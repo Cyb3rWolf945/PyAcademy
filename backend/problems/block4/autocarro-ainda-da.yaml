@@ -1,0 +1,68 @@
+# Problema exemplo (bloco 4, condicionais): programa com stdin/stdout.
+id: autocarro-ainda-da
+titulo:
+  pt: Ainda apanho o autocarro?
+  en: Can I still catch the bus?
+tipo: programa
+bloco: 4
+regiao: encruzilhada
+dificuldade: 2
+origem: variacao_aula
+estado: aprovado
+enunciado:
+  pt: |
+    Lê quantos minutos faltam para o autocarro passar e a que distância (em minutos a pé) estás da paragem.
+    Se chegares com mais de 2 minutos de folga escreve "Vai a andar".
+    Se chegares a tempo mas à justa escreve "Corre!". Caso contrário escreve "Pede boleia".
+  en: |
+    Read how many minutes are left until the bus arrives and how far you are from the stop (in walking minutes).
+    If you arrive with more than 2 minutes to spare, print "Walk".
+    If you arrive in time but only just, print "Run!". Otherwise print "Hitch a ride".
+exemplos:
+  - stdin: "10\n5\n"
+    stdout: {pt: "Vai a andar", en: "Walk"}
+testes:
+  - stdin: "7\n5\n"
+    stdout: {pt: "Corre!", en: "Run!"}
+  - stdin: "4\n5\n"
+    stdout: {pt: "Pede boleia", en: "Hitch a ride"}
+  - stdin: "10\n5\n"
+    stdout: {pt: "Vai a andar", en: "Walk"}
+comparacao: texto
+pistas:
+  - pt: "Entradas: minutos_autocarro, minutos_a_pe. Folga = minutos_autocarro - minutos_a_pe."
+    en: "Inputs: bus_minutes, walk_minutes. Slack = bus_minutes - walk_minutes."
+  - pt: "Portugol: se folga > 2 ... senao se folga >= 0 ... senao ..."
+    en: "Pseudocode: if slack > 2 ... else if slack >= 0 ... else ..."
+erros_comuns:
+  - stdout: {pt: "Corre!", en: "Run!"}
+    quando_stdin: "10\n5\n"
+    mensagem:
+      pt: "Confirma a ordem das condições: a mais exigente vem primeiro."
+      en: "Check the order of your conditions: the strictest one comes first."
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    minutos_autocarro = 0
+    minutos_a_pe = 0
+    minutos_autocarro = int(input("Minutos até o autocarro: "))
+    minutos_a_pe = int(input("Minutos a pé: "))
+    folga = minutos_autocarro - minutos_a_pe
+    if folga > 2:
+        print("Vai a andar")
+    elif folga >= 0:
+        print("Corre!")
+    else:
+        print("Pede boleia")
+  en: |
+    bus_minutes = 0
+    walk_minutes = 0
+    bus_minutes = int(input("Minutes until the bus: "))
+    walk_minutes = int(input("Walking minutes: "))
+    slack = bus_minutes - walk_minutes
+    if slack > 2:
+        print("Walk")
+    elif slack >= 0:
+        print("Run!")
+    else:
+        print("Hitch a ride")

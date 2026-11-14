@@ -1,0 +1,24 @@
+# Caddy: proxy inverso para a app + cabeçalhos de segurança (CSP estrita, sem scripts inline).
+# DOMAIN=":80" -> só HTTP (rede local). Com um domínio real, Caddy trata do HTTPS automático.
+{$DOMAIN::80} {
+	encode zstd gzip
+
+	request_body {
+		max_size 1MB
+	}
+
+	header {
+		Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self' ws: wss:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	# HSTS só em pedidos HTTPS (ou seja, quando DOMAIN é um domínio com TLS)
+	@https protocol https
+	header @https Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+	# A app serve a API, o WebSocket e os ficheiros estáticos
+	reverse_proxy app:8000
+}

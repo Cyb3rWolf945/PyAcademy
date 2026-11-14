@@ -1,0 +1,48 @@
+<!doctype html>
+<!-- Entrada da app: ecrã de login e de entrada com código de turma (aluno novo). -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="text-xl text-accent">PyArena</h1>
+    <div class="flex gap-2" data-lang-switch></div>
+  </header>
+  <main class="mx-auto grid max-w-3xl gap-6 p-4 md:grid-cols-2">
+    <p class="text-muted md:col-span-2" data-i18n="landing.tagline"></p>
+
+    <form id="login-form" class="panel-pixel grid gap-3" autocomplete="on">
+      <h2 class="text-lg" data-i18n="landing.login_title"></h2>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.username"></span>
+        <input class="input-pixel" name="username" autocomplete="username" autocapitalize="none" required maxlength="64"></label>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.password"></span>
+        <input class="input-pixel" name="password" type="password" autocomplete="current-password" required maxlength="256"></label>
+      <p class="min-h-5 text-sm text-danger" role="alert" data-error></p>
+      <button class="btn-pixel" type="submit" data-i18n="landing.login_button"></button>
+    </form>
+
+    <form id="join-form" class="panel-pixel grid gap-3" autocomplete="off">
+      <h2 class="text-lg" data-i18n="landing.join_title"></h2>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.join_code"></span>
+        <input class="input-pixel uppercase" name="join_code" maxlength="6" autocapitalize="characters" required></label>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.display_name"></span>
+        <input class="input-pixel" name="display_name" maxlength="40" required></label>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.username"></span>
+        <input class="input-pixel" name="username" autocapitalize="none" required minlength="3" maxlength="32"></label>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.password_new"></span>
+        <input class="input-pixel" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128"></label>
+      <p class="min-h-5 text-sm text-danger" role="alert" data-error></p>
+      <button class="btn-pixel secondary" type="submit" data-i18n="landing.join_button"></button>
+    </form>
+  </main>
+  <script type="module" src="/pages/landing/landing.js"></script>
+</body>
+</html>

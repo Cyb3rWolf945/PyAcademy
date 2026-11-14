@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- Perfil: nome, idioma, tema, palavra-passe e direitos RGPD (exportar/apagar dados). -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-24 lg:pb-0 lg:pl-56">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="text-xl text-accent" data-i18n="nav.profile"></h1>
+    <div class="flex gap-2" data-lang-switch></div>
+  </header>
+  <main class="mx-auto grid max-w-3xl gap-4 p-4">
+    <form id="prefs-form" class="panel-pixel grid gap-3">
+      <h2 class="text-lg" data-i18n="profile.preferences"></h2>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.display_name"></span>
+        <input class="input-pixel" name="display_name" maxlength="40" required></label>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.locale"></span>
+        <select class="input-pixel" name="locale"></select></label>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.theme"></span>
+        <select class="input-pixel" name="preferred_theme"></select></label>
+      <button class="btn-pixel" type="submit" data-i18n="common.save"></button>
+    </form>
+
+    <form id="pw-form" class="panel-pixel grid gap-3">
+      <h2 class="text-lg" data-i18n="password.title"></h2>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.password_current"></span>
+        <input class="input-pixel" name="current" type="password" autocomplete="current-password" required maxlength="256"></label>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.password_new"></span>
+        <input class="input-pixel" name="next" type="password" autocomplete="new-password" required minlength="8" maxlength="128"></label>
+      <button class="btn-pixel" type="submit" data-i18n="password.submit"></button>
+    </form>
+
+    <section class="panel-pixel grid gap-3">
+      <h2 class="text-lg" data-i18n="profile.data"></h2>
+      <p class="text-sm text-muted" data-i18n="profile.data_help"></p>
+      <button id="export-btn" class="btn-pixel secondary" type="button" data-i18n="profile.export"></button>
+      <label class="grid gap-1 text-sm"><span data-i18n="profile.delete_password"></span>
+        <input id="delete-password" class="input-pixel" type="password" autocomplete="current-password" maxlength="256"></label>
+      <button id="delete-btn" class="btn-pixel danger" type="button" data-i18n="profile.delete"></button>
+      <button id="logout-btn" class="btn-pixel secondary" type="button" data-i18n="profile.logout"></button>
+    </section>
+  </main>
+  <div data-bottom-nav></div>
+  <script type="module" src="/pages/profile/profile.js"></script>
+</body>
+</html>

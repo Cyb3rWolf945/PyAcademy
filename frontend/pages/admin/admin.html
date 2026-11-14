@@ -1,0 +1,60 @@
+<!doctype html>
+<!-- Painel do professor: criar turmas, ver código de entrada, importar alunos por CSV e listá-los. -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-24 lg:pb-0 lg:pl-56">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="text-xl text-accent" data-i18n="admin.title"></h1>
+    <div class="flex gap-2" data-lang-switch></div>
+  </header>
+  <main class="mx-auto grid max-w-3xl gap-4 p-4">
+    <form id="class-form" class="panel-pixel grid gap-3">
+      <h2 class="text-lg" data-i18n="admin.new_class"></h2>
+      <label class="grid gap-1 text-sm"><span data-i18n="field.class_name"></span>
+        <input class="input-pixel" name="name" maxlength="60" required></label>
+      <button class="btn-pixel" type="submit" data-i18n="admin.create_class"></button>
+    </form>
+
+    <section class="panel-pixel grid gap-3">
+      <h2 class="text-lg" data-i18n="admin.classes"></h2>
+      <p class="text-sm text-muted" id="no-classes" data-i18n="admin.no_classes" hidden></p>
+      <ul id="class-list" class="grid gap-2"></ul>
+    </section>
+
+    <section id="class-detail" class="panel-pixel grid gap-3" hidden>
+      <h2 class="text-lg" id="class-title"></h2>
+      <p class="text-sm"><span data-i18n="admin.join_code"></span>: <strong id="join-code" class="text-accent text-xl"></strong></p>
+      <p class="text-sm text-muted" data-i18n="admin.join_help"></p>
+
+      <form id="import-form" class="grid gap-3">
+        <h3 data-i18n="admin.import_title"></h3>
+        <p class="text-sm text-muted" data-i18n="admin.import_help"></p>
+        <input id="csv-file" class="input-pixel" type="file" accept=".csv,text/csv,text/plain">
+        <textarea class="input-pixel" name="csv" rows="5" data-i18n-placeholder="admin.csv_placeholder"></textarea>
+        <button class="btn-pixel" type="submit" data-i18n="admin.import_button"></button>
+      </form>
+
+      <div id="import-result" class="grid gap-2" hidden>
+        <h3 data-i18n="admin.temp_passwords"></h3>
+        <p class="text-sm text-danger" data-i18n="admin.temp_once"></p>
+        <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="temp-body"></tbody></table></div>
+        <ul id="import-errors" class="text-sm text-danger"></ul>
+      </div>
+
+      <h3 data-i18n="admin.students"></h3>
+      <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="students-body"></tbody></table></div>
+    </section>
+  </main>
+  <div data-bottom-nav></div>
+  <script type="module" src="/pages/admin/admin.js"></script>
+</body>
+</html>

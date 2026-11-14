@@ -1,0 +1,20 @@
+# Desenvolvimento: monta o código, uvicorn com --reload e Tailwind em modo --watch.
+# É carregado automaticamente por "docker compose up" (ignorar em produção com -f docker-compose.yml).
+services:
+  app:
+    environment:
+      APP_ENV: dev
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+
+  css:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: css
+    working_dir: /src
+    command: ["tailwindcss", "-i", "frontend/styles/app.css", "-o", "frontend/dist/app.css", "--watch=always"]
+    volumes:
+      - ./frontend:/src/frontend
+    restart: unless-stopped

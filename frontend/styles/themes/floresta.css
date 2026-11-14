@@ -1,0 +1,20 @@
+/* Tema "floresta": só variáveis CSS. Os outros temas seguem o mesmo contrato (fase 6). */
+[data-theme="floresta"] {
+  --c-bg: #1b2a1f;
+  --c-surface: #26392b;
+  --c-surface-2: #34503b;
+  --c-accent: #8bd450;
+  --c-accent-text: #12200f;
+  --c-text: #eaf3de;
+  --c-muted: #a3b8a0;
+  --c-border: #0f1a12;
+  --c-danger: #e8604c;
+  --c-success: #5fd38a;
+  /* Sombra em degrau: duas camadas duras, sem blur */
+  --pixel-shadow: 0 4px 0 0 var(--c-border), 4px 0 0 0 var(--c-border), 4px 4px 0 0 var(--c-border), 0 -2px 0 0 var(--c-border), -2px 0 0 0 var(--c-border);
+  --pixel-shadow-pressed: 0 2px 0 0 var(--c-border), 2px 0 0 0 var(--c-border), 2px 2px 0 0 var(--c-border), 0 -2px 0 0 var(--c-border), -2px 0 0 0 var(--c-border);
+  --pixel-shadow-inset: inset 0 0 0 2px var(--c-border), inset 0 2px 0 2px var(--c-border);
+  /* Sem fontes externas: pilha monoespaçada do sistema até à fase 6 (fontes pixel em vendor/) */
+  --f-pixel: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --f-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}

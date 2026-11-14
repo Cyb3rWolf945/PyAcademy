@@ -1,0 +1,44 @@
+# Modelos de utilizador (aluno/professor) e de turma.
+from datetime import datetime
+from enum import Enum
+
+from sqlalchemy import Column, ForeignKey, Integer
+from sqlmodel import Field, SQLModel
+
+from app.models._base import ts_column, utcnow
+
+
+class Role(str, Enum):
+    teacher = "teacher"
+    student = "student"
+
+
+class User(SQLModel, table=True):
+    __tablename__ = "users"
+
+    id: int | None = Field(default=None, primary_key=True)
+    username: str = Field(unique=True, index=True, max_length=32)
+    display_name: str = Field(max_length=40)
+    password_hash: str
+    role: Role = Field(default=Role.student)
+    locale: str = Field(default="pt-PT", max_length=8)
+    preferred_theme: str | None = Field(default=None, max_length=32)
+    # FK circular com school_classes -> use_alter (criada num ALTER TABLE)
+    class_id: int | None = Field(
+        default=None,
+        sa_column=Column(
+            Integer, ForeignKey("school_classes.id", ondelete="SET NULL", use_alter=True, name="fk_users_class_id"), nullable=True
+        ),
+    )
+    must_change_password: bool = Field(default=False)
+    created_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
+
+
+class SchoolClass(SQLModel, table=True):
+    __tablename__ = "school_classes"
+
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(max_length=60)
+    join_code: str = Field(unique=True, index=True, min_length=6, max_length=6)
+    teacher_id: int = Field(foreign_key="users.id")
+    created_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())

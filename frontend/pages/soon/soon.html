@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- Página provisória "em breve" para os modos que ainda não existem. -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-24 lg:pb-0 lg:pl-56">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="text-xl text-accent">PyArena</h1>
+    <div class="flex gap-2" data-lang-switch></div>
+  </header>
+  <main class="mx-auto grid max-w-3xl gap-4 p-4">
+    <section class="panel-pixel grid gap-2">
+      <h2 class="text-lg" id="mode-title"></h2>
+      <p class="text-muted" data-i18n="soon.text"></p>
+    </section>
+  </main>
+  <div data-bottom-nav></div>
+  <script type="module" src="/pages/soon/soon.js"></script>
+</body>
+</html>

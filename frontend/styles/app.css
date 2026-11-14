@@ -1,0 +1,66 @@
+/* Entrada do Tailwind v4: tokens (@theme) ligados às variáveis dos temas + componentes pixel art.
+   Cores só via tokens/temas (bg-surface, text-accent...). A identidade final chega na fase 6. */
+@import "tailwindcss";
+@import "./themes/floresta.css";
+
+@source "../index.html";
+@source "../pages";
+@source "../components";
+@source "../services";
+
+/* "inline" faz as utilities usarem var(--c-*) diretamente, por isso mudar o tema muda as cores */
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-accent: var(--c-accent);
+  --color-accent-text: var(--c-accent-text);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-border: var(--c-border);
+  --color-danger: var(--c-danger);
+  --color-success: var(--c-success);
+  --shadow-pixel: var(--pixel-shadow);
+  --shadow-pixel-pressed: var(--pixel-shadow-pressed);
+  --font-pixel: var(--f-pixel);
+  --font-mono: var(--f-mono);
+}
+
+@layer base {
+  html { background: var(--c-bg); color: var(--c-text); -webkit-text-size-adjust: 100%; }
+  body { min-height: 100dvh; font-family: var(--f-mono); }
+  h1, h2, h3 { font-family: var(--f-pixel); }
+  :focus-visible { outline: 3px solid var(--c-accent); outline-offset: 2px; }
+}
+
+@layer components {
+  /* Cantos retos e sombra em degrau (sem border-radius) */
+  .panel-pixel {
+    background: var(--c-surface);
+    border: 0;
+    border-radius: 0;
+    box-shadow: var(--pixel-shadow);
+    padding: 1rem;
+  }
+  .btn-pixel {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    min-height: 44px; min-width: 44px; padding: .5rem 1rem;
+    font-family: var(--f-pixel); font-size: .8rem; line-height: 1.2; text-align: center;
+    background: var(--c-accent); color: var(--c-accent-text);
+    border: 0; border-radius: 0; cursor: pointer;
+    box-shadow: var(--pixel-shadow);
+    transition: none;
+  }
+  .btn-pixel:active { transform: translateY(2px); box-shadow: var(--pixel-shadow-pressed); }
+  .btn-pixel[disabled] { opacity: .5; cursor: not-allowed; }
+  .btn-pixel.secondary { background: var(--c-surface-2); color: var(--c-text); }
+  .btn-pixel.danger { background: var(--c-danger); color: var(--c-accent-text); }
+  .input-pixel {
+    display: block; width: 100%; min-height: 44px; padding: .5rem .75rem;
+    font-family: var(--f-mono); font-size: 1rem; /* 16px evita zoom no iOS */
+    color: var(--c-text); background: var(--c-bg);
+    border: 0; border-radius: 0;
+    box-shadow: var(--pixel-shadow-inset);
+  }
+  .input-pixel:focus { outline: 3px solid var(--c-accent); outline-offset: 0; }
+}

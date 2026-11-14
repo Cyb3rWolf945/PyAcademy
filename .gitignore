@@ -1,0 +1,14 @@
+# Materiais das aulas (privados, nunca servidos aos alunos)
+materiais_aulas/
+
+# Segredos e dados locais
+.env
+backups/
+
+# Gerados
+frontend/dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.DS_Store

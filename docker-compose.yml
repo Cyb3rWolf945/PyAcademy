@@ -1,0 +1,81 @@
+# PyArena: proxy (Caddy) + app (FastAPI) + db (PostgreSQL).
+# Redes: "public" (proxy <-> app) e "internal" (app <-> db, sem saída para a internet).
+# Fases seguintes: serviços "runner" (rede sandbox) e "backup".
+name: pyarena
+
+services:
+  proxy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+      - "${HTTPS_PORT:-8443}:443"
+    environment:
+      DOMAIN: ${DOMAIN:-:80}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [public]
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:2019/config/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://pyarena:${POSTGRES_PASSWORD}@db:5432/pyarena
+      TEST_DATABASE_URL: postgresql+asyncpg://pyarena:${POSTGRES_PASSWORD}@db:5432/pyarena_test
+      SESSION_SECRET: ${SESSION_SECRET}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://localhost:8080}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      TEACHER_USERNAME: ${TEACHER_USERNAME:-}
+      TEACHER_PASSWORD: ${TEACHER_PASSWORD:-}
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
+    networks: [public, internal]
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/ready', timeout=3).status==200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 40s
+      retries: 6
+
+  db:
+    image: postgres:16.10-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pyarena
+      POSTGRES_DB: pyarena
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pyarena -d pyarena"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # runner:  (fase 2) contentor isolado, rede "sandbox" interna, sem BD nem internet
+  # backup:  (fase posterior) pg_dump diário para ./backups
+
+networks:
+  public:
+  internal:
+    internal: true
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

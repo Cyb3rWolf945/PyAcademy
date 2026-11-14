@@ -1,0 +1,10 @@
+{
+  "name": "PyArena",
+  "short_name": "PyArena",
+  "description": "Jogo competitivo de Python para Programação I",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1b2a1f",
+  "theme_color": "#1b2a1f",
+  "icons": []
+}

@@ -1,0 +1,32 @@
+[project]
+name = "pyarena"
+version = "0.1.0"
+description = "PyArena: jogo competitivo para Programação I (Python)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn[standard]>=0.32",
+  "gunicorn>=23",
+  "sqlmodel>=0.0.22",
+  "asyncpg>=0.30",
+  "alembic>=1.14",
+  "pydantic-settings>=2.6",
+  "argon2-cffi>=23.1",
+  "pyyaml>=6",
+  "nh3>=0.2.18",
+  "python-multipart>=0.0.12",
+  "greenlet>=3.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "httpx>=0.27"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
