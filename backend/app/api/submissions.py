@@ -56,7 +56,7 @@ async def create(body: SubmissionIn, auth: Auth = Depends(active_auth), db: Asyn
                 mode="tournament", rate_per_minute=settings.tournament_submissions_per_minute, allow_draft=True,
             )
             await tournament_svc.link_submission(db, sub, t, rnd)
-            if sub.status == "accepted":  # tipos sem código já vêm corrigidos: regista a missão já
+            if sub.status not in ("queued", "running"):  # tipos sem código já vêm corrigidos: regista já
                 await tournament_scoring.on_submission_finished(sub.id)
     dispatcher.wake.set()
     view = await _view(db, sub)

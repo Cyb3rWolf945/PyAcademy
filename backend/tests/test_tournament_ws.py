@@ -223,6 +223,10 @@ async def test_listen_connection_drop_recovers(server, make_user, make_class, ne
     async with ws_connect(server, tid, c) as ws:
         await ws.send(json.dumps({"type": "ping"}))
         await recv(ws)
+        for _ in range(100):  # o supervisor liga em segundo plano
+            if hub._pg is not None:
+                break
+            await asyncio.sleep(0.05)
         old_pid = hub._pg.get_server_pid()
         async with SessionLocal() as db:
             from sqlalchemy import text
@@ -246,3 +250,47 @@ async def test_two_students_get_same_events(server, make_user, make_class, new_c
         await control(env, tid, "rounds/1/start")
         ma, mb = await recv_until(a, "round_started"), await recv_until(b, "round_started")
         assert ma == mb
+
+
+async def test_elimination_events_and_private_points_awarded(server, make_user, make_class, new_client):
+    from tests.test_tournament_support import add_players, create_elim, fake_submit
+    await add_problem("ex-boss", tipo="programa", dif=5, origem="boss", pistas=0)  # 2 jogadores: logo é a final
+    env = await make_env(make_user, make_class, new_client)
+    t = await create_elim(env, group_size=4)
+    tid = t["tournament"]["id"]
+    studs = [await env.student(make_user, new_client, f"al{i}") for i in range(2)]
+    await add_players(tid, [u for u, _, _ in studs])
+    (ua, ca, _), (ub, cb, _) = studs
+    async with ws_connect(server, tid, ca) as wa, ws_connect(server, tid, cb) as wb, ws_connect(server, tid, env.t_client) as wt:
+        r = await env.t_client.post(f"/api/tournaments/{tid}/rounds/next/start", json={}, headers=env.t_headers)
+        assert r.status_code == 200
+        for sock in (wa, wb, wt):
+            drawn = await recv_until(sock, "groups_drawn")
+            assert drawn["payload"]["idx"] == 1 and len(drawn["payload"]["groups"][0]["members"]) == 2
+        await fake_submit(tid, 1, ua.id, "ex-boss", "accepted", 4)
+        got = {}
+        for name, sock in (("a", wa), ("b", wb), ("t", wt)):
+            seen = []
+            while True:
+                m = await recv(sock, 8)
+                seen.append(m)
+                if m["type"] == "champion":
+                    break
+            got[name] = seen
+        types = {k: [m["type"] for m in v] for k, v in got.items()}
+        assert [m["payload"]["reason"] for m in got["a"] if m["type"] == "points_awarded"] == ["participation", "exercise", "group_win", "champion"]
+        assert [m["payload"] for m in got["b"] if m["type"] == "points_awarded"] == [{"user_id": ub.id, "points": 50, "reason": "second"}]  # só os seus (2.º lugar)
+        assert "points_awarded" not in types["t"]  # o projetor não recebe pontos de ninguém
+        for k in "abt":
+            assert {"group_decided", "player_eliminated", "round_closed", "champion"} <= set(types[k])
+        # o replay (WS e REST) também não mostra pontos alheios
+        async with ws_connect(server, tid, cb, last_seq=0) as wb2:
+            seen = []
+            while True:
+                m = await recv(wb2, 8)
+                seen.append(m["type"])
+                if m["type"] == "tournament_finished":
+                    break
+            assert seen.count("points_awarded") == 1  # só o seu (2.º lugar), nunca os do campeão
+    ev = (await cb.get(f"/api/tournaments/{tid}/events")).json()["events"]
+    assert all(e["payload"]["user_id"] == ub.id for e in ev if e["type"] == "points_awarded")

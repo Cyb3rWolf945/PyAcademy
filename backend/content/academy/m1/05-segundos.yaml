@@ -1,0 +1,70 @@
+id: m1-05-segundos
+modulo: m1
+ordem: 5
+titulo: {pt: "Segundos em minutos", en: "Seconds to minutes"}
+aprender:
+  pt: |
+    Problema: ler um número de segundos e mostrar quantos minutos e segundos representa. Por exemplo, 135 segundos são 2 min e 15 s.
+
+    Precisas de dois operadores novos:
+
+    - `//` é a **divisão inteira**: `135 // 60` dá 2 (os minutos inteiros);
+    - `%` é o **resto**: `135 % 60` dá 15 (os segundos que sobram).
+
+    Cuidado: em Python `/` dá um número real (`7 / 2` é 3.5). Para a parte inteira usa `//`.
+  en: |
+    Problem: read a number of seconds and show how many minutes and seconds that is. For example, 135 seconds is 2 min and 15 s.
+
+    You need two new operators:
+
+    - `//` is **integer division**: `135 // 60` gives 2 (the whole minutes);
+    - `%` is the **remainder**: `135 % 60` gives 15 (the seconds left over).
+
+    Careful: in Python `/` gives a real number (`7 / 2` is 3.5). For the whole part use `//`.
+exemplo:
+  id: segundos-minutos
+  titulo: {pt: "Segundos em minutos", en: "Seconds to minutes"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "definir inteiro total, minutos, segundos", en: "define integer total, minutos, segundos"}, py: null}
+    - {id: l, tipo: ler, texto: {pt: "ler total", en: "read total"}, py: 'total = int(input("Segundos: "))'}
+    - {id: c1, tipo: calcular, texto: {pt: "minutos = total / 60", en: "minutos = total / 60 (whole part)"}, py: "minutos = total // 60"}
+    - {id: c2, tipo: calcular, texto: {pt: "segundos = total % 60", en: "segundos = total % 60"}, py: "segundos = total % 60"}
+    - {id: e, tipo: escrever, texto: {pt: 'escrever minutos + " min e " + segundos + " s"', en: 'write minutos + " min and " + segundos + " s"'}, py: 'print(minutos, "min e", segundos, "s")'}
+slides:
+  - {deck: aula-2, de: 31, ate: 32}
+  - {deck: aula-2, de: 35, ate: 35}
+leitura:
+  pt: "Python Basics, cap. 5 — Números e matemática (operadores)"
+  en: "Python Basics, ch. 5 — Numbers and math (operators)"
+pistas:
+  - pt: "Quantos minutos inteiros cabem em 135 segundos? Quantos segundos sobram?"
+    en: "How many whole minutes fit in 135 seconds? How many seconds are left?"
+  - pt: "Na divisão inteira usa dois símbolos de barra."
+    en: "For integer division, use two slash symbols."
+atividades:
+  - tipo: completar
+    enunciado:
+      pt: "Completa as duas linhas de cálculo com o operador certo."
+      en: "Complete the two calculation lines with the right operator."
+    lacunas:
+      - {stmt: c1, lado: py, modelo: {pt: "minutos = total ___ 60", en: "minutos = total ___ 60"}, respostas: ["//"]}
+      - {stmt: c2, lado: py, modelo: {pt: "segundos = total ___ 60", en: "segundos = total ___ 60"}, respostas: ["%"]}
+    explicacao:
+      pt: "`//` dá os minutos inteiros e `%` dá o resto, os segundos que sobram."
+      en: "`//` gives the whole minutes and `%` gives the remainder, the seconds left over."
+  - tipo: ordenar_fluxograma
+    enunciado:
+      pt: "Põe os blocos do fluxograma pela ordem certa."
+      en: "Put the flowchart blocks in the right order."
+    explicacao:
+      pt: "Define-se, lê-se o total, calculam-se minutos e segundos e só então se escreve. O resto usa o total, por isso o total vem primeiro."
+      en: "Define, read the total, calculate minutes and seconds and only then write. The calculations use the total, so the total comes first."
+verificacao:
+  pergunta:
+    pt: "Com 135 segundos, o programa mostra..."
+    en: "With 135 seconds, the program shows..."
+  opcoes:
+    - {pt: "2 min e 15 s", en: "2 min and 15 s"}
+    - {pt: "1 min e 75 s", en: "1 min and 75 s"}
+    - {pt: "2.25 min e 0 s", en: "2.25 min and 0 s"}
+  resposta: [0]

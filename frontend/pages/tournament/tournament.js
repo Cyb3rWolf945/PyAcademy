@@ -11,10 +11,12 @@ import { mountLobby } from "./lobby.js";
 import { mountRound } from "./round.js";
 import { mountBetween } from "./between.js";
 import { mountFinal } from "./final.js";
+import { mountElimRound, mountElimBetween } from "./elim.js";
 import { fmtPoints } from "../challenge/lib.js";
 import { celebrateSafe } from "./fx.js";
+import { el } from "../../components/dom.js";
 
-const me = await bootPage({ access: "user" });
+const me = await bootPage({ access: "guest" });
 
 const LAST_KEY = "pyarena.tournament";
 const remember = (id) => { try { localStorage.setItem(LAST_KEY, String(id)); } catch (_) { /* ignora */ } };
@@ -23,6 +25,10 @@ const forget = () => { try { localStorage.removeItem(LAST_KEY); } catch (_) { /*
 
 function main() {
   const view = document.getElementById("view");
+  if (me?.role === "teacher") {
+    mountTeacherHub(view);
+    return;
+  }
   const params = new URLSearchParams(location.search);
   const conn = mountConnectionStatus(document.getElementById("conn"));
   document.getElementById("conn").hidden = true;
@@ -35,10 +41,10 @@ function main() {
     live?.destroy(); live = null; current?.destroy(); current = null; kind = null;
     document.getElementById("conn").hidden = true;
     document.getElementById("page-title").textContent = "PyArena";
-    current = mountJoin(view, { code: params.get("code") || "", error, onJoined: (id) => start(id) });
+    current = mountJoin(view, { code: params.get("code") || "", error, guest: !me, onJoined: (id) => start(id) });
   }
 
-  async function start(id) {
+  async function start(id, { fromRecall = false } = {}) {
     live?.destroy();
     current?.destroy(); current = null; kind = null;
     live = createLive(id, {
@@ -50,7 +56,9 @@ function main() {
     catch (err) {
       forget(); live = null;
       history.replaceState(null, "", location.pathname);
-      showJoin(errorText(err));
+      // Um id guardado pode pertencer a outro torneio, turma ou conta. Nesse
+      // caso não bloqueamos a entrada atual com um erro de um torneio antigo.
+      showJoin(fromRecall ? "" : errorText(err));
       return;
     }
     remember(id);
@@ -69,6 +77,7 @@ function main() {
   }
 
   const factories = { lobby: mountLobby, round: mountRound, between: mountBetween, final: mountFinal };
+  const elimFactories = { ...factories, round: mountElimRound, between: mountElimBetween };
 
   function render() {
     const snap = live?.snap();
@@ -78,7 +87,7 @@ function main() {
     if (next !== kind) {
       current?.destroy();
       kind = next;
-      current = factories[next](view, live);
+      current = (snap.format === "eliminatoria" ? elimFactories : factories)[next](view, live);
       if (next === "final") celebrateSafe("podium");
     }
     current.update();
@@ -88,6 +97,9 @@ function main() {
     const p = ev.payload || {};
     const snap = live.snap();
     const mine = (key) => key === snap?.me?.participant_key;
+    if (ev.type === "points_awarded") { toast(t("tournament.toast_points", { points: fmtPoints(p.points) }), "success"); return; }
+    if (ev.type === "champion" && p.user_id === snap?.me?.user_id) celebrateSafe("podium");
+    if (ev.type === "group_decided" && snap?.format === "eliminatoria") return;
     if (ev.type === "mission_solved" && mine(p.participant_key)) { toast(t("tournament.toast_my_solve", { points: fmtPoints(p.points) }), "success"); celebrateSafe("solve"); }
     else if (ev.type === "first_bonus") toast(t("tournament.toast_first_bonus", { name: p.name }), "success");
     else if (ev.type === "boss_defeated") { toast(t("tournament.toast_boss", { name: p.name }), "success"); celebrateSafe("boss"); }
@@ -102,8 +114,38 @@ function main() {
   });
 
   const id = params.get("id") || (params.get("code") ? null : recall());
-  if (id) start(id);
+  if (id) start(id, { fromRecall: !params.get("id") && !params.get("code") });
   else showJoin();
 }
 
-if (me) main();
+function mountTeacherHub(host) {
+  const code = el("input", { class: "input-pixel uppercase", name: "join_code", maxlength: 6, required: true, autocapitalize: "characters", autocomplete: "off", "aria-label": t("tournament.teacher_code") });
+  const error = el("p", { class: "min-h-5 text-danger", role: "alert" });
+  const open = el("button", { class: "btn-pixel btn-pixel--accent", type: "submit" }, t("tournament.teacher_open"));
+  const form = el("form", { class: "panel-pixel grid gap-3" },
+    el("h2", { class: "text-lg" }, t("tournament.teacher_join_title")),
+    el("p", { class: "text-sm text-muted" }, t("tournament.teacher_join_help")),
+    code, error, open);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    open.disabled = true;
+    error.textContent = "";
+    try {
+      const result = await api("GET", `/api/tournaments/lookup?join_code=${encodeURIComponent(code.value)}`);
+      location.assign(`/pages/projector/projector.html?id=${result.tournament_id}`);
+    } catch (err) {
+      error.textContent = errorText(err);
+      open.disabled = false;
+    }
+  });
+  const create = el("a", { class: "btn-pixel", href: "/pages/admin/admin.html" }, t("tournament.teacher_create"));
+  host.replaceChildren(
+    el("section", { class: "grid gap-4" },
+      form,
+      el("section", { class: "panel-pixel grid gap-3" },
+        el("h2", { class: "text-lg" }, t("tournament.teacher_create_title")),
+        el("p", { class: "text-sm text-muted" }, t("tournament.teacher_create_help")),
+        create)));
+}
+
+main();

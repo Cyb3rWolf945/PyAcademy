@@ -26,5 +26,13 @@
   "tournament.problem_not_in_round": "Este problema não faz parte da ronda.",
   "tournament.hint_not_found": "Essa pista não existe.",
   "tournament.team_locked": "A tua agência já tem pontos: já não podes mudar de agência. Fala com o professor.",
-  "tournament.too_many_attempts": "Demasiadas tentativas com códigos errados. Espera uns minutos."
+  "tournament.too_many_attempts": "Demasiadas tentativas com códigos errados. Espera uns minutos.",
+  "tournament.invalid_format": "Formato de torneio inválido.",
+  "tournament.invalid_points": "Valores de pontos inválidos.",
+  "tournament.exercise_invalid": "Cada ronda tem um único exercício de código (programa, função ou bug).",
+  "tournament.wrong_format": "Esta ação só existe no formato Eliminatória.",
+  "tournament.not_enough_players": "São precisos pelo menos 2 alunos em jogo para começar a ronda.",
+  "tournament.group_not_found": "Grupo não encontrado.",
+  "tournament.player_not_in_group": "Esse aluno não está neste grupo.",
+  "leaderboard.rate_limited": "Demasiados pedidos. Tenta daqui a pouco."
 }

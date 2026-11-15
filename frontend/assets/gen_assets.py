@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
-THEMES = ["floresta", "masmorra", "oceano", "deserto", "neve", "noite"]
+THEMES = ["campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite"]
 
 PAL = {
     ".": None, "K": "#1b1424", "W": "#ffffff", "w": "#d5dde8", "g": "#8a97ab", "G": "#566079",
@@ -374,32 +374,471 @@ def build_themes():
         out = ASSETS / "sprites/themes" / name
         out.mkdir(parents=True, exist_ok=True)
         tile(p, i).save(out / "bg.png")
-        scene(name, p).save(out / "scene.png")
+        if name in ISLAND:  # o campus usa o cartaz sprites/campus/poster.png (build_campus)
+            scene(name, p).save(out / "scene.png")
+
+
+# ---------- medalhas (ouro, bronze, cobre) 32x32 e 64x64 ----------
+DIGITS = {"1": ["010", "110", "010", "010", "111"], "2": ["111", "001", "111", "100", "111"], "3": ["111", "001", "011", "001", "111"]}
+MEDALS = {  # nome: (disco, sombra, brilho, dígito)
+    "gold": ("#ffd23f", "#d9971a", "#fff3a8", "#7a4a00"),
+    "bronze": ("#c4863a", "#8e5a22", "#e8b878", "#3d2208"),
+    "copper": ("#d9573b", "#9a3320", "#f59a7e", "#3a0f08"),
+}
+
+
+def medal(n, name):
+    disc, shade, hi, ink = MEDALS[name]
+    im = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    rib, rib2 = rgba("#3f8cff"), rgba("#2559b8")
+    for i in range(12):  # fita em V
+        d.rectangle((9 + i // 3, i, 14 + i // 3, i), fill=rib)
+        d.rectangle((17 - i // 3, i, 22 - i // 3, i), fill=rib2)
+    d.ellipse((5, 9, 26, 30), fill=rgba(disc))
+    d.ellipse((7, 11, 24, 28), outline=rgba(shade))
+    d.rectangle((9, 12, 12, 13), fill=rgba(hi))
+    d.rectangle((9, 14, 10, 15), fill=rgba(hi))
+    g = DIGITS[str(n)]
+    for y, row in enumerate(g):  # dígito 3x5 ampliado 2x, centrado no disco
+        for x, c in enumerate(row):
+            if c == "1":
+                d.rectangle((13 + x * 2, 14 + y * 2, 14 + x * 2, 15 + y * 2), fill=rgba(ink))
+    # contorno escuro de 1 px
+    src, out = im.copy(), im.load()
+    px = src.load()
+    for y in range(32):
+        for x in range(32):
+            if px[x, y][3] == 0:
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < 32 and 0 <= ny < 32 and px[nx, ny][3]:
+                        out[x, y] = rgba(PAL["K"])
+                        break
+    return im
+
+
+def build_medals():
+    out = ASSETS / "sprites/medals"
+    out.mkdir(parents=True, exist_ok=True)
+    for n, name in enumerate(["gold", "bronze", "copper"], 1):
+        m = medal(n, name)
+        m.save(out / f"{name}-32.png")
+        m.resize((64, 64), Image.NEAREST).save(out / f"{name}-64.png")
+
+
+# ---------- mais ícones (código, relógio, raio, escudo, coroa, pergaminho, baú, estados) e efeitos ----------
+def build_more():
+    out = ASSETS / "sprites/icons"
+    fx = ASSETS / "sprites/fx"
+    fx.mkdir(parents=True, exist_ok=True)
+    icons = {}
+    # código </>
+    im, d = canvas()
+    d.rectangle((1, 2, 14, 13), fill=rgba("#2b2440"))
+    d.rectangle((1, 2, 14, 3), fill=rgba("#473a73"))
+    dots(d, [(5, 6), (4, 7), (3, 8), (4, 9), (5, 10), (10, 6), (11, 7), (12, 8), (11, 9), (10, 10)], "C")
+    dots(d, [(8, 5), (8, 6), (7, 8), (7, 9), (7, 10)], "Y")
+    icons["code"] = outline(im)
+    # relógio
+    im, d = canvas()
+    d.ellipse((1, 1, 14, 14), fill=rgba(PAL["W"]))
+    d.ellipse((1, 1, 14, 14), outline=rgba(PAL["g"]))
+    d.line([(8, 8), (8, 4)], fill=rgba(PAL["K"]))
+    d.line([(8, 8), (11, 9)], fill=rgba(PAL["R"]))
+    dots(d, [(8, 2), (8, 13), (2, 8), (13, 8)], "G")
+    icons["clock"] = outline(im)
+    # raio
+    im, d = canvas()
+    d.polygon([(9, 1), (3, 9), (7, 9), (6, 15), (13, 6), (9, 6)], fill=rgba(PAL["Y"]))
+    d.line([(9, 2), (5, 8)], fill=rgba(PAL["W"]))
+    d.point((12, 6), fill=rgba(PAL["y"]))
+    icons["lightning"] = outline(im)
+    # escudo azul
+    icons["shield"] = shield("#5f9bff", "#2e63c8", "#1d3f8a", "#ffffff")
+    # coroa
+    im, d = canvas()
+    d.polygon([(1, 5), (4, 9), (8, 3), (12, 9), (15, 5), (14, 13), (2, 13)], fill=rgba(PAL["Y"]))
+    d.rectangle((2, 12, 13, 13), fill=rgba(PAL["y"]))
+    dots(d, [(1, 4), (8, 2), (14, 4)], "R")
+    dots(d, [(5, 11), (8, 11), (11, 11)], "R")
+    icons["crown"] = outline(im)
+    # pergaminho
+    im, d = canvas()
+    d.rectangle((3, 2, 12, 13), fill=rgba("#f6e2b3"))
+    d.rectangle((2, 1, 13, 2), fill=rgba(PAL["M"]))
+    d.rectangle((2, 13, 13, 14), fill=rgba(PAL["M"]))
+    for y in (5, 7, 9, 11):
+        d.line([(5, y), (10, y)], fill=rgba(PAL["m"]))
+    icons["scroll"] = outline(im)
+    # baú
+    im, d = canvas()
+    d.rectangle((1, 5, 14, 13), fill=rgba(PAL["M"]))
+    d.rectangle((1, 3, 14, 6), fill=rgba("#b87a43"))
+    d.rectangle((1, 7, 14, 7), fill=rgba(PAL["m"]))
+    d.rectangle((7, 6, 8, 10), fill=rgba(PAL["Y"]))
+    d.rectangle((1, 5, 14, 5), fill=rgba(PAL["y"]))
+    d.rectangle((1, 12, 14, 13), fill=rgba(PAL["m"]))
+    icons["chest"] = outline(im)
+    # estados
+    im, d = canvas()
+    d.rectangle((1, 1, 14, 14), fill=rgba(PAL["N"]))
+    d.rectangle((1, 1, 14, 2), fill=rgba("#8cf09a"))
+    dots(d, [(4, 8), (5, 9), (6, 10), (7, 9), (8, 8), (9, 7), (10, 6), (11, 5)], "W")
+    dots(d, [(4, 9), (5, 10), (6, 11), (7, 10), (8, 9), (9, 8), (10, 7), (11, 6)], "W")
+    icons["check"] = outline(im)
+    im, d = canvas()
+    d.rectangle((1, 1, 14, 14), fill=rgba(PAL["R"]))
+    d.rectangle((1, 1, 14, 2), fill=rgba("#ff8a90"))
+    for i in range(6):
+        dots(d, [(5 + i, 5 + i), (10 - i, 5 + i), (6 + i, 5 + i), (9 - i, 5 + i)], "W")
+    icons["cross"] = outline(im)
+    im, d = canvas()
+    d.rectangle((1, 1, 14, 14), fill=rgba(PAL["B"]))
+    d.rectangle((1, 1, 14, 2), fill=rgba("#8cbcff"))
+    dots(d, [(8, 4), (7, 7), (8, 7), (8, 8), (8, 9), (8, 10), (7, 11), (8, 11), (9, 11)], "W")
+    icons["info"] = outline(im)
+    for name, img in icons.items():
+        img.save(out / f"{name}.png")
+    # nuvens e faísca (efeitos do herói)
+    for name, rows in {
+        "cloud-a": ["..........WWWW..........", "......WWWWWWWWWW........", "...WWWWWWWWWWWWWWWW.....", ".WWWWWWWWWWWWWWWWWWWW...", "WWWWWWWWWWWWWWWWWWWWWWW.", "wwwwwwwwwwwwwwwwwwwwwwww"],
+        "cloud-b": ["....WWW.......", "..WWWWWWW.....", "WWWWWWWWWWWW..", "WWWWWWWWWWWWW.", "wwwwwwwwwwwwww"],
+        "sparkle": ["...W....", "...W....", "WWWYWWW.", "...W....", "...W...."],
+    }.items():
+        w = max(len(r) for r in rows)
+        im = Image.new("RGBA", (w, len(rows)), (0, 0, 0, 0))
+        for y, r in enumerate(rows):
+            for x, ch in enumerate(r):
+                if PAL.get(ch):
+                    c = rgba(PAL[ch]) if ch != "w" else rgba("#c5d6ea")
+                    im.putpixel((x, y), c)
+        im.save(fx / f"{name}.png")
+
+
+# ---------- emblema da Universidade Politécnica de Tomar (UPT) em pixel art ----------
+# Entrada: assets/brand/src/upt-logo-original.png (logótipo oficial). Recorta-se só o escudo + ponto, separam-se as 3 formas
+# (escudo, ornamento branco, ponto), reduz-se cada uma com média de área + limiar e simetriza-se o ornamento.
+# Paleta fixa: verde UPT, branco e verde escuro (contorno de 1 px para ler em qualquer tema). Só ampliações "nearest".
+UPT_GREEN, UPT_DARK, UPT_WHITE = "#74bc1f", "#2f5f0c", "#ffffff"
+
+
+def upt_masks():
+    src = Image.open(ASSETS / "brand/src/upt-logo-original.png").convert("RGBA")
+    bg = Image.new("RGBA", src.size, (255, 255, 255, 255))
+    bg.alpha_composite(src)
+    rgb = bg.convert("RGB").crop((30, 79, 97, 169))  # só o emblema (sem o texto)
+    w, h = rgb.size
+    px = rgb.load()
+    notwhite = lambda p: not (p[0] > 225 and p[1] > 225 and p[2] > 225)
+    # fundo = branco ligado à margem (preenchimento por inundação); o resto é escudo/ornamento/ponto
+    outside = set()
+    stack = [(x, y) for x in range(w) for y in (0, h - 1)] + [(x, y) for y in range(h) for x in (0, w - 1)]
+    while stack:
+        x, y = stack.pop()
+        if (x, y) in outside or not (0 <= x < w and 0 <= y < h) or notwhite(px[x, y]):
+            continue
+        outside.add((x, y))
+        stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+    shield = Image.new("L", (w, h), 0)
+    orn = Image.new("L", (w, h), 0)
+    sp, op = shield.load(), orn.load()
+    for y in range(h):
+        for x in range(w):
+            if (x, y) in outside:
+                continue
+            sp[x, y] = 255
+            if px[x, y][0] > 222 and px[x, y][1] > 232 and px[x, y][2] > 215:
+                op[x, y] = 255  # quase branco dentro do escudo = ornamento
+    from PIL import ImageFilter, ImageChops
+    core = shield.filter(ImageFilter.MinFilter(13))  # afasta o ornamento da orla (meios-tons do contorno não contam)
+    orn = ImageChops.multiply(orn, core)
+    return shield, orn, w, h
+
+
+def upt_emblem(S):
+    """Emblema UPT numa grelha S x S (S=16, 32 ou 64), a verde com contorno escuro."""
+    shield, orn, w, h = upt_masks()
+    # separa o ponto (parte de baixo, sem ornamento) do escudo
+    sp = shield.load()
+    rows = [y for y in range(h) if any(sp[x, y] for x in range(w))]
+    gap = [y for y in range(rows[0], rows[-1]) if not any(sp[x, y] for x in range(w))]
+    cut = gap[0] if gap else h
+    box = shield.getbbox()
+    scale = (S - 2) / (box[3] - box[1])
+    tw, th = max(1, round((box[2] - box[0]) * scale)), max(1, round((box[3] - box[1]) * scale))
+    def small(mask, thr, crop=None):
+        m = mask.crop(box)
+        return m.resize((tw, th), Image.BOX).point(lambda v: 255 if v >= thr else 0)
+    sh_top = Image.new("L", shield.size, 0); sh_top.paste(shield.crop((0, 0, w, cut)), (0, 0))
+    dot = Image.new("L", shield.size, 0); dot.paste(shield.crop((0, cut, w, h)), (0, cut))
+    a_sh, a_dot = small(sh_top, 128), small(dot, 128)
+    a_or = small(orn, 90 if S >= 64 else 70)
+    # ornamento: só dentro do escudo e simétrico (esquerda/direita e cima/baixo em torno do seu centro)
+    ob = a_or.getbbox() if a_sh.getbbox() else None
+    out = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    ox, oy = (S - tw) // 2, (S - th) // 2
+    G, D, W = rgba(UPT_GREEN), rgba(UPT_DARK), rgba(UPT_WHITE)
+    shp, dtp, orp = a_sh.load(), a_dot.load(), a_or.load()
+    cells = {}
+    for y in range(th):
+        for x in range(tw):
+            if shp[x, y] or dtp[x, y]:
+                cells[(x, y)] = G
+    if S == 16:  # a 16 px o ornamento é um asterisco 5x5 desenhado à mão, centrado no escudo
+        bb = a_sh.crop((0, 0, tw, min(th, int(tw * 1.0) + 1))).getbbox()
+        scx, scy = (bb[0] + bb[2]) // 2, (bb[1] + bb[3]) // 2 - 0
+        for dx, dy in [(-2, -2), (0, -2), (2, -2), (-1, -1), (0, -1), (1, -1), (-2, 0), (-1, 0), (0, 0), (1, 0), (2, 0), (-1, 1), (0, 1), (1, 1), (-2, 2), (0, 2), (2, 2)]:
+            cells[(scx + dx, scy + dy)] = W
+    elif ob:
+        inside = [(x, y) for (x, y), c in cells.items() if orp[x, y] and shp[x, y]]
+        # simetriza em torno do centro horizontal do escudo e do centro vertical do ornamento
+        cx = (a_sh.getbbox()[0] + a_sh.getbbox()[2] - 1) / 2
+        oys = [y for _, y in inside]
+        cy = (min(oys) + max(oys)) / 2 if oys else 0
+        sym = set()
+        for x, y in inside:
+            for X, Y in ((x, y), (round(2 * cx - x), y), (x, round(2 * cy - y)), (round(2 * cx - x), round(2 * cy - y))):
+                if shp[X, Y] if 0 <= X < tw and 0 <= Y < th else False:
+                    sym.add((X, Y))
+        for c in sym:
+            cells[c] = W
+    for (x, y), c in cells.items():
+        out.putpixel((ox + x, oy + y), c)
+    # contorno escuro de 1 px à volta de tudo
+    o2, px2 = out.copy(), out.load()
+    p0 = o2.load()
+    for y in range(S):
+        for x in range(S):
+            if p0[x, y][3] == 0:
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < S and 0 <= ny < S and p0[nx, ny][3]:
+                        px2[x, y] = D
+                        break
+    return out
+
+
+def build_upt():
+    out = ASSETS / "sprites/icons"
+    imgs = {S: upt_emblem(S) for S in (16, 32, 64)}
+    for S, im in imgs.items():
+        im.save(out / f"logo-{S}.png")
+    imgs[32].save(out / "logo.png")
+    return imgs
+
+
+# ---------- Academia: ícones dos módulos (m0..m7, bug) e selos das peças ----------
+def build_academy():
+    mod = ASSETS / "sprites/academy"
+    mod.mkdir(parents=True, exist_ok=True)
+    L, LB, NAVY = "#8cc63f", "#ece9fb", "#1f2a44"  # verde "início/fim", lilás dos blocos, azul das decisões (iguais ao fluxograma)
+
+    def shape(name):
+        im, d = canvas()
+        if name == "pill":  # Início/Fim
+            d.rounded_rectangle((1, 4, 14, 11), radius=3, fill=rgba(L))
+            d.rectangle((3, 6, 12, 6), fill=rgba("#c9ec9c"))
+        elif name == "para":  # Ler/Escrever (paralelogramo)
+            d.polygon([(4, 3), (14, 3), (11, 12), (1, 12)], fill=rgba(LB))
+            d.polygon([(4, 3), (14, 3), (11, 12), (1, 12)], outline=rgba("#8f86d6"))
+        elif name == "rect":  # Calcular
+            d.rectangle((1, 3, 14, 12), fill=rgba(LB), outline=rgba("#8f86d6"))
+            d.rectangle((4, 6, 11, 6), fill=rgba("#8f86d6")); d.rectangle((4, 9, 11, 9), fill=rgba("#8f86d6"))
+        elif name == "diamond":  # Decisão
+            d.polygon([(8, 1), (15, 8), (8, 15), (1, 8)], fill=rgba(NAVY))
+            dots(d, [(8, 6), (8, 7), (8, 9)], "W")
+        elif name == "loop":  # Ciclo
+            d.rectangle((3, 3, 12, 4), fill=rgba("#4f8cff")); d.rectangle((3, 11, 12, 12), fill=rgba("#4f8cff"))
+            d.rectangle((11, 3, 12, 12), fill=rgba("#4f8cff")); d.rectangle((3, 3, 4, 12), fill=rgba("#4f8cff"))
+            d.polygon([(1, 8), (6, 8), (3, 12)], fill=rgba("#ffd23f"))
+        elif name == "func":  # Função f(x)
+            d.rectangle((1, 2, 14, 13), fill=rgba("#2b2440"))
+            dots(d, [(4, 4), (5, 4), (4, 5), (4, 6), (3, 6), (5, 6), (4, 7), (4, 8), (3, 9)], "C")
+            dots(d, [(8, 6), (12, 6), (9, 7), (11, 7), (10, 8), (9, 9), (11, 9), (8, 10), (12, 10)], "Y")
+        elif name == "list":  # Lista
+            for i in range(3):
+                d.rectangle((1 + i * 5, 5, 4 + i * 5, 10), fill=rgba("#ffd23f"), outline=rgba("#d9971a"))
+            dots(d, [(2, 7), (7, 7), (12, 7)], "K")
+        elif name == "arrows":  # Setas (M1: o fluxo entre blocos)
+            d.rectangle((7, 1, 8, 9), fill=rgba("#4a4f5c"))
+            d.polygon([(3, 8), (12, 8), (7, 14)], fill=rgba("#4a4f5c"))
+            d.rectangle((1, 4, 6, 4), fill=rgba("#8f86d6")); d.polygon([(6, 2), (10, 4), (6, 6)], fill=rgba("#8f86d6"))
+        elif name == "lupa":  # Lupa (caça aos bugs)
+            d.ellipse((1, 1, 10, 10), fill=rgba("#bfe5ff"), outline=rgba("#6b7a99"))
+            d.line([(9, 9), (14, 14)], fill=rgba(PAL["m"]), width=2)
+            dots(d, [(3, 3), (4, 3)], "W")
+        return outline(im)
+
+    pieces = {"inicio-fim": "pill", "ler-escrever": "para", "calcular": "rect", "decisao": "diamond", "ciclo": "loop", "funcao": "func", "lista": "list", "lupa": "lupa", "setas": "arrows", "processo": "rect"}
+    for n, sh in pieces.items():
+        shape(sh).save(mod / f"peca-{n}.png")
+
+    def bulb():
+        im, d = canvas(); d.ellipse((3, 1, 12, 10), fill=rgba("#ffe56b")); d.rectangle((5, 10, 10, 12), fill=rgba(PAL["g"])); d.rectangle((6, 13, 9, 13), fill=rgba(PAL["G"])); dots(d, [(5, 4), (5, 5)], "W"); return outline(im)
+    def flow():
+        im, d = canvas(); d.rounded_rectangle((4, 0, 11, 3), radius=1, fill=rgba(L)); d.rectangle((7, 4, 8, 5), fill=rgba(PAL["G"]))
+        d.rectangle((3, 6, 12, 9), fill=rgba(LB), outline=rgba("#8f86d6")); d.rectangle((7, 10, 8, 11), fill=rgba(PAL["G"])); d.rounded_rectangle((4, 12, 11, 15), radius=1, fill=rgba(L)); return outline(im)
+    def pencil():
+        im, d = canvas(); d.polygon([(11, 1), (14, 4), (5, 13), (2, 14), (3, 11)], fill=rgba("#ffd23f")); d.polygon([(11, 1), (14, 4), (12, 6), (9, 3)], fill=rgba(PAL["P"])); d.polygon([(3, 11), (5, 13), (2, 14)], fill=rgba(PAL["S"])); return outline(im)
+    def puzzle():
+        im, d = canvas(); d.rectangle((1, 5, 10, 14), fill=rgba("#4f8cff")); d.rectangle((5, 3, 7, 5), fill=rgba("#4f8cff")); d.rectangle((10, 8, 12, 10), fill=rgba("#4f8cff")); d.rectangle((9, 1, 14, 6), fill=rgba(PAL["R"])); return outline(im)
+    def fork():
+        im, d = canvas(); d.polygon([(8, 1), (11, 4), (8, 7), (5, 4)], fill=rgba(NAVY)); d.rectangle((7, 7, 8, 9), fill=rgba(PAL["G"]))
+        d.rectangle((3, 9, 12, 9), fill=rgba(PAL["G"])); d.rectangle((3, 9, 3, 11), fill=rgba(PAL["G"])); d.rectangle((12, 9, 12, 11), fill=rgba(PAL["G"]))
+        d.rectangle((1, 11, 5, 14), fill=rgba(LB), outline=rgba("#8f86d6")); d.rectangle((10, 11, 14, 14), fill=rgba(LB), outline=rgba("#8f86d6")); return outline(im)
+    def gear():
+        im, d = canvas(); d.ellipse((3, 3, 12, 12), fill=rgba(PAL["g"])); d.ellipse((6, 6, 9, 9), fill=rgba(PAL["K"]))
+        for x, y in ((7, 1), (7, 13), (1, 7), (13, 7), (2, 2), (12, 2), (2, 12), (12, 12)): d.rectangle((x, y, x + 1, y + 1), fill=rgba(PAL["g"]))
+        return outline(im)
+    def listi():
+        im, d = canvas(); d.rectangle((2, 1, 13, 14), fill=rgba("#f6e2b3"))
+        for y in (4, 7, 10): d.rectangle((4, y, 5, y), fill=rgba(PAL["R"])); d.rectangle((7, y, 11, y), fill=rgba(PAL["m"]))
+        return outline(im)
+    def bug():
+        im, d = canvas(); d.ellipse((4, 4, 11, 13), fill=rgba(PAL["N"])); d.ellipse((5, 1, 10, 5), fill=rgba(PAL["n"]))
+        for y in (6, 9, 12): d.line([(1, y), (4, y)], fill=rgba(PAL["K"])); d.line([(11, y), (14, y)], fill=rgba(PAL["K"]))
+        dots(d, [(6, 2), (9, 2), (7, 8), (8, 8)], "W"); return outline(im)
+    for n, f in enumerate([bulb, flow, pencil, puzzle, fork, loopi if False else None, gear, listi]):
+        pass
+    def loopic():
+        im, d = canvas(); d.rectangle((3, 2, 13, 3), fill=rgba("#4f8cff")); d.rectangle((12, 2, 13, 9), fill=rgba("#4f8cff")); d.rectangle((3, 12, 13, 13), fill=rgba("#4f8cff")); d.rectangle((2, 6, 3, 13), fill=rgba("#4f8cff"))
+        d.polygon([(10, 7), (15, 7), (12, 11)], fill=rgba("#ffd23f")); d.polygon([(0, 8), (5, 8), (2, 4)], fill=rgba("#ffd23f")); return outline(im)
+    for name, f in zip(["m0", "m1", "m2", "m3", "m4", "m5", "m6", "m7", "bugs"], [bulb, flow, pencil, puzzle, fork, loopic, gear, listi, bug]):
+        f().save(mod / f"{name}.png")
+
+
+# ---------- campus IPT: cartaz 2D (reserva da cena 3D), desenhado a partir de scenes/campus/layout.json ----------
+def paint_campus(L, S):
+    import json as _j
+    ps = L["poster"]
+    k = S / 6
+    sky = round(ps["sky"] * k)
+    W, H = round(L["size"][0] * S), round(ps["h"] * k)
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 255))
+    d = ImageDraw.Draw(im)
+    rnd = random.Random(7)
+    X = lambda x: round(x * S)
+    zk = ps.get("zk", 1)
+    Y = lambda z: sky + round(z * S * zk)
+    # céu em bandas com dither
+    px = im.load()
+    for y in range(sky):
+        t = y / max(1, sky - 1) * 6
+        base, frac = int(t), t - int(t)
+        for x in range(W):
+            lvl = base + (1 if frac * 16 > BAYER[y % 4][x % 4] else 0)
+            px[x, y] = rgba(mix("#5aa8e8", "#d2e9fb", min(1, lvl / 6)))
+    for cx, cy, w in ((30, 8, 22), (130, 14, 16), (250, 6, 24), (300, 20, 14)):
+        cx, cy, w = round(cx * k), round(cy * k), round(w * k)
+        d.rectangle((cx, cy, cx + w, cy + max(2, 3 * round(k))), fill=rgba("#ffffff"))
+        d.rectangle((cx + w // 4, cy - max(1, 2 * round(k)), cx + 3 * w // 4, cy), fill=rgba("#ffffff"))
+    d.rectangle((0, sky, W, H), fill=rgba("#7cae47"))
+    for _ in range(W * H // 40):
+        x, y = rnd.randrange(W), rnd.randrange(sky, H)
+        px[x, y] = rgba(rnd.choice(["#6a9d3a", "#8fc255", "#7cae47"]))
+    def R(r, col, outline=None):
+        x, z, w, dd = r[:4]
+        x0, y0 = X(x), Y(z)
+        d.rectangle((x0, y0, max(x0, X(x + w) - 1), max(y0, Y(z + dd) - 1)), fill=rgba(col), outline=rgba(outline) if outline else None)
+    for r in L["lawns"]: R(r, "#8fc255")
+    R(L["field"], "#5ea43b")
+    fx, fz, fw, fd = L["field"]
+    for i in range(0, int(fd), 2): R([fx, fz + i, fw, 1], "#68ae44")
+    d.rectangle((X(fx) + 2, Y(fz) + 2, X(fx + fw) - 3, Y(fz + fd) - 3), outline=rgba("#ffffff"))
+    d.line([(X(fx) + 2, Y(fz + fd / 2)), (X(fx + fw) - 3, Y(fz + fd / 2))], fill=rgba("#ffffff"))
+    for r in L["parking"]: R(r, "#cfcfd2")
+    for pth in L["paths"]:
+        x1, z1, x2, z2, w = pth
+        R([min(x1, x2) - (w / 2 if x1 == x2 else 0), min(z1, z2) - (w / 2 if z1 == z2 else 0), abs(x2 - x1) + (w if x1 == x2 else 0), abs(z2 - z1) + (w if z1 == z2 else 0)], "#b6b6b3")
+    R(L["branch"], "#5f6268"); R(L["road"], "#5d6066")
+    rz = L["road"]
+    for x in range(2, 55, 4): R([x, rz[1] + rz[3] / 2 - 0.1, 2, 0.2], "#f1f1ee")
+    cx, cz, rr = L["roundabout"]
+    d.ellipse((X(cx - rr), Y(cz - rr), X(cx + rr), Y(cz + rr)), fill=rgba("#5d6066"))
+    d.ellipse((X(cx - rr / 2.2), Y(cz - rr / 2.2), X(cx + rr / 2.2), Y(cz + rr / 2.2)), fill=rgba("#7fb348"))
+    for r in L["pond"]: R(r, "#58a6d6")
+    d.rectangle((X(33), Y(6.3), X(35), Y(6.3)), fill=rgba("#a8dcf5"))
+    # sombras dos edifícios (a sudeste), depois árvores atrás dos edifícios a sul e edifícios por ordem de z
+    parts = [(b, p) for b in L["buildings"] for p in b["parts"]]
+    for _, (x, z, w, dd, st) in parts:
+        sh = st * L["poster"]["hk"] * k
+        d.rectangle((X(x) + round(sh * .6), Y(z + dd), X(x + w) + round(sh * .6), Y(z + dd) + round(sh * .5)), fill=rgba("#5a8a35"))
+    trees = []
+    for lw in L["lawns"]:
+        for _ in range(int(lw[2] * lw[3] / 9)):
+            x, z = lw[0] + rnd.random() * lw[2], lw[1] + rnd.random() * lw[3]
+            if not any(p[0] - 1 < x < p[0] + p[2] + 1 and p[1] - 1 < z < p[1] + p[3] + 1 for _, p in parts):
+                trees.append((x, z))
+    objs = [("t", z, x) for x, z in trees] + [("b", p[1] + p[3], b, p) for b, p in parts]
+    for o in sorted(objs, key=lambda o: o[1]):
+        if o[0] == "t":
+            x, z = o[2], o[1]
+            r = max(2, round(1.0 * S))
+            d.rectangle((X(x) - 1, Y(z) - r, X(x), Y(z)), fill=rgba("#6b4423"))
+            d.ellipse((X(x) - r, Y(z) - 3 * r, X(x) + r, Y(z) - r // 2), fill=rgba("#2f7d32"))
+            d.ellipse((X(x) - r // 2, Y(z) - 3 * r, X(x) + r // 2, Y(z) - 2 * r), fill=rgba("#4fa04a"))
+        else:
+            _, _, b, (x, z, w, dd, st) = o
+            hpx = round(st * L["poster"]["hk"] * k)
+            x0, x1, y1 = X(x), X(x + w) - 1, Y(z + dd) - 1
+            roof_y0, roof_y1 = Y(z) - hpx, Y(z + dd) - hpx - 1
+            fh = hpx
+            brick_h = round(fh * (0.55 if st >= 2 else 1))
+            d.rectangle((x0, roof_y1 + 1, x1, y1), fill=rgba("#d4472a"))
+            if brick_h < fh:
+                d.rectangle((x0, roof_y1 + 1 + brick_h, x1, y1), fill=rgba("#faf8f2"))
+                for xx in range(x0, x1, max(3, round(2 * S / 1.5))):
+                    d.rectangle((xx, roof_y1 + 1 + brick_h, xx + max(1, S // 4), y1), fill=rgba("#ffffff"))
+            wy = roof_y1 + 1 + max(1, brick_h // 3)
+            d.rectangle((x0 + 1, wy, x1 - 1, wy + max(1, brick_h // 3)), fill=rgba("#222c38"))
+            d.rectangle((x0, roof_y0, x1, roof_y1), fill=rgba("#d8dbe0"))
+            d.rectangle((x0, roof_y0, x1, roof_y0 + 1), fill=rgba("#f2f4f7"))
+            d.rectangle((x1, roof_y0, x1, y1), fill=rgba("#a63018"))
+    # muro de entrada
+    wx, wz, ww = L["wall"]
+    R([wx, wz, ww, 0.5], "#f4f1ea")
+    return im
+
+
+def build_campus():
+    import json as _j
+    L = _j.load(open(ROOT / "scenes/campus/layout.json"))
+    out = ASSETS / "sprites/campus"
+    out.mkdir(parents=True, exist_ok=True)
+    paint_campus(L, 6).save(out / "poster.png")
+    paint_campus(L, 3).save(out / "poster-small.png")
 
 
 # ---------- favicon e ícones PWA ----------
-def build_pwa(logo):
+def build_pwa(emb):
+    """Favicon e ícones PWA com o emblema UPT (fundo claro para o verde e o contorno lerem bem)."""
     out = ASSETS / "icons"
     out.mkdir(parents=True, exist_ok=True)
-    bgc = rgba("#16241a")
+    bgc = rgba("#f4f8ec")
 
     def icon(size, scale, bg=True):
         im = Image.new("RGBA", (size, size), bgc if bg else (0, 0, 0, 0))
-        big = logo.resize((16 * scale, 16 * scale), Image.NEAREST)
-        o = (size - 16 * scale) // 2
+        big = emb[64].resize((64 * scale, 64 * scale), Image.NEAREST)
+        o = (size - 64 * scale) // 2
         im.alpha_composite(big, (o, o))
         return im
 
-    icon(32, 2, bg=False).save(out / "favicon-32.png")
-    icon(180, 10).save(out / "apple-touch-icon.png")
-    icon(192, 10).save(out / "icon-192.png")
-    icon(512, 28).save(out / "icon-512.png")
-    icon(512, 24).save(out / "icon-maskable-512.png")  # zona segura de 80%
+    emb[32].save(out / "favicon-32.png")
+    icon(180, 2).save(out / "apple-touch-icon.png")
+    icon(192, 2).save(out / "icon-192.png")
+    icon(512, 6).save(out / "icon-512.png")
+    icon(512, 5).save(out / "icon-maskable-512.png")  # zona segura de 80%
 
 
 if __name__ == "__main__":
-    ic = build_icons()
+    build_icons()
     build_ui()
     build_themes()
-    build_pwa(ic["logo"])
+    build_medals()
+    build_more()
+    build_academy()
+    build_campus()
+    emb = build_upt()
+    build_pwa(emb)
     print("ok")

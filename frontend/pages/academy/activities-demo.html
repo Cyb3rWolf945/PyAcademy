@@ -1,0 +1,24 @@
+<!doctype html>
+<!-- Demo/teste das atividades da Academia (A1) contra um servidor FALSO que só existe nesta página. Não usa o backend. -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-8">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="min-w-0 text-lg text-accent" data-i18n="act.demo_title"></h1>
+    <div class="flex gap-2" data-lang-switch></div>
+  </header>
+  <main class="mx-auto grid max-w-5xl grid-cols-1 gap-4 p-4 [&>*]:min-w-0">
+    <p class="text-sm text-muted" data-i18n="act.demo_note"></p>
+    <div id="list" class="grid gap-4"></div>
+  </main>
+  <script type="module" src="/pages/academy/activities-demo.js"></script>
+</body>
+</html>

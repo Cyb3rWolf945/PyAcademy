@@ -1,0 +1,24 @@
+id: m0-01-primeira
+modulo: m0
+ordem: 1
+titulo: {pt: Primeira, en: First}
+aprender: {pt: "Texto **um**", en: "Text **one**"}
+exemplo:
+  id: media
+  titulo: {pt: Média, en: Average}
+  corpo:
+    - {id: s1, tipo: definir, texto: {pt: Definir nota, en: Define grade}}
+    - {id: s2, tipo: ler, texto: {pt: Ler nota, en: Read grade}, py: "nota = float(input())"}
+    - {id: s3, tipo: calcular, texto: {pt: Calcular dobro, en: Compute double}, py: "dobro = nota * 2"}
+    - {id: s4, tipo: escrever, texto: {pt: Escrever dobro, en: Print double}, py: "print(dobro)"}
+slides: [{deck: aula-2, de: 1, ate: 2}]
+leitura: {pt: "Python Basics, cap. 1", en: "Python Basics, ch. 1"}
+pistas: [{pt: Pista um, en: Hint one}]
+atividades:
+  - {tipo: ligar, enunciado: {pt: Liga, en: Link}, explicacao: {pt: Porque sim, en: Because}}
+  - {tipo: ordenar_fluxograma, enunciado: {pt: Ordena o fluxograma, en: Order flow}, explicacao: {pt: Expl, en: Expl}}
+  - {tipo: ordenar_python, enunciado: {pt: Ordena o código, en: Order code}, explicacao: {pt: Expl, en: Expl}}
+verificacao:
+  pergunta: {pt: "Qual?", en: "Which?"}
+  opcoes: [{pt: A, en: A}, {pt: B, en: B}, {pt: C, en: C}]
+  resposta: [1]

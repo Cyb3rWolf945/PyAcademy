@@ -2,7 +2,7 @@
 # registo de eventos (replay do WebSocket) e presença (tabela UNLOGGED, mais rápida e que se perde num crash).
 from datetime import datetime
 
-from sqlalchemy import BigInteger, Column, Float, ForeignKey, Index, Integer, UniqueConstraint, text
+from sqlalchemy import BigInteger, Boolean, Column, String, Float, ForeignKey, Index, Integer, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Field, SQLModel
 
@@ -31,6 +31,7 @@ class Tournament(SQLModel, table=True):
     teacher_id: int = Field(sa_column=_fk("users.id", index=True))
     name: str = Field(max_length=80)
     mode: str = Field(max_length=12)  # individual | agencias
+    format: str = Field(default="aula", max_length=14)  # aula | eliminatoria
     join_code: str = Field(unique=True, index=True, min_length=6, max_length=6)
     state: str = Field(default="lobby", max_length=16)
     current_round: int | None = None
@@ -38,6 +39,7 @@ class Tournament(SQLModel, table=True):
     created_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
     # Quando foi emitido o último evento "leaderboard": serve de porta para o agrupar a 1 por segundo.
     lb_emitted_at: datetime | None = Field(default=None, sa_column=Column(ts_column().type, nullable=True))
+    gp_emitted_at: datetime | None = Field(default=None, sa_column=Column(ts_column().type, nullable=True))  # idem, para group_progress
 
 
 class TournamentTeam(SQLModel, table=True):
@@ -57,6 +59,9 @@ class TournamentPlayer(SQLModel, table=True):
     user_id: int = Field(sa_column=Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True, index=True))
     team_id: int | None = Field(default=None, sa_column=Column(Integer, ForeignKey("tournament_teams.id", ondelete="SET NULL"), nullable=True))
     joined_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
+    # Eliminatória: alive | eliminated | champion
+    status: str = Field(default="alive", sa_column=Column(String(12), nullable=False, server_default="alive"))
+    eliminated_in_round: int | None = None
 
 
 class TournamentRound(SQLModel, table=True):
@@ -76,6 +81,9 @@ class TournamentRound(SQLModel, table=True):
     started_at: datetime | None = Field(default=None, sa_column=Column(ts_column().type, nullable=True))
     ends_at: datetime | None = Field(default=None, sa_column=Column(ts_column().type, nullable=True))
     remaining_s: int | None = None  # só enquanto pausada
+    is_final: bool = Field(default=False, sa_column=Column(Boolean, nullable=False, server_default="false"))
+    difficulty: str | None = Field(default=None, max_length=8)  # easy | medium | hard (Eliminatória)
+    edited: bool = Field(default=False, sa_column=Column(Boolean, nullable=False, server_default="false"))  # o professor trocou o exercício
 
 
 class TournamentSolve(SQLModel, table=True):
@@ -147,3 +155,20 @@ class TournamentSubmission(SQLModel, table=True):
     round_id: int = Field(sa_column=_fk("tournament_rounds.id"))
     received_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
 
+
+
+class TournamentGroup(SQLModel, table=True):
+    """Grupo de uma ronda da Eliminatória. members/winners/ranking são listas de user_id."""
+    __tablename__ = "tournament_groups"
+    __table_args__ = (UniqueConstraint("round_id", "idx", name="uq_group_idx"),)
+
+    id: int | None = Field(default=None, primary_key=True)
+    tournament_id: int = Field(sa_column=_fk("tournaments.id", index=True))
+    round_id: int = Field(sa_column=_fk("tournament_rounds.id", index=True))
+    idx: int
+    members: list = Field(default_factory=list, sa_column=Column(JSONB, nullable=False))
+    winners: list = Field(default_factory=list, sa_column=Column(JSONB, nullable=False))
+    decided: bool = False
+    decided_by: str | None = Field(default=None, max_length=8)  # solve | tests | draw | teacher
+    ranking: list = Field(default_factory=list, sa_column=Column(JSONB, nullable=False))  # ordem final (preenchida ao fechar)
+    draw_seed: int | None = Field(default=None, sa_column=Column(BigInteger, nullable=True))  # semente do sorteio, se houve

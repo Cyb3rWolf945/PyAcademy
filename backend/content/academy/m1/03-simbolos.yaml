@@ -1,0 +1,93 @@
+id: m1-03-simbolos
+modulo: m1
+ordem: 3
+titulo: {pt: "Os símbolos do fluxograma", en: "Flowchart symbols"}
+aprender:
+  pt: |
+    Um **fluxograma** desenha o algoritmo com formas e setas, e **cada forma é um tipo de passo**:
+
+    - **Início / Fim** (pílula): todo o fluxograma tem um início e um fim;
+    - **Ler** (paralelogramo): introduzir dados para variáveis;
+    - **Definir / Executar** (retângulo): guardar e calcular valores em memória;
+    - **Escrever** (paralelogramo): mostrar informação ao utilizador;
+    - **Decisão** (losango): o fluxo segue por um lado ou por outro;
+    - **Setas**: definem a ordem de execução.
+
+    Vê o exemplo do candeeiro que não acende: toca nos blocos e vê a linha de Python que lhes corresponde.
+  en: |
+    A **flowchart** draws the algorithm with shapes and arrows, and **each shape is a type of step**:
+
+    - **Start / End** (pill): every flowchart has a start and an end;
+    - **Read** (parallelogram): enter data into variables;
+    - **Define / Execute** (rectangle): store and calculate values in memory;
+    - **Write** (parallelogram): show information to the user;
+    - **Decision** (diamond): the flow goes one way or the other;
+    - **Arrows**: set the order of execution.
+
+    Look at the lamp that will not light: tap the blocks and see the Python line that matches them.
+exemplo:
+  id: candeeiro
+  titulo: {pt: "O candeeiro não acende", en: "The lamp will not light"}
+  corpo:
+    - id: s1
+      tipo: se
+      cond: {pt: "Lâmpada enroscada?", en: "Bulb screwed in?"}
+      py: lampada_enroscada
+      sim:
+        - id: s2
+          tipo: se
+          cond: {pt: "Lâmpada fundida?", en: "Bulb blown?"}
+          py: lampada_fundida
+          sim:
+            - {id: e1, tipo: escrever, texto: {pt: "Trocar lâmpada", en: "Replace bulb"}, py: 'print("Trocar a lâmpada")'}
+          nao:
+            - {id: e2, tipo: escrever, texto: {pt: "Comprar novo candeeiro", en: "Buy a new lamp"}, py: 'print("Comprar um candeeiro novo")'}
+      nao:
+        - {id: e3, tipo: escrever, texto: {pt: "Enroscar lâmpada", en: "Screw in the bulb"}, py: 'print("Enroscar a lâmpada")'}
+slides:
+  - {deck: aula-2, de: 23, ate: 23}
+pistas:
+  - pt: "Pensa no que cada forma faz: pedir, guardar, mostrar ou escolher."
+    en: "Think about what each shape does: ask, store, show or choose."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Qual é a forma do bloco que escolhe entre dois caminhos?"
+      en: "What shape is the block that chooses between two paths?"
+    pergunta:
+      pt: "Que forma tem o bloco de decisão?"
+      en: "What shape does the decision block have?"
+    opcoes:
+      - {pt: "Losango", en: "Diamond"}
+      - {pt: "Retângulo", en: "Rectangle"}
+      - {pt: "Paralelogramo", en: "Parallelogram"}
+      - {pt: "Pílula", en: "Pill"}
+    resposta: [0]
+    explicacao:
+      pt: "A decisão é um losango, com uma saída \"Sim\" e outra \"Não\". Como em \"Lâmpada enroscada?\"."
+      en: "A decision is a diamond, with a \"Yes\" exit and a \"No\" exit, like \"Bulb screwed in?\"."
+  - tipo: pergunta
+    enunciado:
+      pt: "Que bloco usarias para cada passo?"
+      en: "Which block would you use for each step?"
+    pergunta:
+      pt: "Quais destes passos usam um paralelogramo?"
+      en: "Which of these steps use a parallelogram?"
+    opcoes:
+      - {pt: "Ler a nota do aluno", en: "Read the student's mark"}
+      - {pt: "Calcular a média", en: "Calculate the average"}
+      - {pt: "Escrever o resultado no ecrã", en: "Write the result on screen"}
+      - {pt: "Início", en: "Start"}
+    resposta: [0, 2]
+    explicacao:
+      pt: "Ler e escrever (entrada e saída de dados) usam paralelogramos. Calcular é um retângulo e o início é uma pílula."
+      en: "Reading and writing (data in and out) use parallelograms. Calculating is a rectangle and the start is a pill."
+verificacao:
+  pergunta:
+    pt: "Quantas saídas tem um bloco de decisão?"
+    en: "How many exits does a decision block have?"
+  opcoes:
+    - {pt: "1", en: "1"}
+    - {pt: "2 (Sim e Não)", en: "2 (Yes and No)"}
+    - {pt: "3", en: "3"}
+  resposta: [1]

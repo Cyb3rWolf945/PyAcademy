@@ -1,0 +1,64 @@
+id: m0-04-texto-binario
+modulo: m0
+ordem: 4
+titulo: {pt: "Texto em binário", en: "Text in binary"}
+aprender:
+  pt: |
+    Quando escreves "Olá" numa mensagem, o computador não vê letras: **vê números, e esses números são sempre binário**.
+
+    A tabela **ASCII** dá um número a cada carácter (de 0 a 127). Por exemplo, o `A` é o 65, que em binário (8 bits, ou seja, 1 byte) é `01000001`. O **Unicode** alarga a tabela para caberem acentos, emojis e outros alfabetos.
+
+    Uma palavra é só uma fila de bytes, um por carácter: `Ola` são três bytes.
+  en: |
+    When you type "Olá" in a message, the computer does not see letters: **it sees numbers, and those numbers are always binary**.
+
+    The **ASCII** table gives a number to each character (0 to 127). For example `A` is 65, which in binary (8 bits, i.e. 1 byte) is `01000001`. **Unicode** extends the table to fit accents, emojis and other alphabets.
+
+    A word is just a row of bytes, one per character: `Ola` is three bytes.
+exemplo:
+  id: ascii-a
+  titulo: {pt: "Código ASCII do A", en: "ASCII code of A"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "definir inteiro codigo", en: "define integer codigo"}, py: null}
+    - {id: c, tipo: calcular, texto: {pt: "codigo = código ASCII de 'A'", en: "codigo = ASCII code of 'A'"}, py: 'codigo = ord("A")'}
+    - {id: e, tipo: escrever, texto: {pt: "escrever codigo", en: "write codigo"}, py: "print(codigo)"}
+slides:
+  - {deck: aula-2, de: 14, ate: 15}
+pistas:
+  - pt: "O 'A' é o 65. O 'B' é o número seguinte."
+    en: "'A' is 65. 'B' is the next number."
+atividades:
+  - tipo: completar
+    enunciado:
+      pt: "Completa o programa que mostra o código ASCII da letra A."
+      en: "Complete the program that shows the ASCII code of the letter A."
+    lacunas:
+      - {stmt: c, lado: py, modelo: {pt: 'codigo = ord("___")', en: 'codigo = ord("___")'}, respostas: ["A"]}
+      - {stmt: e, lado: fluxo, modelo: {pt: "escrever ___ (o resultado, em base 10)", en: "write ___ (the result, in base 10)"}, respostas: ["65"]}
+    explicacao:
+      pt: "`ord(\"A\")` devolve o número do carácter, e o `A` é o 65. Em binário, 65 escreve-se 01000001."
+      en: "`ord(\"A\")` returns the character's number, and `A` is 65. In binary, 65 is written 01000001."
+  - tipo: pergunta
+    enunciado:
+      pt: "Quantos bytes tem uma palavra?"
+      en: "How many bytes does a word take?"
+    pergunta:
+      pt: "Em ASCII, quantos bytes ocupa a palavra \"Adeus\"?"
+      en: "In ASCII, how many bytes does the word \"Adeus\" take?"
+    opcoes:
+      - {pt: "1", en: "1"}
+      - {pt: "5", en: "5"}
+      - {pt: "8", en: "8"}
+    resposta: [1]
+    explicacao:
+      pt: "Um byte por carácter, e \"Adeus\" tem 5 caracteres."
+      en: "One byte per character, and \"Adeus\" has 5 characters."
+verificacao:
+  pergunta:
+    pt: "Quantos bits tem um byte?"
+    en: "How many bits are in a byte?"
+  opcoes:
+    - {pt: "4", en: "4"}
+    - {pt: "8", en: "8"}
+    - {pt: "16", en: "16"}
+  resposta: [1]

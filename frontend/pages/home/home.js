@@ -8,8 +8,13 @@ import { whenIdle } from "../../scenes/lazy.js";
 
 let lobby = null;
 whenIdle(async () => {
-  const { mountLobby } = await import("../../scenes/lobby-island.js");
-  lobby = await mountLobby(document.getElementById("hero"), { theme: currentTheme() });
+  const { mountHero } = await import("../../scenes/hero.js");
+  lobby = await mountHero(document.getElementById("hero"), { theme: currentTheme(), lift: 4 });
+});
+// Leaderboard: carrega depois do herói, sem atrasar o primeiro pixel
+whenIdle(async () => {
+  const { mountLeaderboard } = await import("../../components/leaderboard-public.js");
+  mountLeaderboard(document.getElementById("leaderboard"), { nav: true });
 });
 document.addEventListener("themechange", (e) => lobby?.setTheme(e.detail));
 
@@ -31,6 +36,7 @@ if (me) {
     bar.setAttribute("aria-label", t("home.xp", { xp, next }));
   };
   render();
+  document.getElementById("level-n").textContent = String(lvl);
   document.addEventListener("localechange", render);
   if (me.role === "teacher") document.getElementById("admin-link").hidden = false;
   document.querySelectorAll("[data-soon]").forEach((b) => b.addEventListener("click", () => {

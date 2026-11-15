@@ -7,16 +7,24 @@
   <meta name="theme-color" content="#1b2a1f">
   <title>PyArena</title>
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
   <script src="/services/theme-boot.js"></script>
   <link rel="stylesheet" href="/dist/app.css">
 </head>
 <body class="min-h-dvh pb-24 lg:pb-0 lg:pl-56">
   <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
     <h1 class="text-xl text-accent" data-i18n="nav.profile"></h1>
-    <div class="flex gap-2" data-lang-switch></div>
+    <div class="flex gap-2"><div data-score-hud></div><div class="flex gap-2" data-lang-switch></div></div>
   </header>
-  <main class="mx-auto grid max-w-3xl gap-4 p-4">
+  <main class="enter-stagger mx-auto grid max-w-3xl gap-4 p-4">
+    <section class="panel-pixel hud" aria-label="Perfil">
+      <div class="hud-avatar"><img class="sprite" src="/assets/sprites/icons/profile.png" width="56" height="56" alt=""><span class="hud-level" id="p-level-n">1</span></div>
+      <div class="grid min-w-0 flex-1 gap-2">
+        <p class="truncate font-pixel text-xs" id="p-name">&nbsp;</p>
+        <div class="hud-chips"><span class="chip"><img src="/assets/sprites/icons/star.png" width="20" height="20" alt=""><span id="p-level"></span></span><span class="chip"><img src="/assets/sprites/icons/coin.png" width="20" height="20" alt=""><span id="p-score">0</span></span><span class="chip"><img src="/assets/sprites/icons/shield.png" width="20" height="20" alt=""><span id="p-role"></span></span></div>
+      </div>
+    </section>
     <form id="prefs-form" class="panel-pixel grid gap-3">
       <h2 class="text-lg" data-i18n="profile.preferences"></h2>
       <label class="grid gap-1 text-sm"><span data-i18n="field.display_name"></span>
@@ -27,6 +35,25 @@
         <select class="input-pixel" name="preferred_theme"></select></label>
       <button class="btn-pixel" type="submit" data-i18n="common.save"></button>
     </form>
+    <form id="join-class-form" class="panel-pixel grid gap-3" hidden>
+      <h2 class="text-lg" data-i18n="profile.join_class_title"></h2>
+      <p class="text-sm text-muted" data-i18n="profile.join_class_help"></p>
+      <label class="grid gap-1 text-sm"><span data-i18n="profile.join_class_code"></span>
+        <input class="input-pixel" name="join_code" maxlength="6" required></label>
+      <button class="btn-pixel" type="submit" data-i18n="profile.join_class_button"></button>
+    </form>
+
+    <section id="lb-section" class="panel-pixel grid gap-3">
+      <h2 class="text-lg" data-i18n="profile.lb_title"></h2>
+      <dl class="grid grid-cols-2 gap-2 text-sm">
+        <div class="bg-surface-2 p-2"><dt class="text-xs text-muted" data-i18n="profile.lb_points_all"></dt><dd id="lb-all" class="font-pixel text-lg text-accent">-</dd></div>
+        <div class="bg-surface-2 p-2"><dt class="text-xs text-muted" data-i18n="profile.lb_points_week"></dt><dd id="lb-week" class="font-pixel text-lg text-accent">-</dd></div>
+      </dl>
+      <p id="lb-rank" class="text-sm text-muted"></p>
+      <label class="flex min-h-[44px] items-center gap-3"><input id="lb-toggle" type="checkbox" class="h-6 w-6 shrink-0 accent-[var(--c-accent)]">
+        <span class="text-sm" data-i18n="profile.lb_toggle"></span></label>
+      <p class="text-xs text-muted" data-i18n="profile.lb_privacy"></p>
+    </section>
 
     <form id="pw-form" class="panel-pixel grid gap-3">
       <h2 class="text-lg" data-i18n="password.title"></h2>

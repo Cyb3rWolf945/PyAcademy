@@ -26,5 +26,13 @@
   "tournament.problem_not_in_round": "This problem is not part of the round.",
   "tournament.hint_not_found": "That hint does not exist.",
   "tournament.team_locked": "Your agency already has points: you can no longer switch agency. Ask the teacher.",
-  "tournament.too_many_attempts": "Too many wrong codes. Wait a few minutes."
+  "tournament.too_many_attempts": "Too many wrong codes. Wait a few minutes.",
+  "tournament.invalid_format": "Invalid tournament format.",
+  "tournament.invalid_points": "Invalid points values.",
+  "tournament.exercise_invalid": "Each round has a single code exercise (program, function or bug).",
+  "tournament.wrong_format": "This action only exists in the Elimination format.",
+  "tournament.not_enough_players": "At least 2 players still in the game are needed to start the round.",
+  "tournament.group_not_found": "Group not found.",
+  "tournament.player_not_in_group": "That student is not in this group.",
+  "leaderboard.rate_limited": "Too many requests. Try again shortly."
 }

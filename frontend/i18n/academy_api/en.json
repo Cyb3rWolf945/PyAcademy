@@ -1,0 +1,11 @@
+{
+  "academy.module_not_found": "Module not found.",
+  "academy.section_not_found": "Section not found.",
+  "academy.locked": "This section is still locked. Complete the previous one first.",
+  "academy.activity_not_found": "Activity not found.",
+  "academy.invalid_answer": "The submitted answer is not valid.",
+  "academy.hint_not_found": "That hint does not exist.",
+  "academy.rate_limited": "You are answering too fast. Wait a moment.",
+  "academy.slide_not_found": "Slide not found.",
+  "academy.slides_forbidden": "Slides are only available to students in a class and teachers."
+}

@@ -7,14 +7,22 @@
   <meta name="theme-color" content="#1b2a1f">
   <title>PyArena</title>
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-32.png">
   <script src="/services/theme-boot.js"></script>
   <link rel="stylesheet" href="/dist/app.css">
 </head>
 <body class="h-dvh overflow-hidden">
   <div class="flex h-dvh flex-col gap-[1.2vw] p-[1.5vw]">
     <header class="flex items-center justify-between gap-4">
-      <h1 id="title" class="min-w-0 truncate font-pixel text-[3vw] text-accent">PyArena</h1>
+      <div class="flex min-w-0 items-center gap-[1vw]">
+        <a href="/" aria-label="PyArena">
+          <img class="sprite h-[5vw] w-[5vw]" src="/assets/sprites/icons/logo-64.png" width="64" height="64" alt="">
+        </a>
+        <div class="grid min-w-0">
+          <h1 id="title" class="min-w-0 truncate font-pixel text-[3vw] text-accent">PyArena</h1>
+          <small class="truncate font-ui text-[1.3vw] text-muted" data-i18n="brand.university"></small>
+        </div>
+      </div>
       <div class="flex items-center gap-3">
         <span id="conn"></span>
         <button id="fs" type="button" class="btn-pixel btn-pixel--ghost" data-i18n-aria="projector.fullscreen">⛶</button>

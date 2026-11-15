@@ -107,7 +107,7 @@ function buildBiome(theme) {
   return { cfg, vox, anim, radius };
 }
 
-export async function mountLobby(el, { theme } = {}) {
+export async function mountLobby(el, { theme, lift = 0 } = {}) { // lift: sobe a ilha no ecrã (home: o HUD tapa a parte de baixo)
   const stage = await createStage(el, { fov: 30, onDegrade: () => {} });
   if (!stage) return { dispose() {}, setTheme() {} }; // reserva 2D: o cartaz do CSS já está visível
   const { THREE, scene, camera } = stage;
@@ -211,7 +211,7 @@ export async function mountLobby(el, { theme } = {}) {
     island.position.y = Math.round(Math.sin(t * 0.8) * 4) / 6; // flutua em degraus
     const ang = t * 0.12 + 0.6;
     camera.position.set(Math.cos(ang) * camDist, camDist * 0.42, Math.sin(ang) * camDist);
-    camera.lookAt(0, camRef < 1 ? 3 : 2.2, 0);
+    camera.lookAt(0, (camRef < 1 ? 3 : 2.2) - lift, 0);
   });
 
   return {

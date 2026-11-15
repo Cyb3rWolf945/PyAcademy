@@ -3,6 +3,7 @@
 import { el } from "./dom.js";
 import { t } from "../services/i18n.js";
 import { fmtPoints } from "../pages/challenge/lib.js";
+import { medalImg } from "./medal.js";
 
 // Classes literais para o Tailwind as encontrar
 const TEAM_BG = ["bg-team-0", "bg-team-1", "bg-team-2", "bg-team-3", "bg-team-4", "bg-team-5", "bg-team-6", "bg-team-7"];
@@ -31,6 +32,7 @@ export function mountLeaderboard(host, { meKey = null, limit = 0, big = false } 
     const li = el("li", { class: `flex items-center gap-2 bg-surface ${size}` });
     li._parts = {
       rank: el("span", { class: `${big ? "w-[3em]" : "w-[2.4em]"} shrink-0 font-pixel text-accent` }),
+      medal: el("span", { class: `${big ? "w-[3vw]" : "w-6"} inline-flex shrink-0` }),
       dot: el("span", { class: `inline-block ${big ? "h-[2vw] w-[2vw]" : "h-3 w-3"} shrink-0 ${color || "bg-accent"}`, "aria-hidden": "true" }),
       name: el("span", { class: "min-w-0 flex-1 truncate" }),
       arrow: el("span", { class: "w-[1.5em] shrink-0 text-center", "aria-hidden": "true" }),
@@ -43,6 +45,7 @@ export function mountLeaderboard(host, { meKey = null, limit = 0, big = false } 
   function fill(li, row, teams) {
     const p = li._parts;
     p.rank.textContent = `#${row.rank}`;
+    p.medal.replaceChildren(...(row.rank >= 1 && row.rank <= 3 ? [medalImg(row.rank, { cls: big ? "medal h-[2.8vw] w-[2.8vw]" : "medal h-6 w-6" })] : []));
     p.name.textContent = row.name;
     p.pts.textContent = fmtPoints(row.points);
     const d = row.delta_rank || 0;

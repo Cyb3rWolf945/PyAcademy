@@ -1,6 +1,10 @@
 # Testes das rotas do professor: permissões, isolamento entre professores e importação CSV.
 import pytest
+from sqlalchemy import select
 
+from app.db import SessionLocal
+from app.models.academy import AcademyProgress
+from app.models.points import UserPoints
 from app.models.user import Role
 from tests.conftest import login
 
@@ -55,3 +59,39 @@ async def test_import_students_csv(new_client, make_user):
         # o aluno entra com a temporária e fica bloqueado até mudar
         await login(s, "ana", temp)
         assert (await s.get("/api/problems")).json() == {"error": "auth.must_change_password"}
+
+
+async def test_delete_class_orphans_students_and_allows_rejoining(client, new_client, make_user, make_class):
+    teacher = await make_user("prof1", Role.teacher)
+    class_a = await make_class(teacher.id, code="AAA234")
+    student = await make_user("ana", class_id=class_a.id)
+    async with SessionLocal() as db:
+        db.add(AcademyProgress(user_id=student.id, section_id="m0-s1"))
+        db.add(UserPoints(user_id=student.id, points=12, reason="academy_section", problem_slug="m0-s1"))
+        await db.commit()
+    teacher_headers = await login(client, "prof1")
+    assert (await client.delete(f"/api/classes/{class_a.id}", headers=teacher_headers)).json() == {"ok": True}
+    async with SessionLocal() as db:
+        refreshed = await db.get(type(student), student.id)
+        assert refreshed.class_id is None
+        assert await db.get(AcademyProgress, (student.id, "m0-s1"))
+        assert (await db.execute(select(UserPoints).where(UserPoints.user_id == student.id))).scalar_one().points == 12
+    class_b = await make_class(teacher.id, code="BBB234")
+    async with new_client() as student_client:
+        student_headers = await login(student_client, "ana")
+        joined = await student_client.post("/api/auth/join-class", json={"join_code": "BBB234"}, headers=student_headers)
+        assert joined.status_code == 200 and joined.json()["user"]["class_id"] == class_b.id
+
+
+async def test_teacher_can_bulk_delete_only_owned_classes(client, make_user, make_class):
+    teacher = await make_user("prof1", Role.teacher)
+    other = await make_user("prof2", Role.teacher)
+    first = await make_class(teacher.id, code="AAA234")
+    second = await make_class(teacher.id, code="BBB234")
+    foreign = await make_class(other.id, code="CCC234")
+    headers = await login(client, "prof1")
+    result = await client.post("/api/classes/bulk-delete", json={"class_ids": [first.id, second.id]}, headers=headers)
+    assert result.status_code == 200 and result.json() == {"deleted": 2}
+    assert (await client.get("/api/classes")).json()["classes"] == []
+    rejected = await client.post("/api/classes/bulk-delete", json={"class_ids": [foreign.id]}, headers=headers)
+    assert rejected.status_code == 404 and rejected.json() == {"error": "class.not_found"}

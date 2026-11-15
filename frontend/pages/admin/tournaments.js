@@ -6,6 +6,7 @@ import { el } from "../../components/dom.js";
 import { toast } from "../../components/toast.js";
 import { pick, stars } from "../challenge/lib.js";
 import { fmtClock } from "../../components/timer.js";
+import { memberRow } from "../../components/bracket.js";
 
 const POLL_MS = 3000;
 const TIPOS = ["programa", "funcao", "bug", "quiz", "decomposicao", "tracar"];
@@ -52,22 +53,34 @@ export function initTournaments(root) {
   const classSelect = el("select", { class: "input-pixel", name: "class_id", required: true });
   const nameInput = el("input", { class: "input-pixel", name: "name", maxlength: 80, required: true });
   const modeSelect = el("select", { class: "input-pixel", name: "mode" });
+  const formatSelect = el("select", { class: "input-pixel", name: "format" });
+  const groupSize = el("input", { class: "input-pixel", name: "group_size", type: "number", min: 3, max: 6, value: 4 });
+  const advance = el("input", { class: "input-pixel", name: "advance_per_group", type: "number", min: 1, max: 2, value: 1 });
+  const elimFields = el("div", { class: "grid grid-cols-2 gap-2" });
+  const aulaFields = el("div", { class: "grid gap-1" });
   const createForm = el("form", { class: "grid gap-3" });
   const list = el("ul", { class: "grid gap-2" });
-  const detail = el("div", { class: "grid gap-3" });
+  const detail = el("div", { class: "grid min-w-0 gap-3" });
   const heading = el("h2", { class: "text-lg" });
+  const lab = (text, input) => el("label", { class: "grid gap-1 text-sm" }, el("span", {}, text), input);
+  const syncFormat = () => { const e = formatSelect.value === "eliminatoria"; elimFields.hidden = !e; aulaFields.hidden = e; };
+  formatSelect.addEventListener("change", syncFormat);
   // Textos do cabeçalho e do formulário: refeitos quando o idioma muda (os campos mantêm o valor)
   function paintShell() {
     heading.textContent = t("tournament.admin_title");
-    const mode = modeSelect.value;
+    const mode = modeSelect.value, fmt = formatSelect.value || "eliminatoria";
     modeSelect.replaceChildren(el("option", { value: "agencias" }, t("tournament.mode_agencias")), el("option", { value: "individual" }, t("tournament.mode_individual")));
     if (mode) modeSelect.value = mode;
+    formatSelect.replaceChildren(el("option", { value: "eliminatoria" }, t("tournament.format_eliminatoria")), el("option", { value: "aula" }, t("tournament.format_aula")));
+    formatSelect.value = fmt;
+    elimFields.replaceChildren(lab(t("tournament.group_size"), groupSize), lab(t("tournament.advance_per_group"), advance));
+    aulaFields.replaceChildren(lab(t("tournament.admin_mode"), modeSelect));
     createForm.replaceChildren(
       el("h3", {}, t("tournament.admin_new")),
-      el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_class")), classSelect),
-      el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_name")), nameInput),
-      el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_mode")), modeSelect),
+      lab(t("tournament.admin_class"), classSelect), lab(t("tournament.admin_name"), nameInput), lab(t("tournament.admin_format"), formatSelect),
+      elimFields, aulaFields,
       el("button", { class: "btn-pixel btn-pixel--accent", type: "submit" }, t("tournament.admin_create")));
+    syncFormat();
   }
   paintShell();
   root.replaceChildren(heading, createForm, list, detail);
@@ -90,10 +103,17 @@ export function initTournaments(root) {
     loadList();
   }
 
+  function setActiveClass(classId) {
+    if (classes.some((c) => c.id === classId)) classSelect.value = String(classId);
+  }
+
   createForm.addEventListener("submit", async (ev) => {
     ev.preventDefault();
     try {
-      const res = await api("POST", "/api/tournaments", { class_id: Number(classSelect.value), name: nameInput.value.trim(), mode: modeSelect.value });
+      const body = { class_id: Number(classSelect.value), name: nameInput.value.trim(), format: formatSelect.value };
+      if (body.format === "eliminatoria") Object.assign(body, { group_size: Number(groupSize.value), advance_per_group: Number(advance.value) });
+      else body.mode = modeSelect.value;
+      const res = await api("POST", "/api/tournaments", body);
       nameInput.value = "";
       await loadList();
       select(res.tournament?.id ?? res.id);
@@ -126,7 +146,76 @@ export function initTournaments(root) {
   }
 
   // ---------- Painel de controlo ----------
+  const isElim = () => data.format === "eliminatoria";
+
+  // Painel da eliminatória: um botão grande por ação; fechar/terminar pedem segundo toque
+  function elimControls() {
+    const tour = data.tournament;
+    const cur = tour.current_round, st = tour.state;
+    const big = "btn-pixel btn-pixel--lg min-h-[64px]";
+    const btns = [];
+    if (st === "lobby" || st === "between_rounds") {
+      btns.push(el("button", { type: "button", class: `${big} btn-pixel--accent sm:col-span-2`, onclick: () => call("POST", "/rounds/next/start") }, `▶ ${t("tournament.ctl_next_round")}`));
+    }
+    if (st === "round_active") btns.push(el("button", { type: "button", class: big, onclick: () => call("POST", `/rounds/${cur}/pause`) }, `⏸ ${t("tournament.ctl_pause")}`));
+    if (st === "round_paused") btns.push(el("button", { type: "button", class: `${big} btn-pixel--accent`, onclick: () => call("POST", `/rounds/${cur}/resume`) }, `▶ ${t("tournament.ctl_resume")}`));
+    if (st === "round_active" || st === "round_paused") {
+      btns.push(el("button", { type: "button", class: big, onclick: () => call("POST", `/rounds/${cur}/extend`, { seconds: 120 }) }, `⏱ ${t("tournament.ctl_extend")}`));
+      btns.push(confirmButton(`⏹ ${t("tournament.ctl_close")}`, t("tournament.ctl_tap_confirm"), () => call("POST", `/rounds/${cur}/close`), `${big} btn-pixel--danger`));
+    }
+    if (st !== "finished") btns.push(confirmButton(`🏁 ${t("tournament.ctl_finish")}`, t("tournament.ctl_tap_confirm"), () => call("POST", "/finish"), `${big} btn-pixel--danger`));
+    const curRound = (data.rounds || []).find((r) => r.idx === cur);
+    return el("section", { class: "panel-pixel grid gap-3" },
+      el("div", { class: "flex flex-wrap items-center gap-2" },
+        el("span", { class: "badge-pixel" }, t(`tournament.state_${st}`)),
+        el("span", { class: "text-sm" }, t("tournament.alive_of", { alive: data.alive_count ?? "?", total: data.players_count ?? "?" })),
+        curRound ? el("span", { class: "text-sm" }, `${roundTitleOf(curRound)}${curRound.state === "paused" ? ` · ${fmtClock(curRound.remaining_s || 0)}` : ""}`) : null),
+      el("div", { class: "grid gap-2 sm:grid-cols-2" }, btns));
+  }
+  const roundTitleOf = (r) => pick(r.title) || (r.is_final ? t("tournament.final_round") : t("tournament.round_n", { n: r.idx }));
+
+  // Grelha dos grupos da ronda atual (ou da última): progresso ao vivo + "definir vencedor" com confirmação
+  function groupsView() {
+    const rounds = (data.rounds || []).filter((r) => r.groups?.length);
+    const r = rounds.find((x) => x.idx === data.tournament.current_round) || rounds[rounds.length - 1];
+    if (!r) return el("section", { class: "panel-pixel" }, el("p", { class: "text-sm text-muted" }, t("tournament.bracket_empty")));
+    const grid = el("div", { class: "grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-3" }, r.groups.map((g, i) => el("div", { class: `grid min-w-0 gap-1 bg-surface-2 p-2 ${g.decided ? "border-l-4 border-success" : ""}` },
+      el("p", { class: "text-xs text-muted" }, `${t("tournament.group_n", { n: i + 1 })}${g.decided_by ? ` · ${t(`tournament.decided_${g.decided_by}`)}` : ""}`),
+      ...(g.members || []).map((m) => el("div", { class: "grid gap-1" },
+        memberRow(m, { meId: null, attempts: true }),
+        m.status === "winner" ? null : confirmButton(`🏆 ${t("tournament.set_winner")}`, t("tournament.ctl_tap_confirm"), () => call("POST", `/groups/${g.id}/winner`, { user_id: m.user_id }), "btn-pixel btn-pixel--ghost text-xs"))))));
+    return el("section", { class: "panel-pixel grid min-w-0 gap-2" }, el("h3", {}, `${t("tournament.groups_live")} · ${roundTitleOf(r)}`), grid);
+  }
+
+  // Pré-visualização do bracket com os alunos que já entraram (só no lobby)
+  let previewBox = null, previewTimer = 0;
+  const pv = { group_size: 4, advance: 1 };
+  function previewView() {
+    const box = el("section", { class: "panel-pixel grid min-w-0 gap-2" });
+    const gs = el("input", { class: "input-pixel", type: "number", min: 3, max: 6, value: data.config?.group_size ?? data.tournament.config?.group_size ?? pv.group_size, "aria-label": t("tournament.group_size") });
+    const ad = el("input", { class: "input-pixel", type: "number", min: 1, max: 2, value: data.config?.advance_per_group ?? data.tournament.config?.advance_per_group ?? pv.advance, "aria-label": t("tournament.advance_per_group") });
+    const out = el("ul", { class: "grid gap-1 text-sm" });
+    async function load() {
+      try {
+        const r = await api("GET", `/api/tournaments/${selected}/bracket-preview?group_size=${gs.value}&advance_per_group=${ad.value}`);
+        out.replaceChildren(el("li", { class: "font-bold" }, t("tournament.preview_players", { n: r.players })),
+          ...(r.rounds || []).map((x) => el("li", {}, x.is_final ? t("tournament.preview_final", { n: x.sizes?.[0] ?? "" }) : t("tournament.preview_round", { n: x.idx, groups: x.groups, sizes: (x.sizes || []).join(", "), adv: x.advancing, per: ad.value }))));
+      } catch (err) { out.replaceChildren(el("li", { class: "text-danger" }, errorText(err))); }
+    }
+    const again = () => { clearTimeout(previewTimer); previewTimer = setTimeout(load, 300); };
+    gs.addEventListener("input", again); ad.addEventListener("input", again);
+    // Guardar: PATCH /config (só no lobby) e refresca a pré-visualização
+    const save = el("button", { type: "button", class: "btn-pixel btn-pixel--accent", onclick: async () => {
+      try { await api("PATCH", `/api/tournaments/${selected}/config`, { group_size: Number(gs.value), advance_per_group: Number(ad.value) }); toast(t("common.saved"), "success"); await load(); }
+      catch (err) { toast(errorText(err), "error"); }
+    } }, t("tournament.save_config"));
+    box.append(el("h3", {}, t("tournament.preview_title")), el("div", { class: "grid grid-cols-2 gap-2" }, lab(t("tournament.group_size"), gs), lab(t("tournament.advance_per_group"), ad)), save, out);
+    load();
+    return box;
+  }
+
   function controls() {
+    if (isElim()) return elimControls();
     const tour = data.tournament, rounds = data.rounds || [];
     const cur = tour.current_round;
     const nextPending = rounds.find((r) => r.state === "pending");
@@ -178,9 +267,9 @@ export function initTournaments(root) {
 
   async function saveEditor() {
     try {
-      await api("PUT", `/api/tournaments/${selected}/rounds/${editing}`, {
-        title: draft.title, problem_slugs: draft.slugs, points: draft.points, multiplier: draft.multiplier, duration_s: Math.round(draft.duration_min * 60),
-      });
+      await api("PUT", `/api/tournaments/${selected}/rounds/${editing}`, isElim()
+        ? { problem_slugs: draft.slugs, duration_s: Math.round(draft.duration_min * 60) }
+        : { title: draft.title, problem_slugs: draft.slugs, points: draft.points, multiplier: draft.multiplier, duration_s: Math.round(draft.duration_min * 60) });
       editing = null; picking = false;
       toast(t("common.saved"), "success");
     } catch (err) { toast(errorText(err), "error"); }
@@ -200,18 +289,18 @@ export function initTournaments(root) {
     const results = el("ul", { class: "grid max-h-80 gap-1 overflow-y-auto" });
     function paintResults() {
       const needle = filters.q.trim().toLowerCase();
-      const rows = all.filter((p) => (!filters.bloco || p.bloco === filters.bloco) && (!filters.tipo || p.tipo === filters.tipo)
+      const rows = all.filter((p) => (!isElim() || ["programa", "funcao", "bug"].includes(p.tipo)) && (!filters.bloco || p.bloco === filters.bloco) && (!filters.tipo || p.tipo === filters.tipo)
         && (!filters.dificuldade || String(p.dificuldade) === filters.dificuldade)
         && (!needle || `${p.titulo.pt} ${p.titulo.en} ${p.id}`.toLowerCase().includes(needle))).slice(0, 80);
       results.replaceChildren(...rows.map((p) => el("li", {}, el("button", {
         type: "button", class: "btn-pixel btn-pixel--ghost w-full justify-between text-left", disabled: draft.slugs.includes(p.id),
-        onclick: () => { draft.slugs.push(p.id); render(); },
+        onclick: () => { if (isElim()) draft.slugs = [p.id]; else draft.slugs.push(p.id); render(); },
       }, el("span", { class: "min-w-0 truncate" }, p.estado === "rascunho" ? `[${t("tournament.draft")}] ` : "", pick(p.titulo)), el("span", { class: "shrink-0 text-xs" }, `${stars(p.dificuldade)} ${t(`tournament.tipo_${p.tipo}`)} · B${p.bloco}`)))));
       if (!rows.length) results.replaceChildren(el("li", { class: "text-sm text-muted" }, t("tournament.admin_no_problems")));
     }
     paintResults();
     return el("div", { class: "panel-pixel panel-pixel--inset grid gap-2" },
-      el("div", { class: "grid gap-2 sm:grid-cols-4" }, q, sel("bloco", blocos, t("tournament.admin_filter_bloco")), sel("tipo", TIPOS, t("tournament.admin_filter_tipo")), sel("dificuldade", [1, 2, 3, 4, 5], t("tournament.admin_filter_stars"))),
+      el("div", { class: "grid gap-2 sm:grid-cols-4" }, q, sel("bloco", blocos, t("tournament.admin_filter_bloco")), sel("tipo", isElim() ? TIPOS.slice(0, 3) : TIPOS, t("tournament.admin_filter_tipo")), sel("dificuldade", [1, 2, 3, 4, 5], t("tournament.admin_filter_stars"))),
       results,
       el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => { picking = false; render(); } }, t("tournament.admin_picker_done")));
   }
@@ -226,12 +315,12 @@ export function initTournaments(root) {
     tpt.addEventListener("input", () => { draft.title.pt = tpt.value; });
     ten.addEventListener("input", () => { draft.title.en = ten.value; });
     return el("div", { class: "grid gap-3 bg-surface-2 p-3" },
-      el("div", { class: "grid gap-2 sm:grid-cols-2" },
+      isElim() ? null : el("div", { class: "grid gap-2 sm:grid-cols-2" },
         el("label", { class: "grid gap-1 text-sm" }, el("span", {}, `${t("tournament.admin_round_title")} (PT)`), tpt),
         el("label", { class: "grid gap-1 text-sm" }, el("span", {}, `${t("tournament.admin_round_title")} (EN)`), ten)),
       el("div", { class: "grid grid-cols-3 gap-2" },
-        el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_points")), numInput(draft.points, (v) => { draft.points = v; }, { min: 0, max: 1000 })),
-        el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_multiplier")), numInput(draft.multiplier, (v) => { draft.multiplier = v; }, { min: 1, max: 10, step: 0.5 })),
+        isElim() ? null : el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_points")), numInput(draft.points, (v) => { draft.points = v; }, { min: 0, max: 1000 })),
+        isElim() ? null : el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_multiplier")), numInput(draft.multiplier, (v) => { draft.multiplier = v; }, { min: 1, max: 10, step: 0.5 })),
         el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_minutes")), numInput(draft.duration_min, (v) => { draft.duration_min = v; }, { min: 1, max: 180 }))),
       el("ul", { class: "grid gap-1" }, slugRows),
       picking ? pickerView() : el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => { picking = true; render(); } }, `＋ ${t("tournament.admin_add_problem")}`),
@@ -245,9 +334,9 @@ export function initTournaments(root) {
       const pending = r.state === "pending";
       return el("li", { class: "grid gap-2" },
         el("div", { class: "flex items-center gap-2" },
-          el("span", { class: "min-w-0 flex-1 text-sm" }, `${r.idx}. ${pick(r.title)}${r.is_boss ? " 👹" : ""} · ${r.points}×${r.multiplier} · ${Math.round((r.duration_s || 0) / 60)} min · ${(r.problem_slugs || []).length}`),
+          el("span", { class: "min-w-0 flex-1 text-sm" }, isElim() ? `${r.idx}. ${roundTitleOf(r)} · ${Math.round((r.duration_s || 0) / 60)} min · ${(r.problems?.[0] ? pick(r.problems[0].titulo) : "—")}` : `${r.idx}. ${pick(r.title)}${r.is_boss ? " 👹" : ""} · ${r.points}×${r.multiplier} · ${Math.round((r.duration_s || 0) / 60)} min · ${(r.problem_slugs || []).length}`),
           el("span", { class: "badge-pixel" }, t(`tournament.round_state_${r.state}`)),
-          (r.problem_slugs || []).length < (r.is_boss ? 1 : 3) ? el("span", { class: "badge-pixel text-warning" }, `⚠ ${t("tournament.missing_missions")}`) : null,
+          (r.problem_slugs || []).length < (isElim() || r.is_boss ? 1 : 3) ? el("span", { class: "badge-pixel text-warning" }, `⚠ ${t("tournament.missing_missions")}`) : null,
           pending && editing !== r.idx ? el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => openEditor(r) }, t("tournament.admin_edit")) : null),
         editing === r.idx ? editorView(r) : null);
     });
@@ -285,9 +374,9 @@ export function initTournaments(root) {
         el("p", { class: "text-sm" }, `${t("tournament.admin_join_code")}: `, el("strong", { class: "text-2xl text-accent" }, tour.join_code || "")),
         el("p", { class: "text-sm text-muted" }, t(`tournament.mode_${tour.mode}`)),
         el("a", { class: "btn-pixel btn-pixel--accent", href: projectorUrl, target: "_blank", rel: "noopener" }, `📽 ${t("tournament.admin_open_projector")}`)),
-      controls(), roundsView(), presenceView());
+      ...(isElim() ? [controls(), data.tournament.state === "lobby" ? previewView() : null, groupsView(), roundsView(), presenceView()] : [controls(), roundsView(), presenceView()]).filter(Boolean));
   }
 
   document.addEventListener("localechange", () => { paintShell(); loadList(); render(); });
-  return { setClasses };
+  return { setClasses, setActiveClass };
 }

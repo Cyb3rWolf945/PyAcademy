@@ -1,0 +1,60 @@
+id: m1-06-kmh-ms
+modulo: m1
+ordem: 6
+titulo: {pt: "Desafio: km/h para m/s", en: "Challenge: km/h to m/s"}
+aprender:
+  pt: |
+    Desafio: ler uma velocidade em km/h e mostrar o valor em m/s. Por exemplo, 100 km/h são 27.78 m/s.
+
+    A dica é **decompor o problema**, um passo por linha: os quilómetros passam a metros (× 1000) e as horas passam a segundos (÷ 3600).
+
+    Sê tu a montar o fluxograma e a completar o Python. Já tens todas as peças.
+  en: |
+    Challenge: read a speed in km/h and show the value in m/s. For example, 100 km/h is 27.78 m/s.
+
+    The tip is to **break the problem down**, one step per line: kilometres become metres (× 1000) and hours become seconds (÷ 3600).
+
+    You build the flowchart and complete the Python. You already have all the pieces.
+exemplo:
+  id: kmh-ms
+  titulo: {pt: "Km/h para m/s", en: "Km/h to m/s"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "definir real kmh, mh, ms", en: "define real kmh, mh, ms"}, py: null}
+    - {id: l, tipo: ler, texto: {pt: "ler kmh", en: "read kmh"}, py: 'kmh = float(input("Km/h: "))'}
+    - {id: c1, tipo: calcular, texto: {pt: "mh = kmh * 1000", en: "mh = kmh * 1000"}, py: "mh = kmh * 1000  # km → metros"}
+    - {id: c2, tipo: calcular, texto: {pt: "ms = mh / 3600", en: "ms = mh / 3600"}, py: "ms = mh / 3600  # horas → segundos"}
+    - {id: e, tipo: escrever, texto: {pt: 'escrever "m/s = " + ms', en: 'write "m/s = " + ms'}, py: 'print("m/s =", round(ms, 2))'}
+slides:
+  - {deck: aula-2, de: 36, ate: 36}
+pistas:
+  - pt: "1 km são 1000 m e 1 hora são 3600 s. Faz uma conversão de cada vez."
+    en: "1 km is 1000 m and 1 hour is 3600 s. Do one conversion at a time."
+  - pt: "Primeiro converte os quilómetros em metros, depois as horas em segundos."
+    en: "First convert kilometres to metres, then hours to seconds."
+atividades:
+  - tipo: ordenar_fluxograma
+    enunciado:
+      pt: "Monta o fluxograma do desafio: põe os blocos pela ordem certa."
+      en: "Build the challenge flowchart: put the blocks in the right order."
+    explicacao:
+      pt: "Define-se, lê-se a velocidade, converte-se km em metros, depois horas em segundos e só no fim se escreve."
+      en: "Define, read the speed, convert km to metres, then hours to seconds, and write only at the end."
+  - tipo: completar
+    enunciado:
+      pt: "Completa as duas conversões do programa."
+      en: "Complete the program's two conversions."
+    lacunas:
+      - {stmt: c1, lado: py, modelo: {pt: "mh = kmh * ___", en: "mh = kmh * ___"}, respostas: ["1000"]}
+      - {stmt: c2, lado: py, modelo: {pt: "ms = mh / ___", en: "ms = mh / ___"}, respostas: ["3600"]}
+    explicacao:
+      pt: "Multiplicar por 1000 passa km para metros. Dividir por 3600 passa de por-hora para por-segundo."
+      en: "Multiplying by 1000 turns km into metres. Dividing by 3600 turns per-hour into per-second."
+verificacao:
+  pergunta:
+    pt: "Quanto são 36 km/h em m/s?"
+    en: "What is 36 km/h in m/s?"
+  opcoes:
+    - {pt: "10 m/s", en: "10 m/s"}
+    - {pt: "36000 m/s", en: "36000 m/s"}
+    - {pt: "129.6 m/s", en: "129.6 m/s"}
+  resposta: [0]

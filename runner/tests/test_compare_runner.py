@@ -18,11 +18,12 @@ def test_numeros_14_14_0_e_14_virgula_0():
     assert c.compare_output("numeros", "1000000", "1000000.5")  # tolerância relativa 1e-6
 
 
-def test_exato_so_tira_uma_quebra_final():
-    assert c.compare_output("exato", "ab\n", "ab")
-    assert not c.compare_output("exato", "ab", "ab\n\n")
+def test_exato_ignora_espacos_exteriores_mas_preserva_conteudo():
+    assert c.compare_output("exato", "  ab\n", "ab")
+    assert c.compare_output("exato", "ab", " \tab\n\n")
     assert not c.compare_output("exato", "Ab", "ab")
     assert not c.compare_output("exato", "a  b", "a b")
+    assert c.values_equal("  ab\n", "ab", mode="exato")
 
 
 def test_valores_ints_floats_e_tolerancia():

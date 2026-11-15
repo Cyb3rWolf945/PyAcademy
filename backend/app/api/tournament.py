@@ -8,7 +8,7 @@ from app.api.deps import Auth, active_auth, audit, client_ip, origin_guard, teac
 from app.db import get_db
 from app.errors import ApiError
 from app.models.user import Role
-from app.services import tournament as svc
+from app.services import elimination, points as points_svc, tournament as svc
 from app.services import tournament_events as events
 
 router = APIRouter(prefix="/api/tournaments", dependencies=[Depends(origin_guard)])
@@ -26,7 +26,15 @@ class Bi(Strict):
 class CreateIn(Strict):
     class_id: int
     name: str = Field(min_length=1, max_length=80)
-    mode: str
+    format: str = "eliminatoria"
+    mode: str | None = None
+    group_size: int | None = Field(default=None, ge=3, le=6)
+    advance_per_group: int | None = Field(default=None, ge=1, le=2)
+    points: dict[str, int] | None = None
+
+
+class WinnerIn(Strict):
+    user_id: int
 
 
 class RoundIn(Strict):
@@ -65,12 +73,17 @@ async def _admin(db: AsyncSession, auth: Auth, t) -> dict:
 # ---------------- professor ----------------
 @router.post("", status_code=201)
 async def create(body: CreateIn, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
-    if body.mode not in svc.MODES:
+    if body.format not in ("eliminatoria", "aula"):
+        raise ApiError(422, "tournament.invalid_format")
+    mode = body.mode or "individual"
+    if mode not in svc.MODES:
         raise ApiError(422, "tournament.invalid_mode")
+    if body.points is not None and (set(body.points) - set(points_svc.DEFAULT_POINTS) or any(not 0 <= v <= 1000 for v in body.points.values())):
+        raise ApiError(422, "tournament.invalid_points")
     name = " ".join(body.name.split())
     if not name:
         raise ApiError(422, "tournament.invalid_name")
-    t = await svc.create(db, auth.user, body.class_id, name, body.mode)
+    t = await svc.create(db, auth.user, body.class_id, name, mode, body.format, body.group_size, body.advance_per_group, body.points)
     await audit(db, auth.user.id, "tournament.created", {"tournament_id": t.id})
     await db.commit()
     return await _admin(db, auth, t)
@@ -79,6 +92,13 @@ async def create(body: CreateIn, auth: Auth = Depends(teacher_auth), db: AsyncSe
 @router.get("")
 async def list_tournaments(class_id: int | None = Query(default=None), auth: Auth = Depends(active_auth), db: AsyncSession = Depends(get_db)):
     return {"tournaments": await svc.list_for(db, auth.user, class_id)}
+
+
+@router.get("/lookup")
+async def lookup(join_code: str = Query(min_length=1, max_length=12), auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    code = join_code.strip().upper()[:12]
+    tournament = await svc.owned_by_code(db, code, auth.user)
+    return {"tournament_id": tournament.id}
 
 
 @router.post("/join")
@@ -96,6 +116,41 @@ async def admin(tid: int, auth: Auth = Depends(teacher_auth), db: AsyncSession =
 async def update_round(tid: int, idx: int, body: RoundIn, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
     await svc.update_round(db, auth.user, tid, idx, body.model_dump(exclude_none=True))
     return await _admin(db, auth, await svc.owned(db, tid, auth.user))
+
+
+@router.post("/{tid}/rounds/next/start")
+async def start_next(tid: int, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    """Eliminatória: sorteia os grupos com os jogadores em jogo e começa a ronda pendente."""
+    return await _admin(db, auth, await elimination.start_next(db, auth.user, tid))
+
+
+@router.get("/{tid}/bracket-preview")
+async def bracket_preview(
+    tid: int, group_size: int | None = Query(default=None, ge=3, le=6), advance_per_group: int | None = Query(default=None, ge=1, le=2),
+    auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db),
+):
+    t = await svc.owned(db, tid, auth.user)
+    n = len(await elimination.alive_ids(db, tid))
+    return elimination.bracket_preview(n, t.config, group_size, advance_per_group)
+
+
+class ConfigIn(Strict):
+    group_size: int | None = Field(default=None, ge=3, le=6)
+    advance_per_group: int | None = Field(default=None, ge=1, le=2)
+    points: dict[str, int] | None = None
+
+
+@router.patch("/{tid}/config")
+async def update_config(tid: int, body: ConfigIn, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    """Eliminatória, só no lobby: group_size, advance_per_group e pontos."""
+    if body.points is not None and (set(body.points) - set(points_svc.DEFAULT_POINTS) or any(not 0 <= v <= 1000 for v in body.points.values())):
+        raise ApiError(422, "tournament.invalid_points")
+    return await _admin(db, auth, await elimination.update_config(db, auth.user, tid, body.model_dump(exclude_none=True)))
+
+
+@router.post("/{tid}/groups/{gid}/winner")
+async def group_winner(tid: int, gid: int, body: WinnerIn, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    return await _admin(db, auth, await elimination.set_winner(db, auth.user, tid, gid, body.user_id))
 
 
 @router.post("/{tid}/rounds/{idx}/start")
@@ -157,7 +212,7 @@ async def state(tid: int, auth: Auth = Depends(active_auth), db: AsyncSession = 
 async def get_events(tid: int, after: int = Query(default=0, ge=0), auth: Auth = Depends(active_auth), db: AsyncSession = Depends(get_db)):
     await svc.viewable(db, tid, auth.user)
     evs, resync = await events.replay(db, tid, after)
-    return {"events": evs, "resync": resync}
+    return {"events": [e for e in evs if events.visible_to(e, auth.user.id)], "resync": resync}
 
 
 @router.get("/{tid}/hints/{slug}/{n}")

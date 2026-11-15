@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 ROOT = Path(__file__).resolve().parents[2]  # /app (ou a raiz do projeto)
 
 LOCALES = ("pt-PT", "en")
-THEMES = ("floresta", "masmorra", "oceano", "deserto", "neve", "noite")
+THEMES = ("campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite")
 
 
 class Settings(BaseSettings):
@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     login_window_minutes: int = 15
 
     frontend_dir: Path = ROOT / "frontend"
+    academy_dir: Path = ROOT / "backend" / "content" / "academy"
+    slides_dir: Path = Path("/data/slides")  # volume "slides" (só leitura na app)
+    academy_answers_per_minute: int = 30
     problems_dir: Path = ROOT / "backend" / "problems"
 
 

@@ -8,6 +8,7 @@ import { mountLeaderboard } from "../../components/leaderboard.js";
 import { mountConnectionStatus } from "../../components/connection-status.js";
 import { createLive } from "../tournament/live.js";
 import { fmtPoints } from "../challenge/lib.js";
+import { elimRoundView, elimBetweenView, elimFinalView } from "./elim.js";
 import { celebrateSafe } from "../tournament/fx.js";
 import { podium2d } from "../tournament/podium2d.js";
 import { currentRound, nextRound, roundTitle, TEAM_BG } from "../tournament/ui.js";
@@ -42,7 +43,9 @@ function main() {
     if (next !== kind) {
       view?.destroy();
       kind = next;
-      view = { lobby: lobbyView, round: roundView, between: betweenView, final: finalView }[next](live);
+      const elim = snap.format === "eliminatoria";
+      view = (elim ? { lobby: lobbyView, round: () => elimRoundView(live, stage), between: () => elimBetweenView(live, stage), final: () => elimFinalView(live, stage) }
+        : { lobby: lobbyView, round: roundView, between: betweenView, final: finalView })[next](live);
     }
     view.update();
   }
@@ -58,6 +61,14 @@ function main() {
     const p = ev.payload || {};
     if (ev.type === "mission_solved") pushToast(`🎯 ${t("tournament.toast_solved", { name: p.name, points: fmtPoints(p.points) })}`);
     else if (ev.type === "first_bonus") pushToast(`⚡ ${t("tournament.toast_first_bonus", { name: p.name })}`, "text-gold");
+    else if (ev.type === "group_decided") {
+      const snap = live.snap();
+      const rd = snap?.rounds?.find((x) => x.idx === p.idx);
+      const gi = rd?.groups?.findIndex((g) => g.id === p.group_id) ?? -1;
+      const names = (rd?.groups?.[gi]?.members || []).filter((m) => (p.winners || []).includes(m.user_id)).map((m) => m.display_name).join(", ");
+      pushToast(`🏆 ${t("projector.group_decided_toast", { name: names || "?", n: gi + 1 })}`);
+    } else if (ev.type === "player_eliminated") { const n = (p.user_ids || []).length; pushToast(`💀 ${n === 1 ? t("projector.eliminated_one") : t("projector.eliminated_toast", { n })}`); }
+    else if (ev.type === "champion") { pushToast(`👑 ${t("tournament.champion_is", { name: p.display_name })}`, "text-gold"); celebrateSafe("podium"); }
     else if (ev.type === "boss_defeated") {
       pushToast(`👹 ${t("tournament.toast_boss", { name: p.name })}`, "text-gold");
       bossBanner();

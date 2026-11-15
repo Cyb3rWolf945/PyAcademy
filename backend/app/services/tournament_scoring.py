@@ -10,13 +10,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import SessionLocal
 from app.models._base import utcnow
+from app.models.problem import Problem
 from app.models.submission import Submission
 from app.models.tournament import (
     Tournament, TournamentBonus, TournamentHintUse, TournamentPlayer, TournamentRound, TournamentSolve,
     TournamentSubmission, TournamentTeam,
 )
 from app.models.user import User
-from app.services import tournament_events as events
+from app.services import elimination, points as points_svc, tournament_events as events
 
 log = logging.getLogger("pyarena.tournament")
 COLORS = 8  # team-0 ... team-7
@@ -178,9 +179,13 @@ async def on_submission_finished(submission_id: int) -> None:
                 if link is None:
                     return
                 sub = await db.get(Submission, submission_id)
-                if sub is None or sub.status != "accepted":
+                if sub is None or sub.status in ("queued", "running"):
                     return
-                await record_solve(db, link, sub)
+                t = await db.get(Tournament, link.tournament_id)
+                if t is not None and t.format == "eliminatoria":
+                    await elimination.handle_finished(db, link, sub)
+                elif sub.status == "accepted":
+                    await record_solve(db, link, sub)
                 return
         except Exception:  # noqa: BLE001
             log.exception("falha a registar a missão da submissão %s (tentativa %s)", submission_id, attempt + 1)
@@ -235,6 +240,10 @@ async def record_solve(db: AsyncSession, link: TournamentSubmission, sub: Submis
             )).scalar_one_or_none()
             if got is not None:
                 await events.emit(db, tid, "first_bonus", {"participant_key": key, "name": name, "idx": rnd.idx})
+    if t.mode == "individual":  # pontos pessoais (livro): o Formato Aula individual também conta
+        prob = await db.get(Problem, sub.problem_slug)
+        stars = prob.data.get("dificuldade", 1) if prob else 1
+        await points_svc.award(db, t, sub.user_id, points_svc.config_points(t)[points_svc.difficulty_key(stars)], "exercise", rnd.idx, sub.problem_slug)
     await db.commit()
     schedule_leaderboard(tid)
     return True

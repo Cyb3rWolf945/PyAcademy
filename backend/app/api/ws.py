@@ -68,6 +68,9 @@ async def tournament_socket(ws: WebSocket, tid: int, last_seq: int | None = None
                     else:
                         conn.sent_seq = last_seq
                         for ev in evs:
+                            if not events.visible_to(ev, user.id):
+                                conn.sent_seq = ev["seq"]
+                                continue
                             if not await conn.send_json(ev):
                                 return
                             conn.sent_seq = ev["seq"]

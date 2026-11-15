@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Protótipo A0 da Academia: fluxograma (estilo dos slides) ligado ao Python, com 4 exemplos. Sem backend, sem login. -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-8">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="min-w-0 text-lg text-accent" data-i18n="fx.title"></h1>
+    <div class="flex gap-2" data-lang-switch></div>
+  </header>
+  <main class="mx-auto grid max-w-6xl grid-cols-1 gap-4 p-4 [&>*]:min-w-0">
+    <p class="text-sm text-muted" data-i18n="fx.subtitle"></p>
+    <div class="panel-pixel grid gap-3">
+      <div class="flex flex-wrap items-center gap-2" id="picker" role="group" data-i18n-aria="fx.pick_example"></div>
+      <div class="flex flex-wrap gap-2">
+        <button id="demo" type="button" class="btn-pixel btn-pixel--accent" data-i18n="fx.step_demo"></button>
+        <button id="clear" type="button" class="btn-pixel btn-pixel--ghost" data-i18n="fx.clear"></button>
+      </div>
+      <p class="text-xs text-muted" data-i18n="fx.hint"></p>
+    </div>
+    <div id="linked" class="panel-pixel"></div>
+    <section class="panel-pixel grid gap-2">
+      <h2 class="text-sm" data-i18n="fx.check_title"></h2>
+      <pre id="generated" class="fx-pre"></pre>
+    </section>
+  </main>
+  <script type="module" src="/pages/academy/prototype.js"></script>
+</body>
+</html>

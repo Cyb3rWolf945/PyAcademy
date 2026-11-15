@@ -1,0 +1,68 @@
+id: m0-06-escada-ia
+modulo: m0
+ordem: 6
+titulo: {pt: "A escada das linguagens e a IA", en: "The ladder of languages and AI"}
+aprender:
+  pt: |
+    Entre a tua ideia e os 0 e 1 da máquina há uma **escada de linguagens**. Do mais humano para o mais mecânico: **linguagem natural → IA (prompts) → semi-formal (pseudocódigo) → fluxograma → Python → código máquina (binário)**.
+
+    Na visão do professor, a **IA é uma nova camada, quase junta da linguagem semi-formal**: fica entre a linguagem natural e o pseudocódigo. Ajuda-te a passar de uma ideia em português para código.
+
+    A IA **gera código depressa, resolve problemas padrão e acelera a produção**. Mas quem programa **compreende a lógica, valida e adapta as soluções e decide a melhor estrutura**. Isso é pensamento crítico: a IA propõe, tu decides.
+
+    Por isso aprendemos os níveis de baixo (fluxograma e Python): sem os saberes ler, não consegues validar o que a IA te dá.
+  en: |
+    Between your idea and the machine's 0s and 1s there is a **ladder of languages**. From the most human to the most mechanical: **natural language → AI (prompts) → semi-formal (pseudocode) → flowchart → Python → machine code (binary)**.
+
+    In the teacher's view, **AI is a new layer, almost next to the semi-formal language**: it sits between natural language and pseudocode. It helps you move from an idea in plain words to code.
+
+    AI **generates code quickly, solves standard problems and speeds up production**. But the person programming **understands the logic, validates and adapts solutions and decides the best structure**. That is critical thinking: AI proposes, you decide.
+
+    That is why we learn the lower levels (flowchart and Python): if you cannot read them, you cannot validate what the AI gives you.
+slides:
+  - {deck: aula-1, de: 8, ate: 8}
+pistas:
+  - pt: "A IA fica entre a linguagem natural e o pseudocódigo."
+    en: "AI sits between natural language and pseudocode."
+  - pt: "O binário é o degrau mais perto da máquina, por isso fica no fim."
+    en: "Binary is the step closest to the machine, so it goes last."
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Põe os degraus da escada das linguagens, do mais humano para o mais mecânico."
+      en: "Put the rungs of the ladder of languages in order, from the most human to the most mechanical."
+    itens:
+      - {id: natural, texto: {pt: "Linguagem natural", en: "Natural language"}}
+      - {id: ia, texto: {pt: "IA e prompts", en: "AI and prompts"}}
+      - {id: semi, texto: {pt: "Semi-formal (pseudocódigo)", en: "Semi-formal (pseudocode)"}}
+      - {id: fluxo, texto: {pt: "Fluxograma", en: "Flowchart"}}
+      - {id: python, texto: {pt: "Python", en: "Python"}}
+      - {id: maquina, texto: {pt: "Código máquina (binário)", en: "Machine code (binary)"}}
+    explicacao:
+      pt: "A IA é a camada nova, logo a seguir à linguagem natural e quase junta ao pseudocódigo. Depois vêm as linguagens cada vez mais formais, até ao binário."
+      en: "AI is the new layer, right after natural language and almost next to pseudocode. Then come ever more formal languages, down to binary."
+  - tipo: pergunta
+    enunciado:
+      pt: "Pensa no papel de cada um: a IA e a pessoa que programa."
+      en: "Think about each one's role: the AI and the person programming."
+    pergunta:
+      pt: "Quais destas tarefas ficam para a pessoa, e não para a IA?"
+      en: "Which of these tasks stay with the person, not the AI?"
+    opcoes:
+      - {pt: "Gerar código rapidamente", en: "Generate code quickly"}
+      - {pt: "Validar e adaptar a solução", en: "Validate and adapt the solution"}
+      - {pt: "Decidir a melhor estrutura", en: "Decide the best structure"}
+      - {pt: "Resolver um problema padrão", en: "Solve a standard problem"}
+    resposta: [1, 2]
+    explicacao:
+      pt: "A IA gera, resolve o que é padrão e acelera. Validar, adaptar e decidir a estrutura é contigo."
+      en: "AI generates, solves what is standard and speeds things up. Validating, adapting and deciding the structure is up to you."
+verificacao:
+  pergunta:
+    pt: "A IA devolveu-te um programa que corre sem erros. O que fazes a seguir?"
+    en: "The AI gave you a program that runs without errors. What do you do next?"
+  opcoes:
+    - {pt: "Entrego logo: se corre, está certo", en: "Hand it in right away: if it runs, it is right"}
+    - {pt: "Leio e testo o programa para validar a lógica", en: "Read and test the program to validate the logic"}
+    - {pt: "Peço outro à IA até me parecer bem", en: "Ask the AI for another until it looks right"}
+  resposta: [1]

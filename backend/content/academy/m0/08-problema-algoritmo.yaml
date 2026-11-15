@@ -1,0 +1,61 @@
+id: m0-08-problema-algoritmo
+modulo: m0
+ordem: 8
+titulo: {pt: "Do problema ao algoritmo", en: "From problem to algorithm"}
+aprender:
+  pt: |
+    Um **problema** é uma situação em que temos **dados de partida** (entrada) e queremos chegar a um **resultado** (saída). Antes de programar, é preciso perceber bem os dois lados.
+
+    Exemplo: a conta é de 42 €, somos 4 amigos e um deles só bebeu água. Quanto paga cada um? Se não perguntares como se divide a conta, o programa vai calcular a coisa errada.
+
+    Para atacar qualquer problema, segue seis passos: compreender o problema, identificar a entrada, identificar a saída, encontrar o algoritmo, programar e testar.
+  en: |
+    A **problem** is a situation where we have **starting data** (input) and want to reach a **result** (output). Before programming you need to understand both sides well.
+
+    Example: the bill is 42 €, there are 4 of us and one only drank water. How much does each person pay? If you do not ask how the bill is split, the program will compute the wrong thing.
+
+    To tackle any problem, follow six steps: understand the problem, identify the input, identify the output, find the algorithm, program it and test it.
+slides:
+  - {deck: aula-2, de: 18, ate: 19}
+pistas:
+  - pt: "O primeiro passo é perceber o problema; programar só vem quase no fim."
+    en: "The first step is understanding the problem; programming comes almost last."
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Põe pela ordem os seis passos para atacar um problema."
+      en: "Put the six steps for tackling a problem in order."
+    itens:
+      - {id: p1, texto: {pt: "Compreender o problema", en: "Understand the problem"}}
+      - {id: p2, texto: {pt: "Identificar os dados de entrada", en: "Identify the input data"}}
+      - {id: p3, texto: {pt: "Identificar o resultado pretendido", en: "Identify the intended result"}}
+      - {id: p4, texto: {pt: "Encontrar um algoritmo (entrada → saída)", en: "Find an algorithm (input → output)"}}
+      - {id: p5, texto: {pt: "Programar a solução", en: "Program the solution"}}
+      - {id: p6, texto: {pt: "Testar e validar os resultados", en: "Test and validate the results"}}
+    explicacao:
+      pt: "Primeiro o problema, depois os dois lados (entrada e saída), depois o algoritmo. Só então se programa, e testa-se no fim."
+      en: "Problem first, then both sides (input and output), then the algorithm. Only then do you program, and you test at the end."
+  - tipo: pergunta
+    enunciado:
+      pt: "Aplica os passos à conta do restaurante."
+      en: "Apply the steps to the restaurant bill."
+    pergunta:
+      pt: "Na conta de 42 € entre 4 amigos, qual é a saída (o resultado)?"
+      en: "In the 42 € bill split between 4 friends, what is the output (the result)?"
+    opcoes:
+      - {pt: "O valor total da conta, 42 €", en: "The bill total, 42 €"}
+      - {pt: "O número de amigos, 4", en: "The number of friends, 4"}
+      - {pt: "Quanto paga cada um", en: "How much each person pays"}
+    resposta: [2]
+    explicacao:
+      pt: "O total e o número de amigos são dados de entrada. A saída é o que queremos descobrir: quanto paga cada um."
+      en: "The total and the number of friends are input data. The output is what we want to find out: how much each person pays."
+verificacao:
+  pergunta:
+    pt: "Qual destes passos vem logo a seguir a identificar os dados de entrada?"
+    en: "Which of these steps comes right after identifying the input data?"
+  opcoes:
+    - {pt: "Programar a solução", en: "Program the solution"}
+    - {pt: "Identificar o resultado pretendido", en: "Identify the intended result"}
+    - {pt: "Testar e validar os resultados", en: "Test and validate the results"}
+  resposta: [1]

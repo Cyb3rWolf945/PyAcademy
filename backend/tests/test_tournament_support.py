@@ -71,7 +71,7 @@ async def make_env(make_user, make_class, new_client, teacher="profa") -> Env:
 
 
 async def create_tournament(env: Env, mode="agencias", name="Torneio") -> dict:
-    r = await env.t_client.post("/api/tournaments", json={"class_id": env.class_id, "name": name, "mode": mode}, headers=env.t_headers)
+    r = await env.t_client.post("/api/tournaments", json={"class_id": env.class_id, "name": name, "mode": mode, "format": "aula"}, headers=env.t_headers)
     assert r.status_code == 201, r.text
     return r.json()
 
@@ -107,3 +107,64 @@ async def events_of(tid: int, type_: str | None = None) -> list:
         q = select(TournamentEvent).where(TournamentEvent.tournament_id == tid).order_by(TournamentEvent.seq)
         rows = (await db.execute(q)).scalars().all()
     return [e for e in rows if type_ is None or e.type == type_]
+
+
+# ---------------- Eliminatória ----------------
+async def create_elim(env: Env, name="Elim", **kw) -> dict:
+    r = await env.t_client.post("/api/tournaments", json={"class_id": env.class_id, "name": name, **kw}, headers=env.t_headers)
+    assert r.status_code == 201, r.text
+    return r.json()
+
+
+async def add_players(tid: int, users) -> None:
+    from app.models.tournament import TournamentPlayer
+    async with SessionLocal() as db:
+        db.add_all(TournamentPlayer(tournament_id=tid, user_id=u.id) for u in users)
+        await db.commit()
+
+
+async def round_row(tid: int, idx: int):
+    from app.models.tournament import TournamentRound
+    async with SessionLocal() as db:
+        return (await db.execute(select(TournamentRound).where(TournamentRound.tournament_id == tid, TournamentRound.idx == idx))).scalar_one()
+
+
+async def fake_submit(tid: int, idx: int, user_id: int, slug: str, status: str, passed: int, total: int = 4, at=None) -> int:
+    """Cria uma submissão de torneio já corrigida (sem runner) e corre o hook de pontuação."""
+    from app.models._base import utcnow
+    from app.models.submission import Submission
+    from app.models.tournament import TournamentSubmission
+    from app.services import tournament_scoring
+    rnd = await round_row(tid, idx)
+    at = at or utcnow()
+    async with SessionLocal() as db:
+        s = Submission(client_id=uuid.uuid4(), user_id=user_id, problem_slug=slug, code="print(1)", mode="tournament", status=status,
+                       passed=passed, total=total, created_at=at, finished_at=at)
+        db.add(s)
+        await db.flush()
+        db.add(TournamentSubmission(submission_id=s.id, tournament_id=tid, round_id=rnd.id, received_at=at))
+        await db.commit()
+        sid = s.id
+    await tournament_scoring.on_submission_finished(sid)
+    return sid
+
+
+async def ledger(user_id: int | None = None, tid: int | None = None) -> list:
+    from app.models.points import UserPoints
+    async with SessionLocal() as db:
+        q = select(UserPoints)
+        if user_id is not None:
+            q = q.where(UserPoints.user_id == user_id)
+        if tid is not None:
+            q = q.where(UserPoints.tournament_id == tid)
+        return list((await db.execute(q)).scalars())
+
+
+async def total_points(user_id: int) -> int:
+    return sum(p.points for p in await ledger(user_id))
+
+
+async def admin(env: Env, tid: int) -> dict:
+    r = await env.t_client.get(f"/api/tournaments/{tid}/admin")
+    assert r.status_code == 200, r.text
+    return r.json()

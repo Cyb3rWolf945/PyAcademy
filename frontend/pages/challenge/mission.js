@@ -117,7 +117,7 @@ export function mountMission(host, { mission, ctx = {} }) {
   const resultPanel = el("div", { class: "min-h-0 overflow-y-auto lg:max-h-[45%] lg:border-t-2 lg:border-surface-2" }, resultBox);
   const right = el("div", { class: "min-h-0 min-w-0 flex-col" }, codePanel, resultPanel);
   const body = el("div", { class: "grid min-h-0 min-w-0 flex-1 grid-cols-1 lg:grid-cols-2" }, left, right);
-  const root = el("div", { class: "fixed inset-0 z-30 flex min-w-0 flex-col overflow-hidden bg-bg" }, header, tabs, body);
+  const root = el("div", { class: "fixed inset-0 z-30 flex min-w-0 flex-col overflow-hidden bg-bg" }, header, ctx.headerExtra || null, tabs, body);
   host.replaceChildren(root);
 
   function setTab(next) {

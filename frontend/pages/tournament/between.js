@@ -1,5 +1,6 @@
 // Ecrã entre rondas: resultado até agora, a tua posição e a pré-visualização da próxima ronda.
 import { el } from "../../components/dom.js";
+import { icon } from "../../components/icon.js";
 import { t } from "../../services/i18n.js";
 import { mountLeaderboard } from "../../components/leaderboard.js";
 import { fmtPoints } from "../challenge/lib.js";
@@ -18,7 +19,7 @@ export function mountBetween(host, live) {
     const next = nextRound(snap);
     const mine = myRow(snap);
     head.replaceChildren(...[
-      el("h2", { class: "text-lg" }, done ? t("tournament.round_finished", { title: roundTitle(done) }) : t("tournament.between_title")),
+      el("h2", { class: "flex items-center gap-2 text-lg" }, icon(done ? "scroll" : "clock"), done ? t("tournament.round_finished", { title: roundTitle(done) }) : t("tournament.between_title")),
       mine ? el("p", { class: "text-accent" }, t("tournament.your_rank", { rank: mine.rank, points: fmtPoints(mine.points) })) : null,
       next
         ? el("div", { class: "grid gap-1 bg-surface-2 p-3" },

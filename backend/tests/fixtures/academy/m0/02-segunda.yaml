@@ -1,0 +1,30 @@
+id: m0-02-segunda
+modulo: m0
+ordem: 2
+titulo: {pt: Segunda, en: Second}
+aprender: {pt: Texto, en: Text}
+exemplo:
+  id: media
+  titulo: {pt: Média, en: Average}
+  corpo:
+    - {id: s1, tipo: definir, texto: {pt: Definir nota, en: Define grade}}
+    - {id: s2, tipo: ler, texto: {pt: Ler nota, en: Read grade}, py: "nota = float(input())"}
+    - {id: s3, tipo: calcular, texto: {pt: Calcular dobro, en: Compute double}, py: "dobro = nota * 2"}
+    - {id: s4, tipo: escrever, texto: {pt: Escrever dobro, en: Print double}, py: "print(dobro)"}
+pistas: [{pt: P1, en: P1}, {pt: P2, en: P2}]
+atividades:
+  - tipo: completar
+    enunciado: {pt: Completa, en: Complete}
+    explicacao: {pt: Expl, en: Expl}
+    lacunas:
+      - {stmt: s3, lado: py, modelo: {pt: "dobro = nota * ___", en: "dobro = nota * ___"}, respostas: ["2", "2.0"]}
+  - tipo: pergunta
+    enunciado: {pt: Escolhe, en: Pick}
+    explicacao: {pt: Expl, en: Expl}
+    pergunta: {pt: "Quais?", en: "Which?"}
+    opcoes: [{pt: A, en: A}, {pt: B, en: B}, {pt: C, en: C}]
+    resposta: [0, 2]
+verificacao:
+  pergunta: {pt: "Qual?", en: "Which?"}
+  opcoes: [{pt: A, en: A}, {pt: B, en: B}, {pt: C, en: C}]
+  resposta: [1]

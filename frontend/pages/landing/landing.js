@@ -8,9 +8,20 @@ import { whenIdle } from "../../scenes/lazy.js";
 
 // A cena 3D só arranca com a página já desenhada; o import() não bloqueia nada.
 let lobby = null;
+// Sem sessão, os edifícios do campus que precisam de conta levam ao formulário de entrada; o torneio abre direto.
+function openHotspot(h) {
+  if (h.id === "tournament") { location.assign(h.url); return; }
+  document.querySelector("#login-form input[name=username]")?.focus();
+  import("../../components/toast.js").then(({ toast }) => import("../../services/i18n.js").then(({ t }) => toast(t("campus.login_first"), "info")));
+}
 whenIdle(async () => {
-  const { mountLobby } = await import("../../scenes/lobby-island.js");
-  lobby = await mountLobby(document.getElementById("hero"), { theme: currentTheme() });
+  const { mountHero } = await import("../../scenes/hero.js");
+  lobby = await mountHero(document.getElementById("hero"), { theme: currentTheme(), onHotspot: openHotspot });
+});
+// Leaderboard: carrega depois do herói, sem atrasar o primeiro pixel
+whenIdle(async () => {
+  const { mountLeaderboard } = await import("../../components/leaderboard-public.js");
+  mountLeaderboard(document.getElementById("leaderboard"), { nav: false });
 });
 document.addEventListener("themechange", (e) => lobby?.setTheme(e.detail));
 

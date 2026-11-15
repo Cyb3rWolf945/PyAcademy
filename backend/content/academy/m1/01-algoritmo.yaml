@@ -1,0 +1,57 @@
+id: m1-01-algoritmo
+modulo: m1
+ordem: 1
+titulo: {pt: "O que é um algoritmo", en: "What an algorithm is"}
+aprender:
+  pt: |
+    Um **algoritmo** é uma **sequência finita e não ambígua de passos**, ordenados de forma lógica, que levam à solução de um problema. A palavra vem de al-Khwarizmi, um matemático persa do século IX.
+
+    Uma receita de bolo é um bom exemplo. A versão **vaga** ("misturar os ingredientes", "cozinhar no forno") depende da perícia de quem cozinha. Para ser um bom algoritmo, **refina-se até não haver nenhuma instrução ambígua**: que ingredientes, a que temperatura, durante quanto tempo.
+  en: |
+    An **algorithm** is a **finite, unambiguous sequence of steps**, logically ordered, that leads to the solution of a problem. The word comes from al-Khwarizmi, a Persian mathematician of the 9th century.
+
+    A cake recipe is a good example. The **vague** version ("mix the ingredients", "bake in the oven") depends on the cook's skill. To be a good algorithm, **refine it until no instruction is ambiguous**: which ingredients, what temperature, for how long.
+slides:
+  - {deck: aula-2, de: 20, ate: 21}
+pistas:
+  - pt: "Primeiro misturas tudo, só depois levas ao forno. E o forno aquece antes de entrar o bolo."
+    en: "First you mix everything, only then it goes in the oven. And the oven heats up before the cake goes in."
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Põe pela ordem os passos refinados da receita."
+      en: "Put the refined steps of the recipe in order."
+    itens:
+      - {id: r1, texto: {pt: "Juntar a margarina e a farinha e bater até ficar um creme", en: "Add the margarine and flour and beat until creamy"}}
+      - {id: r2, texto: {pt: "Juntar os ovos e mexer", en: "Add the eggs and stir"}}
+      - {id: r3, texto: {pt: "Juntar o fermento", en: "Add the baking powder"}}
+      - {id: r4, texto: {pt: "Aquecer o forno a 180 ºC", en: "Heat the oven to 180 ºC"}}
+      - {id: r5, texto: {pt: "Cozer durante 45 minutos", en: "Bake for 45 minutes"}}
+      - {id: r6, texto: {pt: "Retirar do forno", en: "Take it out of the oven"}}
+    explicacao:
+      pt: "Misturar (creme, ovos, fermento) vem antes de cozinhar (aquecer, cozer, retirar). Cada passo é claro e só tem uma interpretação."
+      en: "Mixing (cream, eggs, baking powder) comes before cooking (heat, bake, take out). Each step is clear and has just one reading."
+  - tipo: pergunta
+    enunciado:
+      pt: "Qual destes passos ainda é ambíguo?"
+      en: "Which of these steps is still ambiguous?"
+    pergunta:
+      pt: "Qual instrução precisa de ser refinada?"
+      en: "Which instruction needs refining?"
+    opcoes:
+      - {pt: "Cozinhar no forno", en: "Cook in the oven"}
+      - {pt: "Cozer durante 45 minutos", en: "Bake for 45 minutes"}
+      - {pt: "Aquecer o forno a 180 ºC", en: "Heat the oven to 180 ºC"}
+    resposta: [0]
+    explicacao:
+      pt: "\"Cozinhar no forno\" não diz a temperatura nem o tempo. As outras duas já são exatas."
+      en: "\"Cook in the oven\" gives neither temperature nor time. The other two are already exact."
+verificacao:
+  pergunta:
+    pt: "Qual destas frases define melhor um algoritmo?"
+    en: "Which of these sentences best defines an algorithm?"
+  opcoes:
+    - {pt: "Uma sequência finita e não ambígua de passos", en: "A finite, unambiguous sequence of steps"}
+    - {pt: "Um programa escrito em Python", en: "A program written in Python"}
+    - {pt: "Uma ideia vaga sobre como resolver o problema", en: "A vague idea of how to solve the problem"}
+  resposta: [0]

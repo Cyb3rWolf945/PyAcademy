@@ -1,0 +1,67 @@
+id: m0-03-base-2
+modulo: m0
+ordem: 3
+titulo: {pt: "Base 10 e base 2", en: "Base 10 and base 2"}
+aprender:
+  pt: |
+    Nós contamos em **base 10**: dez símbolos (0 a 9) e, quando acabam, passamos para a casa seguinte (9 → 10).
+
+    O computador só tem dois estados (ligado e desligado), por isso conta em **base 2**: só 0 e 1. Quando os símbolos acabam, também passa para a casa seguinte:
+
+    `0, 1, 10, 11, 100, 101, ...`
+
+    Em binário, cada casa vale o dobro da anterior, da direita para a esquerda: **1, 2, 4, 8...** Por isso `101` é 4 + 0 + 1 = 5.
+  en: |
+    We count in **base 10**: ten symbols (0 to 9) and, when they run out, we move to the next place (9 → 10).
+
+    A computer only has two states (on and off), so it counts in **base 2**: just 0 and 1. When the symbols run out it also moves to the next place:
+
+    `0, 1, 10, 11, 100, 101, ...`
+
+    In binary each place is worth double the one before, from right to left: **1, 2, 4, 8...** So `101` is 4 + 0 + 1 = 5.
+slides:
+  - {deck: aula-2, de: 13, ate: 13}
+pistas:
+  - pt: "Escreve as casas por cima do número: 8, 4, 2, 1. Soma só as que têm um 1."
+    en: "Write the places above the number: 8, 4, 2, 1. Add up only the ones holding a 1."
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Conta em binário: põe estes números pela ordem em que aparecem."
+      en: "Count in binary: put these numbers in the order they appear."
+    itens:
+      - {id: b0, texto: {pt: "0", en: "0"}}
+      - {id: b1, texto: {pt: "1", en: "1"}}
+      - {id: b2, texto: {pt: "10", en: "10"}}
+      - {id: b3, texto: {pt: "11", en: "11"}}
+      - {id: b4, texto: {pt: "100", en: "100"}}
+      - {id: b5, texto: {pt: "101", en: "101"}}
+    explicacao:
+      pt: "Tal como 9 → 10 em base 10, em binário 1 → 10 e 11 → 100: quando os símbolos acabam, sobe-se uma casa."
+      en: "Just as 9 → 10 in base 10, in binary 1 → 10 and 11 → 100: when the symbols run out, you move up one place."
+  - tipo: pergunta
+    enunciado:
+      pt: "Converte um número binário para base 10."
+      en: "Convert a binary number to base 10."
+    pergunta:
+      pt: "Quanto vale 101 em base 10?"
+      en: "What is 101 worth in base 10?"
+    opcoes:
+      - {pt: "3", en: "3"}
+      - {pt: "5", en: "5"}
+      - {pt: "7", en: "7"}
+      - {pt: "101", en: "101"}
+    resposta: [1]
+    explicacao:
+      pt: "4 + 0 + 1 = 5. A casa do meio é um 0, por isso não conta."
+      en: "4 + 0 + 1 = 5. The middle place holds a 0, so it adds nothing."
+verificacao:
+  pergunta:
+    pt: "Quanto vale 110 em base 10?"
+    en: "What is 110 worth in base 10?"
+  opcoes:
+    - {pt: "4", en: "4"}
+    - {pt: "6", en: "6"}
+    - {pt: "8", en: "8"}
+    - {pt: "110", en: "110"}
+  resposta: [1]

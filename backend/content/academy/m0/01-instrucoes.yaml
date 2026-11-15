@@ -1,0 +1,73 @@
+id: m0-01-instrucoes
+modulo: m0
+ordem: 1
+titulo: {pt: "O computador segue instruções", en: "The computer follows instructions"}
+aprender:
+  pt: |
+    Um computador não adivinha o que queres: **só faz o que lhe mandas, passo a passo**. Programar é escrever essas ordens de forma tão clara que não sobra nenhuma dúvida.
+
+    Esta cadeira tem quatro objetivos:
+
+    - perceber os **princípios da programação estruturada**;
+    - **desenhar algoritmos** com pseudocódigo e fluxogramas;
+    - **traduzir a lógica em código** Python que funciona;
+    - **comunicar e abstrair**: perceber o que o cliente quer e identificar variáveis, constantes, fórmulas e restrições.
+
+    Não precisas de saber nada disto ainda. Vamos devagar, um degrau de cada vez.
+  en: |
+    A computer cannot guess what you want: **it only does what you tell it, step by step**. Programming means writing those orders so clearly that no doubt is left.
+
+    This course has four goals:
+
+    - understand the **principles of structured programming**;
+    - **design algorithms** with pseudocode and flowcharts;
+    - **translate the logic into working** Python code;
+    - **communicate and abstract**: understand what the client wants and spot variables, constants, formulas and constraints.
+
+    You do not need to know any of this yet. We go slowly, one step at a time.
+slides:
+  - {deck: aula-1, de: 3, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 1 — Introdução"
+  en: "Python Basics, ch. 1 — Introduction"
+pistas:
+  - pt: "Pensa numa receita: o cozinheiro só obedece ao que lá está escrito."
+    en: "Think of a recipe: the cook only obeys what is written there."
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Põe pela ordem o caminho que vais fazer na cadeira, do problema ao programa."
+      en: "Put in order the path you will follow in this course, from problem to program."
+    itens:
+      - {id: a, texto: {pt: "Compreender o problema", en: "Understand the problem"}}
+      - {id: b, texto: {pt: "Desenhar o algoritmo (pseudocódigo e fluxograma)", en: "Design the algorithm (pseudocode and flowchart)"}}
+      - {id: c, texto: {pt: "Traduzir para código Python", en: "Translate into Python code"}}
+      - {id: d, texto: {pt: "Testar e validar os resultados", en: "Test and validate the results"}}
+    explicacao:
+      pt: "Primeiro percebes o problema, depois desenhas a solução e só então a escreves em Python. No fim testas sempre."
+      en: "First you understand the problem, then you design the solution and only then write it in Python. You always test at the end."
+  - tipo: pergunta
+    enunciado:
+      pt: "Qual destas frases descreve melhor o que é programar?"
+      en: "Which of these sentences best describes programming?"
+    pergunta:
+      pt: "Programar é..."
+      en: "Programming is..."
+    opcoes:
+      - {pt: "dar ordens ao computador numa linguagem sem ambiguidade", en: "giving the computer orders in a language without ambiguity"}
+      - {pt: "explicar ao computador o que queremos, e ele percebe o resto", en: "telling the computer roughly what we want and letting it work out the rest"}
+      - {pt: "decorar muitas palavras em inglês", en: "memorising lots of English words"}
+    resposta: [0]
+    explicacao:
+      pt: "O computador não percebe \"o resto\": só executa instruções exatas, escritas numa linguagem formal."
+      en: "The computer does not work out \"the rest\": it only executes exact instructions written in a formal language."
+verificacao:
+  pergunta:
+    pt: "Qual destes NÃO é um objetivo da cadeira?"
+    en: "Which of these is NOT a goal of the course?"
+  opcoes:
+    - {pt: "Desenhar algoritmos com fluxogramas e pseudocódigo", en: "Design algorithms with flowcharts and pseudocode"}
+    - {pt: "Traduzir a lógica de um problema para código Python", en: "Translate a problem's logic into Python code"}
+    - {pt: "Decorar o código de todos os programas possíveis", en: "Memorise the code of every possible program"}
+    - {pt: "Perceber o que o utilizador precisa e abstrair o problema", en: "Understand what the user needs and abstract the problem"}
+  resposta: [2]

@@ -1,0 +1,10 @@
+{
+ "profile.lb_title": "Public leaderboard",
+ "profile.lb_toggle": "Show my name and score on the public leaderboard",
+ "profile.lb_privacy": "Your display name will be visible to anyone on the home page (never your username or your class). You can turn this off at any time.",
+ "profile.lb_hidden": "hidden",
+ "profile.lb_points_all": "Total points",
+ "profile.lb_points_week": "Points this week",
+ "profile.lb_rank": "Rank: #{rank} of {total}",
+ "profile.lb_saved": "Preference saved."
+}

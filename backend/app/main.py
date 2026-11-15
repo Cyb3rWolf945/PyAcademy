@@ -7,11 +7,11 @@ from fastapi.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 from starlette.types import ASGIApp, Receive, Scope, Send
 
-from app.api import admin, auth, health, problems, submissions, tournament, ws
+from app.api import academy, admin, auth, health, leaderboard, problems, submissions, tournament, ws
 from app.config import settings
 from app.errors import install_error_handlers
 from app.realtime.pg_bus import hub
-from app.services import dispatcher, tournament_scoring
+from app.services import dispatcher, elimination, tournament_scoring
 
 
 class BodyLimitMiddleware:
@@ -69,9 +69,11 @@ async def lifespan(_: FastAPI):
     stop, tasks = asyncio.Event(), []
     if settings.runner_url:
         tasks = dispatcher.start(stop)
+    tasks.append(asyncio.create_task(elimination.autoclose_loop(stop)))  # fecha rondas da Eliminatória (um worker age)
     yield
     await hub.stop()  # fecha os WebSockets deste worker (os clientes reconectam)
     await tournament_scoring.cancel_all()
+    await elimination.cancel_all()
     stop.set()
     for t in tasks:
         t.cancel()
@@ -82,7 +84,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title="PyArena", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
     app.add_middleware(BodyLimitMiddleware, max_bytes=settings.max_body_bytes)
     install_error_handlers(app)
-    for r in (health.router, auth.router, admin.router, problems.router, submissions.router, tournament.router, ws.router):
+    for r in (health.router, auth.router, admin.router, problems.router, submissions.router, tournament.router, ws.router, leaderboard.router, academy.router):
         app.include_router(r)
 
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)

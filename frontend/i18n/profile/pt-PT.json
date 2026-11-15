@@ -1,0 +1,10 @@
+{
+ "profile.lb_title": "Leaderboard público",
+ "profile.lb_toggle": "Mostrar o meu nome e pontuação no leaderboard público",
+ "profile.lb_privacy": "O teu nome a mostrar fica visível para qualquer pessoa na página inicial (nunca o teu utilizador nem a tua turma). Podes desligar quando quiseres.",
+ "profile.lb_hidden": "escondido",
+ "profile.lb_points_all": "Pontos totais",
+ "profile.lb_points_week": "Pontos desta semana",
+ "profile.lb_rank": "Posição: #{rank} de {total}",
+ "profile.lb_saved": "Preferência guardada."
+}

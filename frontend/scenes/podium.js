@@ -3,6 +3,7 @@
 // mountPodium(el, top3 [{name, points, color_idx}], { theme }) -> { dispose() }
 import { createStage, voxelMesh, rng, cssColor, disposeObject } from "./scene-base.js";
 import { el as h } from "../components/dom.js";
+import { medalImg } from "../components/medal.js";
 
 const ORDER = [1, 0, 2]; // da esquerda para a direita: 2.º, 1.º, 3.º
 const HEIGHT = [4, 3, 2];
@@ -14,7 +15,7 @@ const fmt = (n) => new Intl.NumberFormat(document.documentElement.lang || "pt-PT
 function labels(host, top3) {
   return top3.slice(0, 3).map((p, rank) => {
     const lab = h("div", { class: "podium-label" },
-      h("b", {}, `#${rank + 1}`), h("span", {}, String(p.name ?? "")), h("small", { class: "block text-muted" }, p.points == null ? "" : fmt(p.points)));
+      medalImg(rank + 1, { size: 64, cls: "medal medal--pod mx-auto" }), h("b", {}, `#${rank + 1}`), h("span", {}, String(p.name ?? "")), h("small", { class: "block text-muted" }, p.points == null ? "" : fmt(p.points)));
     lab.style.setProperty("--blk", `var(${teamVar(p.color_idx)})`);
     lab.style.setProperty("--h", `${28 + HEIGHT[rank] * 14}px`);
     return lab;
@@ -45,7 +46,7 @@ export async function mountPodium(el, top3 = [], { theme } = {}) {
   slots.forEach((rank, slot) => {
     const cx = (slot - 1) * 5, hgt = HEIGHT[rank], team = new THREE.Color(cssColor(teamVar(top3[rank].color_idx))).getHex();
     for (let x = -1; x <= 1; x++) for (let z = -1; z <= 1; z++) {
-      for (let y = 0; y < hgt; y++) vox.push(cx + x, y, z, y === hgt - 1 ? [0xffd23f, 0xd5dde8, 0xd98a4e][rank] : stone);
+      for (let y = 0; y < hgt; y++) vox.push(cx + x, y, z, y === hgt - 1 ? [0xffd23f, 0xc4863a, 0xd9573b][rank] : stone);
     }
     // avatar: pernas, corpo na cor da equipa, cabeça, cabelo; o 1.º leva coroa
     const y0 = hgt;
@@ -76,7 +77,7 @@ export async function mountPodium(el, top3 = [], { theme } = {}) {
   };
   el.append(...labs);
   let dist = 32; // distância da câmara: o pódio tem de caber na largura e na altura (com folga para as etiquetas)
-  stage.onResize((aspect) => { dist = Math.max(34, 17 / (0.4986 * aspect)); camera.position.set(0, 10, dist); camera.lookAt(0, 5, 0); camera.updateMatrixWorld(); place(); });
+  stage.onResize((aspect) => { dist = Math.max(34, 17 / (0.4986 * aspect)); camera.position.set(0, 10, dist); camera.lookAt(0, 8.2, 0); camera.updateMatrixWorld(); place(); });
   stage.onFrame((dt, t) => {
     for (let i = 0; i < N; i++) {
       const c = C[i]; c.y -= dt * 3 * c.s; if (c.y < -1) c.y = 14;
@@ -84,7 +85,7 @@ export async function mountPodium(el, top3 = [], { theme } = {}) {
     }
     conf.instanceMatrix.needsUpdate = true;
     const a = Math.sin(t * 0.35) * 0.22;
-    camera.position.set(Math.sin(a) * dist, 10, Math.cos(a) * dist); camera.lookAt(0, 5, 0); camera.updateMatrixWorld();
+    camera.position.set(Math.sin(a) * dist, 10, Math.cos(a) * dist); camera.lookAt(0, 8.2, 0); camera.updateMatrixWorld();
     place();
   });
   return { dispose() { stage.dispose(); el.replaceChildren(); el.classList.remove("podium", "podium--2d"); } };

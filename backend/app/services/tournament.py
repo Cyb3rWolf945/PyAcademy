@@ -20,7 +20,8 @@ from app.models.tournament import (
 )
 from app.models.user import Role, SchoolClass, User
 from app.realtime import presence
-from app.services import security, tournament_events as events, tournament_scoring as scoring
+from app.services import elimination, security, tournament_events as events, tournament_scoring as scoring
+from app.services import points as points_svc
 from app.services.problems import ProblemSpec, curriculum
 
 JOIN_KEY = "__tjoin__"
@@ -95,9 +96,22 @@ async def owned(db: AsyncSession, tid: int, teacher: User, *, lock: bool = False
     return t
 
 
+async def owned_by_code(db: AsyncSession, code: str, teacher: User) -> Tournament:
+    tournament = (await db.execute(select(Tournament).where(
+        Tournament.join_code == code, Tournament.teacher_id == teacher.id,
+    ))).scalar_one_or_none()
+    if tournament is None:
+        raise ApiError(404, "tournament.not_found")
+    return tournament
+
+
 async def viewable(db: AsyncSession, tid: int, user: User) -> Tournament:
-    """O professor dono ou um aluno da turma do torneio."""
+    """O professor dono, um aluno da turma ou um convidado do próprio torneio."""
     t = await get_tournament(db, tid)
+    if user.is_guest:
+        if user.guest_tournament_id != t.id:
+            raise ApiError(404, "tournament.not_found")
+        return t
     if user.role == Role.teacher:
         if t.teacher_id != user.id:
             raise ApiError(404, "tournament.not_found")
@@ -121,13 +135,21 @@ async def get_round(db: AsyncSession, tid: int, idx: int, *, lock: bool = False)
 
 
 # ---------------- criar / editar ----------------
-async def create(db: AsyncSession, teacher: User, class_id: int, name: str, mode: str) -> Tournament:
+async def create(
+    db: AsyncSession, teacher: User, class_id: int, name: str, mode: str, fmt: str = "aula",
+    group_size: int | None = None, advance: int | None = None, points: dict | None = None,
+) -> Tournament:
     cls = await db.get(SchoolClass, class_id)
     if cls is None or cls.teacher_id != teacher.id:
         raise ApiError(404, "tournament.class_not_found")
-    picks = await pick_problems(db)
+    config = dict(DEFAULT_CONFIG)
+    if fmt == "eliminatoria":
+        mode = "individual"
+        config.update(group_size=group_size or elimination.DEFAULT_GROUP_SIZE, advance_per_group=advance or elimination.DEFAULT_ADVANCE,
+                      points={**points_svc.DEFAULT_POINTS, **(points or {})})
+    picks = await pick_problems(db) if fmt == "aula" else {}
     for _ in range(10):
-        t = Tournament(class_id=class_id, teacher_id=teacher.id, name=name, mode=mode, join_code=security.random_code(6), config=dict(DEFAULT_CONFIG))
+        t = Tournament(class_id=class_id, teacher_id=teacher.id, name=name, mode=mode, format=fmt, join_code=security.random_code(6), config=config)
         try:
             async with db.begin_nested():
                 db.add(t)
@@ -137,6 +159,10 @@ async def create(db: AsyncSession, teacher: User, class_id: int, name: str, mode
             continue
     else:
         raise ApiError(500, "common.error")
+    if fmt == "eliminatoria":
+        await elimination.make_round(db, t, 1)
+        await db.commit()
+        return t
     for idx, title, pts, mult, dur, boss, _d, _t in PRESET:
         db.add(TournamentRound(
             tournament_id=t.id, idx=idx, title=title, points=pts, multiplier=float(mult), duration_s=dur,
@@ -154,10 +180,16 @@ async def update_round(db: AsyncSession, teacher: User, tid: int, idx: int, data
     if (slugs := data.get("problem_slugs")) is not None:
         if len(set(slugs)) != len(slugs):
             raise ApiError(422, "tournament.duplicate_problem")
-        found = set((await db.execute(select(Problem.slug).where(Problem.slug.in_(slugs)))).scalars()) if slugs else set()
-        if found != set(slugs):
+        found = {p.slug: p for p in (await db.execute(select(Problem).where(Problem.slug.in_(slugs)))).scalars()} if slugs else {}
+        if set(found) != set(slugs):
             raise ApiError(422, "tournament.problem_not_found")
+        if t.format == "eliminatoria":
+            if len(slugs) != 1 or found[slugs[0]].tipo not in elimination.CODE_TIPOS:
+                raise ApiError(422, "tournament.exercise_invalid")
+            rnd.edited = True
         rnd.problem_slugs = list(slugs)
+    if t.format == "eliminatoria" and (data.get("title") or data.get("duration_s")):
+        rnd.edited = True
     for k in ("title", "points", "multiplier", "duration_s"):
         if data.get(k) is not None:
             setattr(rnd, k, data[k])
@@ -222,6 +254,8 @@ async def snapshot(db: AsyncSession, t: Tournament, user: User) -> dict:
     """Estado completo para alunos, projetor e professor. Lê o last_seq ANTES do resto: se algo mudar
     durante a leitura, o replay a partir desse seq repõe-no (os eventos são idempotentes no cliente)."""
     teacher = user.role == Role.teacher
+    if t.format == "eliminatoria":
+        return await elimination.build_snapshot(db, t, user, teacher)
     seq = await events.last_seq(db, t.id)
     now = utcnow()
     rounds = await rounds_of(db, t.id)
@@ -235,7 +269,7 @@ async def snapshot(db: AsyncSession, t: Tournament, user: User) -> dict:
     player = None if teacher else await db.get(TournamentPlayer, (t.id, user.id))
     board = await scoring.compute_leaderboard(db, t)
     players_count = (await db.execute(select(func.count()).select_from(TournamentPlayer).where(TournamentPlayer.tournament_id == t.id))).scalar_one()
-    tour = {"players_count": players_count, "id": t.id, "name": t.name, "mode": t.mode, "state": t.state, "current_round": t.current_round, "config": t.config}
+    tour = {"players_count": players_count, "id": t.id, "name": t.name, "mode": t.mode, "format": t.format, "state": t.state, "current_round": t.current_round, "config": t.config}
     if teacher:
         tour["join_code"] = t.join_code  # só o professor
         tour["class_id"] = t.class_id
@@ -277,6 +311,9 @@ async def admin_view(db: AsyncSession, t: Tournament, teacher: User) -> dict:
     solves = {(rid, slug): n for rid, slug, n in (await db.execute(
         select(TournamentSolve.round_id, TournamentSolve.problem_slug, func.count()).where(TournamentSolve.tournament_id == t.id)
         .group_by(TournamentSolve.round_id, TournamentSolve.problem_slug))).all()}
+    if t.format == "eliminatoria":
+        await elimination.admin_extras(db, t, view)
+        return view
     view["missions_stats"] = [
         {"round_idx": r.idx, "slug": s, "submissions": attempts.get((r.id, s), 0), "solved": solves.get((r.id, s), 0)}
         for r in rounds for s in r.problem_slugs
@@ -294,7 +331,7 @@ async def list_for(db: AsyncSession, user: User, class_id: int | None) -> list[d
             TournamentPlayer.user_id == user.id, Tournament.class_id == user.class_id)
     rows = (await db.execute(q.order_by(Tournament.id.desc()))).scalars()
     return [{
-        "id": t.id, "name": t.name, "mode": t.mode, "state": t.state, "class_id": t.class_id, "current_round": t.current_round,
+        "id": t.id, "name": t.name, "mode": t.mode, "format": t.format, "state": t.state, "class_id": t.class_id, "current_round": t.current_round,
         "created_at": t.created_at.isoformat(), **({"join_code": t.join_code} if user.role == Role.teacher else {}),
     } for t in rows]
 
@@ -304,7 +341,10 @@ async def join(db: AsyncSession, user: User, code: str, ip: str = "unknown") -> 
     if await security.recent_failures(db, JOIN_KEY, ip) >= settings.join_max_failures:
         raise ApiError(429, "tournament.too_many_attempts")
     t = (await db.execute(select(Tournament).where(Tournament.join_code == code.strip().upper()[:12]))).scalar_one_or_none()
-    if t is None or user.class_id != t.class_id:
+    allowed = t is not None and (
+        user.guest_tournament_id == t.id if user.is_guest else user.class_id == t.class_id
+    )
+    if not allowed:
         await security.record_failure(db, JOIN_KEY, ip)  # uma turma partilha o IP: o limite é largo (30 por 15 min)
         raise ApiError(404, "tournament.not_found")
     if t.state == "finished":
@@ -327,7 +367,7 @@ async def _ensure_player(db: AsyncSession, t: Tournament, user: User) -> None:
 
 async def _team_op_guard(db: AsyncSession, tid: int, user: User) -> Tournament:
     t = await get_tournament(db, tid, lock=True)  # serializa as operações de agências deste torneio
-    if user.class_id != t.class_id:
+    if not (user.is_guest and user.guest_tournament_id == t.id) and user.class_id != t.class_id:
         raise ApiError(404, "tournament.not_found")
     if t.mode != "agencias":
         raise ApiError(409, "tournament.not_agencies")
@@ -425,6 +465,8 @@ async def move_player(db: AsyncSession, teacher: User, tid: int, team_id: int, u
 
 # ---------------- controlo das rondas (professor) ----------------
 async def start_round(db: AsyncSession, teacher: User, tid: int, idx: int) -> Tournament:
+    if (await owned(db, tid, teacher)).format == "eliminatoria":
+        return await elimination.start_next(db, teacher, tid, idx)
     t = await owned(db, tid, teacher, lock=True)
     rnd = await get_round(db, tid, idx, lock=True)
     if t.state == "finished":
@@ -502,6 +544,8 @@ async def _close(db: AsyncSession, t: Tournament, rnd: TournamentRound) -> None:
 
 
 async def close_round(db: AsyncSession, teacher: User, tid: int, idx: int) -> Tournament:
+    if (await owned(db, tid, teacher)).format == "eliminatoria":
+        return await elimination.close_round(db, teacher, tid, idx)
     t = await owned(db, tid, teacher, lock=True)
     rnd = await _running_round(db, tid, idx, ("active", "paused"))
     await _close(db, t, rnd)
@@ -514,6 +558,10 @@ async def finish(db: AsyncSession, teacher: User, tid: int) -> Tournament:
     t = await owned(db, tid, teacher, lock=True)
     if t.state == "finished":
         raise ApiError(409, "tournament.finished")
+    if t.format == "eliminatoria":
+        await elimination.finish(db, t)
+        await db.commit()
+        return t
     if t.state in ("round_active", "round_paused") and t.current_round is not None:
         await _close(db, t, await get_round(db, tid, t.current_round, lock=True))
     t.state = "finished"
@@ -529,7 +577,7 @@ async def finish(db: AsyncSession, teacher: User, tid: int) -> Tournament:
 async def validate_submission(db: AsyncSession, user: User, tid: int, round_idx: int, slug: str) -> tuple[Tournament, TournamentRound]:
     """Regras do servidor para uma submissão de torneio. Devolve (torneio, ronda) ou levanta ApiError."""
     t = await get_tournament(db, tid)
-    if user.role == Role.teacher or user.class_id != t.class_id:
+    if user.role == Role.teacher or (not (user.is_guest and user.guest_tournament_id == t.id) and user.class_id != t.class_id):
         raise ApiError(404, "tournament.not_found")
     if await db.get(TournamentPlayer, (tid, user.id)) is None:
         raise ApiError(403, "tournament.not_participant")
@@ -560,7 +608,7 @@ async def link_submission(db: AsyncSession, sub: Submission, t: Tournament, rnd:
 
 async def open_hint(db: AsyncSession, user: User, tid: int, slug: str, n: int) -> dict:
     t = await get_tournament(db, tid)
-    if user.role == Role.teacher or user.class_id != t.class_id:
+    if user.role == Role.teacher or (not (user.is_guest and user.guest_tournament_id == t.id) and user.class_id != t.class_id):
         raise ApiError(404, "tournament.not_found")
     if await db.get(TournamentPlayer, (tid, user.id)) is None:
         raise ApiError(403, "tournament.not_participant")

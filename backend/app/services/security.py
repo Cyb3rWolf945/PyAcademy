@@ -67,11 +67,11 @@ async def create_session(db: AsyncSession, user_id: int) -> tuple[str, AuthSessi
 
 
 def origin_ok(origin: str | None, referer: str | None) -> bool:
-    allowed = settings.public_origin.rstrip("/")
+    allowed = {item.strip().rstrip("/") for item in settings.public_origin.split(",") if item.strip()}
     if origin:
-        return origin == allowed
+        return origin.rstrip("/") in allowed
     if referer:
-        return referer == allowed or referer.startswith(allowed + "/")
+        return any(referer == item or referer.startswith(item + "/") for item in allowed)
     return False
 
 

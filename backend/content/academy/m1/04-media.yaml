@@ -1,0 +1,62 @@
+id: m1-04-media
+modulo: m1
+ordem: 4
+titulo: {pt: "Do fluxograma ao Python: média de 3 notas", en: "From flowchart to Python: average of 3 marks"}
+aprender:
+  pt: |
+    Problema: ler três notas e mostrar a média. O fluxograma define as variáveis, **lê** as três notas, **calcula** a média e **escreve** o resultado.
+
+    Cada bloco tem a sua linha de Python. Repara que `input()` devolve **sempre texto**, por isso usamos `float()` para o converter num número real.
+
+    O cálculo precisa de **parênteses**: `(nota1 + nota2 + nota3) / 3`. Sem eles, só a última nota seria dividida por 3. Com as notas 12, 14 e 16, o programa mostra 14.0.
+  en: |
+    Problem: read three marks and show the average. The flowchart defines the variables, **reads** the three marks, **calculates** the average and **writes** the result.
+
+    Each block has its own line of Python. Notice that `input()` **always returns text**, so we use `float()` to turn it into a real number.
+
+    The calculation needs **parentheses**: `(nota1 + nota2 + nota3) / 3`. Without them, only the last mark would be divided by 3. With marks 12, 14 and 16, the program shows 14.0.
+exemplo:
+  id: media-3-notas
+  titulo: {pt: "Média de 3 notas", en: "Average of 3 marks"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "definir real nota1, nota2, nota3, media", en: "define real nota1, nota2, nota3, media"}, py: null}
+    - {id: l1, tipo: ler, texto: {pt: "ler nota1", en: "read nota1"}, py: 'nota1 = float(input("Nota 1: "))'}
+    - {id: l2, tipo: ler, texto: {pt: "ler nota2", en: "read nota2"}, py: 'nota2 = float(input("Nota 2: "))'}
+    - {id: l3, tipo: ler, texto: {pt: "ler nota3", en: "read nota3"}, py: 'nota3 = float(input("Nota 3: "))'}
+    - {id: c, tipo: calcular, texto: {pt: "media = (nota1 + nota2 + nota3) / 3", en: "media = (nota1 + nota2 + nota3) / 3"}, py: "media = (nota1 + nota2 + nota3) / 3"}
+    - {id: e, tipo: escrever, texto: {pt: 'escrever "Média = " + media', en: 'write "Average = " + media'}, py: 'print("Média =", media)'}
+slides:
+  - {deck: aula-2, de: 28, ate: 28}
+  - {deck: aula-2, de: 34, ate: 34}
+leitura:
+  pt: "Python Basics, cap. 3 — O teu primeiro programa Python (variáveis e input)"
+  en: "Python Basics, ch. 3 — Your first Python program (variables and input)"
+pistas:
+  - pt: "Cada bloco do fluxograma dá uma linha de Python, pela mesma ordem."
+    en: "Each flowchart block gives one line of Python, in the same order."
+  - pt: "O bloco Definir só existe no fluxograma: não tem linha de Python."
+    en: "The Define block exists only in the flowchart: it has no line of Python."
+atividades:
+  - tipo: ligar
+    enunciado:
+      pt: "Liga cada bloco do fluxograma à sua linha de Python."
+      en: "Match each flowchart block to its line of Python."
+    explicacao:
+      pt: "Ler → input convertido com float(). Calcular → a fórmula. Escrever → print(). O Definir não tem linha porque o Python deduz o tipo do valor."
+      en: "Read → input converted with float(). Calculate → the formula. Write → print(). Define has no line because Python infers the type from the value."
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as linhas de Python pela ordem certa."
+      en: "Put the lines of Python in the right order."
+    explicacao:
+      pt: "Primeiro leem-se as notas (input), depois calcula-se a média (processamento) e só no fim se escreve (output)."
+      en: "First read the marks (input), then compute the average (processing) and write it last (output)."
+verificacao:
+  pergunta:
+    pt: "Para que serve o float() em float(input(\"Nota 1: \"))?"
+    en: "What is float() for in float(input(\"Nota 1: \"))?"
+  opcoes:
+    - {pt: "Converte o texto lido para um número real", en: "It converts the text that was read into a real number"}
+    - {pt: "Mostra o resultado no ecrã", en: "It shows the result on screen"}
+    - {pt: "Arredonda a nota para cima", en: "It rounds the mark up"}
+  resposta: [0]

@@ -1,0 +1,68 @@
+id: m0-02-turing
+modulo: m0
+ordem: 2
+titulo: {pt: "A máquina de Turing", en: "The Turing machine"}
+aprender:
+  pt: |
+    Em 1936, antes de haver computadores, Alan Turing imaginou uma pessoa numa secretária com **um caderno infinito de quadrados** e um lápis, a seguir instruções muito simples, uma de cada vez.
+
+    Esta máquina tem só três coisas:
+
+    - a **fita**: os quadrados com 0 e 1;
+    - a **cabeça**: lê e escreve um quadrado de cada vez;
+    - as **regras**: dizem o que fazer a seguir.
+
+    A ideia-chave: **todo o computador atual é uma versão elétrica e muito mais rápida disto**. Quando programas, estás a escrever regras para essa cabeça.
+  en: |
+    In 1936, before computers existed, Alan Turing imagined a person at a desk with **an endless notebook of squares** and a pencil, following very simple instructions one at a time.
+
+    The machine has just three things:
+
+    - the **tape**: squares holding 0s and 1s;
+    - the **head**: reads and writes one square at a time;
+    - the **rules**: tell it what to do next.
+
+    The key idea: **every computer today is a much faster, electric version of this**. When you program, you are writing rules for that head.
+slides:
+  - {deck: aula-2, de: 3, ate: 12}
+pistas:
+  - pt: "Pensa no caderno infinito: onde fica o que a máquina \"sabe\"?"
+    en: "Think of the endless notebook: where is what the machine \"knows\" kept?"
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "A cabeça repete sempre o mesmo ciclo. Põe os passos pela ordem."
+      en: "The head repeats the same cycle over and over. Put the steps in order."
+    itens:
+      - {id: ler, texto: {pt: "Ler o símbolo do quadrado onde a cabeça está", en: "Read the symbol in the square under the head"}}
+      - {id: regra, texto: {pt: "Procurar nas regras o que fazer com esse símbolo", en: "Look up in the rules what to do with that symbol"}}
+      - {id: escrever, texto: {pt: "Escrever o novo símbolo no quadrado", en: "Write the new symbol in the square"}}
+      - {id: mover, texto: {pt: "Mover a cabeça para o quadrado vizinho", en: "Move the head to the neighbouring square"}}
+    explicacao:
+      pt: "Ler, consultar as regras, escrever e mover: e depois tudo outra vez. É isto que o computador faz, milhões de vezes por segundo."
+      en: "Read, check the rules, write and move, then do it all again. This is what a computer does, millions of times a second."
+  - tipo: pergunta
+    enunciado:
+      pt: "Escolhe as três peças da máquina de Turing."
+      en: "Pick the three parts of the Turing machine."
+    pergunta:
+      pt: "Quais são as peças da máquina?"
+      en: "Which are the parts of the machine?"
+    opcoes:
+      - {pt: "Fita", en: "Tape"}
+      - {pt: "Cabeça", en: "Head"}
+      - {pt: "Ecrã", en: "Screen"}
+      - {pt: "Regras", en: "Rules"}
+    resposta: [0, 1, 3]
+    explicacao:
+      pt: "Fita, cabeça e regras. O ecrã é só uma forma de ver o resultado."
+      en: "Tape, head and rules. The screen is just a way to see the result."
+verificacao:
+  pergunta:
+    pt: "Na máquina de Turing, quem decide o que fazer a seguir?"
+    en: "In the Turing machine, what decides what to do next?"
+  opcoes:
+    - {pt: "O conjunto de regras", en: "The set of rules"}
+    - {pt: "A cor do lápis", en: "The colour of the pencil"}
+    - {pt: "O tamanho da fita", en: "The size of the tape"}
+  resposta: [0]

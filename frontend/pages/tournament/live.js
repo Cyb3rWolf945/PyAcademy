@@ -68,6 +68,21 @@ export function createLive(id, { onChange, onEvent, onStatus } = {}) {
         tour.state = "between_rounds"; scheduleRefresh(); break;
       case "tournament_finished":
         tour.state = "finished"; snap.podium = p.podium || snap.podium; scheduleRefresh(); break;
+      case "groups_drawn": if (r) r.groups = p.groups || []; scheduleRefresh(0); break;
+      case "group_progress": {
+        const g = r?.groups?.find((x) => x.id === p.group_id);
+        const m = g?.members?.find((x) => x.user_id === p.user_id);
+        if (m) Object.assign(m, { passed: p.passed, total: p.total, attempts: p.attempts });
+        break;
+      }
+      case "group_decided": {
+        const g = r?.groups?.find((x) => x.id === p.group_id);
+        if (g) { g.decided = true; g.winners = p.winners || []; g.decided_by = p.decided_by; for (const m of g.members || []) if (g.winners.includes(m.user_id)) m.status = "winner"; }
+        scheduleRefresh(); break;
+      }
+      case "player_eliminated": scheduleRefresh(0); break;
+      case "champion": snap.champion = { user_id: p.user_id, display_name: p.display_name }; scheduleRefresh(0); break;
+      case "points_awarded": snap.my_points_this_tournament = (snap.my_points_this_tournament || 0) + (p.points || 0); break;
       case "player_joined": if (p.players_count != null) { snap.players_count = p.players_count; tour.players_count = p.players_count; } scheduleRefresh(); break;
       case "mission_solved":
         if (p.participant_key === snap.me?.participant_key || p.participant_key === `t:${snap.me?.team_id}`) scheduleRefresh(0);

@@ -7,7 +7,8 @@
   <meta name="theme-color" content="#1b2a1f">
   <title>PyArena</title>
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
   <script src="/services/theme-boot.js"></script>
   <link rel="stylesheet" href="/dist/app.css">
 </head>
@@ -15,11 +16,12 @@
   <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
     <h1 class="min-w-0 truncate text-xl text-accent" id="page-title">PyArena</h1>
     <div class="flex items-center gap-2">
+      <div data-score-hud></div>
       <span id="conn" hidden></span>
       <div class="flex gap-2" data-lang-switch></div>
     </div>
   </header>
-  <main id="view" class="mx-auto grid max-w-3xl gap-4 p-4"></main>
+  <main id="view" class="mx-auto grid max-w-3xl grid-cols-1 gap-4 p-4 [&>*]:min-w-0"></main>
   <div id="mission-host"></div>
   <script type="module" src="/pages/tournament/tournament.js"></script>
 </body>

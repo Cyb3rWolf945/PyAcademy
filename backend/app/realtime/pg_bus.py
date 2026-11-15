@@ -48,6 +48,9 @@ class Conn:
             for ev in evs:
                 if ev["seq"] <= self.sent_seq or self.dead:
                     continue
+                if not events.visible_to(ev, self.user_id):
+                    self.sent_seq = ev["seq"]
+                    continue
                 if not await self.send_json(ev):
                     return
                 self.sent_seq = ev["seq"]

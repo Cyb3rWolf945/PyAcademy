@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import Auth, audit, origin_guard, teacher_auth
-from app.api.schemas import ClassIn, ImportIn, clean_display_name, clean_username
+from app.api.schemas import ClassBulkDeleteIn, ClassIn, ImportIn, clean_display_name, clean_username
 from app.db import get_db
 from app.errors import ApiError
 from app.models.user import Role, SchoolClass, User
@@ -50,6 +50,25 @@ async def create_class(body: ClassIn, auth: Auth = Depends(teacher_auth), db: As
 async def list_classes(auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
     rows = (await db.execute(select(SchoolClass).where(SchoolClass.teacher_id == auth.user.id).order_by(SchoolClass.id))).scalars()
     return {"classes": [class_payload(c) for c in rows]}
+
+
+@router.delete("/classes/{class_id}")
+async def delete_class(class_id: int, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    cls = await own_class(db, class_id, auth.user)
+    await audit(db, auth.user.id, "class.deleted", {"class_id": cls.id})
+    await db.delete(cls)
+    await db.commit()
+    return {"ok": True}
+
+
+@router.post("/classes/bulk-delete")
+async def delete_classes(body: ClassBulkDeleteIn, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    classes = [await own_class(db, class_id, auth.user) for class_id in set(body.class_ids)]
+    for cls in classes:
+        await audit(db, auth.user.id, "class.deleted", {"class_id": cls.id})
+        await db.delete(cls)
+    await db.commit()
+    return {"deleted": len(classes)}
 
 
 @router.get("/classes/{class_id}/students")

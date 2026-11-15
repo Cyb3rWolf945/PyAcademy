@@ -43,6 +43,11 @@ async def emit(db: AsyncSession, tournament_id: int, type_: str, payload: dict |
     return ev.seq
 
 
+def visible_to(ev: dict, user_id: int) -> bool:
+    """points_awarded é privado: só o próprio aluno o recebe."""
+    return ev["type"] != "points_awarded" or ev["payload"].get("user_id") == user_id
+
+
 def event_view(ev: TournamentEvent) -> dict:
     return {"seq": ev.seq, "type": ev.type, "payload": ev.payload}
 

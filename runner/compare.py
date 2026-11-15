@@ -49,8 +49,7 @@ def num_close(a: float, b: float, abs_tol: float = 0.01, rel_tol: float = 1e-6) 
 def compare_output(mode: str, expected: str, actual: str) -> bool:
     """Compara stdout de programas."""
     if mode == "exato":
-        strip = lambda s: s[:-1] if s.endswith("\n") else s  # noqa: E731
-        return strip(expected) == strip(actual)
+        return expected.strip() == actual.strip()
     if mode == "numeros":
         exp = extract_numbers(expected)
         if exp:
@@ -70,7 +69,7 @@ def values_equal(expected, actual, mode: str = "texto", ordered: bool = True) ->
     if isinstance(expected, bool) or isinstance(actual, bool):
         return expected is actual
     if isinstance(expected, str) and isinstance(actual, str):
-        return expected == actual if mode == "exato" else normalize_text(expected) == normalize_text(actual)
+        return expected.strip() == actual.strip() if mode == "exato" else normalize_text(expected) == normalize_text(actual)
     if isinstance(expected, (list, tuple)) and isinstance(actual, (list, tuple)):
         if len(expected) != len(actual):
             return False

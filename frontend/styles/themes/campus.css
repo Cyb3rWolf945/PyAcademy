@@ -1,0 +1,30 @@
+/* Tema "campus" (Campus IPT, tema por omissão): só variáveis CSS. Paleta clara e fresca (relva, tijolo, cal), as cenas 3D
+   do campus têm o seu próprio céu. Contraste verificado: texto >= 7:1 no fundo, AA nos restantes. */
+[data-theme="campus"] {
+  color-scheme: light;
+  --c-bg: #e8f0da;
+  --c-surface: #fcfbf4;
+  --c-surface-2: #dbe7c8;
+  --c-surface-3: #c6d8ad;
+  --c-border: #2b3a1c;
+  --c-text: #1b2813;
+  --c-muted: #465836;
+  --c-accent: #2c6a10;
+  --c-accent-text: #ffffff;
+  --c-accent-2: #9c3a22;
+  --c-success: #17642b;
+  --c-warning: #7f4b00;
+  --c-danger: #a01e18;
+  --c-sky-1: #6db8ee;
+  --c-sky-2: #e4f4ff;
+  --c-team-0: #c62828;
+  --c-team-1: #d4580a;
+  --c-team-2: #8f6a00;
+  --c-team-3: #2a8a3a;
+  --c-team-4: #00838f;
+  --c-team-5: #1f5fd1;
+  --c-team-6: #7b3fc4;
+  --c-team-7: #c2185b;
+  --bg-tile: url("/assets/sprites/themes/campus/bg.png");
+  --scene-img: url("/assets/sprites/campus/poster.png");
+}

@@ -104,8 +104,8 @@ export async function createStage(host, opts = {}) {
     raf = requestAnimationFrame(tick);
     const dt = prevNow ? now - prevNow : 16;
     prevNow = now;
-    // monitor: janelas de 2 s depois de 1 s de aquecimento (a compilação dos shaders não conta)
-    if (!winStart) winStart = now + 1000;
+    // monitor: janelas de 2 s depois de ~3 s de aquecimento (a compilação dos shaders não conta)
+    if (!winStart) winStart = now + 3000; // aquecimento de ~3 s: shaders, texturas e arranque da página não contam
     if (now >= winStart) { winFrames++; winRaf += dt; }
     acc += dt;
     const step = 1000 / fps;

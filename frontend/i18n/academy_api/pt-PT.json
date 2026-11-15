@@ -1,0 +1,11 @@
+{
+  "academy.module_not_found": "Módulo não encontrado.",
+  "academy.section_not_found": "Secção não encontrada.",
+  "academy.locked": "Esta secção ainda está bloqueada. Conclui a anterior primeiro.",
+  "academy.activity_not_found": "Atividade não encontrada.",
+  "academy.invalid_answer": "A resposta enviada não é válida.",
+  "academy.hint_not_found": "Essa pista não existe.",
+  "academy.rate_limited": "Estás a responder depressa de mais. Espera um momento.",
+  "academy.slide_not_found": "Slide não encontrado.",
+  "academy.slides_forbidden": "Os slides só estão disponíveis para alunos de uma turma e professores."
+}

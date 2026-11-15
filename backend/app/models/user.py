@@ -2,7 +2,7 @@
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import Column, ForeignKey, Integer
+from sqlalchemy import Boolean, Column, ForeignKey, Integer
 from sqlmodel import Field, SQLModel
 
 from app.models._base import ts_column, utcnow
@@ -31,6 +31,10 @@ class User(SQLModel, table=True):
         ),
     )
     must_change_password: bool = Field(default=False)
+    # Aparecer no leaderboard público (só o display_name). Desligado por omissão (RGPD).
+    show_in_leaderboard: bool = Field(default=False, sa_column=Column(Boolean, nullable=False, server_default="false"))
+    is_guest: bool = Field(default=False, sa_column=Column(Boolean, nullable=False, server_default="false"))
+    guest_tournament_id: int | None = Field(default=None, sa_column=Column(Integer, nullable=True))
     created_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
 
 

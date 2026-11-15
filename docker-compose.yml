@@ -43,6 +43,8 @@ services:
       WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
       RUNNER_URL: http://runner:9000
       RUNNER_TOKEN: ${RUNNER_TOKEN}
+    volumes:
+      - slides:/data/slides:ro
     networks: [public, internal, sandbox]
     depends_on:
       db:
@@ -99,6 +101,24 @@ services:
       start_period: 10s
       retries: 5
 
+  # Conversor de slides: só corre quando o professor importa um deck (perfil "tools"), sem rede e sem acesso à BD.
+  # Escreve para o volume "slides" (que a app monta só de leitura). Ver docs/SLIDES.md.
+  converter:
+    profiles: ["tools"]
+    build:
+      context: ./converter
+    network_mode: none
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp:size=768m,mode=1777
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 2g
+    volumes:
+      - slides:/data/slides
+
   # backup:  (fase posterior) pg_dump diário para ./backups
 
 networks:
@@ -112,3 +132,4 @@ volumes:
   pgdata:
   caddy_data:
   caddy_config:
+  slides:

@@ -1,0 +1,17 @@
+id: m0-03-terceira
+modulo: m0
+ordem: 3
+titulo: {pt: Terceira, en: Third}
+aprender: {pt: Texto, en: Text}
+atividades:
+  - tipo: ordenar_lista
+    enunciado: {pt: Ordena, en: Order}
+    explicacao: {pt: Expl, en: Expl}
+    itens:
+      - {id: a, texto: {pt: Primeiro, en: First}}
+      - {id: b, texto: {pt: Segundo, en: Second}}
+      - {id: c, texto: {pt: Terceiro, en: Third}}
+verificacao:
+  pergunta: {pt: "Qual?", en: "Which?"}
+  opcoes: [{pt: A, en: A}, {pt: B, en: B}, {pt: C, en: C}]
+  resposta: [1]

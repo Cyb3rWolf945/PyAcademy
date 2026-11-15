@@ -1,0 +1,11 @@
+id: m2-01-m2
+modulo: m2
+ordem: 1
+titulo: {pt: M2, en: M2}
+aprender: {pt: Texto, en: Text}
+atividades:
+  - {tipo: pergunta, enunciado: {pt: E, en: E}, explicacao: {pt: X, en: X}, pergunta: {pt: Q, en: Q}, opcoes: [{pt: A, en: A}, {pt: B, en: B}], resposta: [0]}
+verificacao:
+  pergunta: {pt: "Qual?", en: "Which?"}
+  opcoes: [{pt: A, en: A}, {pt: B, en: B}, {pt: C, en: C}]
+  resposta: [1]

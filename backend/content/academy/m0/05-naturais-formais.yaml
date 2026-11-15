@@ -1,0 +1,63 @@
+id: m0-05-naturais-formais
+modulo: m0
+ordem: 5
+titulo: {pt: "Linguagens naturais e formais", en: "Natural and formal languages"}
+aprender:
+  pt: |
+    Se um amigo diz "aparece daqui a pouco", ele percebe. A **linguagem natural** (português, inglês, hindi...) é rica, mas **ambígua**: quanto tempo é "um bocadinho"?
+
+    O computador não tolera dúvidas. Precisa de uma **linguagem formal**: símbolos e regras rígidas (sintaxe) e **um único significado possível**. A matemática, os fluxogramas, o Portugol e o Python são linguagens formais.
+
+    "Aparece daqui a pouco" é natural. `esperar 5 minutos` é formal. **Programar é dar ordens ao computador numa linguagem formal.**
+  en: |
+    If a friend says "show up in a little while", they understand. **Natural language** (Portuguese, English, Hindi...) is rich but **ambiguous**: how long is "a little while"?
+
+    The computer tolerates no doubt. It needs a **formal language**: symbols and rigid rules (syntax) and **one single possible meaning**. Maths, flowcharts, Portugol and Python are formal languages.
+
+    "Show up in a little while" is natural. `esperar 5 minutos` (wait 5 minutes) is formal. **Programming means giving the computer orders in a formal language.**
+slides:
+  - {deck: aula-3, de: 11, ate: 11}
+pistas:
+  - pt: "Pergunta-te: dá para duas pessoas entenderem a frase de maneiras diferentes?"
+    en: "Ask yourself: could two people understand the sentence in different ways?"
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Classifica as frases. Escolhe todas as que um computador conseguia executar."
+      en: "Classify the sentences. Pick every one a computer could execute."
+    pergunta:
+      pt: "Quais destas instruções são formais (sem ambiguidade)?"
+      en: "Which of these instructions are formal (no ambiguity)?"
+    opcoes:
+      - {pt: "Espera um bocadinho.", en: "Wait a little bit."}
+      - {pt: "esperar 5 minutos", en: "wait 5 minutes"}
+      - {pt: "Aparece daqui a pouco.", en: "Show up in a while."}
+      - {pt: "a² = b² + c²", en: "a² = b² + c²"}
+    resposta: [1, 3]
+    explicacao:
+      pt: "\"Esperar 5 minutos\" e a fórmula só têm um significado. \"Um bocadinho\" e \"daqui a pouco\" dependem de quem ouve."
+      en: "\"Wait 5 minutes\" and the formula have only one meaning. \"A little bit\" and \"in a while\" depend on who is listening."
+  - tipo: pergunta
+    enunciado:
+      pt: "Porque é que a linguagem natural é um problema para o computador?"
+      en: "Why is natural language a problem for the computer?"
+    pergunta:
+      pt: "O que torna \"espera um bocadinho\" difícil para um computador?"
+      en: "What makes \"wait a little bit\" hard for a computer?"
+    opcoes:
+      - {pt: "Não diz quanto tempo é um bocadinho", en: "It does not say how long a little bit is"}
+      - {pt: "Tem demasiadas letras", en: "It has too many letters"}
+      - {pt: "Está em português", en: "It is in Portuguese"}
+    resposta: [0]
+    explicacao:
+      pt: "O problema não é a língua, é a ambiguidade: sem um número, o computador não sabe quanto esperar."
+      en: "The problem is not the language but the ambiguity: without a number, the computer cannot know how long to wait."
+verificacao:
+  pergunta:
+    pt: "Qual destas é uma linguagem formal?"
+    en: "Which of these is a formal language?"
+  opcoes:
+    - {pt: "Português", en: "Portuguese"}
+    - {pt: "Python", en: "Python"}
+    - {pt: "Inglês", en: "English"}
+  resposta: [1]

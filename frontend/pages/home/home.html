@@ -15,32 +15,33 @@
 </head>
 <body class="min-h-dvh pb-24 lg:pb-0 lg:pl-56">
   <header id="hero" class="scene-host hero hero--short">
+  <div class="hero-fx" aria-hidden="true"><i class="cloud cloud--a"></i><i class="cloud cloud--b"></i><i class="cloud cloud--c"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i></div>
+  <div class="hero-edge" aria-hidden="true"></div>
     <div class="scene-content grid gap-3">
       <div class="flex items-start justify-between gap-2">
-        <span class="logo-pixel text-base sm:text-xl md:text-3xl"><img src="/assets/sprites/icons/logo.png" width="32" height="32" alt="" class="sprite">PyArena</span>
+        <a class="logo-pixel text-base sm:text-xl md:text-3xl" href="/pages/home/home.html" aria-label="PyArena"><img src="/assets/sprites/icons/logo-64.png" width="64" height="64" alt="" class="sprite size-8 md:size-16"><span class="logo-stack"><span class="logo-word" aria-hidden="true"><span>P</span><span>y</span><span>A</span><span>r</span><span>e</span><span>n</span><span>a</span></span><small class="logo-sub hidden sm:block" data-i18n="brand.university"></small></span></a>
         <div class="flex gap-2">
-          <div data-theme-switch></div>
+          <div data-score-hud></div><div data-theme-switch></div>
           <div class="flex gap-2" data-lang-switch></div>
         </div>
       </div>
-      <section class="panel-pixel flex items-center gap-3 !p-3" aria-label="Perfil">
-        <div class="panel-pixel--inset grid size-16 flex-none place-items-center"><img class="sprite sprite--lg" src="/assets/sprites/icons/profile.png" width="64" height="64" alt=""></div>
+      <section class="panel-pixel hud !p-3" aria-label="Perfil">
+        <div class="hud-avatar"><img class="sprite" src="/assets/sprites/icons/profile.png" width="56" height="56" alt=""><span class="hud-level" id="level-n">1</span></div>
         <div class="grid min-w-0 flex-1 gap-1">
           <h1 class="truncate text-xs md:text-sm" id="welcome">&nbsp;</h1>
-          <div class="flex items-center justify-between gap-2 text-sm"><span class="badge-pixel badge-pixel--gold" id="level"></span><span class="text-muted" id="xp-text"></span></div>
+          <div class="flex items-center justify-between gap-2 text-sm"><span class="chip"><img src="/assets/sprites/icons/star.png" width="20" height="20" alt=""><span id="level"></span></span><span class="text-muted" id="xp-text"></span></div>
           <div class="xp-bar" id="xp-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
         </div>
       </section>
     </div>
   </header>
 
-  <main class="mx-auto grid max-w-4xl gap-4 p-4 pt-6 sm:grid-cols-2 lg:grid-cols-3">
-    <button type="button" class="mode-card mode-card--soon" data-soon data-tone="3">
-      <img class="sprite" src="/assets/sprites/icons/world.png" width="56" height="56" alt="">
-      <span class="mode-card__title" data-i18n="mode.world"></span>
-      <span class="mode-card__desc" data-i18n="mode.world_desc"></span>
-      <span class="badge-pixel" data-i18n="mode.soon"></span>
-    </button>
+  <main class="enter-stagger mx-auto grid max-w-4xl gap-4 p-4 pt-6 sm:grid-cols-2 lg:grid-cols-3">
+    <a class="mode-card" data-tone="3" href="/pages/academy/academy.html">
+      <img class="sprite" src="/assets/sprites/academy/m1.png" width="56" height="56" alt="">
+      <span class="mode-card__title" data-i18n="mode.academy"></span>
+      <span class="mode-card__desc" data-i18n="mode.academy_desc"></span>
+    </a>
     <button type="button" class="mode-card mode-card--soon" data-soon data-tone="0">
       <img class="sprite" src="/assets/sprites/icons/arena.png" width="56" height="56" alt="">
       <span class="mode-card__title" data-i18n="mode.arena"></span>
@@ -59,7 +60,7 @@
       <span class="mode-card__title" data-i18n="mode.tournament"></span>
       <span class="mode-card__desc" data-i18n="mode.tournament_desc"></span>
       <div class="col-span-2 mt-2 flex gap-2">
-        <input class="input-pixel uppercase" name="code" maxlength="12" autocapitalize="characters" autocomplete="off" required data-i18n-placeholder="field.tournament_code" data-i18n-aria="field.tournament_code">
+        <input class="input-pixel uppercase" name="code" maxlength="12" autocapitalize="characters" autocomplete="off" required data-i18n-placeholder="home.code_ph" data-i18n-aria="field.tournament_code">
         <button class="btn-pixel btn-pixel--accent" type="submit" data-i18n="home.tournament_go"></button>
       </div>
     </form>
@@ -74,6 +75,7 @@
       <span class="mode-card__title" data-i18n="mode.profile"></span>
       <span class="mode-card__desc" data-i18n="mode.profile_desc"></span>
     </a>
+    <section id="leaderboard" class="sm:col-span-2 lg:col-span-3" aria-labelledby="lb-title"></section>
     <a id="admin-link" class="mode-card sm:col-span-2 lg:col-span-3" data-tone="1" href="/pages/admin/admin.html" hidden>
       <img class="sprite" src="/assets/sprites/icons/teacher.png" width="56" height="56" alt="">
       <span class="mode-card__title" data-i18n="home.admin_link"></span>

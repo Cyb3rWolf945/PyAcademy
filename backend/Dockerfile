@@ -48,7 +48,7 @@ COPY --from=css /src/frontend/dist ./frontend/dist
 # para nenhum browser ficar com estilos antigos depois de uma atualização.
 RUN H=$(sha256sum frontend/dist/app.css | cut -c1-10) \
     && find frontend -name '*.html' -not -path 'frontend/dist/*' -exec sed -i "s#/dist/app.css\"#/dist/app.css?v=${H}\"#g" {} + \
-    && chown -R pyarena:pyarena /app
+    && mkdir -p /data/slides && chown -R pyarena:pyarena /app /data/slides
 USER pyarena
 WORKDIR /app/backend
 EXPOSE 8000

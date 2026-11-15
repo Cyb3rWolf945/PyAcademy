@@ -12,25 +12,87 @@ if (me) init();
 function init() {
   const $ = (id) => document.getElementById(id);
   let selected = null;
+  let classes = [];
+  const selectedClassIds = new Set();
   const tournaments = initTournaments(document.getElementById("tournaments"));
 
+  function renderClasses() {
+    const query = $("class-search").value.trim().toLocaleLowerCase();
+    const visible = classes.filter((c) => `${c.name} ${c.join_code}`.toLocaleLowerCase().includes(query));
+    $("class-list").replaceChildren(...visible.map((c) => {
+      const checkbox = el("input", { type: "checkbox", class: "h-5 w-5", checked: selectedClassIds.has(c.id), "aria-label": c.name });
+      checkbox.addEventListener("click", (ev) => ev.stopPropagation());
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) selectedClassIds.add(c.id); else selectedClassIds.delete(c.id);
+        updateBulkControls();
+      });
+      return el("li", { class: "flex items-center gap-2" },
+        checkbox,
+        el("button", { class: "btn-pixel secondary flex-1 justify-between", type: "button", onclick: () => select(c) },
+          el("span", { class: "truncate" }, c.name), el("span", { class: "text-accent" }, c.join_code)));
+    }));
+    updateBulkControls(visible);
+  }
+
+  function updateBulkControls(visible = classes) {
+    $("delete-selected-classes").disabled = selectedClassIds.size === 0;
+    const visibleIds = visible.map((c) => c.id);
+    $("select-visible-classes").disabled = visibleIds.length === 0;
+    $("select-visible-classes").checked = visibleIds.length > 0 && visibleIds.every((id) => selectedClassIds.has(id));
+  }
+
   async function loadClasses() {
-    const { classes } = await api("GET", "/api/classes");
+    const result = await api("GET", "/api/classes");
+    classes = result.classes;
+    for (const id of [...selectedClassIds]) if (!classes.some((c) => c.id === id)) selectedClassIds.delete(id);
     tournaments.setClasses(classes);
     $("no-classes").hidden = classes.length > 0;
-    $("class-list").replaceChildren(...classes.map((c) =>
-      el("li", {}, el("button", { class: "btn-pixel secondary w-full justify-between", type: "button", onclick: () => select(c) },
-        el("span", {}, c.name), el("span", { class: "text-accent" }, c.join_code)))));
+    renderClasses();
   }
 
   async function select(c) {
     selected = c;
+    tournaments.setActiveClass(c.id);
     $("class-detail").hidden = false;
     $("class-title").textContent = c.name;
     $("join-code").textContent = c.join_code;
     $("import-result").hidden = true;
     await loadStudents();
   }
+
+  $("delete-class-btn").addEventListener("click", async () => {
+    if (!selected || !confirm(t("admin.delete_class_confirm"))) return;
+    try {
+      await api("DELETE", `/api/classes/${selected.id}`);
+      selected = null;
+      $("class-detail").hidden = true;
+      await loadClasses();
+      toast(t("admin.class_deleted"), "success");
+    } catch (err) { toast(errorText(err), "error"); }
+  });
+
+  $("class-search").addEventListener("input", renderClasses);
+  $("select-visible-classes").addEventListener("change", (ev) => {
+    const query = $("class-search").value.trim().toLocaleLowerCase();
+    for (const c of classes.filter((x) => `${x.name} ${x.join_code}`.toLocaleLowerCase().includes(query))) {
+      if (ev.target.checked) selectedClassIds.add(c.id); else selectedClassIds.delete(c.id);
+    }
+    renderClasses();
+  });
+  $("delete-selected-classes").addEventListener("click", async () => {
+    const ids = [...selectedClassIds];
+    if (!ids.length || !confirm(t("admin.delete_selected_confirm", { n: ids.length }))) return;
+    try {
+      await api("POST", "/api/classes/bulk-delete", { class_ids: ids });
+      if (selected && selectedClassIds.has(selected.id)) {
+        selected = null;
+        $("class-detail").hidden = true;
+      }
+      selectedClassIds.clear();
+      await loadClasses();
+      toast(t("admin.classes_deleted"), "success");
+    } catch (err) { toast(errorText(err), "error"); }
+  });
 
   async function loadStudents() {
     const { students } = await api("GET", `/api/classes/${selected.id}/students`);

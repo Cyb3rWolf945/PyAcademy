@@ -1,0 +1,63 @@
+id: m1-02-computacional
+modulo: m1
+ordem: 2
+titulo: {pt: "Computacional ou não?", en: "Computational or not?"}
+aprender:
+  pt: |
+    Trocar uma lâmpada ou fazer uma receita também são algoritmos, só que feitos **por pessoas**. São **não computacionais**: usam linguagem natural, têm algo de ambíguo e dependem da perícia de quem executa.
+
+    Num algoritmo **computacional** quem executa é o computador. Recebe dados, **processa** (calcula, escolhe, repete) e devolve informação, tudo em **linguagem formal, sem ambiguidade**. Um exemplo: calcular a distância de um carro de bombeiros a um prédio, dados o comprimento da escada e a altura.
+
+    Em resumo: um algoritmo computacional é tão bem definido que **até um computador o consegue executar**.
+  en: |
+    Changing a light bulb or following a recipe are also algorithms, just carried out **by people**. They are **non-computational**: they use natural language, are somewhat ambiguous and depend on the skill of whoever runs them.
+
+    In a **computational** algorithm the computer is the one executing. It receives data, **processes** it (calculates, chooses, repeats) and returns information, all in a **formal, unambiguous language**. An example: computing the distance from a fire engine to a building, given the ladder length and the building height.
+
+    In short: a computational algorithm is so well defined that **even a computer can execute it**.
+slides:
+  - {deck: aula-2, de: 22, ate: 22}
+pistas:
+  - pt: "Se precisa de bom senso ou de perícia de quem faz, não é computacional."
+    en: "If it needs common sense or the doer's skill, it is not computational."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Separa os algoritmos computacionais dos outros."
+      en: "Separate the computational algorithms from the others."
+    pergunta:
+      pt: "Quais destes são algoritmos computacionais?"
+      en: "Which of these are computational algorithms?"
+    opcoes:
+      - {pt: "Trocar uma lâmpada fundida", en: "Change a blown light bulb"}
+      - {pt: "Calcular a distância do carro de bombeiros ao prédio", en: "Compute the distance from the fire engine to the building"}
+      - {pt: "Fazer um bolo de forma \"mais ou menos\"", en: "Bake a cake \"more or less\""}
+      - {pt: "Converter segundos em minutos e segundos", en: "Convert seconds into minutes and seconds"}
+    resposta: [1, 3]
+    explicacao:
+      pt: "Os dois cálculos têm dados de entrada, processamento e um resultado exato. Trocar uma lâmpada e fazer um bolo \"mais ou menos\" dependem de quem os faz."
+      en: "Both calculations have input data, processing and an exact result. Changing a bulb and baking \"more or less\" depend on whoever does them."
+  - tipo: pergunta
+    enunciado:
+      pt: "Pensa no que muda quando quem executa é um computador."
+      en: "Think about what changes when a computer is the one executing."
+    pergunta:
+      pt: "O que muda num algoritmo computacional?"
+      en: "What changes in a computational algorithm?"
+    opcoes:
+      - {pt: "As instruções são em linguagem formal, sem ambiguidade", en: "The instructions are in a formal language, with no ambiguity"}
+      - {pt: "Deixa de ter passos", en: "It no longer has steps"}
+      - {pt: "Já não precisa de dados de entrada", en: "It no longer needs input data"}
+    resposta: [0]
+    explicacao:
+      pt: "Os passos e os dados continuam lá. O que muda é que tudo tem de estar escrito sem margem para dúvida."
+      en: "The steps and data are still there. What changes is that everything must be written with no room for doubt."
+verificacao:
+  pergunta:
+    pt: "Qual é uma característica de um algoritmo computacional?"
+    en: "What is a characteristic of a computational algorithm?"
+  opcoes:
+    - {pt: "Depende da perícia de quem executa", en: "It depends on the skill of whoever runs it"}
+    - {pt: "É escrito em linguagem natural e ambígua", en: "It is written in ambiguous natural language"}
+    - {pt: "Recebe dados, processa-os e devolve informação", en: "It receives data, processes it and returns information"}
+  resposta: [2]
