@@ -1,0 +1,44 @@
+# Listas (bloco 7, cidadela): pesquisa linear que devolve o índice ou -1, sem index().
+id: pesquisa-linear
+titulo: {pt: "Onde está o valor?", en: "Where is the value?"}
+tipo: funcao
+bloco: "7"
+regiao: cidadela
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Escreve a função pesquisa_linear(valores, alvo) que percorre a lista da esquerda para a direita e devolve o índice da primeira
+    vez que alvo aparece. Se não aparecer, devolve -1. Se a lista estiver vazia, devolve -1.
+
+    🧱 Requisito: é proibido usar index(). Tens de percorrer a lista com um ciclo for.
+  en: |
+    Write the function pesquisa_linear(valores, alvo) that goes through the list from left to right and returns the index of the first
+    time alvo appears. If it does not appear, return -1. If the list is empty, return -1.
+
+    🧱 Requirement: using index() is forbidden. You must go through the list with a for loop.
+assinatura: "pesquisa_linear(valores, alvo)"
+exemplos:
+  - args: [[4, 8, 15], 15]
+    devolve: 2
+testes:
+  - {args: [[4, 8, 15], 8], devolve: 1}
+  - {args: [[4, 8, 15], 16], devolve: -1}
+  - {args: [[], 1], devolve: -1}
+  - {args: [[7, 7, 7], 7], devolve: 0}
+  - {args: [["ola", "adeus"], "adeus"], devolve: 1}
+comparacao: numeros
+ordem_importa: true
+requisitos:
+  usa: [for]
+  proibe: [index]
+pistas:
+  - {pt: "Usa enumerate ou range(len(valores)) e devolve logo que encontres o alvo.", en: "Use enumerate or range(len(valores)) and return as soon as you find the target."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def pesquisa_linear(valores, alvo):
+      for indice in range(len(valores)):
+          if valores[indice] == alvo:
+              return indice
+      return -1

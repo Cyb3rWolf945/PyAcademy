@@ -1,0 +1,122 @@
+# Arena de Algoritmia (extra_hard): Manchas de relva no campus. Gerado em rascunho; revisão do professor pendente.
+id: algo-manchas-de-relva
+titulo:
+  pt: Manchas de relva no campus
+  en: Grass patches on campus
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 4
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    Uma foto aérea do campus é uma grelha de linhas de texto: `'1'` é relva e `'0'` é cimento. Uma **mancha** é um conjunto de células de relva ligadas por **cima, baixo, esquerda ou direita** (as diagonais não contam).
+
+    Escreve `numero_de_manchas(grelha)`, que recebe a lista de strings (todas do mesmo tamanho) e devolve quantas manchas existem. Grelha vazia devolve `0`.
+
+    **Exemplo:** `["110", "010", "001"]` devolve `2`: a mancha do canto superior esquerdo (3 células) e a célula isolada do canto inferior direito.
+  en: |
+    An aerial photo of the campus is a grid of text rows: `'1'` is grass and `'0'` is concrete. A **patch** is a set of grass cells connected **up, down, left or right** (diagonals do not count).
+
+    Write `numero_de_manchas(grelha)`, which receives the list of strings (all the same length) and returns how many patches exist. An empty grid returns `0`.
+
+    **Example:** `["110", "010", "001"]` returns `2`: the top-left patch (3 cells) and the isolated cell in the bottom-right corner.
+assinatura: numero_de_manchas(grelha)
+restricoes:
+  pt: 0 ≤ linhas, colunas ≤ 300; cada célula é '0' ou '1'
+  en: 0 ≤ rows, columns ≤ 300; each cell is '0' or '1'
+exemplos:
+- args: [['110', '010', '001']]
+  devolve: 2
+testes:
+- args: [['110', '010', '001']]
+  devolve: 2
+- args: [[]]
+  devolve: 0
+- args: [['0']]
+  devolve: 0
+- args: [['1']]
+  devolve: 1
+- args: [['101', '010', '101']]
+  devolve: 5
+- args: [['111', '101', '111']]
+  devolve: 1
+- args: [['1111']]
+  devolve: 1
+- args: [['1', '0', '1']]
+  devolve: 2
+- args_gerador: '[["".join("1" if (r * 7 + c * 13) % 5 else "0" for c in range(300)) for r in range(300)]]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: Para cada célula de relva por visitar, percorre toda a mancha (pilha ou fila) e marca as células como visitadas. Conta as vezes que começas.
+  en: For each unvisited grass cell, walk the whole patch (stack or queue) and mark its cells as visited. Count how many times you start.
+erros_comuns: []
+limite_tempo_s: 3
+solucao_referencia: |
+  def numero_de_manchas(grelha):
+      linhas = len(grelha)
+      if linhas == 0:
+          return 0
+      colunas = len(grelha[0])
+      visitado = [[False] * colunas for _ in range(linhas)]
+      total = 0
+      for r in range(linhas):
+          for c in range(colunas):
+              if grelha[r][c] == "1" and not visitado[r][c]:
+                  total += 1
+                  visitado[r][c] = True
+                  pilha = [(r, c)]
+                  while pilha:
+                      y, x = pilha.pop()
+                      for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                          ny = y + dy
+                          nx = x + dx
+                          if 0 <= ny < linhas and 0 <= nx < colunas:
+                              if grelha[ny][nx] == "1" and not visitado[ny][nx]:
+                                  visitado[ny][nx] = True
+                                  pilha.append((ny, nx))
+      return total
+solucao_ingenua: |
+  def numero_de_manchas(grelha):
+      linhas = len(grelha)
+      if linhas == 0:
+          return 0
+      colunas = len(grelha[0])
+      visitadas = []
+      total = 0
+      for r in range(linhas):
+          for c in range(colunas):
+              if grelha[r][c] == "1" and (r, c) not in visitadas:
+                  total += 1
+                  visitadas.append((r, c))
+                  pilha = [(r, c)]
+                  while pilha:
+                      y, x = pilha.pop()
+                      for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                          ny = y + dy
+                          nx = x + dx
+                          if 0 <= ny < linhas and 0 <= nx < colunas:
+                              if grelha[ny][nx] == "1" and (ny, nx) not in visitadas:
+                                  visitadas.append((ny, nx))
+                                  pilha.append((ny, nx))
+      return total
+editorial:
+  pt: |
+    **Ideia:** pesquisa em profundidade (ou largura) numa grelha. Cada vez que encontramos relva ainda não visitada, descobrimos uma mancha nova e marcamos todas as suas células.
+
+    **Passos:** 1) matriz `visitado`; 2) percorrer todas as células; 3) se for relva não visitada, `total += 1` e explorar com uma pilha, marcando os vizinhos; 4) devolver `total`. (Pilha explícita em vez de recursão, para não rebentar o limite de recursão.)
+
+    **Complexidade:** tempo O(L · C), espaço O(L · C).
+
+    **Porque é que a ingénua falha:** guardar as células visitadas numa **lista** torna cada verificação `in` O(n); com dezenas de milhares de células, o total é O(células²).
+  en: |
+    **Idea:** depth-first (or breadth-first) search on a grid. Each time we find grass not yet visited, we have discovered a new patch and we mark all its cells.
+
+    **Steps:** 1) `visitado` matrix; 2) scan every cell; 3) if it is unvisited grass, `total += 1` and explore with a stack, marking neighbours; 4) return `total`. (Explicit stack instead of recursion, to avoid the recursion limit.)
+
+    **Complexity:** time O(R · C), space O(R · C).
+
+    **Why the naive one is slow:** keeping visited cells in a **list** makes each `in` check O(n); with tens of thousands of cells the total is O(cells²).

@@ -1,0 +1,91 @@
+# Arena de Algoritmia (hard): Senhas vazias para o fim. Gerado em rascunho; revisão do professor pendente.
+id: algo-zeros-para-o-fim
+titulo:
+  pt: Senhas vazias para o fim
+  en: Empty tickets to the back
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 2
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    Na fila da cantina há quem já tenha comido e fique com a senha a `0`. A cantina quer mandar essas senhas vazias para o fim da fila, **sem mudar a ordem relativa** das senhas válidas.
+
+    Escreve `zeros_para_o_fim(fila)`, que devolve uma nova lista com os valores diferentes de zero pela ordem original, seguidos de todos os zeros. A ordem importa.
+
+    **Exemplo:** `[0, 4, 0, 7, 2]` devolve `[4, 7, 2, 0, 0]`.
+  en: |
+    In the canteen queue some people have already eaten and are left holding a `0` ticket. The canteen wants to send those empty tickets to the back, **without changing the relative order** of the valid ones.
+
+    Write `zeros_para_o_fim(fila)`, which returns a new list with the non-zero values in their original order, followed by all the zeros. The order matters.
+
+    **Example:** `[0, 4, 0, 7, 2]` returns `[4, 7, 2, 0, 0]`.
+assinatura: zeros_para_o_fim(fila)
+restricoes:
+  pt: 0 ≤ len(fila) ≤ 4·10^5; |valores| ≤ 10^9
+  en: 0 ≤ len(fila) ≤ 4·10^5; |values| ≤ 10^9
+exemplos:
+- args: [[0, 4, 0, 7, 2]]
+  devolve: [4, 7, 2, 0, 0]
+testes:
+- args: [[0, 4, 0, 7, 2]]
+  devolve: [4, 7, 2, 0, 0]
+- args: [[]]
+  devolve: []
+- args: [[0]]
+  devolve: [0]
+- args: [[5]]
+  devolve: [5]
+- args: [[0, 0, 0]]
+  devolve: [0, 0, 0]
+- args: [[1, 2, 3]]
+  devolve: [1, 2, 3]
+- args: [[-1, 0, -2, 0]]
+  devolve: [-1, -2, 0, 0]
+- args: [[0, 0, 9]]
+  devolve: [9, 0, 0]
+- args_gerador: '[[0 if i % 3 else i + 1 for i in range(400000)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Cria duas listas: uma com os valores diferentes de zero e outra com os zeros, e junta-as.'
+  en: 'Build two lists: one with the non-zero values and one with the zeros, and join them.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def zeros_para_o_fim(fila):
+      validos = [x for x in fila if x != 0]
+      return validos + [0] * (len(fila) - len(validos))
+solucao_ingenua: |
+  def zeros_para_o_fim(fila):
+      res = list(fila)
+      i = 0
+      fim = len(res)
+      while i < fim:
+          if res[i] == 0:
+              res.pop(i)
+              res.append(0)
+              fim -= 1
+          else:
+              i += 1
+      return res
+editorial:
+  pt: |
+    **Ideia:** filtrar os valores não nulos (mantendo a ordem) e acrescentar tantos zeros quantos os que faltam para o tamanho original.
+
+    **Passos:** 1) `validos = [x for x in fila if x != 0]`; 2) devolver `validos + [0] * (n - len(validos))`.
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** `pop(i)` no meio da lista desloca todos os elementos à direita; com muitos zeros são muitos deslocamentos, logo O(n²).
+  en: |
+    **Idea:** filter the non-zero values (keeping order) and append as many zeros as are needed to reach the original length.
+
+    **Steps:** 1) `validos = [x for x in fila if x != 0]`; 2) return `validos + [0] * (n - len(validos))`.
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** `pop(i)` in the middle of a list shifts every element to its right; with many zeros that is many shifts, so O(n²).

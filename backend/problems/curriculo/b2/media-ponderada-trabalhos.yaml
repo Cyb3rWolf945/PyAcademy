@@ -1,0 +1,54 @@
+# Variação da aula (bloco 2): média ponderada em vez da média simples.
+id: media-ponderada-trabalhos
+titulo: {pt: "A média que não é simples", en: "The average that is not simple"}
+tipo: programa
+bloco: "2"
+regiao: floresta
+dificuldade: 1
+origem: variacao_aula
+estado: rascunho
+enunciado:
+  pt: |
+    A nota final da disciplina é ponderada: o teste vale 50%, o trabalho de grupo vale 30% e a participação vale 20%.
+    Lê três notas (de 0 a 20, podem ter decimais), uma por linha: teste, trabalho e participação.
+    Escreve a nota final arredondada a duas casas decimais.
+    Entrada: três linhas com números. Saída: uma linha com a nota final.
+  en: |
+    The final grade is weighted: the test counts 50%, the group project counts 30% and participation counts 20%.
+    Read three grades (from 0 to 20, decimals allowed), one per line: test, project and participation.
+    Print the final grade rounded to two decimal places.
+    Input: three lines with numbers. Output: one line with the final grade.
+exemplos:
+  - stdin: "14\n16\n12\n"
+    stdout: "14.2"
+testes:
+  - stdin: "10\n10\n10\n"
+    stdout: "10"
+  - stdin: "20\n0\n0\n"
+    stdout: "10"
+  - stdin: "15\n18\n19\n"
+    stdout: "16.7"
+  - stdin: "13.5\n11\n17\n"
+    stdout: "13.45"
+  - stdin: "0\n0\n20\n"
+    stdout: "4"
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Cada nota é multiplicada pelo seu peso: 0.5, 0.3 e 0.2.", en: "Each grade is multiplied by its weight: 0.5, 0.3 and 0.2."}
+limite_tempo_s: 2
+solucao_referencia: |
+  teste = 0.0
+  trabalho = 0.0
+  participacao = 0.0
+  # input
+  teste = float(input("Nota do teste: "))
+  trabalho = float(input("Nota do trabalho: "))
+  participacao = float(input("Nota da participação: "))
+  # processamento
+  PESO_TESTE = 0.5
+  PESO_TRABALHO = 0.3
+  PESO_PARTICIPACAO = 0.2
+  media = teste * PESO_TESTE + trabalho * PESO_TRABALHO + participacao * PESO_PARTICIPACAO
+  # output
+  print(round(media, 2))

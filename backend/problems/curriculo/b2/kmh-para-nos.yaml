@@ -1,0 +1,46 @@
+# Variação da aula (bloco 2): km/h convertidos em nós, com constante em maiúsculas.
+id: kmh-para-nos
+titulo: {pt: "Velocidade de barco", en: "Boat speed"}
+tipo: programa
+bloco: "2"
+regiao: floresta
+dificuldade: 2
+origem: variacao_aula
+estado: rascunho
+enunciado:
+  pt: |
+    Na aula de Navegação do clube de vela, a velocidade vem em km/h, mas o instrutor fala em nós.
+    Um nó equivale a 1,852 km/h. Lê a velocidade em km/h (pode ter decimais) e escreve a velocidade em nós, arredondada a duas casas decimais.
+    Entrada: um número. Saída: um número.
+  en: |
+    In the sailing club's navigation class, speed comes in km/h, but the instructor talks in knots.
+    One knot is 1.852 km/h. Read the speed in km/h (decimals allowed) and print the speed in knots, rounded to two decimal places.
+    Input: one number. Output: one number.
+exemplos:
+  - stdin: "37\n"
+    stdout: "19.98"
+testes:
+  - stdin: "100\n"
+    stdout: "54.0"
+  - stdin: "1.852\n"
+    stdout: "1.0"
+  - stdin: "0\n"
+    stdout: "0.0"
+  - stdin: "50\n"
+    stdout: "27.0"
+  - stdin: "120\n"
+    stdout: "64.79"
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Divide a velocidade pela constante KMH_POR_NO = 1.852.", en: "Divide the speed by the constant KMH_POR_NO = 1.852."}
+limite_tempo_s: 2
+solucao_referencia: |
+  velocidade_kmh = 0.0
+  # input
+  velocidade_kmh = float(input("Velocidade em km/h: "))
+  # processamento
+  KMH_POR_NO = 1.852
+  nos = velocidade_kmh / KMH_POR_NO
+  # output
+  print(round(nos, 2))

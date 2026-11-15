@@ -1,0 +1,43 @@
+# Decomposição (bloco 3, mercado): missão da Lavandaria XPTO.
+id: decomposicao-lavandaria-xpto
+titulo: {pt: "Missão Lavandaria XPTO", en: "XPTO Laundry mission"}
+tipo: decomposicao
+bloco: "3"
+regiao: mercado
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    A Lavandaria XPTO cobra 4,50 € por cada máquina de lavar e 0,75 € por cada quilo de roupa que vai para a secadora.
+    Queres saber quanto pagas numa visita, sabendo quantas máquinas usas e quantos quilos secas.
+    Responde às perguntas da decomposição antes de escreveres o programa.
+  en: |
+    XPTO Laundry charges €4.50 for each washing machine and €0.75 for each kilo of clothes that goes into the dryer.
+    You want to know how much you pay per visit, knowing how many machines you use and how many kilos you dry.
+    Answer the decomposition questions before writing the program.
+perguntas:
+  - pergunta: {pt: "Quais são as entradas do programa?", en: "What are the inputs of the program?"}
+    opcoes:
+      - {pt: "O preço de cada máquina", en: "The price of each machine"}
+      - {pt: "O número de máquinas e os quilos de roupa", en: "The number of machines and the kilos of clothes"}
+      - {pt: "O troco que sobra", en: "The change left over"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a constante?", en: "What is the constant?"}
+    opcoes:
+      - {pt: "O número de máquinas", en: "The number of machines"}
+      - {pt: "O preço de 4,50 € por máquina", en: "The price of €4.50 per machine"}
+      - {pt: "O total a pagar", en: "The total to pay"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a saída (o que o programa calcula)?", en: "What is the output (what the program calculates)?"}
+    opcoes:
+      - {pt: "O total a pagar", en: "The total to pay"}
+      - {pt: "O número de máquinas", en: "The number of machines"}
+      - {pt: "O preço por quilo", en: "The price per kilo"}
+    resposta: [0]
+  - pergunta: {pt: "Qual é a operação?", en: "What is the operation?"}
+    opcoes:
+      - {pt: "Subtrair os quilos ao preço", en: "Subtract the kilos from the price"}
+      - {pt: "Multiplicar as máquinas por 4,50 € e os quilos por 0,75 € e somar", en: "Multiply the machines by €4.50 and the kilos by €0.75 and add"}
+      - {pt: "Dividir o total por 2", en: "Divide the total by 2"}
+    resposta: [1]

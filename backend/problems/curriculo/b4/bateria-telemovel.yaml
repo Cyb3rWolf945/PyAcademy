@@ -1,0 +1,76 @@
+# Condicionais aninhadas (bloco 4, encruzilhada): a ordem das condições muda o resultado.
+id: bateria-telemovel
+titulo: {pt: "Bateria em 3%", en: "Battery at 3%"}
+tipo: programa
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O telemóvel da Inês está quase sem bateria antes do teste de Programação. Lê duas linhas:
+    1) a percentagem da bateria (inteiro de 0 a 100);
+    2) se o carregador está ligado: s ou n (aceita maiúsculas).
+    Regras, por esta ordem: com carregador ligado escreve "A carregar, tudo bem"; senão, se a bateria for menor que 5, escreve "Desliga tudo já!";
+    senão, se for 20 ou menos, escreve "Ativa a poupança"; senão escreve "Tudo bem".
+    Entrada: duas linhas. Saída: uma linha.
+  en: |
+    Ines's phone is almost out of battery before the Programming test. Read two lines:
+    1) the battery percentage (integer from 0 to 100);
+    2) whether the charger is plugged in: s or n (uppercase is accepted).
+    Rules, in this order: with the charger plugged in print "Charging, all good"; otherwise, if the battery is below 5, print "Shut everything down now!";
+    otherwise, if it is 20 or less, print "Turn on battery saver"; otherwise print "All fine".
+    Input: two lines. Output: one line.
+exemplos:
+  - stdin: "15\nn\n"
+    stdout: {pt: "Ativa a poupança", en: "Turn on battery saver"}
+testes:
+  - stdin: "3\nn\n"
+    stdout: {pt: "Desliga tudo já!", en: "Shut everything down now!"}
+  - stdin: "3\ns\n"
+    stdout: {pt: "A carregar, tudo bem", en: "Charging, all good"}
+  - stdin: "20\nn\n"
+    stdout: {pt: "Ativa a poupança", en: "Turn on battery saver"}
+  - stdin: "21\nn\n"
+    stdout: {pt: "Tudo bem", en: "All fine"}
+  - stdin: "5\nn\n"
+    stdout: {pt: "Ativa a poupança", en: "Turn on battery saver"}
+  - stdin: "100\nS\n"
+    stdout: {pt: "A carregar, tudo bem", en: "Charging, all good"}
+comparacao: texto
+ordem_importa: true
+pistas:
+  - {pt: "Primeiro vê se está a carregar. Depois, do mais exigente para o menos exigente: menos de 5, depois 20 ou menos.", en: "First check if it is charging. Then go from the strictest to the least strict: below 5, then 20 or less."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    percentagem = 0
+    carregador = ""
+    # input
+    percentagem = int(input("Percentagem da bateria: "))
+    carregador = input("Carregador ligado? (s/n): ").lower().strip()
+    # processamento e output
+    if carregador == "s":
+        print("A carregar, tudo bem")
+    elif percentagem < 5:
+        print("Desliga tudo já!")
+    elif percentagem <= 20:
+        print("Ativa a poupança")
+    else:
+        print("Tudo bem")
+  en: |
+    percentage = 0
+    charger = ""
+    # input
+    percentage = int(input("Battery percentage: "))
+    charger = input("Charger plugged in? (s/n): ").lower().strip()
+    # processing and output
+    if charger == "s":
+        print("Charging, all good")
+    elif percentage < 5:
+        print("Shut everything down now!")
+    elif percentage <= 20:
+        print("Turn on battery saver")
+    else:
+        print("All fine")

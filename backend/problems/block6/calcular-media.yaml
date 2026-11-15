@@ -1,11 +1,11 @@
-# Problema exemplo (bloco 6, funções): chamadas com argumentos e valor devolvido.
+# Problema exemplo (bloco 7, listas e funções): chamadas com argumentos e valor devolvido.
 id: calcular-media
 titulo:
   pt: A média do café
   en: The coffee average
 tipo: funcao
-bloco: 6
-regiao: oficina
+bloco: "7"
+regiao: cidadela
 dificuldade: 1
 origem: novo
 estado: aprovado

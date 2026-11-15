@@ -1,0 +1,37 @@
+# Quiz (bloco 1, vila): o que faz um bom algoritmo, com um café como exemplo.
+id: quiz-algoritmo-cafe
+titulo: {pt: "Um café, passo a passo", en: "A coffee, step by step"}
+tipo: quiz
+bloco: "1"
+regiao: vila
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Um algoritmo é uma sequência finita e não ambígua de passos que resolve um problema.
+    Responde às perguntas sobre a receita do café que o teu colega escreveu antes da aula de Programação.
+  en: |
+    An algorithm is a finite, unambiguous sequence of steps that solves a problem.
+    Answer the questions about the coffee recipe your classmate wrote before the Programming class.
+perguntas:
+  - pergunta: {pt: "Qual destes passos NÃO está bem definido?", en: "Which of these steps is NOT well defined?"}
+    opcoes:
+      - {pt: "Ferve 200 ml de água", en: "Boil 200 ml of water"}
+      - {pt: "Mexe um pouco o café", en: "Stir the coffee a bit"}
+      - {pt: "Põe uma colher de café no copo", en: "Put one spoon of coffee in the cup"}
+      - {pt: "Espera 2 minutos", en: "Wait 2 minutes"}
+    resposta: [1]
+  - pergunta: {pt: "Que propriedade é violada por uma receita que nunca acaba?", en: "Which property is broken by a recipe that never ends?"}
+    opcoes:
+      - {pt: "Clareza", en: "Clarity"}
+      - {pt: "Entradas bem definidas", en: "Well defined inputs"}
+      - {pt: "Finitude (tem de terminar)", en: "Finiteness (it must terminate)"}
+    resposta: [2]
+  - pergunta: {pt: "Um algoritmo pode não receber nenhum dado?", en: "Can an algorithm receive no data at all?"}
+    opcoes:
+      - {pt: "Sim, por exemplo para mostrar uma mensagem fixa", en: "Yes, for example to show a fixed message"}
+      - {pt: "Não, tem sempre de ler alguma coisa", en: "No, it always has to read something"}
+    resposta: [0]
+pistas:
+  - {pt: "Pensa em quantos passos a receita tem e se cada um deixa dúvidas.", en: "Think about how many steps the recipe has and whether each one leaves doubts."}

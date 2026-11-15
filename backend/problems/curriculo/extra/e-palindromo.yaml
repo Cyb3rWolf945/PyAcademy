@@ -1,0 +1,41 @@
+# Mais além (ilhas): strings avançadas, ignorando espaços, maiúsculas e acentos.
+id: e-palindromo
+titulo: {pt: "Lê-se igual de trás para a frente?", en: "Does it read the same backwards?"}
+tipo: funcao
+bloco: "mais_alem"
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+enunciado:
+  pt: |
+    Um palíndromo lê-se igual de trás para a frente. Escreve a função e_palindromo(frase) que devolve True se a frase for um palíndromo
+    e False caso contrário. Ignora espaços, maiúsculas e acentos (ex.: "A mãe ama" é palíndromo). Não ignores as outras letras.
+    Dica: unicodedata.normalize("NFD", ...) separa os acentos das letras.
+  en: |
+    A palindrome reads the same backwards. Write the function e_palindromo(frase) that returns True if the phrase is a palindrome
+    and False otherwise. Ignore spaces, uppercase letters and accents (e.g. "A mãe ama" is a palindrome). Do not ignore other letters.
+    Hint: unicodedata.normalize("NFD", ...) separates accents from letters.
+assinatura: "e_palindromo(frase)"
+exemplos:
+  - args: ["Osso"]
+    devolve: true
+testes:
+  - {args: ["Ana"], devolve: true}
+  - {args: ["A base do teto desaba"], devolve: true}
+  - {args: ["Programação"], devolve: false}
+  - {args: ["A mãe ama"], devolve: true}
+  - {args: ["Um tubo"], devolve: false}
+comparacao: exato
+ordem_importa: true
+pistas:
+  - {pt: "Constrói uma string só com letras (isalpha) em minúsculas e compara com o inverso: texto[::-1].", en: "Build a string with only letters (isalpha) in lowercase and compare it with its reverse: text[::-1]."}
+limite_tempo_s: 2
+solucao_referencia: |
+  import unicodedata
+  def e_palindromo(frase):
+      letras = ""
+      for caracter in unicodedata.normalize("NFD", frase.lower()):
+          if caracter.isalpha():
+              letras = letras + caracter
+      return letras == letras[::-1]

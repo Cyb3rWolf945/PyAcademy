@@ -1,0 +1,52 @@
+# Programa de decomposição (bloco 3, mercado): Uber com acréscimo noturno, sem if (matéria do bloco 2).
+id: uber-noturno
+titulo: {pt: "Uber XPTO depois da meia-noite", en: "XPTO ride after midnight"}
+tipo: programa
+bloco: "3"
+regiao: mercado
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Uma viagem na XPTO-Uber custa 2 € de base mais 0,80 € por cada km. Nas viagens noturnas há um acréscimo de 25% sobre o total.
+    Lê a distância em km (pode ter decimais) e um valor 1 (viagem noturna) ou 0 (viagem diurna), uma linha para cada.
+    Escreve o preço final, arredondado a 2 casas decimais.
+    Entrada: duas linhas (km e 1 ou 0). Saída: um número.
+  en: |
+    A XPTO-Uber ride costs €2 base plus €0.80 per km. Night rides have a 25% surcharge on the total.
+    Read the distance in km (decimals allowed) and a 1 (night ride) or 0 (day ride), one per line.
+    Print the final price, rounded to 2 decimal places.
+    Input: two lines (km and 1 or 0). Output: one number.
+exemplos:
+  - stdin: "10\n1\n"
+    stdout: "12.5"
+testes:
+  - stdin: "5\n0\n"
+    stdout: "6"
+  - stdin: "0\n1\n"
+    stdout: "2.5"
+  - stdin: "2.5\n1\n"
+    stdout: "5"
+  - stdin: "12\n0\n"
+    stdout: "11.6"
+  - stdin: "20\n1\n"
+    stdout: "22.5"
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Com noturna = 1 o fator é 1.25; com noturna = 0 o fator é 1. Escreve a fórmula com a variável noturna.", en: "With night = 1 the factor is 1.25; with night = 0 it is 1. Write the formula using the night variable."}
+limite_tempo_s: 2
+solucao_referencia: |
+  distancia = 0.0
+  noturna = 0
+  # input
+  distancia = float(input("Distância em km: "))
+  noturna = int(input("Viagem noturna? (1 = sim, 0 = não): "))
+  # processamento
+  BANDEIRA = 2
+  PRECO_KM = 0.8
+  ACRESCIMO_NOTURNO = 0.25
+  total = (BANDEIRA + PRECO_KM * distancia) * (1 + ACRESCIMO_NOTURNO * noturna)
+  # output
+  print(round(total, 2))

@@ -19,6 +19,15 @@ class Settings(BaseSettings):
     teacher_username: str = ""
     teacher_password: str = ""
 
+    runner_url: str = ""  # vazio = sem runner (dispatcher desligado)
+    runner_token: str = ""
+    runner_timeout_s: float = 60
+    submissions_per_minute: int = 6
+    max_code_bytes: int = 20 * 1024
+    dispatch_concurrency: int = 4  # chamadas simultâneas ao runner, por worker da app
+    job_stale_s: int = 60
+    job_max_attempts: int = 3
+
     session_days: int = 14
     max_body_bytes: int = 256 * 1024
     login_max_failures: int = 5

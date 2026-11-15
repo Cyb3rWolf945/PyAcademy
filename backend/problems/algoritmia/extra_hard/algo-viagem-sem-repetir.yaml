@@ -1,0 +1,99 @@
+# Arena de Algoritmia (extra_hard): Viagem sem repetir estação. Gerado em rascunho; revisão do professor pendente.
+id: algo-viagem-sem-repetir
+titulo:
+  pt: Viagem sem repetir estação
+  en: A trip with no repeated station
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    Uma linha circular de comboio passa pelas estações por uma lista de identificadores `paradas` (pode repetir estações). A Joana quer viajar um troço de paradas **consecutivas** sem passar duas vezes pela mesma estação.
+
+    Escreve `maior_troco_sem_repetir(paradas)`, que devolve o comprimento do troço mais longo, de paradas consecutivas, em que nenhuma estação aparece duas vezes. Lista vazia devolve `0`.
+
+    **Exemplo:** `[3, 4, 3, 5, 6, 4]` devolve `4`, com o troço `[4, 3, 5, 6]`.
+  en: |
+    A circular train line goes through stations given by a list of identifiers `paradas` (stations may repeat). Joana wants to ride a stretch of **consecutive** stops without passing through the same station twice.
+
+    Write `maior_troco_sem_repetir(paradas)`, which returns the length of the longest stretch of consecutive stops in which no station appears twice. An empty list returns `0`.
+
+    **Example:** `[3, 4, 3, 5, 6, 4]` returns `4`, with the stretch `[4, 3, 5, 6]`.
+assinatura: maior_troco_sem_repetir(paradas)
+restricoes:
+  pt: 0 ≤ len(paradas) ≤ 10^5; 0 ≤ paradas[i] ≤ 10^9
+  en: 0 ≤ len(paradas) ≤ 10^5; 0 ≤ paradas[i] ≤ 10^9
+exemplos:
+- args: [[3, 4, 3, 5, 6, 4]]
+  devolve: 4
+testes:
+- args: [[3, 4, 3, 5, 6, 4]]
+  devolve: 4
+- args: [[]]
+  devolve: 0
+- args: [[1]]
+  devolve: 1
+- args: [[1, 1, 1]]
+  devolve: 1
+- args: [[1, 2, 3, 4]]
+  devolve: 4
+- args: [[1, 2, 1, 2, 1, 2]]
+  devolve: 2
+- args: [[5, 6, 7, 5, 8, 9, 6]]
+  devolve: 5
+- args: [[2, 2, 3, 4, 2]]
+  devolve: 3
+- args_gerador: '[[(i * 7919) % 100003 for i in range(100000)]]'
+- args_gerador: '[[(i * 7919) % 50021 for i in range(100000)]]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: 'Janela deslizante: guarda a última posição de cada estação e, ao ver uma repetida, empurra o início da janela para depois dela.'
+  en: 'Sliding window: store the last position of each station and, on a repeat, push the window start past it.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def maior_troco_sem_repetir(paradas):
+      ultima = {}
+      inicio = 0
+      melhor = 0
+      for i, p in enumerate(paradas):
+          if p in ultima and ultima[p] >= inicio:
+              inicio = ultima[p] + 1
+          ultima[p] = i
+          if i - inicio + 1 > melhor:
+              melhor = i - inicio + 1
+      return melhor
+solucao_ingenua: |
+  def maior_troco_sem_repetir(paradas):
+      melhor = 0
+      for i in range(len(paradas)):
+          vistas = set()
+          j = i
+          while j < len(paradas) and paradas[j] not in vistas:
+              vistas.add(paradas[j])
+              j += 1
+          if j - i > melhor:
+              melhor = j - i
+      return melhor
+editorial:
+  pt: |
+    **Ideia:** janela deslizante `[inicio, i]` sem repetidos. Um dicionário guarda a última posição de cada estação; se a estação atual já está dentro da janela, o `inicio` salta para a posição seguinte à anterior.
+
+    **Passos:** 1) `inicio = 0`; 2) para cada `i`, se `p` apareceu em `ultima[p] >= inicio`, `inicio = ultima[p] + 1`; 3) `ultima[p] = i`; 4) atualizar o melhor `i - inicio + 1`.
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** recomeçar a partir de cada paragem e estender até haver repetição é O(n · L); com 10^5 estações todas diferentes, cada recomeço percorre quase tudo.
+  en: |
+    **Idea:** a sliding window `[inicio, i]` with no repeats. A dictionary stores each station's last position; if the current station is already inside the window, `inicio` jumps to the position after the previous occurrence.
+
+    **Steps:** 1) `inicio = 0`; 2) for each `i`, if `p` appeared at `ultima[p] >= inicio`, `inicio = ultima[p] + 1`; 3) `ultima[p] = i`; 4) update the best `i - inicio + 1`.
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** restarting from every stop and extending until a repeat is O(n · L); with 10^5 all-different stations, each restart walks almost everything.

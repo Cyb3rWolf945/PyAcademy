@@ -1,0 +1,100 @@
+# Arena de Algoritmia (extra_hard): Troco da máquina do café. Gerado em rascunho; revisão do professor pendente.
+id: algo-moedas-do-cafe
+titulo:
+  pt: Troco da máquina do café
+  en: Coffee machine change
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 4
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    A máquina de café da faculdade só aceita certas moedas (cada valor existe em quantidade ilimitada). Para devolver o troco `total` (em cêntimos), quer usar o **menor número de moedas** possível.
+
+    Escreve `moedas_minimas(moedas, total)`, que devolve o menor número de moedas cuja soma é exatamente `total`, ou `-1` se for impossível. `total = 0` devolve `0`.
+
+    **Exemplo:** `moedas = [1, 2, 5]`, `total = 11` devolve `3` (`5 + 5 + 1`). Com `moedas = [4, 9]` e `total = 7` devolve `-1`.
+  en: |
+    The campus coffee machine only accepts certain coins (each value is available in unlimited quantity). To return the change `total` (in cents), it wants to use the **fewest coins** possible.
+
+    Write `moedas_minimas(moedas, total)`, which returns the smallest number of coins whose sum is exactly `total`, or `-1` if impossible. `total = 0` returns `0`.
+
+    **Example:** `moedas = [1, 2, 5]`, `total = 11` returns `3` (`5 + 5 + 1`). With `moedas = [4, 9]` and `total = 7` it returns `-1`.
+assinatura: moedas_minimas(moedas, total)
+restricoes:
+  pt: 1 ≤ len(moedas) ≤ 12; 1 ≤ moedas[i] ≤ 10^4; 0 ≤ total ≤ 10^4
+  en: 1 ≤ len(moedas) ≤ 12; 1 ≤ moedas[i] ≤ 10^4; 0 ≤ total ≤ 10^4
+exemplos:
+- args: [[1, 2, 5], 11]
+  devolve: 3
+- args: [[4, 9], 7]
+  devolve: -1
+testes:
+- args: [[1, 2, 5], 11]
+  devolve: 3
+- args: [[4, 9], 7]
+  devolve: -1
+- args: [[2], 3]
+  devolve: -1
+- args: [[1], 0]
+  devolve: 0
+- args: [[5, 10], 0]
+  devolve: 0
+- args: [[3, 7], 1]
+  devolve: -1
+- args: [[4, 9, 6], 23]
+  devolve: 4
+- args: [[5, 10, 25], 30]
+  devolve: 2
+- args: [[7], 14]
+  devolve: 2
+- args_gerador: '[[97, 89, 83, 79, 73, 71, 67], 5000]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: 'Programação dinâmica: seja melhor[v] o mínimo de moedas para o valor v. Cada melhor[v] vem de melhor[v - moeda] + 1.'
+  en: 'Dynamic programming: let melhor[v] be the fewest coins for value v. Each melhor[v] comes from melhor[v - coin] + 1.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def moedas_minimas(moedas, total):
+      INF = total + 1
+      melhor = [0] + [INF] * total
+      for v in range(1, total + 1):
+          for m in moedas:
+              if m <= v and melhor[v - m] + 1 < melhor[v]:
+                  melhor[v] = melhor[v - m] + 1
+      return melhor[total] if melhor[total] != INF else -1
+solucao_ingenua: |
+  def moedas_minimas(moedas, total):
+      def f(resto):
+          if resto == 0:
+              return 0
+          melhor = -1
+          for m in moedas:
+              if m <= resto:
+                  s = f(resto - m)
+                  if s != -1 and (melhor == -1 or s + 1 < melhor):
+                      melhor = s + 1
+          return melhor
+      return f(total)
+editorial:
+  pt: |
+    **Ideia:** programação dinâmica ascendente. `melhor[v]` é o menor número de moedas para fazer `v`; para cada moeda `m ≤ v`, `melhor[v] = min(melhor[v], melhor[v-m] + 1)`.
+
+    **Passos:** 1) `melhor[0] = 0`, o resto "infinito"; 2) para `v` de 1 a `total`, testar cada moeda; 3) se `melhor[total]` continuar infinito, devolver `-1`.
+
+    **Complexidade:** tempo O(total · len(moedas)), espaço O(total).
+
+    **Porque é que a ingénua falha:** a recursão sem memória volta a calcular os mesmos subproblemas inúmeras vezes: o número de chamadas cresce exponencialmente.
+  en: |
+    **Idea:** bottom-up dynamic programming. `melhor[v]` is the fewest coins to make `v`; for each coin `m ≤ v`, `melhor[v] = min(melhor[v], melhor[v-m] + 1)`.
+
+    **Steps:** 1) `melhor[0] = 0`, the rest "infinite"; 2) for `v` from 1 to `total`, try each coin; 3) if `melhor[total]` is still infinite, return `-1`.
+
+    **Complexity:** time O(total · len(moedas)), space O(total).
+
+    **Why the naive one is slow:** recursion without memory recomputes the same subproblems over and over: the number of calls grows exponentially.

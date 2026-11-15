@@ -1,0 +1,44 @@
+# Listas (bloco 7, cidadela): encontrar o máximo à mão, sem max().
+id: maior-valor
+titulo: {pt: "O maior sem max()", en: "The largest without max()"}
+tipo: funcao
+bloco: "7"
+regiao: cidadela
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Escreve a função maior_valor(valores) que recebe uma lista com pelo menos um número e devolve o maior valor.
+    Começa por assumir que o primeiro elemento é o maior e percorre o resto da lista.
+
+    🧱 Requisito: é proibido usar max(). Tens de comparar à mão.
+  en: |
+    Write the function maior_valor(valores) that receives a list with at least one number and returns the largest value.
+    Start by assuming the first element is the largest and go through the rest of the list.
+
+    🧱 Requirement: using max() is forbidden. You must compare by hand.
+assinatura: "maior_valor(valores)"
+exemplos:
+  - args: [[2, 8, 5]]
+    devolve: 8
+testes:
+  - {args: [[3]], devolve: 3}
+  - {args: [[1, 9, 4]], devolve: 9}
+  - {args: [[-5, -2, -8]], devolve: -2}
+  - {args: [[7, 7]], devolve: 7}
+  - {args: [[0, 100, 99]], devolve: 100}
+comparacao: numeros
+ordem_importa: true
+requisitos:
+  proibe: [max]
+pistas:
+  - {pt: "Guarda o maior até agora numa variável e troca-o quando aparecer um valor maior.", en: "Keep the largest so far in a variable and replace it when a bigger value shows up."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def maior_valor(valores):
+      maior = valores[0]
+      for valor in valores:
+          if valor > maior:
+              maior = valor
+      return maior

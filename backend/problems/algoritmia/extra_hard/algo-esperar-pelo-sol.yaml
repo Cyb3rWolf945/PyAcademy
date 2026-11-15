@@ -1,0 +1,95 @@
+# Arena de Algoritmia (extra_hard): Esperar pelo sol. Gerado em rascunho; revisão do professor pendente.
+id: algo-esperar-pelo-sol
+titulo:
+  pt: Esperar pelo sol
+  en: Waiting for the sun
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    A previsão do tempo de Tomar dá a temperatura de cada dia. Para cada dia, o Rui quer saber **quantos dias tem de esperar** até aparecer um dia estritamente mais quente. Se nunca aparecer, a resposta é `0`.
+
+    Escreve `dias_ate_aquecer(temps)`, que devolve uma lista do mesmo tamanho com essa espera para cada dia. A ordem importa.
+
+    **Exemplo:** `[18, 15, 19, 22, 17, 20]` devolve `[2, 1, 1, 0, 1, 0]`: no dia 0 (18º) o próximo mais quente é o dia 2 (19º), logo espera 2; no dia 3 (22º) nunca aquece mais, logo 0.
+  en: |
+    Tomar's weather forecast gives each day's temperature. For each day, Rui wants to know **how many days he has to wait** until a strictly warmer day appears. If none ever does, the answer is `0`.
+
+    Write `dias_ate_aquecer(temps)`, which returns a list of the same size with that wait for each day. The order matters.
+
+    **Example:** `[18, 15, 19, 22, 17, 20]` returns `[2, 1, 1, 0, 1, 0]`: on day 0 (18º) the next warmer one is day 2 (19º), so he waits 2; on day 3 (22º) it never gets warmer, so 0.
+assinatura: dias_ate_aquecer(temps)
+restricoes:
+  pt: 0 ≤ len(temps) ≤ 10^5; |temps[i]| ≤ 10^6
+  en: 0 ≤ len(temps) ≤ 10^5; |temps[i]| ≤ 10^6
+exemplos:
+- args: [[18, 15, 19, 22, 17, 20]]
+  devolve: [2, 1, 1, 0, 1, 0]
+testes:
+- args: [[18, 15, 19, 22, 17, 20]]
+  devolve: [2, 1, 1, 0, 1, 0]
+- args: [[]]
+  devolve: []
+- args: [[10]]
+  devolve: [0]
+- args: [[5, 5, 5]]
+  devolve: [0, 0, 0]
+- args: [[1, 2, 3, 4]]
+  devolve: [1, 1, 1, 0]
+- args: [[4, 3, 2, 1]]
+  devolve: [0, 0, 0, 0]
+- args: [[30, 31, 29, 35, 28]]
+  devolve: [1, 2, 1, 0, 0]
+- args: [[-5, -3, -4, 0]]
+  devolve: [1, 2, 1, 0]
+- args_gerador: '[[100000 - i for i in range(99000)] + [200000 + i for i in range(1000)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Pilha de índices de dias ainda à espera: quando aparece um dia mais quente, resolve todos os do topo que são mais frios.'
+  en: 'A stack of indices of days still waiting: when a warmer day appears, resolve all the colder ones on top.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def dias_ate_aquecer(temps):
+      res = [0] * len(temps)
+      pilha = []  # índices de dias à espera, com temperaturas não crescentes
+      for i, t in enumerate(temps):
+          while pilha and temps[pilha[-1]] < t:
+              j = pilha.pop()
+              res[j] = i - j
+          pilha.append(i)
+      return res
+solucao_ingenua: |
+  def dias_ate_aquecer(temps):
+      res = []
+      for i in range(len(temps)):
+          espera = 0
+          for j in range(i + 1, len(temps)):
+              if temps[j] > temps[i]:
+                  espera = j - i
+                  break
+          res.append(espera)
+      return res
+editorial:
+  pt: |
+    **Ideia:** pilha monótona. Guardamos os índices dos dias ainda sem resposta (as suas temperaturas não crescem da base para o topo). Quando chega um dia mais quente, resolve todos os do topo mais frios.
+
+    **Passos:** 1) para cada dia `i`, enquanto o topo da pilha for mais frio, retirar `j` e fazer `res[j] = i - j`; 2) empilhar `i`; 3) os que sobram ficam com `0`.
+
+    **Complexidade:** tempo O(n) (cada índice entra e sai uma vez), espaço O(n).
+
+    **Porque é que a ingénua falha:** para cada dia procura à frente até achar um mais quente, e quando não há, percorre tudo: O(n²).
+  en: |
+    **Idea:** a monotonic stack. We store the indices of days still without an answer (their temperatures do not increase from bottom to top). When a warmer day arrives, resolve all the colder ones on top.
+
+    **Steps:** 1) for each day `i`, while the stack top is colder, pop `j` and set `res[j] = i - j`; 2) push `i`; 3) the leftovers keep `0`.
+
+    **Complexity:** time O(n) (each index enters and leaves once), space O(n).
+
+    **Why the naive one is slow:** for each day it scans ahead until it finds a warmer one, and when there is none it scans everything: O(n²).

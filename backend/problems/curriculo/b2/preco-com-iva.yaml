@@ -1,0 +1,56 @@
+# Programa de sequência (bloco 2): preço com IVA e arredondamento com round().
+id: preco-com-iva
+titulo: {pt: "Com IVA, por favor", en: "With VAT, please"}
+tipo: programa
+bloco: "2"
+regiao: floresta
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O preço de um produto na papelaria é indicado sem IVA. O IVA é de 23%.
+    Lê o preço sem IVA (pode ter decimais) e escreve o preço final com IVA, arredondado a duas casas decimais.
+    Entrada: uma linha com o preço. Saída: uma linha com o preço final.
+  en: |
+    The stationery shop lists prices without VAT. VAT is 23%.
+    Read the price without VAT (decimals allowed) and print the final price with VAT, rounded to two decimal places.
+    Input: one line with the price. Output: one line with the final price.
+exemplos:
+  - stdin: "10\n"
+    stdout: "12.3"
+testes:
+  - stdin: "99.99\n"
+    stdout: "122.99"
+  - stdin: "0\n"
+    stdout: "0"
+  - stdin: "5.5\n"
+    stdout: "6.77"
+  - stdin: "2.45\n"
+    stdout: "3.01"
+  - stdin: "100\n"
+    stdout: "123"
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Multiplica o preço por 1.23, que é o preço mais 23%.", en: "Multiply the price by 1.23, which is the price plus 23%."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    preco_sem_iva = 0.0
+    # input
+    preco_sem_iva = float(input("Preço sem IVA: "))
+    # processamento
+    FATOR_IVA = 1.23
+    preco_final = preco_sem_iva * FATOR_IVA
+    # output
+    print(round(preco_final, 2))
+  en: |
+    price_without_vat = 0.0
+    # input
+    price_without_vat = float(input("Price without VAT: "))
+    # processing
+    VAT_FACTOR = 1.23
+    final_price = price_without_vat * VAT_FACTOR
+    # output
+    print(round(final_price, 2))

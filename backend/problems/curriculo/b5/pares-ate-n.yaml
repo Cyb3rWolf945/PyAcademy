@@ -1,0 +1,58 @@
+# Ciclo for com if (bloco 5, rio): contar números pares de 1 a N.
+id: pares-ate-n
+titulo: {pt: "Contar os pares", en: "Count the evens"}
+tipo: programa
+bloco: "5"
+regiao: rio
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    A professora de Matemática quer saber quantos números pares existem entre 1 e um número N, incluindo N.
+    Lê N (inteiro, pelo menos 1) e escreve quantos números pares há entre 1 e N.
+    Entrada: um inteiro. Saída: um inteiro.
+  en: |
+    The Maths teacher wants to know how many even numbers there are between 1 and a number N, including N.
+    Read N (integer, at least 1) and print how many even numbers there are between 1 and N.
+    Input: one integer. Output: one integer.
+exemplos:
+  - stdin: "10\n"
+    stdout: "5"
+testes:
+  - stdin: "1\n"
+    stdout: "0"
+  - stdin: "7\n"
+    stdout: "3"
+  - stdin: "2\n"
+    stdout: "1"
+  - stdin: "100\n"
+    stdout: "50"
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Um número é par se o resto da divisão por 2 for 0.", en: "A number is even if the remainder of dividing by 2 is 0."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    n = 0
+    contador = 0
+    # input
+    n = int(input("N: "))
+    # processamento
+    for numero in range(1, n + 1):
+        if numero % 2 == 0:
+            contador = contador + 1
+    # output
+    print(contador)
+  en: |
+    n = 0
+    counter = 0
+    # input
+    n = int(input("N: "))
+    # processing
+    for number in range(1, n + 1):
+        if number % 2 == 0:
+            counter = counter + 1
+    # output
+    print(counter)

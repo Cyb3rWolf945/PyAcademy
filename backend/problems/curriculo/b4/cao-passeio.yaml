@@ -1,0 +1,75 @@
+# Condicionais (bloco 4, encruzilhada): if / elif / else com texto normalizado (lower e strip).
+id: cao-passeio
+titulo: {pt: "O cão quer passear", en: "The dog wants a walk"}
+tipo: programa
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O Bolinha já está em casa há algum tempo e não para de olhar para a trela. Lê duas linhas:
+    1) horas desde o último passeio (número, pode ter decimais);
+    2) se está a chover: s (sim) ou n (não). Aceita maiúsculas.
+    Regras, por esta ordem: se passaram 3 horas ou mais, escreve "Passeio já!"; senão, se está a chover, escreve "Espera, está a chover"; senão escreve "Ainda não".
+    Entrada: duas linhas. Saída: uma linha.
+  en: |
+    Bolinha has been at home for a while and keeps staring at the leash. Read two lines:
+    1) hours since the last walk (a number, decimals allowed);
+    2) whether it is raining: s (yes) or n (no). Uppercase is accepted.
+    Rules, in this order: if 3 hours or more have passed, print "Walk now!"; otherwise, if it is raining, print "Wait, it's raining"; otherwise print "Not yet".
+    Input: two lines. Output: one line.
+exemplos:
+  - stdin: "3.5\nn\n"
+    stdout: {pt: "Passeio já!", en: "Walk now!"}
+testes:
+  - stdin: "1\ns\n"
+    stdout: {pt: "Espera, está a chover", en: "Wait, it's raining"}
+  - stdin: "1\nn\n"
+    stdout: {pt: "Ainda não", en: "Not yet"}
+  - stdin: "3\nS\n"
+    stdout: {pt: "Passeio já!", en: "Walk now!"}
+  - stdin: "2.5\nS\n"
+    stdout: {pt: "Espera, está a chover", en: "Wait, it's raining"}
+  - stdin: "0\nn\n"
+    stdout: {pt: "Ainda não", en: "Not yet"}
+comparacao: texto
+ordem_importa: true
+pistas:
+  - {pt: "A condição das 3 horas vem primeiro, porque tem prioridade sobre a chuva.", en: "The 3 hours condition comes first, because it has priority over the rain."}
+  - {pt: "Usa .lower() para aceitar S e s.", en: "Use .lower() to accept S and s."}
+erros_comuns:
+  - stdout: {pt: "Ainda não", en: "Not yet"}
+    quando_stdin: "3\nS\n"
+    mensagem:
+      pt: "Verifica a ordem: com 3 horas ou mais o passeio é já, mesmo a chover."
+      en: "Check the order: with 3 hours or more the walk is now, even when it rains."
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    horas = 0.0
+    chove = ""
+    # input
+    horas = float(input("Horas desde o último passeio: "))
+    chove = input("Está a chover? (s/n): ").lower().strip()
+    # processamento e output
+    if horas >= 3:
+        print("Passeio já!")
+    elif chove == "s":
+        print("Espera, está a chover")
+    else:
+        print("Ainda não")
+  en: |
+    hours = 0.0
+    rain = ""
+    # input
+    hours = float(input("Hours since the last walk: "))
+    rain = input("Is it raining? (s/n): ").lower().strip()
+    # processing and output
+    if hours >= 3:
+        print("Walk now!")
+    elif rain == "s":
+        print("Wait, it's raining")
+    else:
+        print("Not yet")

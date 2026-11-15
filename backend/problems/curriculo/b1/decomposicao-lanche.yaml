@@ -1,0 +1,37 @@
+# Decomposição (bloco 1, vila): separar entradas, constantes e operação de um problema simples.
+id: decomposicao-lanche
+titulo: {pt: "Lanche na máquina", en: "Snack from the machine"}
+tipo: decomposicao
+bloco: "1"
+regiao: vila
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Na máquina da escola, cada bolacha custa 0,80 €. Queres comprar algumas e pagar com uma nota de 5 €.
+    Queres saber quanto troco recebes. Antes de programar, decompõe o problema respondendo às perguntas.
+  en: |
+    At the school machine, each cookie costs €0.80. You want to buy some and pay with a €5 note.
+    You want to know how much change you get. Before coding, break the problem down by answering the questions.
+perguntas:
+  - pergunta: {pt: "Qual é a constante do problema?", en: "What is the constant of the problem?"}
+    opcoes:
+      - {pt: "Quantas bolachas compro", en: "How many cookies I buy"}
+      - {pt: "O preço de cada bolacha (0,80 €)", en: "The price of each cookie (€0.80)"}
+      - {pt: "O troco que recebo", en: "The change I receive"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a entrada do programa?", en: "What is the input of the program?"}
+    opcoes:
+      - {pt: "O preço de cada bolacha", en: "The price of each cookie"}
+      - {pt: "A quantidade de bolachas", en: "The number of cookies"}
+      - {pt: "O troco final", en: "The final change"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a operação que resolve o problema?", en: "Which operation solves the problem?"}
+    opcoes:
+      - {pt: "Somar 0,80 € ao valor pago", en: "Add €0.80 to the amount paid"}
+      - {pt: "Multiplicar a quantidade pelo preço e subtrair ao valor pago", en: "Multiply the quantity by the price and subtract it from the amount paid"}
+      - {pt: "Dividir o valor pago pelo número de bolachas", en: "Divide the amount paid by the number of cookies"}
+    resposta: [1]
+pistas:
+  - {pt: "A constante é o que não muda de compra para compra.", en: "The constant is what does not change from purchase to purchase."}

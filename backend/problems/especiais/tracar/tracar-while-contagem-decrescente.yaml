@@ -1,0 +1,84 @@
+# Problema tracar gerado (tracar); rascunho à espera de revisão do professor.
+id: tracar-while-contagem-decrescente
+titulo:
+  pt: 'Traçar: a contagem decrescente do foguetão'
+  en: 'Trace it: the rocket countdown'
+tipo: tracar
+bloco: '5'
+regiao: rio
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: Um `while` repete **enquanto** a condição for verdadeira, e a condição é testada **antes** de cada volta (por isso pode não correr nenhuma vez). Acompanha as variáveis volta a volta.
+  en: A `while` repeats **as long as** its condition is true, and the condition is tested **before** each pass (so it may run zero times). Follow the variables pass by pass.
+perguntas:
+- pergunta:
+    pt: O que escreve este programa? (uma linha por escrita)
+    en: What does this program print? (one line per print)
+  codigo: |
+    n = 3
+    while n > 0:
+        print(n)
+        n = n - 1
+    print("Fogo!")
+  resposta_texto: '3
+
+    2
+
+    1
+
+    Fogo!'
+- pergunta:
+    pt: Qual é o valor de `passos` no fim?
+    en: What is the value of `passos` at the end?
+  codigo: |
+    n = 10
+    passos = 0
+    while n > 1:
+        n = n // 2
+        passos = passos + 1
+  opcoes:
+  - pt: '2'
+    en: '2'
+  - pt: '3'
+    en: '3'
+  - pt: '4'
+    en: '4'
+  - pt: '5'
+    en: '5'
+  resposta:
+  - 1
+- pergunta:
+    pt: Qual é o valor de `vidas` no fim?
+    en: What is the value of `vidas` at the end?
+  codigo: |
+    vidas = 3
+    dano = 1
+    while vidas > 0 and dano < 3:
+        vidas = vidas - 1
+        dano = dano + 1
+  resposta_texto: '1'
+- pergunta:
+    pt: Qual é o valor de `vezes` no fim?
+    en: What is the value of `vezes` at the end?
+  codigo: |
+    i = 5
+    vezes = 0
+    while i < 5:
+        vezes = vezes + 1
+        i = i + 1
+  opcoes:
+  - pt: '0'
+    en: '0'
+  - pt: '1'
+    en: '1'
+  - pt: '5'
+    en: '5'
+  - pt: Ciclo infinito
+    en: Ciclo infinito
+  resposta:
+  - 0
+pistas:
+- pt: Testa a condição antes de cada volta e escreve os valores das variáveis no fim dela.
+  en: Test the condition before each pass and write the variable values at the end of it.

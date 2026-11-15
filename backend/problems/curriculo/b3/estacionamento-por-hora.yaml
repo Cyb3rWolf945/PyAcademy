@@ -1,0 +1,50 @@
+# Programa de decomposição (bloco 3, mercado): estacionamento cobrado por hora iniciada, com math.ceil.
+id: estacionamento-por-hora
+titulo: {pt: "Parque XPTO: hora iniciada é hora paga", en: "XPTO parking: a started hour is a paid hour"}
+tipo: programa
+bloco: "3"
+regiao: mercado
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O parque XPTO cobra 1,20 € por cada hora iniciada. Uma hora iniciada conta como hora completa:
+    22 minutos já pagam uma hora e 61 minutos pagam duas horas.
+    Lê o número de minutos que o carro esteve estacionado (inteiro, zero ou positivo) e escreve o total a pagar com 2 casas decimais.
+    Entrada: um inteiro. Saída: um número.
+  en: |
+    XPTO parking charges €1.20 for each started hour. A started hour counts as a full hour:
+    22 minutes already pay one hour and 61 minutes pay two hours.
+    Read the number of minutes the car was parked (non-negative integer) and print the total to pay with 2 decimal places.
+    Input: one integer. Output: one number.
+exemplos:
+  - stdin: "75\n"
+    stdout: "2.4"
+testes:
+  - stdin: "60\n"
+    stdout: "1.2"
+  - stdin: "1\n"
+    stdout: "1.2"
+  - stdin: "0\n"
+    stdout: "0.0"
+  - stdin: "180\n"
+    stdout: "3.6"
+  - stdin: "61\n"
+    stdout: "2.4"
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Minutos / 60 dá horas com fração. math.ceil arredonda sempre para cima.", en: "Minutes / 60 gives hours with a fraction. math.ceil always rounds up."}
+limite_tempo_s: 2
+solucao_referencia: |
+  import math
+  minutos = 0
+  # input
+  minutos = int(input("Minutos estacionado: "))
+  # processamento
+  TAXA_HORA = 1.20
+  horas_iniciadas = math.ceil(minutos / 60)
+  total = horas_iniciadas * TAXA_HORA
+  # output
+  print(round(total, 2))

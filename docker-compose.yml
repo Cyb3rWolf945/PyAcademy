@@ -1,6 +1,7 @@
 # PyArena: proxy (Caddy) + app (FastAPI) + db (PostgreSQL).
-# Redes: "public" (proxy <-> app) e "internal" (app <-> db, sem saída para a internet).
-# Fases seguintes: serviços "runner" (rede sandbox) e "backup".
+# Redes: "public" (proxy <-> app), "internal" (app <-> db) e "sandbox" (app <-> runner), as duas últimas sem
+# saída para a internet. O runner só está na rede sandbox: não vê a BD nem a internet.
+# Fase seguinte: serviço "backup".
 name: pyarena
 
 services:
@@ -40,9 +41,13 @@ services:
       TEACHER_USERNAME: ${TEACHER_USERNAME:-}
       TEACHER_PASSWORD: ${TEACHER_PASSWORD:-}
       WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
-    networks: [public, internal]
+      RUNNER_URL: http://runner:9000
+      RUNNER_TOKEN: ${RUNNER_TOKEN}
+    networks: [public, internal, sandbox]
     depends_on:
       db:
+        condition: service_healthy
+      runner:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/ready', timeout=3).status==200 else 1)"]
@@ -67,12 +72,40 @@ services:
       timeout: 3s
       retries: 10
 
-  # runner:  (fase 2) contentor isolado, rede "sandbox" interna, sem BD nem internet
+  runner:
+    build:
+      context: ./runner
+      target: runner
+    restart: unless-stopped
+    # sem `init: true`: o docker-init seria o PID 1 com o RUNNER_TOKEN no ambiente e legível pelos filhos.
+    # O PID 1 é o server.py (não despejável, sem token no ambiente) e recolhe os zombies ele próprio.
+    environment:
+      RUNNER_TOKEN: ${RUNNER_TOKEN}
+    networks: [sandbox]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    user: "65534:65534"
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    mem_limit: 1g
+    cpus: ${RUNNER_CPUS:-2}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:9000/health', timeout=3).status==200 else 1)"]
+      interval: 10s
+      timeout: 4s
+      start_period: 10s
+      retries: 5
+
   # backup:  (fase posterior) pg_dump diário para ./backups
 
 networks:
   public:
   internal:
+    internal: true
+  sandbox:
     internal: true
 
 volumes:

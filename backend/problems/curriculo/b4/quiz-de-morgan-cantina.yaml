@@ -1,0 +1,37 @@
+# Quiz (bloco 4, encruzilhada): leis de De Morgan com um exemplo da cantina.
+id: quiz-de-morgan-cantina
+titulo: {pt: "Negar sem enganar", en: "Negating without fooling yourself"}
+tipo: quiz
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 4
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    As leis de De Morgan dizem como negar uma condição composta:
+    not (A or B) é igual a (not A and not B), e not (A and B) é igual a (not A or not B).
+    Responde às perguntas sobre a cantina, onde a regra é: "pagas com cartão OU com dinheiro".
+  en: |
+    De Morgan's laws explain how to negate a compound condition:
+    not (A or B) is the same as (not A and not B), and not (A and B) is the same as (not A or not B).
+    Answer the questions about the canteen, where the rule is: "you pay by card OR with cash".
+perguntas:
+  - pergunta: {pt: "Qual é o equivalente de not (A or B)?", en: "What is the equivalent of not (A or B)?"}
+    opcoes:
+      - {pt: "not A or not B", en: "not A or not B"}
+      - {pt: "not A and not B", en: "not A and not B"}
+      - {pt: "A and B", en: "A and B"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é o equivalente de not (A and B)?", en: "What is the equivalent of not (A and B)?"}
+    opcoes:
+      - {pt: "not A and not B", en: "not A and not B"}
+      - {pt: "not A or not B", en: "not A or not B"}
+      - {pt: "A or B", en: "A or B"}
+    resposta: [1]
+  - pergunta: {pt: "Quando a cantina NÃO aceita o pagamento (sem cartão e sem dinheiro), qual é a frase certa?", en: "When the canteen does NOT accept the payment (no card and no cash), which sentence is right?"}
+    opcoes:
+      - {pt: "Não tens cartão ou não tens dinheiro", en: "You have no card or you have no cash"}
+      - {pt: "Não tens cartão e não tens dinheiro", en: "You have no card and you have no cash"}
+      - {pt: "Tens cartão e dinheiro", en: "You have a card and cash"}
+    resposta: [1]

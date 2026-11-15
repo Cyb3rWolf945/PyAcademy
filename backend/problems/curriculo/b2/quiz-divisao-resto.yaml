@@ -1,0 +1,43 @@
+# Quiz (bloco 2, floresta): /, // e % e o tipo devolvido por input().
+id: quiz-divisao-resto
+titulo: {pt: "Dividir, cortar, sobrar", en: "Divide, cut, leftover"}
+tipo: quiz
+bloco: "2"
+regiao: floresta
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Em Python, / faz a divisão real, // faz a divisão inteira (arredonda para baixo) e % devolve o resto.
+    Responde às perguntas sobre estes três operadores e sobre o que input() devolve.
+  en: |
+    In Python, / does real division, // does integer division (rounding down) and % gives the remainder.
+    Answer the questions about these three operators and about what input() returns.
+perguntas:
+  - pergunta: {pt: "Quanto dá 17 / 5 ?", en: "What is 17 / 5 ?"}
+    opcoes:
+      - {pt: "3", en: "3"}
+      - {pt: "3.4", en: "3.4"}
+      - {pt: "2", en: "2"}
+    resposta: [1]
+  - pergunta: {pt: "Quanto dá -7 // 2 em Python?", en: "What is -7 // 2 in Python?"}
+    opcoes:
+      - {pt: "-3", en: "-3"}
+      - {pt: "-4", en: "-4"}
+      - {pt: "-3.5", en: "-3.5"}
+    resposta: [1]
+  - pergunta: {pt: "Quanto dá 17 % 5 ?", en: "What is 17 % 5 ?"}
+    opcoes:
+      - {pt: "2", en: "2"}
+      - {pt: "3", en: "3"}
+      - {pt: "5", en: "5"}
+    resposta: [0]
+  - pergunta: {pt: "De que tipo é o valor devolvido por input('5') ?", en: "What type is the value returned by input('5') ?"}
+    opcoes:
+      - {pt: "int", en: "int"}
+      - {pt: "str (texto)", en: "str (text)"}
+      - {pt: "float", en: "float"}
+    resposta: [1]
+pistas:
+  - {pt: "Para o resto, pensa no que sobra depois de tirar tantos grupos de 5 quantos couberem.", en: "For the remainder, think about what is left after taking out as many groups of 5 as fit."}

@@ -1,0 +1,81 @@
+# Problema tracar gerado (tracar); rascunho à espera de revisão do professor.
+id: tracar-listas-e-indices
+titulo:
+  pt: 'Traçar: listas, índices e append'
+  en: 'Trace it: lists, indices and append'
+tipo: tracar
+bloco: '7'
+regiao: cidadela
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: Os índices de uma lista começam em **0**, e `-1` é o último elemento. `append` junta ao fim, `pop(0)` tira o primeiro. Escreve o estado da lista a cada passo.
+  en: List indices start at **0**, and `-1` is the last element. `append` adds to the end, `pop(0)` removes the first. Write down the state of the list at each step.
+perguntas:
+- pergunta:
+    pt: Qual é o valor de `c`?
+    en: What is the value of `c`?
+  codigo: |
+    notas = [12, 15, 9, 18]
+    a = notas[0]
+    b = notas[-1]
+    c = notas[1] + notas[2]
+  opcoes:
+  - pt: '24'
+    en: '24'
+  - pt: '27'
+    en: '27'
+  - pt: '30'
+    en: '30'
+  - pt: '21'
+    en: '21'
+  resposta:
+  - 0
+- pergunta:
+    pt: Qual é o conteúdo de `quadrados` no fim?
+    en: What is the content of `quadrados` at the end?
+  codigo: |
+    quadrados = []
+    for i in range(4):
+        quadrados.append(i * i)
+  resposta_texto: '[0, 1, 4, 9]'
+- pergunta:
+    pt: Qual é o valor de `primeiro` no fim?
+    en: What is the value of `primeiro` at the end?
+  codigo: |
+    fila = ["Ana", "Rui", "Eva"]
+    fila.append("Léo")
+    fila.pop(0)
+    primeiro = fila[0]
+  opcoes:
+  - pt: Ana
+    en: Ana
+  - pt: Rui
+    en: Rui
+  - pt: Eva
+    en: Eva
+  - pt: Léo
+    en: Léo
+  resposta:
+  - 1
+- pergunta:
+    pt: O que acontece ao correr este programa?
+    en: What happens when this program runs?
+  codigo: |
+    precos = [10, 20, 30]
+    print(precos[3])
+  opcoes:
+  - pt: Escreve 30
+    en: Escreve 30
+  - pt: Escreve 10
+    en: Escreve 10
+  - pt: IndexError
+    en: IndexError
+  - pt: Escreve None
+    en: Escreve None
+  resposta:
+  - 2
+pistas:
+- pt: Escreve a lista inteira depois de cada linha. O primeiro índice é 0 e uma lista de 3 elementos acaba no índice 2.
+  en: Write the whole list after each line. The first index is 0 and a list of 3 elements ends at index 2.

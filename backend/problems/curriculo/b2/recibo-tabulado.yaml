@@ -1,0 +1,65 @@
+# Programa de sequência (bloco 2): formatação com \n, \t e f-strings com duas casas decimais.
+id: recibo-tabulado
+titulo: {pt: "Recibo da cantina", en: "Canteen receipt"}
+tipo: programa
+bloco: "2"
+regiao: floresta
+dificuldade: 4
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    A cantina imprime um pequeno recibo. Lê o nome do artigo, o preço unitário (com decimais) e a quantidade.
+    O recibo tem duas linhas, separadas por \n, e a segunda linha tem um \t antes do valor:
+    Artigo:<TAB>nome do artigo
+    Total:<TAB>valor total com 2 casas decimais e o símbolo €
+    Entrada: três linhas (nome, preço, quantidade). Saída: as duas linhas do recibo.
+  en: |
+    The canteen prints a small receipt. Read the item name, the unit price (with decimals) and the quantity.
+    The receipt has two lines, separated by \n, and each line has a \t after the label:
+    Item:<TAB>item name
+    Total:<TAB>total amount with 2 decimal places and the € symbol
+    Input: three lines (name, price, quantity). Output: the two lines of the receipt.
+exemplos:
+  - stdin: "Bifana\n2.5\n2\n"
+    stdout: {pt: "Artigo:\tBifana\nTotal:\t5.00 €", en: "Item:\tBifana\nTotal:\t5.00 €"}
+testes:
+  - stdin: "Sandes de queijo\n3.2\n3\n"
+    stdout: {pt: "Artigo:\tSandes de queijo\nTotal:\t9.60 €", en: "Item:\tSandes de queijo\nTotal:\t9.60 €"}
+  - stdin: "Café\n0.7\n1\n"
+    stdout: {pt: "Artigo:\tCafé\nTotal:\t0.70 €", en: "Item:\tCafé\nTotal:\t0.70 €"}
+  - stdin: "Água\n1\n0\n"
+    stdout: {pt: "Artigo:\tÁgua\nTotal:\t0.00 €", en: "Item:\tÁgua\nTotal:\t0.00 €"}
+  - stdin: "Bolo de bolacha\n1.5\n4\n"
+    stdout: {pt: "Artigo:\tBolo de bolacha\nTotal:\t6.00 €", en: "Item:\tBolo de bolacha\nTotal:\t6.00 €"}
+comparacao: texto
+ordem_importa: true
+pistas:
+  - {pt: "Usa f\"...{total:.2f}...\" para o valor com duas casas decimais.", en: "Use f\"...{total:.2f}...\" for the value with two decimal places."}
+  - {pt: "Dentro de uma string, \\t é um tabulador e \\n é uma mudança de linha.", en: "Inside a string, \\t is a tab and \\n is a line break."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    nome = ""
+    preco = 0.0
+    quantidade = 0
+    # input
+    nome = input("Nome do artigo: ")
+    preco = float(input("Preço unitário: "))
+    quantidade = int(input("Quantidade: "))
+    # processamento
+    total = preco * quantidade
+    # output
+    print(f"Artigo:\t{nome}\nTotal:\t{total:.2f} €")
+  en: |
+    name = ""
+    price = 0.0
+    quantity = 0
+    # input
+    name = input("Item name: ")
+    price = float(input("Unit price: "))
+    quantity = int(input("Quantity: "))
+    # processing
+    total = price * quantity
+    # output
+    print(f"Item:\t{name}\nTotal:\t{total:.2f} €")

@@ -1,0 +1,101 @@
+# Arena de Algoritmia (hard): Procurar na estante. Gerado em rascunho; revisão do professor pendente.
+id: algo-estante-binaria
+titulo:
+  pt: Procurar na estante
+  en: Searching the shelf
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 2
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    Os livros da estante têm códigos todos diferentes, arrumados **por ordem crescente**. Vários alunos pedem livros e queres saber a posição de cada um.
+
+    Escreve `posicoes_na_estante(livros, pedidos)`, que devolve uma lista com, para cada código de `pedidos` (pela mesma ordem), a sua posição em `livros`, ou `-1` se não existir. A ordem do resultado importa.
+
+    **Exemplo:** `livros = [10, 20, 30, 40]`, `pedidos = [30, 5, 10]` devolve `[2, -1, 0]`.
+  en: |
+    The books on the shelf have all-different codes, arranged in **ascending order**. Several students request books and you want each one's position.
+
+    Write `posicoes_na_estante(livros, pedidos)`, which returns a list with, for each code in `pedidos` (in the same order), its position in `livros`, or `-1` if it is not there. The order of the result matters.
+
+    **Example:** `livros = [10, 20, 30, 40]`, `pedidos = [30, 5, 10]` returns `[2, -1, 0]`.
+assinatura: posicoes_na_estante(livros, pedidos)
+restricoes:
+  pt: 0 ≤ len(livros), len(pedidos) ≤ 10^5; livros estritamente crescente
+  en: 0 ≤ len(livros), len(pedidos) ≤ 10^5; livros strictly increasing
+exemplos:
+- args: [[10, 20, 30, 40], [30, 5, 10]]
+  devolve: [2, -1, 0]
+testes:
+- args: [[10, 20, 30, 40], [30, 5, 10]]
+  devolve: [2, -1, 0]
+- args: [[], [1, 2]]
+  devolve: [-1, -1]
+- args: [[5], [5]]
+  devolve: [0]
+- args: [[5], [6]]
+  devolve: [-1]
+- args: [[1, 3, 5, 7, 9], []]
+  devolve: []
+- args: [[1, 3, 5, 7, 9], [9, 1, 4, 10, 0]]
+  devolve: [4, 0, -1, -1, -1]
+- args: [[-4, -2, 0], [-2, -3]]
+  devolve: [1, -1]
+- args_gerador: '[[i * 2 for i in range(100000)], [(i * 7919) % 200000 for i in range(100000)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'A lista está ordenada: espreita o meio e descarta metade de cada vez (pesquisa binária, ou o módulo bisect).'
+  en: 'The list is sorted: peek at the middle and discard half each time (binary search, or the bisect module).'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def posicoes_na_estante(livros, pedidos):
+      res = []
+      for alvo in pedidos:
+          baixo = 0
+          alto = len(livros) - 1
+          pos = -1
+          while baixo <= alto:
+              meio = (baixo + alto) // 2
+              if livros[meio] == alvo:
+                  pos = meio
+                  break
+              if livros[meio] < alvo:
+                  baixo = meio + 1
+              else:
+                  alto = meio - 1
+          res.append(pos)
+      return res
+solucao_ingenua: |
+  def posicoes_na_estante(livros, pedidos):
+      res = []
+      for alvo in pedidos:
+          pos = -1
+          for i in range(len(livros)):
+              if livros[i] == alvo:
+                  pos = i
+                  break
+          res.append(pos)
+      return res
+editorial:
+  pt: |
+    **Ideia:** pesquisa binária. Com a lista ordenada, comparar com o elemento do meio elimina metade das hipóteses.
+
+    **Passos:** 1) `baixo = 0`, `alto = n-1`; 2) `meio = (baixo+alto)//2`; 3) se igual, encontrámos; se menor, `baixo = meio+1`; se maior, `alto = meio-1`; 4) repetir até `baixo > alto` (então `-1`).
+
+    **Complexidade:** tempo O(q · log n) para q pedidos, espaço O(1) extra.
+
+    **Porque é que a ingénua falha:** percorrer a estante toda para cada pedido é O(q · n), cerca de 10^10 comparações.
+  en: |
+    **Idea:** binary search. With the list sorted, comparing with the middle element eliminates half of the possibilities.
+
+    **Steps:** 1) `baixo = 0`, `alto = n-1`; 2) `meio = (baixo+alto)//2`; 3) if equal, found; if smaller, `baixo = meio+1`; if larger, `alto = meio-1`; 4) repeat until `baixo > alto` (then `-1`).
+
+    **Complexity:** time O(q · log n) for q requests, O(1) extra space.
+
+    **Why the naive one is slow:** scanning the whole shelf for every request is O(q · n), about 10^10 comparisons.

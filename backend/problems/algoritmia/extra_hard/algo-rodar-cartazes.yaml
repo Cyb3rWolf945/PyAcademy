@@ -1,0 +1,91 @@
+# Arena de Algoritmia (extra_hard): Rodar os cartazes. Gerado em rascunho; revisão do professor pendente.
+id: algo-rodar-cartazes
+titulo:
+  pt: Rodar os cartazes
+  en: Rotating the posters
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    Num expositor há uma fila de cartazes e, todos os dias, o último cartaz passa para a primeira posição (a fila **roda para a direita** uma posição). Passados `k` dias, como fica a fila?
+
+    Escreve `rodar_lista(cartazes, k)`, que devolve uma nova lista com os cartazes depois de rodar `k` vezes para a direita. A ordem importa.
+
+    **Exemplo:** `[1, 2, 3, 4, 5]` com `k = 2` devolve `[4, 5, 1, 2, 3]`. Com `k = 5` volta a ficar igual.
+  en: |
+    On a display stand there is a row of posters and, every day, the last poster moves to the first position (the row **rotates right** by one place). After `k` days, what does the row look like?
+
+    Write `rodar_lista(cartazes, k)`, which returns a new list with the posters after rotating `k` times to the right. The order matters.
+
+    **Example:** `[1, 2, 3, 4, 5]` with `k = 2` returns `[4, 5, 1, 2, 3]`. With `k = 5` it is the same again.
+assinatura: rodar_lista(cartazes, k)
+restricoes:
+  pt: 0 ≤ len(cartazes) ≤ 10^5; 0 ≤ k ≤ 10^9
+  en: 0 ≤ len(cartazes) ≤ 10^5; 0 ≤ k ≤ 10^9
+exemplos:
+- args: [[1, 2, 3, 4, 5], 2]
+  devolve: [4, 5, 1, 2, 3]
+testes:
+- args: [[1, 2, 3, 4, 5], 2]
+  devolve: [4, 5, 1, 2, 3]
+- args: [[], 3]
+  devolve: []
+- args: [[7], 10]
+  devolve: [7]
+- args: [[1, 2, 3], 0]
+  devolve: [1, 2, 3]
+- args: [[1, 2, 3], 3]
+  devolve: [1, 2, 3]
+- args: [[1, 2, 3], 4]
+  devolve: [3, 1, 2]
+- args: [[1, 2, 3, 4], 7]
+  devolve: [2, 3, 4, 1]
+- args: [[5, 6], 1]
+  devolve: [6, 5]
+- args_gerador: '[[(i * 7919) % 100003 for i in range(100000)], 987654321]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Rodar n vezes é igual a não rodar: reduz k com o resto da divisão por len(cartazes). Depois usa fatias.'
+  en: 'Rotating n times is the same as not rotating: reduce k with the remainder of the division by len(cartazes). Then use slices.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def rodar_lista(cartazes, k):
+      n = len(cartazes)
+      if n == 0:
+          return []
+      k = k % n
+      if k == 0:
+          return list(cartazes)
+      return cartazes[-k:] + cartazes[:-k]
+solucao_ingenua: |
+  def rodar_lista(cartazes, k):
+      res = list(cartazes)
+      if not res:
+          return res
+      for _ in range(k):
+          res.insert(0, res.pop())
+      return res
+editorial:
+  pt: |
+    **Ideia:** rodar `n` vezes devolve a lista original, por isso só interessa `k % n`. Depois, rodar à direita `k` posições é pôr as últimas `k` à frente: `cartazes[-k:] + cartazes[:-k]`.
+
+    **Passos:** 1) tratar a lista vazia; 2) `k = k % n`; 3) juntar duas fatias.
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** rodar uma posição de cada vez, `k` vezes, custa O(n) cada, e `k` chega a 10^9: nunca termina.
+  en: |
+    **Idea:** rotating `n` times gives back the original list, so only `k % n` matters. Then, rotating right by `k` places means putting the last `k` in front: `cartazes[-k:] + cartazes[:-k]`.
+
+    **Steps:** 1) handle the empty list; 2) `k = k % n`; 3) join two slices.
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** rotating one place at a time, `k` times, costs O(n) each, and `k` reaches 10^9: it never finishes.

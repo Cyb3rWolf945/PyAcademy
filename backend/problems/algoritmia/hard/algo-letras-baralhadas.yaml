@@ -1,0 +1,89 @@
+# Arena de Algoritmia (hard): Letras baralhadas. Gerado em rascunho; revisão do professor pendente.
+id: algo-letras-baralhadas
+titulo:
+  pt: Letras baralhadas
+  en: Shuffled letters
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 1
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    A Mariana e o Tiago escreveram cada um uma palavra no Scrabble com as mesmas peças? Duas palavras são **anagramas** se tiverem exatamente as mesmas letras, as mesmas vezes, noutra ordem.
+
+    Escreve `anagramas(a, b)`, que devolve `True` se `a` e `b` forem anagramas, ou `False` caso contrário. As strings só têm letras minúsculas de `a` a `z`.
+
+    **Exemplos:** `anagramas("roma", "amor")` devolve `True`. `anagramas("aab", "abb")` devolve `False`.
+  en: |
+    Did Mariana and Tiago each write a Scrabble word using the same tiles? Two words are **anagrams** if they have exactly the same letters, the same number of times, in a different order.
+
+    Write `anagramas(a, b)`, which returns `True` if `a` and `b` are anagrams or `False` otherwise. The strings only contain lowercase letters `a` to `z`.
+
+    **Examples:** `anagramas("roma", "amor")` returns `True`. `anagramas("aab", "abb")` returns `False`.
+assinatura: anagramas(a, b)
+restricoes:
+  pt: 0 ≤ len(a), len(b) ≤ 3·10^5; só letras a-z
+  en: 0 ≤ len(a), len(b) ≤ 3·10^5; letters a-z only
+exemplos:
+- args: [roma, amor]
+  devolve: true
+- args: [aab, abb]
+  devolve: false
+testes:
+- args: [roma, amor]
+  devolve: true
+- args: [tomar, morta]
+  devolve: true
+- args: [a, b]
+  devolve: false
+- args: ['', '']
+  devolve: true
+- args: [aab, abb]
+  devolve: false
+- args: [abc, ab]
+  devolve: false
+- args: [zzz, zzz]
+  devolve: true
+- args_gerador: '["".join(chr(97 + (i * 7) % 26) for i in range(300000)), "".join(chr(97 + (i * 7) % 26) for i in reversed(range(300000)))]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: Conta quantas vezes aparece cada letra em cada palavra e compara as contagens.
+  en: Count how many times each letter appears in each word and compare the counts.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  from collections import Counter
+
+  def anagramas(a, b):
+      if len(a) != len(b):
+          return False
+      return Counter(a) == Counter(b)
+solucao_ingenua: |
+  def anagramas(a, b):
+      if len(a) != len(b):
+          return False
+      for c in a:
+          if a.count(c) != b.count(c):
+              return False
+      return True
+editorial:
+  pt: |
+    **Ideia:** dois anagramas têm as mesmas contagens por letra. Constroem-se as contagens com um dicionário (`Counter`) e comparam-se.
+
+    **Passos:** 1) se os tamanhos diferem, `False`; 2) `Counter(a) == Counter(b)`.
+
+    **Complexidade:** tempo O(n), espaço O(1) (alfabeto fixo de 26 letras).
+
+    **Porque é que a ingénua falha:** `a.count(c)` percorre a string toda para cada letra, o que dá O(n²).
+  en: |
+    **Idea:** two anagrams have the same per-letter counts. Build the counts with a dictionary (`Counter`) and compare them.
+
+    **Steps:** 1) if the lengths differ, `False`; 2) `Counter(a) == Counter(b)`.
+
+    **Complexity:** time O(n), space O(1) (fixed alphabet of 26 letters).
+
+    **Why the naive one is slow:** `a.count(c)` scans the entire string for every letter, giving O(n²).

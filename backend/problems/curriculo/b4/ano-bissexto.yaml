@@ -1,0 +1,60 @@
+# Condicionais com and/or (bloco 4, encruzilhada): regra do ano bissexto.
+id: ano-bissexto
+titulo: {pt: "Ano de fevereiro com 29 dias", en: "The year with 29 days in February"}
+tipo: programa
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Um ano é bissexto se for divisível por 4, exceto os anos de século (divisíveis por 100), que só são bissextos se forem divisíveis por 400.
+    Lê um ano (inteiro positivo) e escreve "Sim" se for bissexto, ou "Não" se não for.
+    Entrada: um inteiro. Saída: uma palavra.
+  en: |
+    A year is a leap year if it is divisible by 4, except century years (divisible by 100), which are leap years only if they are divisible by 400.
+    Read a year (positive integer) and print "Yes" if it is a leap year, or "No" if it is not.
+    Input: one integer. Output: one word.
+exemplos:
+  - stdin: "2024\n"
+    stdout: {pt: "Sim", en: "Yes"}
+testes:
+  - stdin: "1900\n"
+    stdout: {pt: "Não", en: "No"}
+  - stdin: "2000\n"
+    stdout: {pt: "Sim", en: "Yes"}
+  - stdin: "2023\n"
+    stdout: {pt: "Não", en: "No"}
+  - stdin: "2100\n"
+    stdout: {pt: "Não", en: "No"}
+  - stdin: "1996\n"
+    stdout: {pt: "Sim", en: "Yes"}
+comparacao: texto
+ordem_importa: true
+pistas:
+  - {pt: "Divisível por 4 e não por 100, ou divisível por 400. Usa % e and/or.", en: "Divisible by 4 and not by 100, or divisible by 400. Use % and and/or."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    ano = 0
+    # input
+    ano = int(input("Ano: "))
+    # processamento e output
+    if ano % 4 == 0 and ano % 100 != 0:
+        print("Sim")
+    elif ano % 400 == 0:
+        print("Sim")
+    else:
+        print("Não")
+  en: |
+    year = 0
+    # input
+    year = int(input("Year: "))
+    # processing and output
+    if year % 4 == 0 and year % 100 != 0:
+        print("Yes")
+    elif year % 400 == 0:
+        print("Yes")
+    else:
+        print("No")

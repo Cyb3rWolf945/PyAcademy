@@ -1,0 +1,278 @@
+# Problema programa gerado (bosses); rascunho à espera de revisão do professor.
+id: boss-encruzilhada-bilheteira-cinema
+titulo:
+  pt: 'Boss da Encruzilhada: a bilheteira do cinema'
+  en: 'Crossroads Boss: the cinema box office'
+tipo: programa
+bloco: '4'
+regiao: encruzilhada
+dificuldade: 5
+origem: boss
+estado: rascunho
+enunciado:
+  pt: |
+    O cinema da faculdade quer um sistema de preços que não confunda o Sr. da bilheteira. Lê, uma por linha:
+    1. a idade (inteiro);
+    2. o dia da semana, em minúsculas ou maiúsculas, sem acentos: `segunda`, `terca`, `quarta`, `quinta`, `sexta`, `sabado`, `domingo`;
+    3. se é estudante: `sim` ou `nao`;
+    4. quantos bilhetes quer comprar (inteiro, pelo menos 1), todos ao mesmo preço.
+
+    Regras do preço de **um** bilhete (aplica-as por esta ordem de prioridade):
+    - à **quarta** (dia do cinema) custa 5,00 €, para toda a gente;
+    - senão, quem tem **menos de 12** ou **65 ou mais** anos paga 4,50 €;
+    - senão, um **estudante com 25 anos ou menos** paga 6,00 €;
+    - senão, o preço normal é 8,00 €.
+    - A seguir, ao **sábado e domingo** soma-se um suplemento de 1,50 € (a quarta nunca é fim de semana, é claro).
+
+    Depois, grupos de **5 ou mais bilhetes** têm 10% de desconto no total.
+
+    Escreve duas linhas: `Bilhete:` (o preço de um bilhete, já com suplemento) e `Total:` (o total a pagar, com desconto de grupo se houver), ambos com 2 casas decimais.
+  en: |
+    The campus cinema wants a pricing system that will not confuse the box-office clerk. Read, one per line:
+    1. the age (integer);
+    2. the day of the week, in lower or upper case, no accents: `segunda`, `terca`, `quarta`, `quinta`, `sexta`, `sabado`, `domingo` (Portuguese day names: Monday to Sunday);
+    3. whether the person is a student: `sim` (yes) or `nao` (no);
+    4. how many tickets they want (integer, at least 1), all at the same price.
+
+    Price rules for **one** ticket (apply them in this priority order):
+    - on **Wednesday** (`quarta`, cinema day) it costs 5.00 €, for everyone;
+    - otherwise, anyone **under 12** or **65 or older** pays 4.50 €;
+    - otherwise, a **student aged 25 or less** pays 6.00 €;
+    - otherwise the normal price is 8.00 €.
+    - Then, on **Saturday and Sunday** add a surcharge of 1.50 € (Wednesday is never a weekend, of course).
+
+    After that, groups of **5 or more tickets** get a 10% discount on the total.
+
+    Print two lines: `Ticket:` (the price of one ticket, surcharge included) and `Total:` (the amount to pay, with the group discount if any), both with 2 decimal places.
+exemplos:
+- &id001
+  stdin: |
+    30
+    sexta
+    nao
+    1
+  stdout:
+    pt: |-
+      Bilhete: 8.0
+      Total: 8.0
+    en: |-
+      Ticket: 8.0
+      Total: 8.0
+- &id002
+  stdin: |
+    10
+    sabado
+    nao
+    2
+  stdout:
+    pt: |-
+      Bilhete: 6.0
+      Total: 12.0
+    en: |-
+      Ticket: 6.0
+      Total: 12.0
+testes:
+- stdin: |
+    70
+    DOMINGO
+    nao
+    1
+  stdout:
+    pt: |-
+      Bilhete: 6.0
+      Total: 6.0
+    en: |-
+      Ticket: 6.0
+      Total: 6.0
+- stdin: |
+    22
+    terca
+    sim
+    3
+  stdout:
+    pt: |-
+      Bilhete: 6.0
+      Total: 18.0
+    en: |-
+      Ticket: 6.0
+      Total: 18.0
+- stdin: |
+    26
+    terca
+    sim
+    1
+  stdout:
+    pt: |-
+      Bilhete: 8.0
+      Total: 8.0
+    en: |-
+      Ticket: 8.0
+      Total: 8.0
+- stdin: |
+    25
+    quinta
+    sim
+    5
+  stdout:
+    pt: |-
+      Bilhete: 6.0
+      Total: 27.0
+    en: |-
+      Ticket: 6.0
+      Total: 27.0
+- stdin: |
+    40
+    Quarta
+    nao
+    5
+  stdout:
+    pt: |-
+      Bilhete: 5.0
+      Total: 22.5
+    en: |-
+      Ticket: 5.0
+      Total: 22.5
+- stdin: |
+    12
+    segunda
+    nao
+    1
+  stdout:
+    pt: |-
+      Bilhete: 8.0
+      Total: 8.0
+    en: |-
+      Ticket: 8.0
+      Total: 8.0
+- stdin: |
+    65
+    sabado
+    nao
+    4
+  stdout:
+    pt: |-
+      Bilhete: 6.0
+      Total: 24.0
+    en: |-
+      Ticket: 6.0
+      Total: 24.0
+- stdin: |
+    11
+    quarta
+    sim
+    6
+  stdout:
+    pt: |-
+      Bilhete: 5.0
+      Total: 27.0
+    en: |-
+      Ticket: 5.0
+      Total: 27.0
+- stdin: |
+    18
+    domingo
+    SIM
+    10
+  stdout:
+    pt: |-
+      Bilhete: 7.5
+      Total: 67.5
+    en: |-
+      Ticket: 7.5
+      Total: 67.5
+- *id001
+- *id002
+comparacao: numeros
+pistas:
+- pt: 'A ordem dos if/elif é a prioridade das regras: a mais forte (quarta) vem primeiro. O suplemento é um if separado, não um elif.'
+  en: 'The order of the if/elif chain is the rule priority: the strongest one (Wednesday) comes first. The surcharge is a separate if, not an elif.'
+- pt: 'Estudante: estudante == "sim" and idade <= 25. Fim de semana: dia == "sabado" or dia == "domingo".'
+  en: 'Student: student == "sim" and age <= 25. Weekend: day == "sabado" or day == "domingo".'
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    BILHETE_NORMAL = 8.00
+    BILHETE_REDUZIDO = 4.50
+    BILHETE_ESTUDANTE = 6.00
+    BILHETE_QUARTA = 5.00
+    SUPLEMENTO_FIM_DE_SEMANA = 1.50
+    DESCONTO_GRUPO = 0.10
+    GRUPO_MINIMO = 5
+
+    idade = 0
+    dia = ""
+    estudante = ""
+    quantidade = 0
+    preco = 0
+
+    # input
+    idade = int(input("Idade: "))
+    dia = input("Dia da semana: ")
+    estudante = input("Estudante (sim/nao): ")
+    quantidade = int(input("Bilhetes: "))
+
+    # processamento
+    dia = dia.lower()
+    estudante = estudante.lower()
+    if dia == "quarta":
+        preco = BILHETE_QUARTA
+    elif idade < 12 or idade >= 65:
+        preco = BILHETE_REDUZIDO
+    elif estudante == "sim" and idade <= 25:
+        preco = BILHETE_ESTUDANTE
+    else:
+        preco = BILHETE_NORMAL
+
+    if dia == "sabado" or dia == "domingo":
+        preco = preco + SUPLEMENTO_FIM_DE_SEMANA
+
+    total = preco * quantidade
+    if quantidade >= GRUPO_MINIMO:
+        total = total * (1 - DESCONTO_GRUPO)
+
+    # output
+    print("Bilhete:", round(preco, 2))
+    print("Total:", round(total, 2))
+  en: |
+    NORMAL_TICKET = 8.00
+    REDUCED_TICKET = 4.50
+    STUDENT_TICKET = 6.00
+    WEDNESDAY_TICKET = 5.00
+    WEEKEND_SURCHARGE = 1.50
+    GROUP_DISCOUNT = 0.10
+    GROUP_MINIMUM = 5
+
+    age = 0
+    day = ""
+    student = ""
+    quantity = 0
+    price = 0
+
+    # input
+    age = int(input("Age: "))
+    day = input("Day of the week: ")
+    student = input("Student (sim/nao): ")
+    quantity = int(input("Tickets: "))
+
+    # processing
+    day = day.lower()
+    student = student.lower()
+    if day == "quarta":
+        price = WEDNESDAY_TICKET
+    elif age < 12 or age >= 65:
+        price = REDUCED_TICKET
+    elif student == "sim" and age <= 25:
+        price = STUDENT_TICKET
+    else:
+        price = NORMAL_TICKET
+
+    if day == "sabado" or day == "domingo":
+        price = price + WEEKEND_SURCHARGE
+
+    total = price * quantity
+    if quantity >= GROUP_MINIMUM:
+        total = total * (1 - GROUP_DISCOUNT)
+
+    # output
+    print("Ticket:", round(price, 2))
+    print("Total:", round(total, 2))

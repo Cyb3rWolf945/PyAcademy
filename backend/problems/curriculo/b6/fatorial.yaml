@@ -1,0 +1,41 @@
+# Função (bloco 6, torre): fatorial iterativo com um ciclo for (sem recursão).
+id: fatorial
+titulo: {pt: "Fatorial sem voltar atrás", en: "Factorial without going back"}
+tipo: funcao
+bloco: "6"
+regiao: torre
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O fatorial de n (n!) é 1 × 2 × 3 × ... × n, e 0! = 1. Escreve a função fatorial(n) que devolve n! para n inteiro, zero ou positivo.
+
+    🧱 Requisito: tens de usar um ciclo for dentro da função. Não podes usar recursão.
+  en: |
+    The factorial of n (n!) is 1 × 2 × 3 × ... × n, and 0! = 1. Write the function fatorial(n) that returns n! for an integer n, zero or positive.
+
+    🧱 Requirement: you must use a for loop inside the function. You cannot use recursion.
+assinatura: "fatorial(n)"
+exemplos:
+  - args: [4]
+    devolve: 24
+testes:
+  - {args: [0], devolve: 1}
+  - {args: [1], devolve: 1}
+  - {args: [3], devolve: 6}
+  - {args: [5], devolve: 120}
+  - {args: [10], devolve: 3628800}
+comparacao: numeros
+ordem_importa: true
+requisitos:
+  usa: [for]
+pistas:
+  - {pt: "Começa com resultado = 1 e multiplica por cada número de 1 até n.", en: "Start with resultado = 1 and multiply by each number from 1 to n."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def fatorial(n):
+      resultado = 1
+      for numero in range(1, n + 1):
+          resultado = resultado * numero
+      return resultado

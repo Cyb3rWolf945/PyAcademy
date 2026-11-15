@@ -1,0 +1,41 @@
+# Decomposição (bloco 3, mercado): missão da Farmácia XPTO.
+id: decomposicao-farmacia-xpto
+titulo: {pt: "Missão Farmácia XPTO", en: "XPTO Pharmacy mission"}
+tipo: decomposicao
+bloco: "3"
+regiao: mercado
+dificuldade: 4
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Na Farmácia XPTO, cada embalagem de um medicamento custa 6,40 €, e a esse valor acresce um IVA de 6%.
+    Precisas de comprar várias embalagens para o mês. Decompõe o problema antes de programar.
+  en: |
+    At XPTO Pharmacy, each pack of a medicine costs €6.40, and a 6% VAT is added to that value.
+    You need to buy several packs for the month. Break the problem down before coding.
+perguntas:
+  - pergunta: {pt: "Qual é a entrada?", en: "What is the input?"}
+    opcoes:
+      - {pt: "O preço de cada embalagem", en: "The price of each pack"}
+      - {pt: "O número de embalagens", en: "The number of packs"}
+      - {pt: "O nome do medicamento", en: "The name of the medicine"}
+    resposta: [1]
+  - pergunta: {pt: "Quais são as constantes?", en: "What are the constants?"}
+    opcoes:
+      - {pt: "O número de embalagens", en: "The number of packs"}
+      - {pt: "O preço de 6,40 € por embalagem e o IVA de 6%", en: "The €6.40 price per pack and the 6% VAT"}
+      - {pt: "O total com IVA", en: "The total with VAT"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a operação?", en: "What is the operation?"}
+    opcoes:
+      - {pt: "Somar 6% ao número de embalagens", en: "Add 6% to the number of packs"}
+      - {pt: "Multiplicar as embalagens por 6,40 € e depois por 1,06", en: "Multiply the packs by €6.40 and then by 1.06"}
+      - {pt: "Dividir 6,40 € por 1,06", en: "Divide €6.40 by 1.06"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a variável que muda de compra para compra?", en: "Which variable changes from purchase to purchase?"}
+    opcoes:
+      - {pt: "O IVA", en: "The VAT"}
+      - {pt: "O total a pagar", en: "The total to pay"}
+      - {pt: "O preço unitário", en: "The unit price"}
+    resposta: [1]

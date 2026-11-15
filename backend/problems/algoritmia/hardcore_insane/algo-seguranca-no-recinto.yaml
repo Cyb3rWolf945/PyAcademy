@@ -1,0 +1,114 @@
+# Arena de Algoritmia (hardcore_insane): Seguranças no recinto. Gerado em rascunho; revisão do professor pendente.
+id: algo-seguranca-no-recinto
+titulo:
+  pt: Seguranças no recinto
+  en: Security guards on the grounds
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 5
+origem: mais_alem
+estado: rascunho
+nivel_algo: hardcore_insane
+enunciado:
+  pt: |
+    O recinto de um festival é um quadrado de `n × n` casas. A organização quer colocar `n` seguranças, **um por linha e um por coluna**, de modo que **nenhum veja outro**: dois seguranças veem-se se estiverem na mesma linha, na mesma coluna ou na mesma **diagonal** (em qualquer dos dois sentidos).
+
+    Escreve `contar_disposicoes(n)`, que devolve de quantas maneiras diferentes se podem colocar os `n` seguranças. `n = 1` devolve `1`; `n = 2` e `n = 3` devolvem `0`.
+
+    **Exemplo:** `contar_disposicoes(4)` devolve `2` (as duas disposições são espelhos uma da outra). Para `n = 6` devolve `4`.
+  en: |
+    A festival's grounds are an `n × n` square of cells. The organisation wants to place `n` guards, **one per row and one per column**, so that **none sees another**: two guards see each other if they are in the same row, the same column or the same **diagonal** (in either direction).
+
+    Write `contar_disposicoes(n)`, which returns in how many different ways the `n` guards can be placed. `n = 1` returns `1`; `n = 2` and `n = 3` return `0`.
+
+    **Example:** `contar_disposicoes(4)` returns `2` (the two arrangements are mirrors of each other). For `n = 6` it returns `4`.
+assinatura: contar_disposicoes(n)
+restricoes:
+  pt: 1 ≤ n ≤ 11
+  en: 1 ≤ n ≤ 11
+exemplos:
+- args: [4]
+  devolve: 2
+testes:
+- args: [1]
+  devolve: 1
+- args: [2]
+  devolve: 0
+- args: [3]
+  devolve: 0
+- args: [4]
+  devolve: 2
+- args: [5]
+  devolve: 10
+- args: [6]
+  devolve: 4
+- args: [7]
+  devolve: 40
+- args: [8]
+  devolve: 92
+- args: [9]
+  devolve: 352
+- args: [10]
+  devolve: 724
+- args_gerador: '[11]'
+- args_gerador: '[10]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: 'Backtracking: coloca um segurança por linha, tentando cada coluna livre; recua quando uma coluna ou diagonal já está ocupada.'
+  en: 'Backtracking: place one guard per row, trying each free column; backtrack when a column or diagonal is already taken.'
+- pt: Guarda as colunas e as duas diagonais ocupadas (por exemplo com conjuntos, ou com bits) para testar cada posição em O(1).
+  en: Store the occupied columns and the two diagonals (for example in sets, or with bits) to test each position in O(1).
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def contar_disposicoes(n):
+      cheio = (1 << n) - 1
+
+      def colocar(colunas, diag1, diag2):
+          if colunas == cheio:
+              return 1
+          total = 0
+          livres = cheio & ~(colunas | diag1 | diag2)
+          while livres:
+              bit = livres & -livres
+              livres -= bit
+              total += colocar(colunas | bit, ((diag1 | bit) << 1) & cheio, (diag2 | bit) >> 1)
+          return total
+
+      return colocar(0, 0, 0)
+solucao_ingenua: |
+  from itertools import permutations
+
+  def contar_disposicoes(n):
+      total = 0
+      for p in permutations(range(n)):
+          ok = True
+          for i in range(n):
+              for j in range(i + 1, n):
+                  if abs(p[i] - p[j]) == j - i:
+                      ok = False
+                      break
+              if not ok:
+                  break
+          if ok:
+              total += 1
+      return total
+editorial:
+  pt: |
+    **Ideia:** backtracking linha a linha. Como há um segurança por linha, escolhe-se a coluna de cada um; só se aceitam colunas e diagonais ainda livres. Quando uma linha não tem opção, recua-se (poda). Aqui as colunas e as diagonais ocupadas guardam-se como bits de um inteiro, o que torna cada teste O(1).
+
+    **Passos:** 1) `colocar(colunas, diag1, diag2)` conta as formas de preencher as linhas que faltam; 2) `livres` = colunas onde ainda se pode pôr; 3) para cada bit livre, ocupar e deslocar as diagonais (`<< 1` e `>> 1`) para a linha seguinte; 4) se todas as colunas estão ocupadas, é uma solução.
+
+    **Complexidade:** tempo exponencial, mas muito inferior a `n!` graças à poda (para n = 11 visitam-se algumas centenas de milhares de estados); espaço O(n).
+
+    **Porque é que a ingénua falha:** gerar todas as `n!` permutações e testá-las uma a uma gera quase 40 milhões de candidatos para n = 11, cada um com uma verificação O(n²).
+  en: |
+    **Idea:** row-by-row backtracking. Since there is one guard per row, we choose each one's column; only columns and diagonals still free are accepted. When a row has no option, we backtrack (pruning). Here the occupied columns and diagonals are stored as bits of an integer, making each test O(1).
+
+    **Steps:** 1) `colocar(colunas, diag1, diag2)` counts the ways to fill the remaining rows; 2) `livres` = columns where one can still place; 3) for each free bit, occupy it and shift the diagonals (`<< 1` and `>> 1`) to the next row; 4) if all columns are occupied, it is a solution.
+
+    **Complexity:** exponential time, but far below `n!` thanks to pruning (for n = 11 it visits a few hundred thousand states); space O(n).
+
+    **Why the naive one is slow:** generating all `n!` permutations and testing them one by one produces almost 40 million candidates for n = 11, each with an O(n²) check.

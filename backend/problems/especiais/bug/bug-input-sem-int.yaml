@@ -1,0 +1,105 @@
+# Problema bug gerado (bug); rascunho à espera de revisão do professor.
+id: bug-input-sem-int
+titulo:
+  pt: 'Bug: as pizzas coladas'
+  en: 'Bug: the glued pizzas'
+tipo: bug
+bloco: '2'
+regiao: floresta
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |-
+    A Ana pediu 2 pizzas e o Rui pediu 3, e o programa diz que são 23 (nem a cantina é tão generosa). Corrige-o para que some as pizzas e calcule quanto se paga, a 6 € cada.
+
+    Entrada: as pizzas da Ana e as do Rui (inteiros), uma por linha. Saída: duas linhas, o total de pizzas e o valor a pagar em euros.
+  en: |-
+    Ana ordered 2 pizzas and Rui ordered 3, and the program says that makes 23 (not even the canteen is that generous). Fix it so it adds the pizzas and works out how much to pay, at 6 € each.
+
+    Input: Ana's pizzas and Rui's pizzas (integers), one per line. Output: two lines, the total number of pizzas and the amount to pay in euros.
+codigo_inicial: |
+  PRECO_PIZZA = 6
+
+  pizzas_ana = 0
+  pizzas_rui = 0
+  total_pizzas = 0
+
+  # input
+  pizzas_ana = input("Pizzas da Ana: ")
+  pizzas_rui = input("Pizzas do Rui: ")
+
+  # processamento
+  total_pizzas = pizzas_ana + pizzas_rui
+  a_pagar = total_pizzas * PRECO_PIZZA
+
+  # output
+  print(total_pizzas)
+  print(a_pagar)
+exemplos:
+- &id001
+  stdin: '2
+
+    3
+
+    '
+  stdout: '5
+
+    30'
+testes:
+- *id001
+- stdin: '0
+
+    4
+
+    '
+  stdout: '4
+
+    24'
+- stdin: '1
+
+    1
+
+    '
+  stdout: '2
+
+    12'
+- stdin: '10
+
+    0
+
+    '
+  stdout: '10
+
+    60'
+- stdin: '0
+
+    0
+
+    '
+  stdout: '0
+
+    0'
+comparacao: numeros
+pistas:
+- pt: O que devolve input()? Texto (str). E o que faz o + com dois textos?
+  en: What does input() return? Text (str). And what does + do with two pieces of text?
+limite_tempo_s: 2
+solucao_referencia: |
+  PRECO_PIZZA = 6
+
+  pizzas_ana = 0
+  pizzas_rui = 0
+  total_pizzas = 0
+
+  # input
+  pizzas_ana = int(input("Pizzas da Ana: "))
+  pizzas_rui = int(input("Pizzas do Rui: "))
+
+  # processamento
+  total_pizzas = pizzas_ana + pizzas_rui
+  a_pagar = total_pizzas * PRECO_PIZZA
+
+  # output
+  print(total_pizzas)
+  print(a_pagar)

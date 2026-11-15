@@ -41,6 +41,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project
 COPY backend ./backend
+COPY runner ./runner
 COPY frontend ./frontend
 COPY --from=css /src/frontend/dist ./frontend/dist
 RUN chown -R pyarena:pyarena /app

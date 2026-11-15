@@ -14,6 +14,8 @@ class Problem(SQLModel, table=True):
     slug: str = Field(primary_key=True, max_length=80)
     data: dict = Field(sa_column=Column(JSONB, nullable=False))
     estado: str = Field(index=True, max_length=16)
-    bloco: str = Field(index=True, max_length=4)
+    bloco: str = Field(index=True, max_length=16)
     tipo: str = Field(max_length=16)
+    # args + valor esperado dos `args_gerador`, calculados no runner (nunca expostos): {hash, items}
+    generated: dict | None = Field(default=None, sa_column=Column(JSONB, nullable=True))
     updated_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())

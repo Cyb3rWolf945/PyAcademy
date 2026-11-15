@@ -1,0 +1,42 @@
+# Listas (bloco 7, cidadela): inverter uma lista criando uma nova, sem reverse().
+id: inverter-lista
+titulo: {pt: "De trás para a frente", en: "Back to front"}
+tipo: funcao
+bloco: "7"
+regiao: cidadela
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Escreve a função inverter_lista(valores) que recebe uma lista e devolve uma NOVA lista com os mesmos elementos por ordem inversa.
+    A lista original não deve ser alterada. Se a lista estiver vazia, devolve uma lista vazia.
+
+    🧱 Requisito: é proibido usar reverse(). Percorre a lista com um ciclo e vai juntando os elementos à nova lista com append.
+  en: |
+    Write the function inverter_lista(valores) that receives a list and returns a NEW list with the same elements in reverse order.
+    The original list must not be changed. If the list is empty, return an empty list.
+
+    🧱 Requirement: using reverse() is forbidden. Go through the list with a loop and add the elements to the new list with append.
+assinatura: "inverter_lista(valores)"
+exemplos:
+  - args: [[1, 2, 3]]
+    devolve: [3, 2, 1]
+testes:
+  - {args: [[]], devolve: []}
+  - {args: [[1]], devolve: [1]}
+  - {args: [["a", "b"]], devolve: ["b", "a"]}
+  - {args: [[4, 4, 9, 0]], devolve: [0, 9, 4, 4]}
+comparacao: exato
+ordem_importa: true
+requisitos:
+  proibe: [reverse]
+pistas:
+  - {pt: "Percorre a lista original do fim para o início com range(len(valores) - 1, -1, -1).", en: "Go through the original list from the end to the start with range(len(valores) - 1, -1, -1)."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def inverter_lista(valores):
+      nova = []
+      for indice in range(len(valores) - 1, -1, -1):
+          nova.append(valores[indice])
+      return nova

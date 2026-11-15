@@ -1,0 +1,78 @@
+# Problema tracar gerado (tracar); rascunho à espera de revisão do professor.
+id: tracar-ciclo-soma-media
+titulo:
+  pt: 'Traçar: vamos traçar o ciclo'
+  en: 'Trace it: let us trace the loop'
+tipo: tracar
+bloco: '5'
+regiao: rio
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: 'Faz a tabela de traçado à mão: escreve o valor de cada variável a cada volta do ciclo e só depois responde. Cuidado com o `range`: o primeiro valor está incluído e o último **não**.'
+  en: 'Make the trace table by hand: write the value of each variable on every pass of the loop and only then answer. Careful with `range`: the first value is included and the last one is **not**.'
+perguntas:
+- pergunta:
+    pt: Qual é o valor de `soma` depois do ciclo?
+    en: What is the value of `soma` after the loop?
+  codigo: |
+    soma = 0
+    contador = 0
+    for i in range(1, 4):
+        soma = soma + i
+        contador = contador + 1
+    media = soma / contador
+  opcoes:
+  - pt: '3'
+    en: '3'
+  - pt: '6'
+    en: '6'
+  - pt: '10'
+    en: '10'
+  - pt: '2'
+    en: '2'
+  resposta:
+  - 1
+- pergunta:
+    pt: Qual é o valor de `media` no fim do mesmo programa?
+    en: What is the value of `media` at the end of the same program?
+  codigo: |
+    soma = 0
+    contador = 0
+    for i in range(1, 4):
+        soma = soma + i
+        contador = contador + 1
+    media = soma / contador
+  resposta_texto: '2.0'
+- pergunta:
+    pt: 'Qual é o valor de `voltas` no fim? (off-by-one: o `range(1, 6)` dá quantos valores?)'
+    en: 'What is the value of `voltas` at the end? (off-by-one: how many values does `range(1, 6)` give?)'
+  codigo: |
+    voltas = 0
+    total = 0
+    for i in range(1, 6):
+        total = total + i
+        voltas = voltas + 1
+  opcoes:
+  - pt: '4'
+    en: '4'
+  - pt: '5'
+    en: '5'
+  - pt: '6'
+    en: '6'
+  - pt: '15'
+    en: '15'
+  resposta:
+  - 1
+- pergunta:
+    pt: Qual é o valor de `fatorial` no fim?
+    en: What is the value of `fatorial` at the end?
+  codigo: |
+    fatorial = 1
+    for i in range(1, 5):
+        fatorial = fatorial * i
+  resposta_texto: '24'
+pistas:
+- pt: 'Escreve uma linha de tabela por volta: i, soma, contador. range(1, 4) dá 1, 2, 3.'
+  en: 'Write one table row per pass: i, soma, contador. range(1, 4) gives 1, 2, 3.'

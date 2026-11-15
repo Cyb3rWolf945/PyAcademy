@@ -1,0 +1,43 @@
+# Decomposição (bloco 3, mercado): missão da Oficina XPTO.
+id: decomposicao-oficina-xpto
+titulo: {pt: "Missão Oficina XPTO", en: "XPTO Garage mission"}
+tipo: decomposicao
+bloco: "3"
+regiao: mercado
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    A Oficina XPTO cobra uma taxa fixa de 35 € por revisão, mais 18 € por cada hora de mão de obra, mais o valor das peças usadas.
+    O mecânico vai dizer-te quantas horas demora e quanto custam as peças. Queres prever o total antes de aceitar.
+    Responde às perguntas da decomposição.
+  en: |
+    XPTO Garage charges a fixed €35 per service, plus €18 for each hour of labour, plus the value of the parts used.
+    The mechanic will tell you how many hours it takes and how much the parts cost. You want to predict the total before accepting.
+    Answer the decomposition questions.
+perguntas:
+  - pergunta: {pt: "Quais são as entradas?", en: "What are the inputs?"}
+    opcoes:
+      - {pt: "Horas de mão de obra e valor das peças", en: "Labour hours and value of the parts"}
+      - {pt: "A taxa fixa", en: "The fixed fee"}
+      - {pt: "O nome do mecânico", en: "The mechanic's name"}
+    resposta: [0]
+  - pergunta: {pt: "Quais são as constantes?", en: "What are the constants?"}
+    opcoes:
+      - {pt: "O valor das peças", en: "The value of the parts"}
+      - {pt: "A taxa fixa de 35 € e os 18 € por hora", en: "The fixed €35 fee and the €18 per hour"}
+      - {pt: "As horas trabalhadas", en: "The hours worked"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a variável que o programa calcula?", en: "Which variable does the program calculate?"}
+    opcoes:
+      - {pt: "A taxa fixa", en: "The fixed fee"}
+      - {pt: "O custo total da revisão", en: "The total cost of the service"}
+      - {pt: "O preço por hora", en: "The price per hour"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é a operação?", en: "What is the operation?"}
+    opcoes:
+      - {pt: "Taxa fixa + horas × 18 € + peças", en: "Fixed fee + hours × €18 + parts"}
+      - {pt: "18 € ÷ horas + peças", en: "€18 ÷ hours + parts"}
+      - {pt: "Taxa fixa − peças", en: "Fixed fee − parts"}
+    resposta: [0]

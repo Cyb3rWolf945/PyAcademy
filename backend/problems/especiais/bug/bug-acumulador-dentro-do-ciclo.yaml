@@ -1,0 +1,95 @@
+# Problema bug gerado (bug); rascunho à espera de revisão do professor.
+id: bug-acumulador-dentro-do-ciclo
+titulo:
+  pt: 'Bug: a caixa que esquece tudo'
+  en: 'Bug: the till that forgets everything'
+tipo: bug
+bloco: '5'
+regiao: rio
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |-
+    A caixa da papelaria devia **somar o preço de `n` artigos**, mas só mostra o preço do último (compras 2 €, 3 € e 4 € e paga 4 €: o dono não gosta). Corrige-o.
+
+    Entrada: `n` e depois os `n` preços (decimais), um por linha. Saída: o total, arredondado a 2 casas decimais.
+  en: |-
+    The stationery shop till should **add up the price of `n` items**, but it only shows the price of the last one (you buy items of 2 €, 3 € and 4 € and pay 4 €: the owner is not happy). Fix it.
+
+    Input: `n` and then the `n` prices (decimals), one per line. Output: the total, rounded to 2 decimal places.
+codigo_inicial: |
+  n = 0
+  total = 0
+  preco = 0
+
+  # input
+  n = int(input("Quantos artigos: "))
+
+  # processamento
+  for i in range(n):
+      total = 0
+      preco = float(input("Preço: "))
+      total = total + preco
+
+  # output
+  print(round(total, 2))
+exemplos:
+- &id001
+  stdin: '3
+
+    2
+
+    3
+
+    4
+
+    '
+  stdout: '9.0'
+testes:
+- *id001
+- stdin: '1
+
+    5
+
+    '
+  stdout: '5.0'
+- stdin: '0
+
+    '
+  stdout: '0'
+- stdin: |
+    4
+    1.5
+    2.5
+    1
+    1
+  stdout: '6.0'
+- stdin: '2
+
+    10
+
+    10
+
+    '
+  stdout: '20.0'
+comparacao: numeros
+pistas:
+- pt: O acumulador inicializa-se uma vez, antes do ciclo. O que acontece se o puseres a 0 em cada volta?
+  en: The accumulator is initialised once, before the loop. What happens if you reset it to 0 on every pass?
+limite_tempo_s: 2
+solucao_referencia: |
+  n = 0
+  total = 0
+  preco = 0
+
+  # input
+  n = int(input("Quantos artigos: "))
+
+  # processamento
+  for i in range(n):
+      preco = float(input("Preço: "))
+      total = total + preco
+
+  # output
+  print(round(total, 2))

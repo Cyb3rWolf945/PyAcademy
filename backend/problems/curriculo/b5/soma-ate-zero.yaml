@@ -1,0 +1,52 @@
+# Ciclo while com leitura antes do ciclo (bloco 5, rio): soma até o utilizador escrever 0.
+id: soma-ate-zero
+titulo: {pt: "Soma até ao zero", en: "Sum until zero"}
+tipo: programa
+bloco: "5"
+regiao: rio
+dificuldade: 4
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Na caixa de multibanco da papelaria, vais somar os valores das moedas que a Rita te pede para contar.
+    Lê números (decimais permitidos, negativos também) um por linha, até o utilizador escrever 0. O 0 não entra na soma.
+    Escreve a soma de todos os números lidos.
+
+    🧱 Requisito: tens de usar um ciclo while.
+  en: |
+    At the stationery shop's machine, you add up the values of the coins that Rita asks you to count.
+    Read numbers (decimals and negatives allowed), one per line, until the user types 0. The 0 is not added.
+    Print the sum of all the numbers read.
+
+    🧱 Requirement: you must use a while loop.
+exemplos:
+  - stdin: "5\n3\n0\n"
+    stdout: "8"
+testes:
+  - stdin: "0\n"
+    stdout: "0"
+  - stdin: "-2\n10\n0\n"
+    stdout: "8"
+  - stdin: "1\n1\n1\n1\n0\n"
+    stdout: "4"
+  - stdin: "2.5\n2.5\n0\n"
+    stdout: "5"
+comparacao: numeros
+ordem_importa: true
+requisitos:
+  usa: [while]
+pistas:
+  - {pt: "Lê um número antes do ciclo e, dentro do ciclo, soma-o e lê o seguinte.", en: "Read a number before the loop, and inside the loop add it and read the next one."}
+limite_tempo_s: 2
+solucao_referencia: |
+  numero = 0.0
+  soma = 0.0
+  # input
+  numero = float(input("Número (0 para terminar): "))
+  # processamento
+  while numero != 0:
+      soma = soma + numero
+      numero = float(input("Número (0 para terminar): "))
+  # output
+  print(soma)

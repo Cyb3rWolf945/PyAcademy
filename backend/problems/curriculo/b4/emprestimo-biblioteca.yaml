@@ -1,0 +1,85 @@
+# Condicionais aninhadas (bloco 4, encruzilhada): regras de multa de uma biblioteca.
+id: emprestimo-biblioteca
+titulo: {pt: "Devolução atrasada", en: "Late return"}
+tipo: programa
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 5
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    A biblioteca da escola tem duas regras de multa:
+    - Alunos pagam 0,50 € por cada dia de atraso.
+    - Professores têm 2 dias de tolerância: se o atraso for de 2 dias ou menos não pagam nada; se for de mais de 2 dias pagam 0,20 € por cada dia de atraso (todos os dias contam).
+    Lê duas linhas: o tipo de leitor (aluno ou professor; aceita maiúsculas) e os dias de atraso (inteiro, zero se entregou a tempo).
+    Escreve "Multa: X.XX €" com a multa a pagar, com 2 casas decimais.
+    Entrada: duas linhas. Saída: uma linha.
+  en: |
+    The school library has two fine rules:
+    - Students pay €0.50 for each day late.
+    - Teachers have 2 days of grace: if the delay is 2 days or less they pay nothing; if it is more than 2 days they pay €0.20 for each day late (all days count).
+    Read two lines: the reader type (aluno or professor; uppercase is accepted) and the days late (integer, zero if returned on time).
+    Print "Fine: X.XX €" with the fine to pay, with 2 decimal places.
+    Input: two lines. Output: one line.
+exemplos:
+  - stdin: "aluno\n3\n"
+    stdout: {pt: "Multa: 1.50 €", en: "Fine: 1.50 €"}
+testes:
+  - stdin: "aluno\n0\n"
+    stdout: {pt: "Multa: 0.00 €", en: "Fine: 0.00 €"}
+  - stdin: "Professor\n2\n"
+    stdout: {pt: "Multa: 0.00 €", en: "Fine: 0.00 €"}
+  - stdin: "professor\n5\n"
+    stdout: {pt: "Multa: 1.00 €", en: "Fine: 1.00 €"}
+  - stdin: "PROFESSOR\n10\n"
+    stdout: {pt: "Multa: 2.00 €", en: "Fine: 2.00 €"}
+  - stdin: "professor\n3\n"
+    stdout: {pt: "Multa: 0.60 €", en: "Fine: 0.60 €"}
+  - stdin: "aluno\n1\n"
+    stdout: {pt: "Multa: 0.50 €", en: "Fine: 0.50 €"}
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Primeiro separa alunos de professores. Dentro dos professores, vê se o atraso passa os 2 dias.", en: "First separate students from teachers. Among teachers, check whether the delay goes beyond 2 days."}
+  - {pt: "Usa .lower() no tipo de leitor, para aceitar maiúsculas.", en: "Use .lower() on the reader type, to accept uppercase."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    tipo = ""
+    dias_atraso = 0
+    multa = 0.0
+    # input
+    tipo = input("Tipo de leitor (aluno/professor): ").lower().strip()
+    dias_atraso = int(input("Dias de atraso: "))
+    # processamento
+    PRECO_ALUNO_DIA = 0.5
+    PRECO_PROFESSOR_DIA = 0.2
+    if tipo == "aluno":
+        multa = dias_atraso * PRECO_ALUNO_DIA
+    else:
+        if dias_atraso > 2:
+            multa = dias_atraso * PRECO_PROFESSOR_DIA
+        else:
+            multa = 0.0
+    # output
+    print(f"Multa: {multa:.2f} €")
+  en: |
+    reader = ""
+    days_late = 0
+    fine = 0.0
+    # input
+    reader = input("Reader type (aluno/professor): ").lower().strip()
+    days_late = int(input("Days late: "))
+    # processing
+    STUDENT_DAY_PRICE = 0.5
+    TEACHER_DAY_PRICE = 0.2
+    if reader == "aluno":
+        fine = days_late * STUDENT_DAY_PRICE
+    else:
+        if days_late > 2:
+            fine = days_late * TEACHER_DAY_PRICE
+        else:
+            fine = 0.0
+    # output
+    print(f"Fine: {fine:.2f} €")

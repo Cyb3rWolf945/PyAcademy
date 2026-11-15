@@ -1,0 +1,105 @@
+# Arena de Algoritmia (hardcore_insane): Água entre os pilares. Gerado em rascunho; revisão do professor pendente.
+id: algo-agua-na-ponte
+titulo:
+  pt: Água entre os pilares
+  en: Water between the pillars
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 5
+origem: mais_alem
+estado: rascunho
+nivel_algo: hardcore_insane
+enunciado:
+  pt: |
+    Depois de uma tempestade, a água da chuva fica retida entre os pilares de uma ponte velha. Os pilares estão em fila e a altura de cada um vem na lista `alturas` (cada pilar tem largura 1). A água de cada posição sobe até à menor das duas alturas máximas, à esquerda e à direita dela, e não pode passar por cima dos pilares nem escoar pelas pontas.
+
+    Escreve `agua_retida(alturas)`, que devolve o total de unidades de água retidas.
+
+    **Exemplo:** `[3, 0, 2, 0, 4]` devolve `7`: sobre a posição 1 ficam 3 unidades, sobre a 2 fica 1 e sobre a 3 ficam 3 (`3 + 1 + 3 = 7`).
+  en: |
+    After a storm, rainwater is trapped between the pillars of an old bridge. The pillars stand in a row and each one's height is in the list `alturas` (each pillar has width 1). The water at each position rises up to the lower of the two maximum heights, to its left and to its right, and can neither pass over pillars nor drain off the ends.
+
+    Write `agua_retida(alturas)`, which returns the total units of trapped water.
+
+    **Example:** `[3, 0, 2, 0, 4]` returns `7`: over position 1 there are 3 units, over position 2 there is 1 and over position 3 there are 3 (`3 + 1 + 3 = 7`).
+assinatura: agua_retida(alturas)
+restricoes:
+  pt: 0 ≤ len(alturas) ≤ 10^5; 0 ≤ alturas[i] ≤ 10^5
+  en: 0 ≤ len(alturas) ≤ 10^5; 0 ≤ alturas[i] ≤ 10^5
+exemplos:
+- args: [[3, 0, 2, 0, 4]]
+  devolve: 7
+testes:
+- args: [[3, 0, 2, 0, 4]]
+  devolve: 7
+- args: [[]]
+  devolve: 0
+- args: [[5]]
+  devolve: 0
+- args: [[1, 2, 3, 4]]
+  devolve: 0
+- args: [[4, 3, 2, 1]]
+  devolve: 0
+- args: [[2, 0, 2]]
+  devolve: 2
+- args: [[0, 0, 0]]
+  devolve: 0
+- args: [[5, 1, 1, 1, 5]]
+  devolve: 12
+- args: [[1, 0, 1, 0, 1, 0, 1]]
+  devolve: 3
+- args: [[4, 2, 3]]
+  devolve: 1
+- args_gerador: '[[(i * 7919) % 1003 for i in range(100000)]]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: Sobre a posição i a água fica a min(maior à esquerda, maior à direita) - alturas[i]. Pré-calcula esses máximos em vez de os procurar para cada i.
+  en: Over position i the water is min(max to the left, max to the right) - alturas[i]. Precompute those maxima instead of searching for them at every i.
+- pt: 'Em alternativa, dois ponteiros: avança sempre o lado cujo máximo é menor.'
+  en: 'Alternatively, two pointers: always advance the side whose maximum is smaller.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def agua_retida(alturas):
+      n = len(alturas)
+      if n == 0:
+          return 0
+      esq = [0] * n
+      dir = [0] * n
+      esq[0] = alturas[0]
+      for i in range(1, n):
+          esq[i] = max(esq[i - 1], alturas[i])
+      dir[n - 1] = alturas[n - 1]
+      for i in range(n - 2, -1, -1):
+          dir[i] = max(dir[i + 1], alturas[i])
+      total = 0
+      for i in range(n):
+          total += min(esq[i], dir[i]) - alturas[i]
+      return total
+solucao_ingenua: |
+  def agua_retida(alturas):
+      total = 0
+      for i in range(len(alturas)):
+          maior_esq = max(alturas[:i + 1])
+          maior_dir = max(alturas[i:])
+          total += min(maior_esq, maior_dir) - alturas[i]
+      return total
+editorial:
+  pt: |
+    **Ideia:** a água sobre o pilar `i` é `min(esq[i], dir[i]) - alturas[i]`, onde `esq[i]` é a maior altura em `[0..i]` e `dir[i]` a maior em `[i..n-1]`. Em vez de procurar esses máximos para cada `i`, calculam-se todos em duas passagens.
+
+    **Passos:** 1) `esq` da esquerda para a direita; 2) `dir` da direita para a esquerda; 3) somar `min(esq[i], dir[i]) - alturas[i]`. (Há uma versão com dois ponteiros e O(1) de espaço.)
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** procurar os dois máximos para cada posição (percorrendo à esquerda e à direita) é O(n²).
+  en: |
+    **Idea:** the water over pillar `i` is `min(esq[i], dir[i]) - alturas[i]`, where `esq[i]` is the tallest height in `[0..i]` and `dir[i]` the tallest in `[i..n-1]`. Instead of searching those maxima for every `i`, compute all of them in two passes.
+
+    **Steps:** 1) `esq` left to right; 2) `dir` right to left; 3) add up `min(esq[i], dir[i]) - alturas[i]`. (There is a two-pointer version with O(1) space.)
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** searching both maxima for every position (scanning left and right) is O(n²).

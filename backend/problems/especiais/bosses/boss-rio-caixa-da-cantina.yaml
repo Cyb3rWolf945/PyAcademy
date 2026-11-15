@@ -1,0 +1,219 @@
+# Problema programa gerado (bosses); rascunho à espera de revisão do professor.
+id: boss-rio-caixa-da-cantina
+titulo:
+  pt: 'Boss do Rio: a caixa da cantina'
+  en: 'River Boss: the canteen till'
+tipo: programa
+bloco: '5'
+regiao: rio
+dificuldade: 5
+origem: boss
+estado: rascunho
+enunciado:
+  pt: |
+    A D. Luísa, da cantina, passa o dia a registar preços e à hora de fecho ninguém sabe quanto fez. Faz o programa da caixa!
+
+    Lê preços (decimais, um por linha) **até ser lido o valor `0`**, que significa "fim do dia". Os valores **negativos** são engano de digitação: ignora-os (não contam para nada). O `0` final não é um artigo.
+
+    No fim escreve quatro linhas, com valores decimais a 2 casas:
+    - `Artigos:` quantos preços válidos foram registados (inteiro);
+    - `Total:` a soma dos preços válidos;
+    - `Média:` o preço médio (se não houve artigos, 0);
+    - `Mais caro:` o preço mais alto (se não houve artigos, 0).
+  en: |
+    Mrs. Luísa, from the canteen, spends the day typing prices and at closing time nobody knows how much she made. Write the till program!
+
+    Read prices (decimals, one per line) **until the value `0` is read**, which means "end of day". **Negative** values are typos: ignore them (they count for nothing). The final `0` is not an item.
+
+    At the end print four lines, decimals with 2 places:
+    - `Items:` how many valid prices were registered (integer);
+    - `Total:` the sum of the valid prices;
+    - `Average:` the average price (if there were no items, 0);
+    - `Most expensive:` the highest price (if there were no items, 0).
+exemplos:
+- &id001
+  stdin: '1.5
+
+    2.5
+
+    0
+
+    '
+  stdout:
+    pt: |-
+      Artigos: 2
+      Total: 4.0
+      Média: 2.0
+      Mais caro: 2.5
+    en: |-
+      Items: 2
+      Total: 4.0
+      Average: 2.0
+      Most expensive: 2.5
+- &id002
+  stdin: '0
+
+    '
+  stdout:
+    pt: |-
+      Artigos: 0
+      Total: 0
+      Média: 0
+      Mais caro: 0
+    en: |-
+      Items: 0
+      Total: 0
+      Average: 0
+      Most expensive: 0
+testes:
+- stdin: '-3
+
+    2
+
+    0
+
+    '
+  stdout:
+    pt: |-
+      Artigos: 1
+      Total: 2.0
+      Média: 2.0
+      Mais caro: 2.0
+    en: |-
+      Items: 1
+      Total: 2.0
+      Average: 2.0
+      Most expensive: 2.0
+- stdin: '7
+
+    0
+
+    '
+  stdout:
+    pt: |-
+      Artigos: 1
+      Total: 7.0
+      Média: 7.0
+      Mais caro: 7.0
+    en: |-
+      Items: 1
+      Total: 7.0
+      Average: 7.0
+      Most expensive: 7.0
+- stdin: |
+    1.2
+    1.2
+    1.2
+    9.9
+    0
+  stdout:
+    pt: |-
+      Artigos: 4
+      Total: 13.5
+      Média: 3.38
+      Mais caro: 9.9
+    en: |-
+      Items: 4
+      Total: 13.5
+      Average: 3.38
+      Most expensive: 9.9
+- stdin: '-1
+
+    -2
+
+    0
+
+    '
+  stdout:
+    pt: |-
+      Artigos: 0
+      Total: 0
+      Média: 0
+      Mais caro: 0
+    en: |-
+      Items: 0
+      Total: 0
+      Average: 0
+      Most expensive: 0
+- stdin: |
+    4.75
+    3.5
+    6
+    2.25
+    5
+    0
+  stdout:
+    pt: |-
+      Artigos: 5
+      Total: 21.5
+      Média: 4.3
+      Mais caro: 6.0
+    en: |-
+      Items: 5
+      Total: 21.5
+      Average: 4.3
+      Most expensive: 6.0
+- *id001
+- *id002
+comparacao: numeros
+pistas:
+- pt: Lê o primeiro preço antes do while e volta a ler no fim de cada volta. O máximo começa em 0 (os preços válidos são positivos).
+  en: Read the first price before the while and read again at the end of each pass. The maximum starts at 0 (valid prices are positive).
+- pt: 'Cuidado com a divisão por zero: só calcules a média se quantidade > 0.'
+  en: 'Beware of division by zero: only compute the average if quantity > 0.'
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    preco = 0
+    quantidade = 0
+    total = 0
+    maior = 0
+    media = 0
+
+    # input
+    preco = float(input("Preço do artigo (0 para terminar): "))
+
+    # processamento
+    while preco != 0:
+        if preco > 0:
+            quantidade = quantidade + 1
+            total = total + preco
+            if preco > maior:
+                maior = preco
+        preco = float(input("Preço do artigo (0 para terminar): "))
+
+    if quantidade > 0:
+        media = total / quantidade
+
+    # output
+    print("Artigos:", quantidade)
+    print("Total:", round(total, 2))
+    print("Média:", round(media, 2))
+    print("Mais caro:", round(maior, 2))
+  en: |
+    price = 0
+    quantity = 0
+    total = 0
+    highest = 0
+    average = 0
+
+    # input
+    price = float(input("Item price (0 to finish): "))
+
+    # processing
+    while price != 0:
+        if price > 0:
+            quantity = quantity + 1
+            total = total + price
+            if price > highest:
+                highest = price
+        price = float(input("Item price (0 to finish): "))
+
+    if quantity > 0:
+        average = total / quantity
+
+    # output
+    print("Items:", quantity)
+    print("Total:", round(total, 2))
+    print("Average:", round(average, 2))
+    print("Most expensive:", round(highest, 2))

@@ -1,0 +1,75 @@
+# Problema bug gerado (bug); rascunho à espera de revisão do professor.
+id: bug-ciclo-um-a-menos
+titulo:
+  pt: 'Bug: a flexão que faltava'
+  en: 'Bug: the missing push-up'
+tipo: bug
+bloco: '5'
+regiao: rio
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |-
+    O Tomás começou um desafio de flexões: no dia 1 faz 1, no dia 2 faz 2, e assim sucessivamente. O programa devia dar o **total de flexões ao fim de `n` dias** (5 dias: 15), mas esquece-se sempre do último dia. Corrige-o.
+
+    Entrada: `n`, o número de dias (inteiro, pode ser 0). Saída: o total de flexões.
+  en: |-
+    Tomás started a push-up challenge: on day 1 he does 1, on day 2 he does 2, and so on. The program should print the **total push-ups after `n` days** (5 days: 15), but it always forgets the last day. Fix it.
+
+    Input: `n`, the number of days (integer, may be 0). Output: the total push-ups.
+codigo_inicial: |
+  n = 0
+  soma = 0
+
+  # input
+  n = int(input("Quantos dias: "))
+
+  # processamento
+  for dia in range(1, n):
+      soma = soma + dia
+
+  # output
+  print(soma)
+exemplos:
+- &id001
+  stdin: '5
+
+    '
+  stdout: '15'
+testes:
+- *id001
+- stdin: '1
+
+    '
+  stdout: '1'
+- stdin: '0
+
+    '
+  stdout: '0'
+- stdin: '10
+
+    '
+  stdout: '55'
+- stdin: '3
+
+    '
+  stdout: '6'
+comparacao: numeros
+pistas:
+- pt: 'Faz o traçado com n = 3: que valores toma `dia`? O range pára antes do segundo número.'
+  en: 'Trace it with n = 3: which values does `dia` take? The range stops before the second number.'
+limite_tempo_s: 2
+solucao_referencia: |
+  n = 0
+  soma = 0
+
+  # input
+  n = int(input("Quantos dias: "))
+
+  # processamento
+  for dia in range(1, n + 1):
+      soma = soma + dia
+
+  # output
+  print(soma)

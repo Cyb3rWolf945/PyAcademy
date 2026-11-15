@@ -1,0 +1,50 @@
+# Listas (bloco 7, cidadela): contar quantos valores estão acima da média.
+id: contar-acima-media
+titulo: {pt: "Quantos estão acima da média?", en: "How many are above the average?"}
+tipo: funcao
+bloco: "7"
+regiao: cidadela
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Escreve a função contar_acima_media(notas) que recebe uma lista de notas (pode estar vazia) e devolve quantas notas são estritamente maiores do que a média da lista.
+    Se a lista estiver vazia, devolve 0. Usa um ciclo for; podes calcular a média primeiro.
+
+    🧱 Requisito: tens de usar um ciclo for.
+  en: |
+    Write the function contar_acima_media(notas) that receives a list of grades (it may be empty) and returns how many grades are strictly greater than the average of the list.
+    If the list is empty, return 0. Use a for loop; you may calculate the average first.
+
+    🧱 Requirement: you must use a for loop.
+assinatura: "contar_acima_media(notas)"
+exemplos:
+  - args: [[1, 2, 6]]
+    devolve: 1
+testes:
+  - {args: [[10, 12, 14]], devolve: 1}
+  - {args: [[5, 5, 5]], devolve: 0}
+  - {args: [[]], devolve: 0}
+  - {args: [[1, 2, 3, 4]], devolve: 2}
+  - {args: [[10, 20, 30, 40]], devolve: 2}
+comparacao: numeros
+ordem_importa: true
+requisitos:
+  usa: [for]
+pistas:
+  - {pt: "Primeiro calcula a média (soma a dividir pelo número de elementos) e depois conta com outro ciclo.", en: "First compute the average (sum divided by the number of elements) and then count with another loop."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def contar_acima_media(notas):
+      if len(notas) == 0:
+          return 0
+      total = 0
+      for nota in notas:
+          total = total + nota
+      media = total / len(notas)
+      contador = 0
+      for nota in notas:
+          if nota > media:
+              contador = contador + 1
+      return contador

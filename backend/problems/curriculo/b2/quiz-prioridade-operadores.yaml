@@ -1,0 +1,38 @@
+# Quiz (bloco 2, floresta): prioridade de operadores e potência.
+id: quiz-prioridade-operadores
+titulo: {pt: "Quem manda primeiro?", en: "Who goes first?"}
+tipo: quiz
+bloco: "2"
+regiao: floresta
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O Python calcula as expressões segundo uma ordem de prioridade: primeiro os parênteses, depois a potência **,
+    depois * / // % e por fim + e -. Responde sem usar o computador e confirma depois.
+  en: |
+    Python evaluates expressions following a priority order: first parentheses, then the power **,
+    then * / // %, and finally + and -. Answer without the computer and check afterwards.
+perguntas:
+  - pergunta: {pt: "Quanto dá 5 + 4 * 3 ** 2 - (1 * 6) * 2 ?", en: "What is 5 + 4 * 3 ** 2 - (1 * 6) * 2 ?"}
+    opcoes:
+      - {pt: "90", en: "90"}
+      - {pt: "29", en: "29"}
+      - {pt: "17", en: "17"}
+      - {pt: "41", en: "41"}
+    resposta: [1]
+  - pergunta: {pt: "Quanto dá 2 ** 3 ** 2 ?", en: "What is 2 ** 3 ** 2 ?"}
+    opcoes:
+      - {pt: "64", en: "64"}
+      - {pt: "512", en: "512"}
+      - {pt: "36", en: "36"}
+    resposta: [1]
+  - pergunta: {pt: "Quanto dá 10 - 4 - 3 ?", en: "What is 10 - 4 - 3 ?"}
+    opcoes:
+      - {pt: "9", en: "9"}
+      - {pt: "3", en: "3"}
+      - {pt: "-3", en: "-3"}
+    resposta: [1]
+pistas:
+  - {pt: "A potência é calculada antes da multiplicação, e a subtração é feita da esquerda para a direita.", en: "Powers are computed before multiplication, and subtraction goes from left to right."}

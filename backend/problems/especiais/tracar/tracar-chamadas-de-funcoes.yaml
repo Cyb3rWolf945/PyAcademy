@@ -1,0 +1,83 @@
+# Problema tracar gerado (tracar); rascunho à espera de revisão do professor.
+id: tracar-chamadas-de-funcoes
+titulo:
+  pt: 'Traçar: chamadas e valores devolvidos'
+  en: 'Trace it: calls and returned values'
+tipo: tracar
+bloco: '6'
+regiao: torre
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: 'Segue a execução: o que cada função **devolve** (`return`) é diferente do que **escreve** (`print`). Uma função sem `return` devolve `None`, e as variáveis de dentro da função não mexem nas de fora.'
+  en: 'Follow the execution: what a function **returns** (`return`) is different from what it **prints** (`print`). A function without `return` gives back `None`, and the variables inside a function do not change those outside.'
+perguntas:
+- pergunta:
+    pt: Qual é o valor de `resultado`?
+    en: What is the value of `resultado`?
+  codigo: |
+    def dobro(x):
+        return x * 2
+
+    resultado = dobro(5) + dobro(1)
+  opcoes:
+  - pt: '6'
+    en: '6'
+  - pt: '12'
+    en: '12'
+  - pt: '11'
+    en: '11'
+  - pt: '10'
+    en: '10'
+  resposta:
+  - 1
+- pergunta:
+    pt: O que escreve este programa? (uma linha por escrita)
+    en: What does this program print? (one line per print)
+  codigo: |
+    def saudar(nome):
+        print("Olá,", nome)
+
+    x = saudar("Rita")
+    print(x)
+  resposta_texto: |-
+    Olá, Rita
+    None
+- pergunta:
+    pt: 'Qual é o valor de `valor`? (funções que chamam funções: resolve de dentro para fora)'
+    en: 'What is the value of `valor`? (functions calling functions: work from the inside out)'
+  codigo: |
+    def somar(a, b):
+        return a + b
+
+    def triplo(x):
+        return x * 3
+
+    valor = triplo(somar(2, 3))
+  resposta_texto: '15'
+- pergunta:
+    pt: Qual é o valor de `pontos` (a variável de **fora**) no fim?
+    en: What is the value of `pontos` (the **outside** variable) at the end?
+  codigo: |
+    pontos = 10
+
+    def ganhar(pontos):
+        pontos = pontos + 5
+        return pontos
+
+    ganhar(pontos)
+  opcoes:
+  - pt: '5'
+    en: '5'
+  - pt: '10'
+    en: '10'
+  - pt: '15'
+    en: '15'
+  - pt: None
+    en: None
+  resposta:
+  - 1
+pistas:
+- pt: 'Resolve as chamadas de dentro para fora e lembra-te: sem return, a função devolve None.'
+  en: 'Resolve the calls from the inside out and remember: without return, the function gives back None.'

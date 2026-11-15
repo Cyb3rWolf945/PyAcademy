@@ -1,0 +1,95 @@
+# Arena de Algoritmia (extra_hard): Cartas do mesmo baralho. Gerado em rascunho; revisão do professor pendente.
+id: algo-agrupar-anagramas
+titulo:
+  pt: Cartas do mesmo baralho
+  en: Cards from the same deck
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    Na banca do mercado há cartões com palavras. Dois cartões pertencem ao mesmo **grupo** se as palavras forem anagramas uma da outra (as mesmas letras, noutra ordem).
+
+    Escreve `tamanhos_dos_grupos(palavras)`, que devolve uma lista com o **tamanho de cada grupo** de anagramas. **A ordem do resultado não importa** (é comparada como conjunto com repetição). Lista vazia devolve `[]`.
+
+    **Exemplo:** `["roma", "amor", "tomar", "morta", "sol", "los", "ramo"]` devolve `[3, 2, 2]` por alguma ordem: `roma/amor/ramo` (3), `tomar/morta` (2) e `sol/los` (2).
+  en: |
+    At the market stall there are cards with words on them. Two cards belong to the same **group** if their words are anagrams of each other (same letters, different order).
+
+    Write `tamanhos_dos_grupos(palavras)`, which returns a list with the **size of each group** of anagrams. **The order of the result does not matter** (it is compared as a multiset). An empty list returns `[]`.
+
+    **Example:** `["roma", "amor", "tomar", "morta", "sol", "los", "ramo"]` returns `[3, 2, 2]` in some order: `roma/amor/ramo` (3), `tomar/morta` (2) and `sol/los` (2).
+assinatura: tamanhos_dos_grupos(palavras)
+restricoes:
+  pt: 0 ≤ len(palavras) ≤ 10^5; cada palavra tem até 10 caracteres
+  en: 0 ≤ len(palavras) ≤ 10^5; each word has up to 10 characters
+exemplos:
+- args: [[roma, amor, tomar, morta, sol, los, ramo]]
+  devolve: [3, 2, 2]
+testes:
+- args: [[roma, amor, tomar, morta, sol, los, ramo]]
+  devolve: [3, 2, 2]
+- args: [[]]
+  devolve: []
+- args: [[a]]
+  devolve: [1]
+- args: [['', '']]
+  devolve: [2]
+- args: [[abc, bca, cab, abd]]
+  devolve: [3, 1]
+- args: [[x, y, z]]
+  devolve: [1, 1, 1]
+- args: [[aa, aa, aa]]
+  devolve: [3]
+- args: [[ab, ba, ab, ba, cd]]
+  devolve: [4, 1]
+- args_gerador: '[[str((i * 7919) % 1000003) for i in range(100000)]]'
+comparacao: exato
+ordem_importa: false
+pistas:
+- pt: Duas palavras são do mesmo grupo se tiverem a mesma versão ordenada. Usa-a como chave de um dicionário.
+  en: Two words are in the same group if their sorted versions match. Use that as a dictionary key.
+erros_comuns: []
+limite_tempo_s: 3
+solucao_referencia: |
+  def tamanhos_dos_grupos(palavras):
+      grupos = {}
+      for p in palavras:
+          chave = "".join(sorted(p))
+          grupos[chave] = grupos.get(chave, 0) + 1
+      return list(grupos.values())
+solucao_ingenua: |
+  def tamanhos_dos_grupos(palavras):
+      chaves = []
+      contagens = []
+      for p in palavras:
+          chave = sorted(p)
+          for i in range(len(chaves)):
+              if chaves[i] == chave:
+                  contagens[i] += 1
+                  break
+          else:
+              chaves.append(chave)
+              contagens.append(1)
+      return contagens
+editorial:
+  pt: |
+    **Ideia:** palavras do mesmo grupo têm a mesma versão com as letras ordenadas. Essa versão é uma chave perfeita para um dicionário.
+
+    **Passos:** 1) para cada palavra, `chave = "".join(sorted(p))`; 2) incrementar `grupos[chave]`; 3) devolver os valores do dicionário.
+
+    **Complexidade:** tempo O(n · k log k) com k o tamanho máximo da palavra, espaço O(n).
+
+    **Porque é que a ingénua falha:** procurar o grupo da palavra percorrendo a lista de grupos já criados é O(n · g), com g (número de grupos) a rondar os milhares.
+  en: |
+    **Idea:** words in the same group share the same sorted-letters version. That version is a perfect dictionary key.
+
+    **Steps:** 1) for each word, `chave = "".join(sorted(p))`; 2) increment `grupos[chave]`; 3) return the dictionary's values.
+
+    **Complexity:** time O(n · k log k) with k the maximum word length, space O(n).
+
+    **Why the naive one is slow:** finding a word's group by scanning the list of groups created so far is O(n · g), with g (the number of groups) in the thousands.

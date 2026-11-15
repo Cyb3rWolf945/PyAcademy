@@ -1,0 +1,200 @@
+# Problema programa gerado (bosses); rascunho à espera de revisão do professor.
+id: boss-floresta-viagem-serra-estrela
+titulo:
+  pt: 'Boss da Floresta: a viagem à Serra da Estrela'
+  en: 'Forest Boss: the road trip to Serra da Estrela'
+tipo: programa
+bloco: '2'
+regiao: floresta
+dificuldade: 5
+origem: boss
+estado: rascunho
+enunciado:
+  pt: |
+    O Bernardo vai levar a malta de carro à Serra da Estrela, ida **e volta**. O carro dele bebe combustível como se fosse um frigorífico em modo festa, por isso convém fazer as contas antes de alguém dizer "eu pago o café".
+
+    Lê, por esta ordem (uma por linha):
+    1. a distância da viagem **só de ida**, em km (inteiro);
+    2. o consumo do carro, em litros por 100 km (decimal);
+    3. o preço do litro, em euros (decimal);
+    4. o número de pessoas no carro, incluindo o condutor (inteiro, pelo menos 1).
+
+    Há dois custos fixos: as portagens de toda a viagem custam **12,40 €** e cada pessoa leva um lanche de **3,50 €**.
+
+    Escreve três linhas, com os valores arredondados a 2 casas decimais:
+    - `Combustível:` o custo do combustível da viagem toda (ida e volta);
+    - `Total da viagem:` combustível + portagens + lanches;
+    - `Cada um paga:` o total dividido igualmente pelas pessoas.
+  en: |
+    Bernardo is driving the gang to Serra da Estrela, **round trip**. His car drinks fuel like a fridge at a party, so let us do the maths before someone says "I'll get the coffee".
+
+    Read, in this order (one per line):
+    1. the **one-way** trip distance in km (integer);
+    2. the car's consumption in litres per 100 km (decimal);
+    3. the price per litre in euros (decimal);
+    4. the number of people in the car, driver included (integer, at least 1).
+
+    There are two fixed costs: the tolls for the whole trip cost **12.40 €** and each person brings a snack worth **3.50 €**.
+
+    Print three lines, values rounded to 2 decimal places:
+    - `Fuel:` the fuel cost for the whole trip (there and back);
+    - `Trip total:` fuel + tolls + snacks;
+    - `Everyone pays:` the total split equally among the people.
+exemplos:
+- &id001
+  stdin: |
+    100
+    6.5
+    1.8
+    4
+  stdout:
+    pt: |-
+      Combustível: 23.4
+      Total da viagem: 49.8
+      Cada um paga: 12.45
+    en: |-
+      Fuel: 23.4
+      Trip total: 49.8
+      Everyone pays: 12.45
+testes:
+- stdin: |
+    250
+    5
+    1.75
+    1
+  stdout:
+    pt: |-
+      Combustível: 43.75
+      Total da viagem: 59.65
+      Cada um paga: 59.65
+    en: |-
+      Fuel: 43.75
+      Trip total: 59.65
+      Everyone pays: 59.65
+- stdin: '0
+
+    7
+
+    1.8
+
+    3
+
+    '
+  stdout:
+    pt: |-
+      Combustível: 0.0
+      Total da viagem: 22.9
+      Cada um paga: 7.63
+    en: |-
+      Fuel: 0.0
+      Trip total: 22.9
+      Everyone pays: 7.63
+- stdin: |
+    320
+    7.2
+    1.9
+    5
+  stdout:
+    pt: |-
+      Combustível: 87.55
+      Total da viagem: 117.45
+      Cada um paga: 23.49
+    en: |-
+      Fuel: 87.55
+      Trip total: 117.45
+      Everyone pays: 23.49
+- stdin: '50
+
+    0
+
+    1.8
+
+    2
+
+    '
+  stdout:
+    pt: |-
+      Combustível: 0.0
+      Total da viagem: 19.4
+      Cada um paga: 9.7
+    en: |-
+      Fuel: 0.0
+      Trip total: 19.4
+      Everyone pays: 9.7
+- stdin: |
+    175
+    8.4
+    1.69
+    6
+  stdout:
+    pt: |-
+      Combustível: 49.69
+      Total da viagem: 83.09
+      Cada um paga: 13.85
+    en: |-
+      Fuel: 49.69
+      Trip total: 83.09
+      Everyone pays: 13.85
+- *id001
+comparacao: numeros
+pistas:
+- pt: 'Constantes (o que é fixo): portagens, lanche por pessoa e o 2 da ida e volta. Variáveis: distância, consumo, preço do litro, pessoas.'
+  en: 'Constants (what is fixed): tolls, snack per person and the 2 of the round trip. Variables: distance, consumption, price per litre, people.'
+- pt: litros = distância total * consumo / 100. Só no fim dividas pelo número de pessoas.
+  en: litres = total distance * consumption / 100. Only divide by the number of people at the very end.
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    PRECO_PORTAGENS = 12.40
+    LANCHE_POR_PESSOA = 3.50
+    IDA_E_VOLTA = 2
+
+    distancia_km = 0
+    consumo = 0
+    preco_litro = 0
+    pessoas = 0
+
+    # input
+    distancia_km = int(input("Distância (km, só ida): "))
+    consumo = float(input("Consumo (L/100 km): "))
+    preco_litro = float(input("Preço do litro (€): "))
+    pessoas = int(input("Pessoas no carro: "))
+
+    # processamento
+    distancia_total = distancia_km * IDA_E_VOLTA
+    litros = distancia_total * consumo / 100
+    combustivel = litros * preco_litro
+    total = combustivel + PRECO_PORTAGENS + LANCHE_POR_PESSOA * pessoas
+    por_pessoa = total / pessoas
+
+    # output
+    print("Combustível:", round(combustivel, 2))
+    print("Total da viagem:", round(total, 2))
+    print("Cada um paga:", round(por_pessoa, 2))
+  en: |
+    TOLLS_PRICE = 12.40
+    SNACK_PER_PERSON = 3.50
+    ROUND_TRIP = 2
+
+    distance_km = 0
+    consumption = 0
+    price_per_litre = 0
+    people = 0
+
+    # input
+    distance_km = int(input("Distance (km, one way): "))
+    consumption = float(input("Consumption (L/100 km): "))
+    price_per_litre = float(input("Price per litre (€): "))
+    people = int(input("People in the car: "))
+
+    # processing
+    total_distance = distance_km * ROUND_TRIP
+    litres = total_distance * consumption / 100
+    fuel = litres * price_per_litre
+    total = fuel + TOLLS_PRICE + SNACK_PER_PERSON * people
+    per_person = total / people
+
+    # output
+    print("Fuel:", round(fuel, 2))
+    print("Trip total:", round(total, 2))
+    print("Everyone pays:", round(per_person, 2))

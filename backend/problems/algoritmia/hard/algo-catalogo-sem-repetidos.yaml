@@ -1,0 +1,86 @@
+# Arena de Algoritmia (hard): Catálogo sem repetidos. Gerado em rascunho; revisão do professor pendente.
+id: algo-catalogo-sem-repetidos
+titulo:
+  pt: Catálogo sem repetidos
+  en: Catalogue without duplicates
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 1
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    O catálogo da biblioteca lista os códigos das estantes **por ordem crescente**, mas o scanner leu alguns códigos mais do que uma vez. Limpa a lista.
+
+    Escreve `sem_repetidos(codigos)`, que devolve uma nova lista com cada código apenas uma vez, mantendo a ordem crescente. A ordem do resultado importa.
+
+    **Exemplo:** `[1, 1, 2, 3, 3, 3, 7]` devolve `[1, 2, 3, 7]`.
+  en: |
+    The library catalogue lists shelf codes in **ascending order**, but the scanner read some codes more than once. Clean up the list.
+
+    Write `sem_repetidos(codigos)`, which returns a new list with each code only once, keeping the ascending order. The order of the result matters.
+
+    **Example:** `[1, 1, 2, 3, 3, 3, 7]` returns `[1, 2, 3, 7]`.
+assinatura: sem_repetidos(codigos)
+restricoes:
+  pt: 0 ≤ len(codigos) ≤ 2·10^5; lista ordenada; |valores| ≤ 10^9
+  en: 0 ≤ len(codigos) ≤ 2·10^5; sorted list; |values| ≤ 10^9
+exemplos:
+- args: [[1, 1, 2, 3, 3, 3, 7]]
+  devolve: [1, 2, 3, 7]
+testes:
+- args: [[1, 1, 2, 3, 3, 3, 7]]
+  devolve: [1, 2, 3, 7]
+- args: [[]]
+  devolve: []
+- args: [[5]]
+  devolve: [5]
+- args: [[2, 2, 2, 2]]
+  devolve: [2]
+- args: [[1, 2, 3]]
+  devolve: [1, 2, 3]
+- args: [[-3, -3, 0, 0, 4]]
+  devolve: [-3, 0, 4]
+- args: [[0, 0, 1, 1, 1, 2]]
+  devolve: [0, 1, 2]
+- args_gerador: '[[i // 2 for i in range(200000)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Como a lista está ordenada, os repetidos ficam juntos: compara cada elemento com o último que guardaste.'
+  en: 'Since the list is sorted, duplicates sit together: compare each element with the last one you kept.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def sem_repetidos(codigos):
+      res = []
+      for c in codigos:
+          if not res or res[-1] != c:
+              res.append(c)
+      return res
+solucao_ingenua: |
+  def sem_repetidos(codigos):
+      res = []
+      for c in codigos:
+          if c not in res:
+              res.append(c)
+      return res
+editorial:
+  pt: |
+    **Ideia:** numa lista ordenada, valores iguais aparecem seguidos. Basta comparar cada valor com o último guardado.
+
+    **Passos:** 1) lista `res` vazia; 2) para cada código, se `res` estiver vazia ou o último for diferente, acrescentar; 3) devolver `res`.
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** `c not in res` percorre a lista de resultados toda (O(n)), por isso o ciclo total é O(n²).
+  en: |
+    **Idea:** in a sorted list, equal values appear next to each other. Just compare each value with the last kept one.
+
+    **Steps:** 1) empty list `res`; 2) for each code, if `res` is empty or its last item differs, append; 3) return `res`.
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** `c not in res` scans the whole result list (O(n)), so the full loop is O(n²).

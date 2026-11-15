@@ -1,0 +1,92 @@
+# Arena de Algoritmia (hard): Pontos no arraial. Gerado em rascunho; revisão do professor pendente.
+id: algo-pontos-arraial
+titulo:
+  pt: Pontos no arraial
+  en: Fair-night points
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 2
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    No arraial, os números de `1` a `n` ganham pontos num jogo à la FizzBuzz: se o número for múltiplo de `3` **e** de `5`, vale `15` pontos; se for só múltiplo de `3`, vale `3`; se for só múltiplo de `5`, vale `5`; caso contrário vale `0`.
+
+    Escreve `pontos_arraial(n)`, que devolve o total de pontos dos números de `1` a `n`. Atenção: `n` pode ser enorme.
+
+    **Exemplo:** `n = 15` devolve `37`: os múltiplos de 3 sozinhos são 3, 6, 9, 12 (4×3 = 12); os de 5 sozinhos são 5, 10 (2×5 = 10); e o 15 vale 15. Total `12 + 10 + 15 = 37`.
+  en: |
+    At the fair, the numbers from `1` to `n` earn points in a FizzBuzz-like game: if the number is a multiple of `3` **and** of `5`, it is worth `15` points; if only a multiple of `3`, it is worth `3`; if only a multiple of `5`, it is worth `5`; otherwise `0`.
+
+    Write `pontos_arraial(n)`, which returns the total points of the numbers from `1` to `n`. Careful: `n` can be huge.
+
+    **Example:** `n = 15` returns `37`: multiples of 3 alone are 3, 6, 9, 12 (4×3 = 12); multiples of 5 alone are 5, 10 (2×5 = 10); and 15 is worth 15. Total `12 + 10 + 15 = 37`.
+assinatura: pontos_arraial(n)
+restricoes:
+  pt: 0 ≤ n ≤ 10^12
+  en: 0 ≤ n ≤ 10^12
+exemplos:
+- args: [15]
+  devolve: 37
+testes:
+- args: [15]
+  devolve: 37
+- args: [0]
+  devolve: 0
+- args: [1]
+  devolve: 0
+- args: [3]
+  devolve: 3
+- args: [5]
+  devolve: 8
+- args: [14]
+  devolve: 22
+- args: [30]
+  devolve: 74
+- args: [100]
+  devolve: 241
+- args_gerador: '[10**9]'
+- args_gerador: '[10**12]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: Quantos múltiplos de 3 há até n? E de 5? E de 15? Divisão inteira, sem ciclo.
+  en: How many multiples of 3 are there up to n? Of 5? Of 15? Integer division, no loop.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def pontos_arraial(n):
+      m3 = n // 3
+      m5 = n // 5
+      m15 = n // 15
+      return 3 * (m3 - m15) + 5 * (m5 - m15) + 15 * m15
+solucao_ingenua: |
+  def pontos_arraial(n):
+      total = 0
+      for i in range(1, n + 1):
+          if i % 15 == 0:
+              total += 15
+          elif i % 3 == 0:
+              total += 3
+          elif i % 5 == 0:
+              total += 5
+      return total
+editorial:
+  pt: |
+    **Ideia:** em vez de visitar cada número, contar quantos múltiplos existem: `n//3`, `n//5` e `n//15`. Os múltiplos de 15 estão contados nos dois primeiros, por isso subtraem-se.
+
+    **Passos:** 1) `m3, m5, m15 = n//3, n//5, n//15`; 2) soma = `3*(m3-m15) + 5*(m5-m15) + 15*m15`.
+
+    **Complexidade:** tempo O(1), espaço O(1).
+
+    **Porque é que a ingénua falha:** o ciclo de 1 a n é O(n). Com n = 10^9 são milhares de milhões de iterações, e com 10^12 nunca acaba.
+  en: |
+    **Idea:** instead of visiting every number, count how many multiples exist: `n//3`, `n//5` and `n//15`. Multiples of 15 are counted in the first two, so they are subtracted.
+
+    **Steps:** 1) `m3, m5, m15 = n//3, n//5, n//15`; 2) total = `3*(m3-m15) + 5*(m5-m15) + 15*m15`.
+
+    **Complexity:** time O(1), space O(1).
+
+    **Why the naive one is slow:** the loop from 1 to n is O(n). With n = 10^9 that is billions of iterations, and with 10^12 it never finishes.

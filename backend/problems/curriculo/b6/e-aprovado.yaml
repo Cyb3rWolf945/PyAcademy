@@ -1,0 +1,33 @@
+# Função (bloco 6, torre): função simples com return e comparação >=.
+id: e-aprovado
+titulo: {pt: "Aprovado ou não?", en: "Pass or not?"}
+tipo: funcao
+bloco: "6"
+regiao: torre
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Escreve a função e_aprovado(media) que recebe a média de um aluno (número, pode ter decimais).
+    Deve devolver True se a média for pelo menos 10 e False caso contrário. Usa return.
+  en: |
+    Write the function e_aprovado(media) that receives a student's average (number, decimals allowed).
+    It must return True if the average is at least 10 and False otherwise. Use return.
+assinatura: "e_aprovado(media)"
+exemplos:
+  - args: [12.5]
+    devolve: true
+testes:
+  - {args: [10], devolve: true}
+  - {args: [9.99], devolve: false}
+  - {args: [20], devolve: true}
+  - {args: [0], devolve: false}
+comparacao: exato
+ordem_importa: true
+pistas:
+  - {pt: "Basta devolver o resultado de uma comparação: media >= 10.", en: "Just return the result of a comparison: media >= 10."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def e_aprovado(media):
+      return media >= 10

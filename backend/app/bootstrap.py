@@ -34,11 +34,33 @@ async def seed_teacher(db: AsyncSession) -> bool:
     return True
 
 
+async def precompute_generated(db: AsyncSession) -> int:
+    """Calcula (no runner) os args/devolve dos `args_gerador`; falhar aqui não impede a app de arrancar."""
+    from app.models.problem import Problem
+    from app.services import dispatcher
+    from app.services.problems import ProblemSpec
+    from app.services.runner_client import generator_exprs
+
+    n = 0
+    for p in (await db.execute(select(Problem))).scalars():
+        spec = ProblemSpec.model_validate(p.data)
+        if not generator_exprs(spec):
+            continue
+        try:
+            await dispatcher._ensure_generated(db, p, spec)
+            n += 1
+        except Exception as exc:  # noqa: BLE001
+            log.warning("geradores de %s adiados: %s", p.slug, exc)
+    return n
+
+
 async def main() -> None:
     logging.basicConfig(level=logging.INFO)
     async with SessionLocal() as db:
         log.info("professor criado: %s", await seed_teacher(db))
         log.info("problemas sincronizados: %s", await sync_problems(db, settings.problems_dir))
+        if settings.runner_url:
+            log.info("geradores pré-calculados: %s", await precompute_generated(db))
 
 
 if __name__ == "__main__":

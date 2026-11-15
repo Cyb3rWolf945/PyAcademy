@@ -1,0 +1,89 @@
+# Arena de Algoritmia (hard): Capicua na pulseira. Gerado em rascunho; revisão do professor pendente.
+id: algo-capicua-pulseira
+titulo:
+  pt: Capicua na pulseira
+  en: Wristband palindrome
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 1
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    No festival, a pulseira tem uma frase e quem a ler igual nos dois sentidos ganha um gelado. Ignora espaços, pontuação e maiúsculas/minúsculas: só contam as letras e os dígitos.
+
+    Escreve `e_capicua(frase)`, que devolve `True` se a frase (assim limpa) se lê igual de trás para a frente, e `False` caso contrário. Uma frase sem letras nem dígitos conta como capicua.
+
+    **Exemplos:** `"Roma me tem amor"` devolve `True` (fica `romametemamor`). `"Tomar no comboio"` devolve `False`.
+  en: |
+    At the festival, each wristband carries a phrase, and whoever reads it the same in both directions wins an ice cream. Ignore spaces, punctuation and upper/lower case: only letters and digits count.
+
+    Write `e_capicua(frase)`, which returns `True` if the phrase (cleaned that way) reads the same backwards, and `False` otherwise. A phrase with no letters or digits counts as a palindrome.
+
+    **Examples:** `"Roma me tem amor"` returns `True` (it becomes `romametemamor`). `"Tomar no comboio"` returns `False`.
+assinatura: e_capicua(frase)
+restricoes:
+  pt: 0 ≤ len(frase) ≤ 5·10^5
+  en: 0 ≤ len(frase) ≤ 5·10^5
+exemplos:
+- args: [Roma me tem amor]
+  devolve: true
+- args: [Tomar no comboio]
+  devolve: false
+testes:
+- args: ['']
+  devolve: true
+- args: [a]
+  devolve: true
+- args: [Roma me tem amor]
+  devolve: true
+- args: [Tomar no comboio]
+  devolve: false
+- args: ['Ana, a Ana!']
+  devolve: true
+- args: ['12 3, 21']
+  devolve: true
+- args: ['!!! ???']
+  devolve: true
+- args: [ab]
+  devolve: false
+- args: [Aa]
+  devolve: true
+- args_gerador: '["ab, " * 100000 + "X" + " ba" * 100000]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: Primeiro limpa a frase (isalnum e lower). Depois compara-a com a versão invertida.
+  en: First clean the phrase (isalnum and lower). Then compare it with its reversed version.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def e_capicua(frase):
+      limpa = [c.lower() for c in frase if c.isalnum()]
+      return limpa == limpa[::-1]
+solucao_ingenua: |
+  def e_capicua(frase):
+      limpa = [c.lower() for c in frase if c.isalnum()]
+      while len(limpa) > 1:
+          if limpa.pop(0) != limpa.pop():
+              return False
+      return True
+editorial:
+  pt: |
+    **Ideia:** limpar a frase e compará-la com a versão invertida (ou com dois ponteiros, um em cada ponta).
+
+    **Passos:** 1) construir a lista de caracteres alfanuméricos em minúsculas; 2) devolver `limpa == limpa[::-1]`.
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** `pop(0)` numa lista obriga a deslocar todos os elementos restantes, por isso retirar do início n/2 vezes custa O(n²) no total.
+  en: |
+    **Idea:** clean the phrase and compare it with its reversed version (or use two pointers, one at each end).
+
+    **Steps:** 1) build the list of lowercase alphanumeric characters; 2) return `limpa == limpa[::-1]`.
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** `pop(0)` on a list shifts every remaining element, so removing from the front n/2 times costs O(n²) overall.

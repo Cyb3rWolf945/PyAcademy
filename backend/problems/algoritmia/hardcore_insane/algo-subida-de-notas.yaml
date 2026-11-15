@@ -1,0 +1,101 @@
+# Arena de Algoritmia (hardcore_insane): A subida de notas. Gerado em rascunho; revisão do professor pendente.
+id: algo-subida-de-notas
+titulo:
+  pt: A subida de notas
+  en: The grade climb
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 5
+origem: mais_alem
+estado: rascunho
+nivel_algo: hardcore_insane
+enunciado:
+  pt: |
+    Ao longo do semestre, a Beatriz fez vários testes e anotou a nota de cada um. Quer saber qual é a maior sequência de testes, **não necessariamente seguidos mas pela ordem em que foram feitos**, em que as notas vão **sempre a subir** (estritamente).
+
+    Escreve `maior_subida(notas)`, que devolve o comprimento da maior subsequência estritamente crescente. Lista vazia devolve `0`.
+
+    **Exemplo:** `[4, 10, 4, 3, 8, 9]` devolve `3`, com as notas `4, 8, 9` (ou `3, 8, 9`). Com `[5, 5, 5]` devolve `1`, porque repetir a nota não é subir.
+  en: |
+    Over the semester, Beatriz took several tests and noted each grade. She wants to know the longest sequence of tests, **not necessarily consecutive but in the order they were taken**, whose grades **always go up** (strictly).
+
+    Write `maior_subida(notas)`, which returns the length of the longest strictly increasing subsequence. An empty list returns `0`.
+
+    **Example:** `[4, 10, 4, 3, 8, 9]` returns `3`, with the grades `4, 8, 9` (or `3, 8, 9`). With `[5, 5, 5]` it returns `1`, since repeating a grade is not going up.
+assinatura: maior_subida(notas)
+restricoes:
+  pt: 0 ≤ len(notas) ≤ 10^5; |notas[i]| ≤ 10^9
+  en: 0 ≤ len(notas) ≤ 10^5; |notas[i]| ≤ 10^9
+exemplos:
+- args: [[4, 10, 4, 3, 8, 9]]
+  devolve: 3
+- args: [[5, 5, 5]]
+  devolve: 1
+testes:
+- args: [[4, 10, 4, 3, 8, 9]]
+  devolve: 3
+- args: [[]]
+  devolve: 0
+- args: [[7]]
+  devolve: 1
+- args: [[5, 5, 5]]
+  devolve: 1
+- args: [[1, 2, 3, 4]]
+  devolve: 4
+- args: [[4, 3, 2, 1]]
+  devolve: 1
+- args: [[2, 2, 3, 3, 4]]
+  devolve: 3
+- args: [[10, 1, 11, 2, 12, 3, 13]]
+  devolve: 4
+- args: [[-3, -1, -2, 0]]
+  devolve: 3
+- args_gerador: '[[(i * 7919) % 100003 for i in range(100000)]]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: 'Mantém uma lista ''caudas'' em que caudas[k] é a menor nota final possível de uma subida de tamanho k+1. Essa lista fica sempre ordenada: usa pesquisa binária (bisect_left).'
+  en: 'Keep a list ''tails'' where tails[k] is the smallest possible last grade of a climb of length k+1. That list stays sorted: use binary search (bisect_left).'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  from bisect import bisect_left
+
+  def maior_subida(notas):
+      caudas = []
+      for x in notas:
+          pos = bisect_left(caudas, x)
+          if pos == len(caudas):
+              caudas.append(x)
+          else:
+              caudas[pos] = x
+      return len(caudas)
+solucao_ingenua: |
+  def maior_subida(notas):
+      n = len(notas)
+      if n == 0:
+          return 0
+      melhor = [1] * n
+      for i in range(n):
+          for j in range(i):
+              if notas[j] < notas[i] and melhor[j] + 1 > melhor[i]:
+                  melhor[i] = melhor[j] + 1
+      return max(melhor)
+editorial:
+  pt: |
+    **Ideia:** a lista `caudas` guarda, para cada comprimento `k+1`, a menor nota em que pode terminar uma subida desse tamanho. Fica sempre ordenada, por isso cada nova nota é colocada por pesquisa binária: ou estende a maior subida (acrescenta no fim), ou substitui a primeira cauda `≥` ela (`bisect_left`, que garante estrito).
+
+    **Passos:** 1) `caudas = []`; 2) para cada nota, `pos = bisect_left(caudas, x)`; 3) se `pos` é o fim, acrescentar, senão substituir; 4) o resultado é `len(caudas)`.
+
+    **Complexidade:** tempo O(n log n), espaço O(n). (Atenção: `caudas` não é uma subida válida, só serve para medir o comprimento.)
+
+    **Porque é que a ingénua falha:** a solução clássica `melhor[i] = 1 + max(melhor[j])` compara cada par: O(n²), cerca de 5·10^9 comparações com 10^5 notas.
+  en: |
+    **Idea:** the list `caudas` stores, for each length `k+1`, the smallest grade a climb of that size can end with. It always stays sorted, so each new grade is placed by binary search: either it extends the longest climb (appended at the end) or it replaces the first tail `≥` it (`bisect_left`, which guarantees strictness).
+
+    **Steps:** 1) `caudas = []`; 2) for each grade, `pos = bisect_left(caudas, x)`; 3) if `pos` is the end, append, otherwise replace; 4) the result is `len(caudas)`.
+
+    **Complexity:** time O(n log n), space O(n). (Note: `caudas` is not itself a valid climb, it only measures the length.)
+
+    **Why the naive one is slow:** the classic `melhor[i] = 1 + max(melhor[j])` compares every pair: O(n²), about 5·10^9 comparisons with 10^5 grades.

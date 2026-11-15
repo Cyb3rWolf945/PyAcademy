@@ -1,0 +1,100 @@
+# Arena de Algoritmia (hard): Parênteses na cantina. Gerado em rascunho; revisão do professor pendente.
+id: algo-parenteses-cantina
+titulo:
+  pt: Parênteses na cantina
+  en: Canteen brackets
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 1
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    O sistema de senhas da cantina escreve os pedidos com parênteses, por exemplo `({[]})`: cada combo `(`, `[` ou `{` tem de ser fechado pelo símbolo certo, e pela ordem certa (o último a abrir é o primeiro a fechar).
+
+    Escreve `parenteses_ok(texto)`, que recebe uma string só com os caracteres `()[]{}` e devolve `True` se estiver bem formada, ou `False` caso contrário. A string vazia é válida.
+
+    **Exemplos:** `"([]{})"` devolve `True`. `"([)]"` devolve `False`, porque o `]` tenta fechar o `[` antes de o `)` fechar o `(`. A ordem dos caracteres importa, claro.
+  en: |
+    The canteen ticket system writes orders with brackets, for example `({[]})`: every opener `(`, `[` or `{` must be closed by the right symbol, in the right order (the last one opened is the first one closed).
+
+    Write `parenteses_ok(texto)`, which receives a string made only of the characters `()[]{}` and returns `True` if it is well formed or `False` otherwise. The empty string is valid.
+
+    **Examples:** `"([]{})"` returns `True`. `"([)]"` returns `False`, because `]` tries to close `[` before `)` closes `(`. The order of the characters obviously matters.
+assinatura: parenteses_ok(texto)
+restricoes:
+  pt: 0 ≤ len(texto) ≤ 3·10^5; só os caracteres ()[]{}
+  en: 0 ≤ len(texto) ≤ 3·10^5; only the characters ()[]{}
+exemplos:
+- args: ['([]{})']
+  devolve: true
+- args: ['([)]']
+  devolve: false
+testes:
+- args: ['']
+  devolve: true
+- args: [()]
+  devolve: true
+- args: ['([]{})']
+  devolve: true
+- args: ['(]']
+  devolve: false
+- args: [(()]
+  devolve: false
+- args: [)(]
+  devolve: false
+- args: ['{[()]}']
+  devolve: true
+- args: ['([)]']
+  devolve: false
+- args: [((]
+  devolve: false
+- args: ['{}[]()']
+  devolve: true
+- args_gerador: '["(" * 150000 + ")" * 150000]'
+- args_gerador: '["([{" * 20000 + "}])" * 20000]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Usa uma pilha (lista com append/pop): ao ver um fecho, tem de coincidir com o último abridor.'
+  en: 'Use a stack (a list with append/pop): when you see a closer, it must match the last opener.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def parenteses_ok(texto):
+      pares = {")": "(", "]": "[", "}": "{"}
+      pilha = []
+      for c in texto:
+          if c in pares:
+              if not pilha or pilha.pop() != pares[c]:
+                  return False
+          else:
+              pilha.append(c)
+      return len(pilha) == 0
+solucao_ingenua: |
+  def parenteses_ok(texto):
+      while True:
+          novo = texto.replace("()", "").replace("[]", "").replace("{}", "")
+          if novo == texto:
+              break
+          texto = novo
+      return texto == ""
+editorial:
+  pt: |
+    **Ideia:** uma pilha. Cada abridor vai para a pilha; cada fecho tem de encontrar no topo o abridor correspondente, que é retirado. No fim, a pilha tem de estar vazia.
+
+    **Passos:** 1) percorrer os caracteres; 2) abridor: `append`; 3) fecho: se a pilha estiver vazia ou o topo não for o par certo, devolver `False`; 4) no fim, devolver `len(pilha) == 0`.
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** apagar repetidamente os pares `()`, `[]`, `{}` com `replace` só remove uma camada de cada vez. Num texto com 150 000 níveis de aninhamento são 150 000 passagens por uma string enorme, isto é, O(n²).
+  en: |
+    **Idea:** a stack. Every opener is pushed; every closer must find the matching opener on top, which is then popped. At the end the stack must be empty.
+
+    **Steps:** 1) walk the characters; 2) opener: `append`; 3) closer: if the stack is empty or the top is not the right match, return `False`; 4) at the end, return `len(pilha) == 0`.
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** repeatedly deleting the pairs `()`, `[]`, `{}` with `replace` only removes one layer per pass. With 150,000 nesting levels that is 150,000 passes over a huge string, i.e. O(n²).

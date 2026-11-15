@@ -1,0 +1,38 @@
+# Quiz (bloco 1, vila): símbolos básicos de um fluxograma.
+id: quiz-simbolos-fluxograma
+titulo: {pt: "Os símbolos do mapa", en: "The symbols on the map"}
+tipo: quiz
+bloco: "1"
+regiao: vila
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Um fluxograma desenha o algoritmo com símbolos. Cada forma tem um significado.
+    Escolhe a opção certa em cada pergunta.
+  en: |
+    A flowchart draws the algorithm with shapes. Each shape has a meaning.
+    Pick the right option for each question.
+perguntas:
+  - pergunta: {pt: "Qual é o símbolo de uma decisão (sim ou não)?", en: "Which symbol is a decision (yes or no)?"}
+    opcoes:
+      - {pt: "Retângulo", en: "Rectangle"}
+      - {pt: "Losango", en: "Diamond"}
+      - {pt: "Oval", en: "Oval"}
+      - {pt: "Seta", en: "Arrow"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é o símbolo que marca o início e o fim do fluxograma?", en: "Which symbol marks the start and end of the flowchart?"}
+    opcoes:
+      - {pt: "Losango", en: "Diamond"}
+      - {pt: "Oval", en: "Oval"}
+      - {pt: "Retângulo", en: "Rectangle"}
+      - {pt: "Paralelogramo", en: "Parallelogram"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é o símbolo para pedir dados ao utilizador ou mostrar um resultado?", en: "Which symbol is used to ask the user for data or show a result?"}
+    opcoes:
+      - {pt: "Losango", en: "Diamond"}
+      - {pt: "Retângulo", en: "Rectangle"}
+      - {pt: "Paralelogramo", en: "Parallelogram"}
+      - {pt: "Oval", en: "Oval"}
+    resposta: [2]

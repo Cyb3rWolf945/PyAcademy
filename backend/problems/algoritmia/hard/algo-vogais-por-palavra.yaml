@@ -1,0 +1,91 @@
+# Arena de Algoritmia (hard): Vogais por palavra. Gerado em rascunho; revisão do professor pendente.
+id: algo-vogais-por-palavra
+titulo:
+  pt: Vogais por palavra
+  en: Vowels per word
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 2
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    A professora de Português quer um relatório das vogais de cada palavra de uma frase. As palavras estão separadas por espaços. Só contam as vogais `a`, `e`, `i`, `o`, `u` (maiúsculas ou minúsculas, sem acentos).
+
+    Escreve `vogais_por_palavra(frase)`, que devolve uma lista com o número de vogais de cada palavra, pela ordem em que aparecem. Uma frase vazia devolve `[]`.
+
+    **Exemplo:** `"o gato bebeu cafe"` devolve `[1, 2, 3, 2]` (`o`=1, `gato`=2, `bebeu`=3, `cafe`=2). A ordem importa.
+  en: |
+    The Portuguese teacher wants a report of the vowels in each word of a sentence. Words are separated by spaces. Only the vowels `a`, `e`, `i`, `o`, `u` count (upper or lower case, no accents).
+
+    Write `vogais_por_palavra(frase)`, which returns a list with the number of vowels of each word, in the order they appear. An empty sentence returns `[]`.
+
+    **Example:** `"o gato bebeu cafe"` returns `[1, 2, 3, 2]` (`o`=1, `gato`=2, `bebeu`=3, `cafe`=2). The order matters.
+assinatura: vogais_por_palavra(frase)
+restricoes:
+  pt: 0 ≤ len(frase) ≤ 6·10^5; palavras separadas por espaços; sem acentos
+  en: 0 ≤ len(frase) ≤ 6·10^5; words separated by spaces; no accents
+exemplos:
+- args: [o gato bebeu cafe]
+  devolve: [1, 2, 3, 2]
+testes:
+- args: [o gato bebeu cafe]
+  devolve: [1, 2, 3, 2]
+- args: ['']
+  devolve: []
+- args: [sol]
+  devolve: [1]
+- args: [AEIOU]
+  devolve: [5]
+- args: [rhythm sky]
+  devolve: [0, 0]
+- args: [Ana e Rui]
+  devolve: [2, 1, 2]
+- args: ['  espacos   a mais ']
+  devolve: [3, 1, 2]
+- args_gerador: '[" ".join(["banana", "ovo", "sol", "aeiou", "rhythm"][i % 5] for i in range(100000))]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: Faz `frase.split()` uma só vez e conta as vogais de cada palavra.
+  en: Call `frase.split()` just once and count the vowels of each word.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def vogais_por_palavra(frase):
+      vogais = set("aeiouAEIOU")
+      res = []
+      for palavra in frase.split():
+          res.append(sum(1 for c in palavra if c in vogais))
+      return res
+solucao_ingenua: |
+  def vogais_por_palavra(frase):
+      vogais = "aeiouAEIOU"
+      res = []
+      for i in range(len(frase.split())):
+          palavra = frase.split()[i]
+          total = 0
+          for c in palavra:
+              if c in vogais:
+                  total += 1
+          res.append(total)
+      return res
+editorial:
+  pt: |
+    **Ideia:** dividir a frase em palavras uma única vez e contar as vogais de cada uma com um conjunto de vogais (pesquisa O(1)).
+
+    **Passos:** 1) `palavras = frase.split()`; 2) para cada palavra, contar caracteres que estão no conjunto; 3) acrescentar ao resultado.
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** repetir `frase.split()` dentro do ciclo reconstrói a lista de palavras a cada iteração: O(palavras × n).
+  en: |
+    **Idea:** split the sentence into words just once and count each word's vowels using a set of vowels (O(1) lookup).
+
+    **Steps:** 1) `palavras = frase.split()`; 2) for each word, count the characters that are in the set; 3) append to the result.
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** repeating `frase.split()` inside the loop rebuilds the word list on every iteration: O(words × n).

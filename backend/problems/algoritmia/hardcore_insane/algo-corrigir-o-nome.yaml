@@ -1,0 +1,101 @@
+# Arena de Algoritmia (hardcore_insane): Corrigir o nome na pauta. Gerado em rascunho; revisão do professor pendente.
+id: algo-corrigir-o-nome
+titulo:
+  pt: Corrigir o nome na pauta
+  en: Fixing the name on the grade sheet
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 5
+origem: mais_alem
+estado: rascunho
+nivel_algo: hardcore_insane
+enunciado:
+  pt: |
+    A secretaria escreveu mal o nome de um aluno na pauta. Cada correção pode ser uma destas operações sobre **uma** letra: **inserir** uma letra, **apagar** uma letra ou **trocar** uma letra por outra. Cada operação custa 1.
+
+    Escreve `distancia_edicao(a, b)`, que devolve o **menor número de operações** para transformar a string `a` na string `b`.
+
+    **Exemplo:** `distancia_edicao("tomar", "tomada")` devolve `2`: trocar `r` por `d` (`tomad`) e inserir `a` no fim (`tomada`). Strings iguais devolvem `0`; se uma é vazia, devolve o tamanho da outra.
+  en: |
+    The registrar's office misspelled a student's name on the grade sheet. Each fix may be one of these operations on **one** letter: **insert** a letter, **delete** a letter or **replace** a letter with another. Each operation costs 1.
+
+    Write `distancia_edicao(a, b)`, which returns the **smallest number of operations** needed to turn the string `a` into the string `b`.
+
+    **Example:** `distancia_edicao("tomar", "tomada")` returns `2`: replace `r` with `d` (`tomad`) and insert `a` at the end (`tomada`). Equal strings return `0`; if one is empty, it returns the length of the other.
+assinatura: distancia_edicao(a, b)
+restricoes:
+  pt: 0 ≤ len(a), len(b) ≤ 300; letras minúsculas
+  en: 0 ≤ len(a), len(b) ≤ 300; lowercase letters
+exemplos:
+- args: [tomar, tomada]
+  devolve: 2
+testes:
+- args: [tomar, tomada]
+  devolve: 2
+- args: ['', '']
+  devolve: 0
+- args: [abc, '']
+  devolve: 3
+- args: ['', ab]
+  devolve: 2
+- args: [igual, igual]
+  devolve: 0
+- args: [gato, pato]
+  devolve: 1
+- args: [cantina, cantiga]
+  devolve: 1
+- args: [domingo, doming]
+  devolve: 1
+- args: [abc, cba]
+  devolve: 2
+- args: [horario, horrario]
+  devolve: 1
+- args_gerador: '["".join(chr(97 + (i * i + 3 * i) % 5) for i in range(22)), "".join(chr(97 + (i * 7 + 2) % 5) for i in range(22))]'
+- args_gerador: '["".join(chr(97 + (i * i) % 7) for i in range(300)), "".join(chr(97 + (i * 5 + 1) % 7) for i in range(280))]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: 'Tabela dp[i][j] = distância entre os primeiros i caracteres de a e os primeiros j de b. Olha para a última letra de cada: se for igual não custa nada, senão tens 3 opções.'
+  en: 'Table dp[i][j] = distance between the first i characters of a and the first j of b. Look at the last letter of each: if equal it costs nothing, otherwise you have 3 options.'
+- pt: dp[i][j] vem de dp[i-1][j] + 1 (apagar), dp[i][j-1] + 1 (inserir) ou dp[i-1][j-1] + (0 ou 1) (igual ou trocar).
+  en: dp[i][j] comes from dp[i-1][j] + 1 (delete), dp[i][j-1] + 1 (insert) or dp[i-1][j-1] + (0 or 1) (equal or replace).
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def distancia_edicao(a, b):
+      anterior = list(range(len(b) + 1))
+      for i in range(1, len(a) + 1):
+          atual = [i] + [0] * len(b)
+          for j in range(1, len(b) + 1):
+              custo = 0 if a[i - 1] == b[j - 1] else 1
+              atual[j] = min(anterior[j] + 1, atual[j - 1] + 1, anterior[j - 1] + custo)
+          anterior = atual
+      return anterior[len(b)]
+solucao_ingenua: |
+  def distancia_edicao(a, b):
+      def f(i, j):
+          if i == 0:
+              return j
+          if j == 0:
+              return i
+          custo = 0 if a[i - 1] == b[j - 1] else 1
+          return min(f(i - 1, j) + 1, f(i, j - 1) + 1, f(i - 1, j - 1) + custo)
+      return f(len(a), len(b))
+editorial:
+  pt: |
+    **Ideia:** programação dinâmica. `dp[i][j]` é a distância entre os `i` primeiros caracteres de `a` e os `j` primeiros de `b`. Casos base: `dp[i][0] = i` e `dp[0][j] = j`. Caso geral: o mínimo entre apagar (`dp[i-1][j]+1`), inserir (`dp[i][j-1]+1`) e trocar/manter (`dp[i-1][j-1] + (0 se iguais, 1 se não)`).
+
+    **Passos:** 1) preencher a tabela linha a linha (basta guardar a linha anterior); 2) a resposta é `dp[n][m]`.
+
+    **Complexidade:** tempo O(n · m), espaço O(m) com duas linhas.
+
+    **Porque é que a ingénua falha:** a recursão sem memória explora as 3 opções em cada passo e repete os mesmos subproblemas: o número de chamadas cresce exponencialmente, já impraticável para strings de ~20 caracteres.
+  en: |
+    **Idea:** dynamic programming. `dp[i][j]` is the distance between the first `i` characters of `a` and the first `j` of `b`. Base cases: `dp[i][0] = i` and `dp[0][j] = j`. General case: the minimum of delete (`dp[i-1][j]+1`), insert (`dp[i][j-1]+1`) and replace/keep (`dp[i-1][j-1] + (0 if equal, 1 otherwise)`).
+
+    **Steps:** 1) fill the table row by row (keeping only the previous row is enough); 2) the answer is `dp[n][m]`.
+
+    **Complexity:** time O(n · m), space O(m) with two rows.
+
+    **Why the naive one is slow:** recursion without memory explores 3 options at every step and repeats the same subproblems: the number of calls grows exponentially, already impractical for strings of ~20 characters.

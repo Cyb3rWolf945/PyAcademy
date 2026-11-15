@@ -1,0 +1,74 @@
+# Condicionais aninhadas (bloco 4, encruzilhada): classificar um triângulo a partir de três lados.
+id: tipo-triangulo
+titulo: {pt: "Que triângulo é este?", en: "What kind of triangle is this?"}
+tipo: programa
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 4
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O professor de Desenho pediu para classificar triângulos a partir das medidas dos lados. Lê três inteiros, um por linha (lados a, b e c).
+    Primeiro verifica se é triângulo: todos os lados têm de ser positivos e cada lado tem de ser menor do que a soma dos outros dois.
+    Se não for triângulo, escreve "Não é triângulo". Se for, escreve "Equilátero" (três lados iguais), "Isósceles" (dois lados iguais) ou "Escaleno" (todos diferentes).
+    Entrada: três linhas com inteiros. Saída: uma linha.
+  en: |
+    The Drawing teacher asked for triangles to be classified from their side lengths. Read three integers, one per line (sides a, b and c).
+    First check whether it is a triangle: all sides must be positive and each side must be smaller than the sum of the other two.
+    If it is not a triangle, print "Not a triangle". If it is, print "Equilateral" (three equal sides), "Isosceles" (two equal sides) or "Scalene" (all different).
+    Input: three lines with integers. Output: one line.
+exemplos:
+  - stdin: "3\n4\n5\n"
+    stdout: {pt: "Escaleno", en: "Scalene"}
+testes:
+  - stdin: "3\n3\n3\n"
+    stdout: {pt: "Equilátero", en: "Equilateral"}
+  - stdin: "3\n3\n5\n"
+    stdout: {pt: "Isósceles", en: "Isosceles"}
+  - stdin: "5\n3\n3\n"
+    stdout: {pt: "Isósceles", en: "Isosceles"}
+  - stdin: "1\n2\n3\n"
+    stdout: {pt: "Não é triângulo", en: "Not a triangle"}
+  - stdin: "0\n4\n4\n"
+    stdout: {pt: "Não é triângulo", en: "Not a triangle"}
+comparacao: texto
+ordem_importa: true
+pistas:
+  - {pt: "Primeiro os casos que NÃO são triângulos (um lado <= 0 ou a + b <= c, etc.). Depois compara os lados.", en: "First the cases that are NOT triangles (a side <= 0 or a + b <= c, etc.). Then compare the sides."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    a = 0
+    b = 0
+    c = 0
+    # input
+    a = int(input("Lado a: "))
+    b = int(input("Lado b: "))
+    c = int(input("Lado c: "))
+    # processamento e output
+    if a <= 0 or b <= 0 or c <= 0 or a + b <= c or a + c <= b or b + c <= a:
+        print("Não é triângulo")
+    elif a == b and b == c:
+        print("Equilátero")
+    elif a == b or b == c or a == c:
+        print("Isósceles")
+    else:
+        print("Escaleno")
+  en: |
+    a = 0
+    b = 0
+    c = 0
+    # input
+    a = int(input("Side a: "))
+    b = int(input("Side b: "))
+    c = int(input("Side c: "))
+    # processing and output
+    if a <= 0 or b <= 0 or c <= 0 or a + b <= c or a + c <= b or b + c <= a:
+        print("Not a triangle")
+    elif a == b and b == c:
+        print("Equilateral")
+    elif a == b or b == c or a == c:
+        print("Isosceles")
+    else:
+        print("Scalene")

@@ -1,0 +1,103 @@
+# Problema bug gerado (bug); rascunho à espera de revisão do professor.
+id: bug-media-sem-parenteses
+titulo:
+  pt: 'Bug: a média que não era média'
+  en: 'Bug: the average that was not an average'
+tipo: bug
+bloco: '2'
+regiao: floresta
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |-
+    Este programa devia calcular a **média de três notas**, mas a Marta tirou 12, 14 e 16 e ele diz que a média é 31,33 (ela bem queria!). Encontra o erro e corrige-o.
+
+    Entrada: três notas (decimais), uma por linha. Saída: a média, arredondada a 2 casas decimais.
+  en: |-
+    This program should compute the **average of three marks**, but Marta got 12, 14 and 16 and it says her average is 31.33 (she wishes!). Find the bug and fix it.
+
+    Input: three marks (decimals), one per line. Output: the average, rounded to 2 decimal places.
+codigo_inicial: |
+  NUMERO_NOTAS = 3
+
+  nota1 = 0
+  nota2 = 0
+  nota3 = 0
+
+  # input
+  nota1 = float(input("Nota 1: "))
+  nota2 = float(input("Nota 2: "))
+  nota3 = float(input("Nota 3: "))
+
+  # processamento
+  media = nota1 + nota2 + nota3 / NUMERO_NOTAS
+
+  # output
+  print(round(media, 2))
+exemplos:
+- &id001
+  stdin: '12
+
+    14
+
+    16
+
+    '
+  stdout: '14.0'
+testes:
+- *id001
+- stdin: '10
+
+    10
+
+    10
+
+    '
+  stdout: '10.0'
+- stdin: '0
+
+    0
+
+    0
+
+    '
+  stdout: '0.0'
+- stdin: '20
+
+    0
+
+    0
+
+    '
+  stdout: '6.67'
+- stdin: '9.5
+
+    13
+
+    18
+
+    '
+  stdout: '13.5'
+comparacao: numeros
+pistas:
+- pt: 'Qual operação é feita primeiro: a soma ou a divisão? Lembra-te da prioridade dos operadores.'
+  en: 'Which operation is done first: the sum or the division? Remember operator precedence.'
+limite_tempo_s: 2
+solucao_referencia: |
+  NUMERO_NOTAS = 3
+
+  nota1 = 0
+  nota2 = 0
+  nota3 = 0
+
+  # input
+  nota1 = float(input("Nota 1: "))
+  nota2 = float(input("Nota 2: "))
+  nota3 = float(input("Nota 3: "))
+
+  # processamento
+  media = (nota1 + nota2 + nota3) / NUMERO_NOTAS
+
+  # output
+  print(round(media, 2))

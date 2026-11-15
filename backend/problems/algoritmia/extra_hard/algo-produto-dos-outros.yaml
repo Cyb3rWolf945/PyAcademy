@@ -1,0 +1,101 @@
+# Arena de Algoritmia (extra_hard): O produto dos outros. Gerado em rascunho; revisão do professor pendente.
+id: algo-produto-dos-outros
+titulo:
+  pt: O produto dos outros
+  en: The product of the others
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    Numa sala de estudo, cada aluno `i` trouxe `nums[i]` livros. Para cada aluno, queres saber o **produto dos livros de todos os outros** alunos, sem usar divisão (um dos números pode ser 0).
+
+    Escreve `produto_dos_outros(nums)`, que devolve uma lista em que a posição `i` tem o produto de todos os elementos exceto `nums[i]`, **módulo `1000003`**. Um só elemento devolve `[1]`. A ordem importa.
+
+    **Exemplo:** `[1, 2, 3, 4]` devolve `[24, 12, 8, 6]`. Com `[0, 2, 3]` devolve `[6, 0, 0]`.
+  en: |
+    In a study room, each student `i` brought `nums[i]` books. For each student you want the **product of the books of all the other** students, without using division (one of the numbers may be 0).
+
+    Write `produto_dos_outros(nums)`, which returns a list whose position `i` holds the product of every element except `nums[i]`, **modulo `1000003`**. A single element returns `[1]`. The order matters.
+
+    **Example:** `[1, 2, 3, 4]` returns `[24, 12, 8, 6]`. With `[0, 2, 3]` it returns `[6, 0, 0]`.
+assinatura: produto_dos_outros(nums)
+restricoes:
+  pt: 0 ≤ len(nums) ≤ 5·10^4; 0 ≤ nums[i] ≤ 10^9
+  en: 0 ≤ len(nums) ≤ 5·10^4; 0 ≤ nums[i] ≤ 10^9
+exemplos:
+- args: [[1, 2, 3, 4]]
+  devolve: [24, 12, 8, 6]
+- args: [[0, 2, 3]]
+  devolve: [6, 0, 0]
+testes:
+- args: [[1, 2, 3, 4]]
+  devolve: [24, 12, 8, 6]
+- args: [[0, 2, 3]]
+  devolve: [6, 0, 0]
+- args: [[]]
+  devolve: []
+- args: [[5]]
+  devolve: [1]
+- args: [[0, 0, 3]]
+  devolve: [0, 0, 0]
+- args: [[1000, 1000, 1000]]
+  devolve: [1000000, 1000000, 1000000]
+- args: [[7, 7]]
+  devolve: [7, 7]
+- args: [[2, 0, 4, 0]]
+  devolve: [0, 0, 0, 0]
+- args_gerador: '[[(i * 7919) % 1000 + 1 for i in range(50000)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: Para cada posição, o resultado é (produto de tudo à esquerda) × (produto de tudo à direita). Calcula-os em duas passagens.
+  en: For each position, the result is (product of everything to the left) × (product of everything to the right). Compute both in two passes.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def produto_dos_outros(nums):
+      M = 1000003
+      n = len(nums)
+      res = [1] * n
+      esquerda = 1
+      for i in range(n):
+          res[i] = esquerda
+          esquerda = esquerda * nums[i] % M
+      direita = 1
+      for i in range(n - 1, -1, -1):
+          res[i] = res[i] * direita % M
+          direita = direita * nums[i] % M
+      return res
+solucao_ingenua: |
+  def produto_dos_outros(nums):
+      M = 1000003
+      res = []
+      for i in range(len(nums)):
+          p = 1
+          for j in range(len(nums)):
+              if j != i:
+                  p = p * nums[j] % M
+          res.append(p)
+      return res
+editorial:
+  pt: |
+    **Ideia:** o produto dos outros é (produto dos elementos à esquerda de `i`) vezes (produto dos elementos à direita). Evita-se a divisão e o problema do zero.
+
+    **Passos:** 1) passagem da esquerda para a direita: `res[i]` = produto dos anteriores; 2) passagem da direita para a esquerda, a multiplicar por um acumulador dos seguintes; 3) tudo módulo `1000003`.
+
+    **Complexidade:** tempo O(n), espaço O(1) extra além do resultado.
+
+    **Porque é que a ingénua falha:** recalcular o produto de n-1 elementos para cada posição é O(n²), mais de 2,5·10^9 multiplicações com n = 5·10^4.
+  en: |
+    **Idea:** the product of the others is (product of the elements left of `i`) times (product of the elements right of `i`). This avoids division and the zero problem.
+
+    **Steps:** 1) left-to-right pass: `res[i]` = product of the previous ones; 2) right-to-left pass, multiplying by an accumulator of the following ones; 3) everything modulo `1000003`.
+
+    **Complexity:** time O(n), O(1) extra space besides the result.
+
+    **Why the naive one is slow:** recomputing the product of n-1 elements for every position is O(n²), over 2.5·10^9 multiplications with n = 5·10^4.

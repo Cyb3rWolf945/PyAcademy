@@ -1,0 +1,48 @@
+# Variação da aula (bloco 2): segundos convertidos em horas, minutos e segundos.
+id: segundos-para-hms
+titulo: {pt: "Quantas horas são estes segundos?", en: "How many hours are these seconds?"}
+tipo: programa
+bloco: "2"
+regiao: floresta
+dificuldade: 2
+origem: variacao_aula
+estado: rascunho
+enunciado:
+  pt: |
+    O cronómetro da corrida da escola mostra apenas segundos. Lê o total de segundos (inteiro, zero ou positivo).
+    Escreve quantas horas, minutos e segundos são, no formato: H h M min S s (ex.: 1 h 2 min 5 s).
+    Entrada: um número inteiro. Saída: uma linha no formato indicado.
+  en: |
+    The school race stopwatch only shows seconds. Read the total number of seconds (a non-negative integer).
+    Print how many hours, minutes and seconds that is, in the format: H h M min S s (e.g. 1 h 2 min 5 s).
+    Input: one integer. Output: one line in the given format.
+exemplos:
+  - stdin: "3725\n"
+    stdout: "1 h 2 min 5 s"
+testes:
+  - stdin: "0\n"
+    stdout: "0 h 0 min 0 s"
+  - stdin: "59\n"
+    stdout: "0 h 0 min 59 s"
+  - stdin: "3600\n"
+    stdout: "1 h 0 min 0 s"
+  - stdin: "86399\n"
+    stdout: "23 h 59 min 59 s"
+  - stdin: "7322\n"
+    stdout: "2 h 2 min 2 s"
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Horas = segundos // 3600. Os segundos que sobram voltam a ser divididos.", en: "Hours = seconds // 3600. The leftover seconds are split again."}
+  - {pt: "Minutos = (segundos % 3600) // 60 e segundos = segundos % 60.", en: "Minutes = (seconds % 3600) // 60 and seconds = seconds % 60."}
+limite_tempo_s: 2
+solucao_referencia: |
+  segundos = 0
+  # input
+  segundos = int(input("Quantos segundos? "))
+  # processamento
+  horas = segundos // 3600
+  minutos = (segundos % 3600) // 60
+  segundos_restantes = segundos % 60
+  # output
+  print(horas, "h", minutos, "min", segundos_restantes, "s")

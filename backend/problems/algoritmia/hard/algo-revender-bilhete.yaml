@@ -1,0 +1,92 @@
+# Arena de Algoritmia (hard): Revender o bilhete. Gerado em rascunho; revisão do professor pendente.
+id: algo-revender-bilhete
+titulo:
+  pt: Revender o bilhete
+  en: Reselling the ticket
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 2
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    O preço de um bilhete de festival varia de dia para dia. O Tiago pode comprar **um** bilhete num dia e revendê-lo **num dia posterior** (ou não fazer nada).
+
+    Escreve `melhor_lucro(precos)`, que devolve o maior lucro possível com uma compra seguida de uma venda, ou `0` se nunca der para ganhar.
+
+    **Exemplo:** `[8, 3, 6, 2, 9, 4]` devolve `7` (comprar a 2, vender a 9).
+  en: |
+    A festival ticket's price changes from day to day. Tiago may buy **one** ticket on one day and resell it **on a later day** (or do nothing).
+
+    Write `melhor_lucro(precos)`, which returns the largest possible profit from one buy followed by one sell, or `0` if no profit is ever possible.
+
+    **Example:** `[8, 3, 6, 2, 9, 4]` returns `7` (buy at 2, sell at 9).
+assinatura: melhor_lucro(precos)
+restricoes:
+  pt: 0 ≤ len(precos) ≤ 10^5; 0 ≤ precos[i] ≤ 10^9
+  en: 0 ≤ len(precos) ≤ 10^5; 0 ≤ precos[i] ≤ 10^9
+exemplos:
+- args: [[8, 3, 6, 2, 9, 4]]
+  devolve: 7
+testes:
+- args: [[8, 3, 6, 2, 9, 4]]
+  devolve: 7
+- args: [[]]
+  devolve: 0
+- args: [[5]]
+  devolve: 0
+- args: [[9, 7, 4, 1]]
+  devolve: 0
+- args: [[1, 2, 3, 4]]
+  devolve: 3
+- args: [[3, 3, 3]]
+  devolve: 0
+- args: [[2, 1, 2, 0, 1]]
+  devolve: 1
+- args: [[10, 1, 10]]
+  devolve: 9
+- args_gerador: '[[(i * 7919) % 100003 for i in range(100000)]]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: Percorre os dias uma vez, guardando o preço mínimo visto até agora.
+  en: Walk through the days once, remembering the lowest price seen so far.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def melhor_lucro(precos):
+      minimo = None
+      melhor = 0
+      for p in precos:
+          if minimo is None or p < minimo:
+              minimo = p
+          elif p - minimo > melhor:
+              melhor = p - minimo
+      return melhor
+solucao_ingenua: |
+  def melhor_lucro(precos):
+      melhor = 0
+      for i in range(len(precos)):
+          for j in range(i + 1, len(precos)):
+              if precos[j] - precos[i] > melhor:
+                  melhor = precos[j] - precos[i]
+      return melhor
+editorial:
+  pt: |
+    **Ideia:** o melhor dia para vender o dia `j` é comprar no mínimo dos dias anteriores. Mantemos esse mínimo ao percorrer a lista.
+
+    **Passos:** 1) `minimo`, `melhor = 0`; 2) para cada preço, atualizar `minimo`; senão, ver se `preço - minimo` bate o melhor; 3) devolver `melhor`.
+
+    **Complexidade:** tempo O(n), espaço O(1).
+
+    **Porque é que a ingénua falha:** testar todos os pares (compra, venda) é O(n²), cerca de 5·10^9 pares com n = 10^5.
+  en: |
+    **Idea:** the best way to sell on day `j` is to have bought at the minimum of the earlier days. We keep that minimum while walking the list.
+
+    **Steps:** 1) `minimo`, `melhor = 0`; 2) for each price, update `minimo`; otherwise check whether `price - minimo` beats the best; 3) return `melhor`.
+
+    **Complexity:** time O(n), space O(1).
+
+    **Why the naive one is slow:** trying every (buy, sell) pair is O(n²), about 5·10^9 pairs with n = 10^5.

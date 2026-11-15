@@ -1,0 +1,123 @@
+# Problema funcao gerado (bosses); rascunho à espera de revisão do professor.
+id: boss-ilhas-grupo-de-whatsapp
+titulo:
+  pt: 'Boss das Ilhas: o grupo de WhatsApp da turma'
+  en: 'Isles Boss: the class WhatsApp group'
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 5
+origem: boss
+estado: rascunho
+enunciado:
+  pt: |
+    O grupo da turma tem 300 mensagens por dia e ninguém lê nenhuma. Escreve a função `analisar_mensagem(texto)` que recebe o texto de uma mensagem e devolve uma lista de três elementos:
+
+    `[palavra_mais_usada, quantas_vezes, palavras_distintas]`
+
+    Regras:
+    - ignora maiúsculas/minúsculas (`Sim` e `sim` são a mesma palavra, devolvida em minúsculas);
+    - os sinais `. , ! ? ; :` são separadores, como se fossem espaços;
+    - em caso de empate, ganha a palavra que vem **primeiro por ordem alfabética**;
+    - se o texto não tiver palavras, devolve `["", 0, 0]`.
+
+    Exemplo: `"Sim? sim! Não... SIM"` devolve `["sim", 3, 2]`.
+
+    Dica de ilhéu: um dicionário é um excelente contador de palavras.
+  en: |
+    The class group gets 300 messages a day and nobody reads any. Write the function `analisar_mensagem(texto)` that receives the text of a message and returns a list of three elements:
+
+    `[most_used_word, how_many_times, distinct_words]`
+
+    Rules:
+    - ignore upper/lower case (`Sim` and `sim` are the same word, returned in lower case);
+    - the signs `. , ! ? ; :` are separators, as if they were spaces;
+    - in case of a tie, the word that comes **first alphabetically** wins;
+    - if the text has no words, return `["", 0, 0]`.
+
+    Example: `"Sim? sim! Não... SIM"` returns `["sim", 3, 2]`.
+
+    Islander tip: a dictionary is an excellent word counter.
+assinatura: analisar_mensagem(texto)
+exemplos:
+- &id001
+  args:
+  - Sim? sim! Não... SIM
+  devolve:
+  - sim
+  - 3
+  - 2
+testes:
+- *id001
+- args:
+  - ora bem ora mal, ORA pois!
+  devolve:
+  - ora
+  - 3
+  - 4
+- args:
+  - ''
+  devolve:
+  - ''
+  - 0
+  - 0
+- args:
+  - b a b a c
+  devolve:
+  - a
+  - 2
+  - 3
+- args:
+  - '  ... ,, !! '
+  devolve:
+  - ''
+  - 0
+  - 0
+- args:
+  - 'olá, olá; mundo: olá'
+  devolve:
+  - olá
+  - 3
+  - 2
+- args:
+  - um dois tres
+  devolve:
+  - dois
+  - 1
+  - 3
+- args:
+  - Café café CAFÉ cafe
+  devolve:
+  - café
+  - 3
+  - 2
+- args:
+  - z
+  devolve:
+  - z
+  - 1
+  - 1
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Substitui cada sinal por um espaço, usa .lower() e .split(). Depois conta com um dicionário: contagem[palavra] = contagem.get(palavra, 0) + 1.'
+  en: 'Replace each sign with a space, use .lower() and .split(). Then count with a dictionary: counts[word] = counts.get(word, 0) + 1.'
+- pt: 'Percorre as palavras com sorted(contagem): como já vêm por ordem alfabética, só trocas o melhor se a contagem for estritamente maior.'
+  en: 'Walk through the words with sorted(counts): they already come alphabetically, so only replace the best one if the count is strictly greater.'
+limite_tempo_s: 2
+solucao_referencia: |
+  def analisar_mensagem(texto):
+      SINAIS = ".,!?;:"
+      limpo = texto.lower()
+      for sinal in SINAIS:
+          limpo = limpo.replace(sinal, " ")
+      contagem = {}
+      for palavra in limpo.split():
+          contagem[palavra] = contagem.get(palavra, 0) + 1
+      if len(contagem) == 0:
+          return ["", 0, 0]
+      melhor = ""
+      for palavra in sorted(contagem):
+          if melhor == "" or contagem[palavra] > contagem[melhor]:
+              melhor = palavra
+      return [melhor, contagem[melhor], len(contagem)]

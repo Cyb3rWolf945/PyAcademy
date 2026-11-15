@@ -1,0 +1,62 @@
+# Ciclo for com acumulador e filtro (bloco 5, rio): só contam as notas positivas.
+id: media-positivas
+titulo: {pt: "Só as notas que contam", en: "Only the grades that count"}
+tipo: programa
+bloco: "5"
+regiao: rio
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    No registo de notas, um valor igual ou menor que 0 significa "não fez a prova" e não deve contar para a média.
+    Lê quantas notas vais introduzir e depois cada nota (decimais permitidos).
+    Escreve a média apenas das notas positivas, com 2 casas decimais. Se não houver nenhuma nota positiva, escreve 0.00.
+    Entrada: uma linha com N, depois N linhas com as notas. Saída: um número.
+
+    🧱 Requisito: tens de usar um ciclo for.
+  en: |
+    In the grades register, a value of 0 or less means "did not take the test" and must not count towards the average.
+    Read how many grades you will enter, then each grade (decimals allowed).
+    Print the average of the positive grades only, with 2 decimal places. If there is no positive grade, print 0.00.
+    Input: one line with N, then N lines with the grades. Output: one number.
+
+    🧱 Requirement: you must use a for loop.
+exemplos:
+  - stdin: "4\n12\n-1\n14\n8\n"
+    stdout: "11.33"
+testes:
+  - stdin: "3\n10\n15\n0\n"
+    stdout: "12.5"
+  - stdin: "2\n-1\n-1\n"
+    stdout: "0.00"
+  - stdin: "1\n7\n"
+    stdout: "7.00"
+  - stdin: "5\n20\n-3\n10\n-1\n12\n"
+    stdout: "14.00"
+comparacao: numeros
+ordem_importa: true
+requisitos:
+  usa: [for]
+pistas:
+  - {pt: "Mantém dois contadores: a soma e quantas notas são positivas.", en: "Keep two counters: the sum and how many grades are positive."}
+limite_tempo_s: 2
+solucao_referencia: |
+  quantidade = 0
+  nota = 0.0
+  soma = 0.0
+  positivas = 0
+  # input
+  quantidade = int(input("Quantas notas? "))
+  # processamento
+  for i in range(quantidade):
+      nota = float(input("Nota: "))
+      if nota > 0:
+          soma = soma + nota
+          positivas = positivas + 1
+  # output
+  if positivas > 0:
+      media = soma / positivas
+  else:
+      media = 0
+  print(f"{media:.2f}")

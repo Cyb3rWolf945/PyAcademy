@@ -1,0 +1,91 @@
+# Arena de Algoritmia (hard): Dois bilhetes para Lisboa. Gerado em rascunho; revisão do professor pendente.
+id: algo-dois-bilhetes
+titulo:
+  pt: Dois bilhetes para Lisboa
+  en: Two tickets to Lisbon
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 1
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    A Rita tem um voucher de comboio que cobre **exatamente** `alvo` euros e quer comprar **dois** bilhetes Tomar–Lisboa (de horários diferentes) cujos preços somem esse valor.
+
+    Escreve a função `dois_bilhetes(precos, alvo)`, onde `precos[i]` é o preço do bilhete `i`. Devolve a lista `[i, j]` com `i < j` dos índices dos dois bilhetes. Se houver vários pares possíveis, escolhe o par com o **menor `j`** e, para esse `j`, o menor `i`. Se não existir nenhum par, devolve `[]`.
+
+    **Exemplo:** `precos = [12, 7, 3, 9]`, `alvo = 16` devolve `[1, 3]`, porque `7 + 9 = 16`. A ordem dos índices importa (`i < j`).
+  en: |
+    Rita has a train voucher that covers **exactly** `alvo` euros and wants to buy **two** Tomar–Lisbon tickets (different departures) whose prices add up to that value.
+
+    Write the function `dois_bilhetes(precos, alvo)`, where `precos[i]` is the price of ticket `i`. Return the list `[i, j]` with `i < j` holding the indices of the two tickets. If several pairs work, pick the pair with the **smallest `j`** and, for that `j`, the smallest `i`. If no pair exists, return `[]`.
+
+    **Example:** `precos = [12, 7, 3, 9]`, `alvo = 16` returns `[1, 3]`, because `7 + 9 = 16`. The order of the indices matters (`i < j`).
+assinatura: dois_bilhetes(precos, alvo)
+restricoes:
+  pt: 0 ≤ len(precos) ≤ 10^5; 0 ≤ precos[i] ≤ 10^9; 0 ≤ alvo ≤ 2·10^9
+  en: 0 ≤ len(precos) ≤ 10^5; 0 ≤ precos[i] ≤ 10^9; 0 ≤ alvo ≤ 2·10^9
+exemplos:
+- args: [[12, 7, 3, 9], 16]
+  devolve: [1, 3]
+testes:
+- args: [[12, 7, 3, 9], 16]
+  devolve: [1, 3]
+- args: [[], 5]
+  devolve: []
+- args: [[4], 8]
+  devolve: []
+- args: [[5, 5], 10]
+  devolve: [0, 1]
+- args: [[3, 3, 3], 6]
+  devolve: [0, 1]
+- args: [[2, 7, 11, 15], 26]
+  devolve: [2, 3]
+- args: [[1, 2, 3], 100]
+  devolve: []
+- args: [[0, 0], 0]
+  devolve: [0, 1]
+- args_gerador: '[[(i * 7919) % 100003 + 10 for i in range(99998)] + [500000, 700000], 1200000]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: Para cada preço, que preço te falta para chegar ao alvo? Guarda os preços já vistos num dicionário.
+  en: For each price, which price is missing to reach the target? Store the prices already seen in a dictionary.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def dois_bilhetes(precos, alvo):
+      vistos = {}  # preço -> primeiro índice onde apareceu
+      for j, preco in enumerate(precos):
+          falta = alvo - preco
+          if falta in vistos:
+              return [vistos[falta], j]
+          if preco not in vistos:
+              vistos[preco] = j
+      return []
+solucao_ingenua: |
+  def dois_bilhetes(precos, alvo):
+      for j in range(len(precos)):
+          for i in range(j):
+              if precos[i] + precos[j] == alvo:
+                  return [i, j]
+      return []
+editorial:
+  pt: |
+    **Ideia:** para cada bilhete `j`, o parceiro ideal custa `alvo - precos[j]`. Em vez de procurar esse valor na lista toda, guardamos num dicionário os preços já vistos (preço -> primeiro índice). Procurar numa chave do dicionário é O(1) em média.
+
+    **Passos:** 1) percorrer a lista da esquerda para a direita; 2) para cada `j`, ver se `alvo - precos[j]` já está no dicionário; se sim, devolver `[índice guardado, j]`; 3) senão, guardar o preço atual (só se ainda não existir, para ficar com o menor `i`).
+
+    **Complexidade:** tempo O(n), espaço O(n).
+
+    **Porque é que a ingénua falha:** testar todos os pares é O(n²). Com 10^5 bilhetes são cerca de 5·10^9 comparações, muito mais do que o limite de tempo.
+  en: |
+    **Idea:** for each ticket `j`, the ideal partner costs `alvo - precos[j]`. Instead of scanning the whole list for it, store the prices already seen in a dictionary (price -> first index). Looking up a dictionary key is O(1) on average.
+
+    **Steps:** 1) walk the list left to right; 2) for each `j`, check whether `alvo - precos[j]` is already in the dictionary; if so, return `[stored index, j]`; 3) otherwise store the current price (only if absent, to keep the smallest `i`).
+
+    **Complexity:** time O(n), space O(n).
+
+    **Why the naive one is slow:** trying every pair is O(n²). With 10^5 tickets that is about 5·10^9 comparisons, far beyond the time limit.

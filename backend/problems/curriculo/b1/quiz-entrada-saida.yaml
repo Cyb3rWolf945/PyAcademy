@@ -1,0 +1,35 @@
+# Quiz (bloco 1, vila): identificar entradas, saídas e variáveis num problema do dia a dia.
+id: quiz-entrada-saida
+titulo: {pt: "Quanto troco recebo?", en: "How much change do I get?"}
+tipo: quiz
+bloco: "1"
+regiao: vila
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Na máquina do bar pagas uma bica com uma moeda maior do que o preço. O problema é: "Quanto troco recebo?".
+    Antes de escrever qualquer algoritmo, identifica os dados de entrada, o resultado e o que é variável.
+  en: |
+    At the café machine you pay for a coffee with a coin bigger than the price. The problem is: "How much change do I get?".
+    Before writing any algorithm, identify the input data, the result and what changes.
+perguntas:
+  - pergunta: {pt: "Quais são os dados de entrada?", en: "What are the input data?"}
+    opcoes:
+      - {pt: "Só o troco", en: "Only the change"}
+      - {pt: "O valor pago e o preço da bica", en: "The amount paid and the price of the coffee"}
+      - {pt: "A hora do dia", en: "The time of day"}
+    resposta: [1]
+  - pergunta: {pt: "Qual é o resultado (saída) do problema?", en: "What is the result (output) of the problem?"}
+    opcoes:
+      - {pt: "O preço da bica", en: "The price of the coffee"}
+      - {pt: "O troco", en: "The change"}
+      - {pt: "A moeda usada", en: "The coin used"}
+    resposta: [1]
+  - pergunta: {pt: "Qual destes valores é uma variável (muda de cliente para cliente)?", en: "Which of these values is a variable (it changes from customer to customer)?"}
+    opcoes:
+      - {pt: "A taxa de IVA de 23%", en: "The 23% VAT rate"}
+      - {pt: "O valor pago pelo cliente", en: "The amount paid by the customer"}
+      - {pt: "O número de dias numa semana", en: "The number of days in a week"}
+    resposta: [1]

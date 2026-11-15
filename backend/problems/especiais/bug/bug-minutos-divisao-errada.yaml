@@ -1,0 +1,99 @@
+# Problema bug gerado (bug); rascunho à espera de revisão do professor.
+id: bug-minutos-divisao-errada
+titulo:
+  pt: 'Bug: o filme com horas partidas'
+  en: 'Bug: the film with broken hours'
+tipo: bug
+bloco: '2'
+regiao: floresta
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |-
+    O programa converte a duração de um filme em **horas inteiras e minutos que sobram** (150 minutos são 2 horas e 30 minutos), mas diz que são 2,5 horas e 30 minutos. Corrige-o.
+
+    Entrada: os minutos totais (inteiro). Saída: duas linhas, as horas inteiras e os minutos que sobram.
+  en: |-
+    The program converts a film's length into **whole hours and leftover minutes** (150 minutes are 2 hours and 30 minutes), but it says 2.5 hours and 30 minutes. Fix it.
+
+    Input: the total minutes (integer). Output: two lines, the whole hours and the leftover minutes.
+codigo_inicial: |
+  MINUTOS_POR_HORA = 60
+
+  minutos_totais = 0
+  horas = 0
+  minutos = 0
+
+  # input
+  minutos_totais = int(input("Duração do filme em minutos: "))
+
+  # processamento
+  horas = minutos_totais / MINUTOS_POR_HORA
+  minutos = minutos_totais % MINUTOS_POR_HORA
+
+  # output
+  print(horas)
+  print(minutos)
+exemplos:
+- &id001
+  stdin: '150
+
+    '
+  stdout: '2
+
+    30'
+testes:
+- *id001
+- stdin: '90
+
+    '
+  stdout: '1
+
+    30'
+- stdin: '59
+
+    '
+  stdout: '0
+
+    59'
+- stdin: '60
+
+    '
+  stdout: '1
+
+    0'
+- stdin: '0
+
+    '
+  stdout: '0
+
+    0'
+- stdin: '185
+
+    '
+  stdout: '3
+
+    5'
+comparacao: numeros
+pistas:
+- pt: Queres só a parte inteira da divisão. Que operador dá a divisão inteira?
+  en: You only want the whole part of the division. Which operator gives integer division?
+limite_tempo_s: 2
+solucao_referencia: |
+  MINUTOS_POR_HORA = 60
+
+  minutos_totais = 0
+  horas = 0
+  minutos = 0
+
+  # input
+  minutos_totais = int(input("Duração do filme em minutos: "))
+
+  # processamento
+  horas = minutos_totais // MINUTOS_POR_HORA
+  minutos = minutos_totais % MINUTOS_POR_HORA
+
+  # output
+  print(horas)
+  print(minutos)

@@ -1,0 +1,78 @@
+# Programa com funções (bloco 6, torre): decompor um programa em funções, com define_funcao.
+id: dividir-em-funcoes
+titulo: {pt: "Arruma o programa em funções", en: "Tidy the program into functions"}
+tipo: programa
+bloco: "6"
+regiao: torre
+dificuldade: 4
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O colega escreveu um programa de notas com tudo no mesmo sítio. Tu vais arrumá-lo com uma função.
+    Lê três notas (decimais permitidos), uma por linha. Escreve "Média: X.XX" com a média arredondada a 2 casas decimais (2 casas com zeros à direita, ex.: 13.00), numa linha.
+    Na linha seguinte escreve "Aprovado" se a média for 10 ou mais, senão "Reprovado".
+
+    🧱 Requisito: tens de definir uma função calcular_media(a, b, c) com 3 parâmetros que devolve a média, e o programa tem de a usar.
+  en: |
+    A classmate wrote a grades program with everything in one place. You are going to tidy it up with a function.
+    Read three grades (decimals allowed), one per line. Print "Average: X.XX" with the average rounded to 2 decimal places (zeros kept, e.g. 13.00), on one line.
+    On the next line print "Passed" if the average is 10 or more, otherwise "Failed".
+
+    🧱 Requirement: you must define a function calcular_media(a, b, c) with 3 parameters that returns the average, and the program must use it.
+exemplos:
+  - stdin: "12\n13\n14\n"
+    stdout: {pt: "Média: 13.00\nAprovado", en: "Average: 13.00\nPassed"}
+testes:
+  - stdin: "8\n9\n9.5\n"
+    stdout: {pt: "Média: 8.83\nReprovado", en: "Average: 8.83\nFailed"}
+  - stdin: "10\n10\n10\n"
+    stdout: {pt: "Média: 10.00\nAprovado", en: "Average: 10.00\nPassed"}
+  - stdin: "20\n20\n19\n"
+    stdout: {pt: "Média: 19.67\nAprovado", en: "Average: 19.67\nPassed"}
+  - stdin: "0\n0\n0\n"
+    stdout: {pt: "Média: 0.00\nReprovado", en: "Average: 0.00\nFailed"}
+comparacao: texto
+ordem_importa: true
+requisitos:
+  define_funcao: {nome: calcular_media, parametros: 3}
+pistas:
+  - {pt: "A função só faz a conta e devolve o resultado. O print fica fora dela.", en: "The function only does the calculation and returns the result. The print stays outside it."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    nota_1 = 0.0
+    nota_2 = 0.0
+    nota_3 = 0.0
+    def calcular_media(a, b, c):
+        return (a + b + c) / 3
+    # input
+    nota_1 = float(input("Nota 1: "))
+    nota_2 = float(input("Nota 2: "))
+    nota_3 = float(input("Nota 3: "))
+    # processamento
+    media = calcular_media(nota_1, nota_2, nota_3)
+    # output
+    print(f"Média: {media:.2f}")
+    if media >= 10:
+        print("Aprovado")
+    else:
+        print("Reprovado")
+  en: |
+    grade_1 = 0.0
+    grade_2 = 0.0
+    grade_3 = 0.0
+    def calcular_media(a, b, c):
+        return (a + b + c) / 3
+    # input
+    grade_1 = float(input("Grade 1: "))
+    grade_2 = float(input("Grade 2: "))
+    grade_3 = float(input("Grade 3: "))
+    # processing
+    average = calcular_media(grade_1, grade_2, grade_3)
+    # output
+    print(f"Average: {average:.2f}")
+    if average >= 10:
+        print("Passed")
+    else:
+        print("Failed")

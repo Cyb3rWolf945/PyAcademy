@@ -1,0 +1,80 @@
+# Ciclo while com contador e break (bloco 5, rio): validação de PIN com 3 tentativas.
+id: pin-tres-tentativas
+titulo: {pt: "Três tentativas e o cartão bloqueia", en: "Three tries and the card gets blocked"}
+tipo: programa
+bloco: "5"
+regiao: rio
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O cartão da cantina só aceita o PIN 4321 e dá apenas 3 tentativas. Lê os PIN que o utilizador escreve, um por linha.
+    Se acertar numa das 3 tentativas, escreve "Acesso concedido". Se falhar as 3, escreve "Cartão bloqueado" e não lês mais nada.
+    Entrada: linhas com inteiros (até 3 tentativas). Saída: uma linha.
+
+    🧱 Requisito: tens de usar um ciclo while com um contador de tentativas.
+  en: |
+    The canteen card only accepts the PIN 4321 and gives only 3 tries. Read the PINs the user types, one per line.
+    If the user gets it right in one of the 3 tries, print "Access granted". If all 3 fail, print "Card blocked" and read nothing else.
+    Input: lines with integers (up to 3 tries). Output: one line.
+
+    🧱 Requirement: you must use a while loop with a try counter.
+exemplos:
+  - stdin: "1111\n4321\n"
+    stdout: {pt: "Acesso concedido", en: "Access granted"}
+testes:
+  - stdin: "4321\n"
+    stdout: {pt: "Acesso concedido", en: "Access granted"}
+  - stdin: "1\n2\n3\n"
+    stdout: {pt: "Cartão bloqueado", en: "Card blocked"}
+  - stdin: "1\n2\n4321\n"
+    stdout: {pt: "Acesso concedido", en: "Access granted"}
+  - stdin: "1\n2\n3\n4321\n"
+    stdout: {pt: "Cartão bloqueado", en: "Card blocked"}
+  - stdin: "9999\n4321\n"
+    stdout: {pt: "Acesso concedido", en: "Access granted"}
+comparacao: texto
+ordem_importa: true
+requisitos:
+  usa: [while]
+pistas:
+  - {pt: "O ciclo deve parar quando acertas (break) ou quando já foram 3 tentativas.", en: "The loop must stop when you get it right (break) or when there have been 3 tries."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    PIN_CORRETO = 4321
+    MAX_TENTATIVAS = 3
+    pin_tentado = 0
+    tentativas = 0
+    acertou = False
+    # input e processamento
+    while tentativas < MAX_TENTATIVAS:
+        pin_tentado = int(input("PIN: "))
+        tentativas = tentativas + 1
+        if pin_tentado == PIN_CORRETO:
+            acertou = True
+            break
+    # output
+    if acertou:
+        print("Acesso concedido")
+    else:
+        print("Cartão bloqueado")
+  en: |
+    CORRECT_PIN = 4321
+    MAX_TRIES = 3
+    typed_pin = 0
+    tries = 0
+    success = False
+    # input and processing
+    while tries < MAX_TRIES:
+        typed_pin = int(input("PIN: "))
+        tries = tries + 1
+        if typed_pin == CORRECT_PIN:
+            success = True
+            break
+    # output
+    if success:
+        print("Access granted")
+    else:
+        print("Card blocked")

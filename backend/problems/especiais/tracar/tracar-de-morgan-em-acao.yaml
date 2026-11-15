@@ -1,0 +1,64 @@
+# Problema tracar gerado (tracar); rascunho à espera de revisão do professor.
+id: tracar-de-morgan-em-acao
+titulo:
+  pt: 'Traçar: De Morgan em ação'
+  en: 'Trace it: De Morgan in action'
+tipo: tracar
+bloco: '4'
+regiao: encruzilhada
+dificuldade: 3
+origem: novo
+estado: rascunho
+enunciado:
+  pt: 'Avalia as expressões lógicas passo a passo. Recorda as leis de De Morgan: `not (A and B)` é igual a `(not A) or (not B)`, e `not (A or B)` é igual a `(not A) and (not B)`. Prioridade: `not`, depois `and`, depois `or`.'
+  en: 'Evaluate the logical expressions step by step. Recall De Morgan''s laws: `not (A and B)` equals `(not A) or (not B)`, and `not (A or B)` equals `(not A) and (not B)`. Precedence: `not`, then `and`, then `or`.'
+perguntas:
+- pergunta:
+    pt: Qual é o valor de `resultado`?
+    en: What is the value of `resultado`?
+  codigo: |
+    a = True
+    b = False
+    resultado = not (a and b)
+  opcoes:
+  - pt: 'True'
+    en: 'True'
+  - pt: 'False'
+    en: 'False'
+  resposta:
+  - 0
+- pergunta:
+    pt: Qual é o valor de `equivalente`?
+    en: What is the value of `equivalente`?
+  codigo: |
+    idade = 20
+    tem_bilhete = False
+    entra = (idade >= 18) and tem_bilhete
+    equivalente = not ((idade < 18) or (not tem_bilhete))
+  opcoes:
+  - pt: 'True'
+    en: 'True'
+  - pt: 'False'
+    en: 'False'
+  resposta:
+  - 1
+- pergunta:
+    pt: 'Qual é o valor de `demorgan`? (É a forma de De Morgan de `original`: confirma que dão o mesmo.)'
+    en: 'What is the value of `demorgan`? (It is the De Morgan form of `original`: check that they agree.)'
+  codigo: |
+    x = 3
+    y = 1
+    original = not (x > 5 or y < 2)
+    demorgan = (x <= 5) and (y >= 2)
+  resposta_texto: 'False'
+- pergunta:
+    pt: 'O que escreve este programa? (Dica: o `and` é resolvido antes do `or`.)'
+    en: 'What does this program print? (Hint: `and` is evaluated before `or`.)'
+  codigo: |
+    x = 7
+    y = 2
+    print(x > 5 and y > 5 or x < 10)
+  resposta_texto: 'True'
+pistas:
+- pt: Substitui cada variável pelo seu valor e resolve primeiro os parênteses, depois not, and e or.
+  en: Replace each variable by its value and solve the parentheses first, then not, and, or.

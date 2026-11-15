@@ -1,0 +1,70 @@
+# Condicionais (bloco 4, encruzilhada): escala de classificação com limites >= e <.
+id: nota-qualitativa
+titulo: {pt: "De número a palavra", en: "From number to word"}
+tipo: programa
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    O professor de Programação usa uma escala qualitativa para o relatório. Lê uma nota de 0 a 20 (pode ter decimais).
+    Escreve a classificação:
+    menos de 10: "Insuficiente"; de 10 (incluído) a 14 (excluído): "Suficiente"; de 14 (incluído) a 18 (excluído): "Bom"; 18 ou mais: "Muito bom".
+    Entrada: um número. Saída: uma palavra.
+  en: |
+    The Programming teacher uses a qualitative scale for the report. Read a grade from 0 to 20 (decimals allowed).
+    Print the classification:
+    below 10: "Insufficient"; from 10 (included) to 14 (excluded): "Sufficient"; from 14 (included) to 18 (excluded): "Good"; 18 or more: "Very good".
+    Input: one number. Output: one word.
+exemplos:
+  - stdin: "15\n"
+    stdout: {pt: "Bom", en: "Good"}
+testes:
+  - stdin: "9.5\n"
+    stdout: {pt: "Insuficiente", en: "Insufficient"}
+  - stdin: "10\n"
+    stdout: {pt: "Suficiente", en: "Sufficient"}
+  - stdin: "13.5\n"
+    stdout: {pt: "Suficiente", en: "Sufficient"}
+  - stdin: "14\n"
+    stdout: {pt: "Bom", en: "Good"}
+  - stdin: "17.9\n"
+    stdout: {pt: "Bom", en: "Good"}
+  - stdin: "18\n"
+    stdout: {pt: "Muito bom", en: "Very good"}
+  - stdin: "0\n"
+    stdout: {pt: "Insuficiente", en: "Insufficient"}
+comparacao: texto
+ordem_importa: true
+pistas:
+  - {pt: "Testa primeiro a nota mais baixa com <. Cada elif só é avaliado se o anterior for falso.", en: "Test the lowest grade first with <. Each elif is only checked if the previous one was false."}
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    nota = 0.0
+    # input
+    nota = float(input("Nota (0 a 20): "))
+    # processamento e output
+    if nota < 10:
+        print("Insuficiente")
+    elif nota < 14:
+        print("Suficiente")
+    elif nota < 18:
+        print("Bom")
+    else:
+        print("Muito bom")
+  en: |
+    grade = 0.0
+    # input
+    grade = float(input("Grade (0 to 20): "))
+    # processing and output
+    if grade < 10:
+        print("Insufficient")
+    elif grade < 14:
+        print("Sufficient")
+    elif grade < 18:
+        print("Good")
+    else:
+        print("Very good")

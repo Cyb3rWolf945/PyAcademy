@@ -1,0 +1,98 @@
+# Arena de Algoritmia (extra_hard): Palcos sem buracos. Gerado em rascunho; revisão do professor pendente.
+id: algo-juntar-horarios-festival
+titulo:
+  pt: Palcos sem buracos
+  en: Stages without gaps
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    No festival, cada banda tem um horário `[inicio, fim]` (em minutos, `inicio ≤ fim`) e os horários podem sobrepor-se ou vir em qualquer ordem. A organização quer agrupar os horários em **blocos contínuos**: dois horários que se sobrepõem ou apenas se **tocam** (`fim` de um igual ao `inicio` do outro) fundem-se num só.
+
+    Escreve `juntar_horarios(horarios)`, que devolve a lista de blocos `[inicio, fim]` resultantes, **ordenados** por `inicio`. A ordem do resultado importa.
+
+    **Exemplo:** `[[8, 10], [1, 3], [2, 6], [6, 7]]` devolve `[[1, 7], [8, 10]]`: `[1,3]`, `[2,6]` e `[6,7]` fundem-se em `[1,7]`; `[8,10]` fica isolado.
+  en: |
+    At the festival, each band has a slot `[inicio, fim]` (in minutes, `inicio ≤ fim`) and the slots may overlap or come in any order. The organisation wants to group the slots into **continuous blocks**: two slots that overlap or merely **touch** (one's `fim` equals the other's `inicio`) merge into one.
+
+    Write `juntar_horarios(horarios)`, which returns the resulting list of blocks `[inicio, fim]`, **sorted** by `inicio`. The order of the result matters.
+
+    **Example:** `[[8, 10], [1, 3], [2, 6], [6, 7]]` returns `[[1, 7], [8, 10]]`: `[1,3]`, `[2,6]` and `[6,7]` merge into `[1,7]`; `[8,10]` stays on its own.
+assinatura: juntar_horarios(horarios)
+restricoes:
+  pt: 0 ≤ len(horarios) ≤ 4·10^4; 0 ≤ inicio ≤ fim ≤ 10^9
+  en: 0 ≤ len(horarios) ≤ 4·10^4; 0 ≤ inicio ≤ fim ≤ 10^9
+exemplos:
+- args: [[[8, 10], [1, 3], [2, 6], [6, 7]]]
+  devolve: [[1, 7], [8, 10]]
+testes:
+- args: [[[8, 10], [1, 3], [2, 6], [6, 7]]]
+  devolve: [[1, 7], [8, 10]]
+- args: [[]]
+  devolve: []
+- args: [[[5, 5]]]
+  devolve: [[5, 5]]
+- args: [[[1, 4], [4, 5]]]
+  devolve: [[1, 5]]
+- args: [[[1, 10], [2, 3], [4, 5]]]
+  devolve: [[1, 10]]
+- args: [[[1, 2], [3, 4]]]
+  devolve: [[1, 2], [3, 4]]
+- args: [[[3, 6], [1, 2], [2, 3]]]
+  devolve: [[1, 6]]
+- args: [[[0, 0], [0, 0]]]
+  devolve: [[0, 0]]
+- args_gerador: '[[[(i * 7919) % 100003 * 4, (i * 7919) % 100003 * 4 + 1 + i % 4] for i in range(40000)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Ordena por início. Depois percorre: se o próximo começa antes (ou quando) o bloco atual acaba, estende o bloco; senão, abre um novo.'
+  en: 'Sort by start. Then walk through: if the next one starts before (or when) the current block ends, extend the block; otherwise open a new one.'
+erros_comuns: []
+limite_tempo_s: 3
+solucao_referencia: |
+  def juntar_horarios(horarios):
+      res = []
+      for ini, fim in sorted(horarios):
+          if res and ini <= res[-1][1]:
+              if fim > res[-1][1]:
+                  res[-1][1] = fim
+          else:
+              res.append([ini, fim])
+      return res
+solucao_ingenua: |
+  def juntar_horarios(horarios):
+      res = []
+      for ini, fim in horarios:
+          novo = [ini, fim]
+          resto = []
+          for a, b in res:
+              if a <= novo[1] and novo[0] <= b:
+                  novo = [min(a, novo[0]), max(b, novo[1])]
+              else:
+                  resto.append([a, b])
+          resto.append(novo)
+          res = resto
+      return sorted(res)
+editorial:
+  pt: |
+    **Ideia:** depois de ordenar por início, só o último bloco construído pode fundir-se com o horário seguinte.
+
+    **Passos:** 1) ordenar os horários; 2) para cada `[ini, fim]`: se `ini <= fim` do último bloco, estender esse `fim` (máximo); senão, acrescentar um bloco novo; 3) devolver os blocos.
+
+    **Complexidade:** tempo O(n log n) (a ordenação), espaço O(n).
+
+    **Porque é que a ingénua falha:** comparar cada horário novo com todos os blocos existentes (e reconstruir a lista) é O(n · b), com b o número de blocos, que aqui são dezenas de milhares.
+  en: |
+    **Idea:** after sorting by start, only the last block built can merge with the next slot.
+
+    **Steps:** 1) sort the slots; 2) for each `[ini, fim]`: if `ini <= fim` of the last block, extend that `fim` (maximum); otherwise append a new block; 3) return the blocks.
+
+    **Complexity:** time O(n log n) (the sort), space O(n).
+
+    **Why the naive one is slow:** comparing each new slot with all existing blocks (and rebuilding the list) is O(n · b), with b the number of blocks, here tens of thousands.

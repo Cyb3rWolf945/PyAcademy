@@ -42,7 +42,7 @@ deploy/Caddyfile   docker-compose.yml   docs/PLANO.md   materiais_aulas/ (no .gi
 ## Comandos (sempre via compose)
 ```bash
 docker compose up -d --build
-docker compose run --rm app pytest
+docker compose run --rm -w /app app pytest      # backend + runner
 docker compose run --rm app python -m app.tools.validate_problems
 docker compose run --rm app python -m app.tools.check_curriculum
 docker compose run --rm app python -m app.tools.check_i18n

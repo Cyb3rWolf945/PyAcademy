@@ -1,0 +1,43 @@
+# Listas (bloco 7, cidadela): somar uma lista à mão, sem sum().
+id: soma-lista
+titulo: {pt: "Somar sem sum()", en: "Adding without sum()"}
+tipo: funcao
+bloco: "7"
+regiao: cidadela
+dificuldade: 1
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Escreve a função soma_lista(valores) que recebe uma lista de números (pode estar vazia) e devolve a soma de todos.
+    Usa um acumulador e um ciclo for. Se a lista estiver vazia, devolve 0.
+
+    🧱 Requisito: é proibido usar sum(). Tens de somar à mão.
+  en: |
+    Write the function soma_lista(valores) that receives a list of numbers (it may be empty) and returns the sum of all of them.
+    Use an accumulator and a for loop. If the list is empty, return 0.
+
+    🧱 Requirement: using sum() is forbidden. You must add the values by hand.
+assinatura: "soma_lista(valores)"
+exemplos:
+  - args: [[4, 6]]
+    devolve: 10
+testes:
+  - {args: [[]], devolve: 0}
+  - {args: [[5]], devolve: 5}
+  - {args: [[1, 2, 3]], devolve: 6}
+  - {args: [[-1, 1, 10]], devolve: 10}
+  - {args: [[2.5, 2.5]], devolve: 5.0}
+comparacao: numeros
+ordem_importa: true
+requisitos:
+  proibe: [sum]
+pistas:
+  - {pt: "Começa com total = 0 antes do ciclo e vai somando cada elemento.", en: "Start with total = 0 before the loop and add each element."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def soma_lista(valores):
+      total = 0
+      for valor in valores:
+          total = total + valor
+      return total

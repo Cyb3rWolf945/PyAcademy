@@ -1,0 +1,98 @@
+# Arena de Algoritmia (hard): Dois horários, um só. Gerado em rascunho; revisão do professor pendente.
+id: algo-horario-juntar
+titulo:
+  pt: Dois horários, um só
+  en: Two timetables, one
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 1
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    Duas companhias fazem o Tomar–Lisboa e cada uma publicou os seus horários de partida (em minutos depois da meia-noite), já **por ordem crescente**. Cria o quadro único da estação.
+
+    Escreve `juntar_ordenadas(a, b)`, que devolve uma nova lista, também por ordem crescente, com todos os valores de `a` e de `b` (os repetidos mantêm-se). A ordem do resultado importa.
+
+    **Exemplo:** `a = [420, 480, 600]`, `b = [450, 480]` devolve `[420, 450, 480, 480, 600]`.
+  en: |
+    Two companies run Tomar–Lisbon and each published its departure times (in minutes after midnight), already in **ascending order**. Build the station's single board.
+
+    Write `juntar_ordenadas(a, b)`, which returns a new list, also in ascending order, with every value of `a` and `b` (duplicates are kept). The order of the result matters.
+
+    **Example:** `a = [420, 480, 600]`, `b = [450, 480]` returns `[420, 450, 480, 480, 600]`.
+assinatura: juntar_ordenadas(a, b)
+restricoes:
+  pt: 0 ≤ len(a), len(b) ≤ 10^5; a e b ordenadas; |valores| ≤ 10^9
+  en: 0 ≤ len(a), len(b) ≤ 10^5; a and b sorted; |values| ≤ 10^9
+exemplos:
+- args: [[420, 480, 600], [450, 480]]
+  devolve: [420, 450, 480, 480, 600]
+testes:
+- args: [[420, 480, 600], [450, 480]]
+  devolve: [420, 450, 480, 480, 600]
+- args: [[], []]
+  devolve: []
+- args: [[1], []]
+  devolve: [1]
+- args: [[], [2, 3]]
+  devolve: [2, 3]
+- args: [[1, 2, 3], [4, 5, 6]]
+  devolve: [1, 2, 3, 4, 5, 6]
+- args: [[4, 5, 6], [1, 2, 3]]
+  devolve: [1, 2, 3, 4, 5, 6]
+- args: [[-5, 0, 5], [-5, 0, 5]]
+  devolve: [-5, -5, 0, 0, 5, 5]
+- args: [[2, 2], [2]]
+  devolve: [2, 2, 2]
+- args_gerador: '[[i * 3 for i in range(100000)], [i * 3 + 1 for i in range(100000)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: 'Dois ponteiros, um em cada lista: copia sempre o menor dos dois valores e avança esse ponteiro.'
+  en: 'Two pointers, one per list: always copy the smaller of the two values and advance that pointer.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def juntar_ordenadas(a, b):
+      i = 0
+      j = 0
+      res = []
+      while i < len(a) and j < len(b):
+          if a[i] <= b[j]:
+              res.append(a[i])
+              i += 1
+          else:
+              res.append(b[j])
+              j += 1
+      res.extend(a[i:])
+      res.extend(b[j:])
+      return res
+solucao_ingenua: |
+  def juntar_ordenadas(a, b):
+      res = list(a)
+      for x in b:
+          i = 0
+          while i < len(res) and res[i] <= x:
+              i += 1
+          res.insert(i, x)
+      return res
+editorial:
+  pt: |
+    **Ideia:** como as duas listas já estão ordenadas, o menor elemento por usar está sempre à frente de uma delas. Dois ponteiros resolvem.
+
+    **Passos:** 1) `i = j = 0`; 2) enquanto ambos válidos, copiar o menor e avançar; 3) acrescentar o que sobrou.
+
+    **Complexidade:** tempo O(n + m), espaço O(n + m) para o resultado.
+
+    **Porque é que a ingénua falha:** inserir cada elemento de `b` em `a`, procurando a posição desde o início, custa O(n·m), e `insert` ainda desloca elementos.
+  en: |
+    **Idea:** since both lists are already sorted, the smallest unused element is always at the front of one of them. Two pointers do the job.
+
+    **Steps:** 1) `i = j = 0`; 2) while both are valid, copy the smaller and advance; 3) append whatever is left.
+
+    **Complexity:** time O(n + m), space O(n + m) for the result.
+
+    **Why the naive one is slow:** inserting each element of `b` into `a`, searching for its place from the start, costs O(n·m), and `insert` also shifts elements.

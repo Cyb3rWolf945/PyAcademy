@@ -1,0 +1,111 @@
+# Arena de Algoritmia (extra_hard): Trios de saldo zero. Gerado em rascunho; revisão do professor pendente.
+id: algo-trios-saldo-zero
+titulo:
+  pt: Trios de saldo zero
+  en: Zero-balance trios
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 4
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    Numa casa de estudantes, cada colega tem um saldo (positivo se lhe devem, negativo se deve). A casa quer formar **trios** de colegas cujos saldos somem exatamente `0`, para saldarem as contas entre si.
+
+    Escreve `trios_saldo_zero(saldos)`, que devolve a lista de todos os trios `[a, b, c]` **distintos** com `a ≤ b ≤ c` e `a + b + c = 0`. Cada trio de valores só aparece uma vez, mesmo que existam vários colegas com os mesmos saldos. Devolve os trios **ordenados** por ordem lexicográfica crescente (assim a ordem é única e **importa**).
+
+    **Exemplo:** `[-1, 0, 1, 2, -1, -4]` devolve `[[-1, -1, 2], [-1, 0, 1]]`.
+  en: |
+    In a student house, each flatmate has a balance (positive if they are owed money, negative if they owe). The house wants to form **trios** whose balances add up to exactly `0`, so they can settle among themselves.
+
+    Write `trios_saldo_zero(saldos)`, which returns the list of all **distinct** trios `[a, b, c]` with `a ≤ b ≤ c` and `a + b + c = 0`. Each trio of values appears only once, even if several flatmates share the same balances. Return the trios **sorted** in ascending lexicographic order (so the order is unique and **matters**).
+
+    **Example:** `[-1, 0, 1, 2, -1, -4]` returns `[[-1, -1, 2], [-1, 0, 1]]`.
+assinatura: trios_saldo_zero(saldos)
+restricoes:
+  pt: 0 ≤ len(saldos) ≤ 1500; |saldos[i]| ≤ 10^6
+  en: 0 ≤ len(saldos) ≤ 1500; |saldos[i]| ≤ 10^6
+exemplos:
+- args: [[-1, 0, 1, 2, -1, -4]]
+  devolve: [[-1, -1, 2], [-1, 0, 1]]
+testes:
+- args: [[-1, 0, 1, 2, -1, -4]]
+  devolve: [[-1, -1, 2], [-1, 0, 1]]
+- args: [[]]
+  devolve: []
+- args: [[0, 0, 0]]
+  devolve: [[0, 0, 0]]
+- args: [[0, 0]]
+  devolve: []
+- args: [[1, 2, 3]]
+  devolve: []
+- args: [[-2, 0, 1, 1, 2]]
+  devolve: [[-2, 0, 2], [-2, 1, 1]]
+- args: [[0, 0, 0, 0]]
+  devolve: [[0, 0, 0]]
+- args: [[-3, 1, 2, -3, 1, 2]]
+  devolve: [[-3, 1, 2]]
+- args_gerador: '[[(i * 7919) % 2000003 - 1000000 for i in range(1500)]]'
+comparacao: exato
+ordem_importa: true
+pistas:
+- pt: Ordena a lista. Fixa o primeiro valor e procura os outros dois com dois ponteiros (um em cada ponta do resto), saltando valores repetidos.
+  en: Sort the list. Fix the first value and look for the other two with two pointers (one at each end of the rest), skipping repeated values.
+erros_comuns: []
+limite_tempo_s: 3
+solucao_referencia: |
+  def trios_saldo_zero(saldos):
+      v = sorted(saldos)
+      n = len(v)
+      res = []
+      for i in range(n - 2):
+          if v[i] > 0:
+              break
+          if i > 0 and v[i] == v[i - 1]:
+              continue
+          esq = i + 1
+          dir = n - 1
+          while esq < dir:
+              soma = v[i] + v[esq] + v[dir]
+              if soma < 0:
+                  esq += 1
+              elif soma > 0:
+                  dir -= 1
+              else:
+                  res.append([v[i], v[esq], v[dir]])
+                  esq += 1
+                  dir -= 1
+                  while esq < dir and v[esq] == v[esq - 1]:
+                      esq += 1
+                  while esq < dir and v[dir] == v[dir + 1]:
+                      dir -= 1
+      return res
+solucao_ingenua: |
+  def trios_saldo_zero(saldos):
+      n = len(saldos)
+      achados = set()
+      for i in range(n):
+          for j in range(i + 1, n):
+              for k in range(j + 1, n):
+                  if saldos[i] + saldos[j] + saldos[k] == 0:
+                      achados.add(tuple(sorted((saldos[i], saldos[j], saldos[k]))))
+      return [list(t) for t in sorted(achados)]
+editorial:
+  pt: |
+    **Ideia:** ordenar permite usar dois ponteiros. Fixamos o menor valor `v[i]` e procuramos `v[esq] + v[dir] = -v[i]`: se a soma é pequena, `esq` avança; se é grande, `dir` recua. Saltar valores iguais evita trios repetidos.
+
+    **Passos:** 1) ordenar; 2) para cada `i` (saltando repetidos), `esq = i+1`, `dir = n-1`; 3) ajustar os ponteiros conforme a soma; 4) ao achar um trio, guardá-lo e saltar duplicados dos dois lados.
+
+    **Complexidade:** tempo O(n²), espaço O(1) extra (além da ordenação e do resultado).
+
+    **Porque é que a ingénua falha:** testar todos os trios é O(n³): para n = 1500 são cerca de 5,6·10^8 trios.
+  en: |
+    **Idea:** sorting enables two pointers. Fix the smallest value `v[i]` and look for `v[esq] + v[dir] = -v[i]`: if the sum is too small, `esq` advances; if too large, `dir` retreats. Skipping equal values avoids repeated trios.
+
+    **Steps:** 1) sort; 2) for each `i` (skipping repeats), `esq = i+1`, `dir = n-1`; 3) adjust the pointers according to the sum; 4) on finding a trio, store it and skip duplicates on both sides.
+
+    **Complexity:** time O(n²), O(1) extra space (besides sorting and the result).
+
+    **Why the naive one is slow:** trying every trio is O(n³): for n = 1500 that is about 5.6·10^8 trios.

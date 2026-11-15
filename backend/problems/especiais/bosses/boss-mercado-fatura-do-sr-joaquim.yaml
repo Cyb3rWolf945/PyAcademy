@@ -1,0 +1,234 @@
+# Problema programa gerado (bosses); rascunho à espera de revisão do professor.
+id: boss-mercado-fatura-do-sr-joaquim
+titulo:
+  pt: 'Boss do Mercado: a fatura do Sr. Joaquim'
+  en: 'Market Boss: Mr. Joaquim''s invoice'
+tipo: programa
+bloco: '3'
+regiao: mercado
+dificuldade: 5
+origem: boss
+estado: rascunho
+enunciado:
+  pt: |
+    O Sr. Joaquim, do minimercado da esquina, perdeu a calculadora (anda a ver se está atrás do queijo). Ajuda-o a fazer a fatura!
+
+    Lê, uma por linha, a quantidade (inteira) de **pães**, de **pacotes de leite** e de **queijos** que o cliente leva.
+
+    Preços e regras fixas (são constantes!):
+    - pão: 0,30 €; leite: 0,85 €; queijo: 3,20 €;
+    - desconto de cliente de **5%** sobre o subtotal;
+    - IVA de **6%** sobre o valor já com desconto;
+    - cada saco de plástico custa 0,10 € e cabem **6 artigos** por saco. Usa o número mínimo de sacos (7 artigos precisam de 2 sacos; 0 artigos, de nenhum).
+
+    Escreve cinco linhas, arredondadas a 2 casas decimais (os sacos são um número inteiro):
+    `Subtotal:`, `Desconto:`, `IVA:`, `Sacos:` (quantos), `Total:` (subtotal - desconto + IVA + custo dos sacos).
+  en: |
+    Mr. Joaquim, from the corner shop, lost his calculator (he is checking behind the cheese). Help him make the invoice!
+
+    Read, one per line, the (integer) quantity of **bread rolls**, **milk cartons** and **cheeses** the customer is buying.
+
+    Fixed prices and rules (they are constants!):
+    - bread roll: 0.30 €; milk: 0.85 €; cheese: 3.20 €;
+    - a customer discount of **5%** on the subtotal;
+    - **6%** VAT on the already discounted value;
+    - each plastic bag costs 0.10 € and holds **6 items**. Use the minimum number of bags (7 items need 2 bags; 0 items need none).
+
+    Print five lines, rounded to 2 decimal places (bags is a whole number):
+    `Subtotal:`, `Discount:`, `VAT:`, `Bags:` (how many), `Total:` (subtotal - discount + VAT + cost of the bags).
+exemplos:
+- &id001
+  stdin: '4
+
+    2
+
+    1
+
+    '
+  stdout:
+    pt: |-
+      Subtotal: 6.1
+      Desconto: 0.3
+      IVA: 0.35
+      Sacos: 2
+      Total: 6.34
+    en: |-
+      Subtotal: 6.1
+      Discount: 0.3
+      VAT: 0.35
+      Bags: 2
+      Total: 6.34
+testes:
+- stdin: '0
+
+    0
+
+    0
+
+    '
+  stdout:
+    pt: |-
+      Subtotal: 0.0
+      Desconto: 0.0
+      IVA: 0.0
+      Sacos: 0
+      Total: 0.0
+    en: |-
+      Subtotal: 0.0
+      Discount: 0.0
+      VAT: 0.0
+      Bags: 0
+      Total: 0.0
+- stdin: '6
+
+    0
+
+    0
+
+    '
+  stdout:
+    pt: |-
+      Subtotal: 1.8
+      Desconto: 0.09
+      IVA: 0.1
+      Sacos: 1
+      Total: 1.91
+    en: |-
+      Subtotal: 1.8
+      Discount: 0.09
+      VAT: 0.1
+      Bags: 1
+      Total: 1.91
+- stdin: '7
+
+    0
+
+    0
+
+    '
+  stdout:
+    pt: |-
+      Subtotal: 2.1
+      Desconto: 0.11
+      IVA: 0.12
+      Sacos: 2
+      Total: 2.31
+    en: |-
+      Subtotal: 2.1
+      Discount: 0.11
+      VAT: 0.12
+      Bags: 2
+      Total: 2.31
+- stdin: '12
+
+    3
+
+    5
+
+    '
+  stdout:
+    pt: |-
+      Subtotal: 22.15
+      Desconto: 1.11
+      IVA: 1.26
+      Sacos: 4
+      Total: 22.71
+    en: |-
+      Subtotal: 22.15
+      Discount: 1.11
+      VAT: 1.26
+      Bags: 4
+      Total: 22.71
+- stdin: '1
+
+    1
+
+    1
+
+    '
+  stdout:
+    pt: |-
+      Subtotal: 4.35
+      Desconto: 0.22
+      IVA: 0.25
+      Sacos: 1
+      Total: 4.48
+    en: |-
+      Subtotal: 4.35
+      Discount: 0.22
+      VAT: 0.25
+      Bags: 1
+      Total: 4.48
+- *id001
+comparacao: numeros
+pistas:
+- pt: 'Para o número de sacos usa // : (artigos + 5) // 6 arredonda para cima. Põe o 6 e o 0,10 em constantes.'
+  en: 'For the bags use // : (items + 5) // 6 rounds up. Put the 6 and the 0.10 in constants.'
+- pt: O IVA incide sobre (subtotal - desconto), não sobre o subtotal.
+  en: VAT applies to (subtotal - discount), not to the subtotal.
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    PRECO_PAO = 0.30
+    PRECO_LEITE = 0.85
+    PRECO_QUEIJO = 3.20
+    DESCONTO_CLIENTE = 0.05
+    TAXA_IVA = 0.06
+    PRECO_SACO = 0.10
+    ARTIGOS_POR_SACO = 6
+
+    paes = 0
+    leites = 0
+    queijos = 0
+
+    # input
+    paes = int(input("Pães: "))
+    leites = int(input("Leites: "))
+    queijos = int(input("Queijos: "))
+
+    # processamento
+    subtotal = paes * PRECO_PAO + leites * PRECO_LEITE + queijos * PRECO_QUEIJO
+    desconto = subtotal * DESCONTO_CLIENTE
+    iva = (subtotal - desconto) * TAXA_IVA
+    artigos = paes + leites + queijos
+    sacos = (artigos + ARTIGOS_POR_SACO - 1) // ARTIGOS_POR_SACO
+    total = subtotal - desconto + iva + sacos * PRECO_SACO
+
+    # output
+    print("Subtotal:", round(subtotal, 2))
+    print("Desconto:", round(desconto, 2))
+    print("IVA:", round(iva, 2))
+    print("Sacos:", sacos)
+    print("Total:", round(total, 2))
+  en: |
+    BREAD_PRICE = 0.30
+    MILK_PRICE = 0.85
+    CHEESE_PRICE = 3.20
+    CUSTOMER_DISCOUNT = 0.05
+    VAT_RATE = 0.06
+    BAG_PRICE = 0.10
+    ITEMS_PER_BAG = 6
+
+    breads = 0
+    milks = 0
+    cheeses = 0
+
+    # input
+    breads = int(input("Bread rolls: "))
+    milks = int(input("Milk cartons: "))
+    cheeses = int(input("Cheeses: "))
+
+    # processing
+    subtotal = breads * BREAD_PRICE + milks * MILK_PRICE + cheeses * CHEESE_PRICE
+    discount = subtotal * CUSTOMER_DISCOUNT
+    vat = (subtotal - discount) * VAT_RATE
+    items = breads + milks + cheeses
+    bags = (items + ITEMS_PER_BAG - 1) // ITEMS_PER_BAG
+    total = subtotal - discount + vat + bags * BAG_PRICE
+
+    # output
+    print("Subtotal:", round(subtotal, 2))
+    print("Discount:", round(discount, 2))
+    print("VAT:", round(vat, 2))
+    print("Bags:", bags)
+    print("Total:", round(total, 2))

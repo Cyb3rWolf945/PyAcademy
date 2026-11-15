@@ -1,12 +1,16 @@
 # Cria a app FastAPI: middleware, rotas /api e ficheiros estáticos do frontend em "/".
+import asyncio
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 from starlette.types import ASGIApp, Receive, Scope, Send
 
-from app.api import admin, auth, health, problems
+from app.api import admin, auth, health, problems, submissions
 from app.config import settings
 from app.errors import install_error_handlers
+from app.services import dispatcher
 
 
 class BodyLimitMiddleware:
@@ -58,11 +62,24 @@ class Frontend(StaticFiles):
         return resp
 
 
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    """Arranca o dispatcher da fila do runner neste worker (se houver RUNNER_URL) e pára-o ao sair."""
+    stop, tasks = asyncio.Event(), []
+    if settings.runner_url:
+        tasks = dispatcher.start(stop)
+    yield
+    stop.set()
+    for t in tasks:
+        t.cancel()
+    await asyncio.gather(*tasks, return_exceptions=True)
+
+
 def create_app() -> FastAPI:
-    app = FastAPI(title="PyArena", docs_url=None, redoc_url=None, openapi_url=None)
+    app = FastAPI(title="PyArena", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
     app.add_middleware(BodyLimitMiddleware, max_bytes=settings.max_body_bytes)
     install_error_handlers(app)
-    for r in (health.router, auth.router, admin.router, problems.router):
+    for r in (health.router, auth.router, admin.router, problems.router, submissions.router):
         app.include_router(r)
 
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)

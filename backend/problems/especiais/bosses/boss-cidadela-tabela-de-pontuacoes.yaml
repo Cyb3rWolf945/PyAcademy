@@ -1,0 +1,200 @@
+# Problema programa gerado (bosses); rascunho à espera de revisão do professor.
+id: boss-cidadela-tabela-de-pontuacoes
+titulo:
+  pt: 'Boss da Cidadela: a tabela de pontuações'
+  en: 'Citadel Boss: the score table'
+tipo: programa
+bloco: '7'
+regiao: cidadela
+dificuldade: 5
+origem: boss
+estado: rascunho
+enunciado:
+  pt: |
+    A turma fez um campeonato de jogos e é preciso afixar a tabela antes que alguém reclame. Lê:
+    1. `n`, o número de alunos (inteiro, pelo menos 1);
+    2. as `n` pontuações (inteiros), uma por linha.
+
+    Escreve três linhas:
+    - `Pódio:` as **3 pontuações mais altas**, da maior para a menor e separadas por espaços (se houver menos de 3 alunos, mostra as que existirem; pontuações repetidas contam todas);
+    - `Média:` a média de todas as pontuações, a 2 casas decimais;
+    - `Acima da média:` quantos alunos têm uma pontuação **estritamente maior** do que a média.
+  en: |
+    The class held a game championship and the table must be posted before someone complains. Read:
+    1. `n`, the number of students (integer, at least 1);
+    2. the `n` scores (integers), one per line.
+
+    Print three lines:
+    - `Podium:` the **3 highest scores**, from highest to lowest and separated by spaces (if there are fewer than 3 students, show the ones that exist; repeated scores all count);
+    - `Average:` the average of all the scores, to 2 decimal places;
+    - `Above average:` how many students have a score **strictly greater** than the average.
+exemplos:
+- &id001
+  stdin: |
+    5
+    50
+    80
+    65
+    95
+    70
+  stdout:
+    pt: |-
+      Pódio: 95 80 70
+      Média: 72.0
+      Acima da média: 2
+    en: |-
+      Podium: 95 80 70
+      Average: 72.0
+      Above average: 2
+testes:
+- stdin: '1
+
+    42
+
+    '
+  stdout:
+    pt: |-
+      Pódio: 42
+      Média: 42.0
+      Acima da média: 0
+    en: |-
+      Podium: 42
+      Average: 42.0
+      Above average: 0
+- stdin: '2
+
+    10
+
+    30
+
+    '
+  stdout:
+    pt: |-
+      Pódio: 30 10
+      Média: 20.0
+      Acima da média: 1
+    en: |-
+      Podium: 30 10
+      Average: 20.0
+      Above average: 1
+- stdin: '3
+
+    7
+
+    7
+
+    7
+
+    '
+  stdout:
+    pt: |-
+      Pódio: 7 7 7
+      Média: 7.0
+      Acima da média: 0
+    en: |-
+      Podium: 7 7 7
+      Average: 7.0
+      Above average: 0
+- stdin: |
+    4
+    90
+    90
+    80
+    70
+  stdout:
+    pt: |-
+      Pódio: 90 90 80
+      Média: 82.5
+      Acima da média: 2
+    en: |-
+      Podium: 90 90 80
+      Average: 82.5
+      Above average: 2
+- stdin: |
+    6
+    0
+    100
+    55
+    55
+    20
+    99
+  stdout:
+    pt: |-
+      Pódio: 100 99 55
+      Média: 54.83
+      Acima da média: 4
+    en: |-
+      Podium: 100 99 55
+      Average: 54.83
+      Above average: 4
+- *id001
+comparacao: numeros
+pistas:
+- pt: Guarda as pontuações numa lista (append) e vai somando. Só depois de ter a média podes contar quantos ficam acima dela.
+  en: Keep the scores in a list (append) and add them up as you go. Only once you have the average can you count how many are above it.
+- pt: 'sorted(lista) ordena do menor para o maior: usa .reverse() e a fatia [:3] para o pódio. A fatia nunca dá erro se a lista for curta.'
+  en: 'sorted(list) sorts from lowest to highest: use .reverse() and the slice [:3] for the podium. The slice never errors on a short list.'
+limite_tempo_s: 2
+solucao_referencia:
+  pt: |
+    NUMERO_PODIO = 3
+
+    n = 0
+    pontuacoes = []
+    soma = 0
+    acima_da_media = 0
+    texto_podio = ""
+
+    # input
+    n = int(input("Quantos alunos: "))
+    for i in range(n):
+        pontuacao = int(input("Pontuação: "))
+        pontuacoes.append(pontuacao)
+        soma = soma + pontuacao
+
+    # processamento
+    media = soma / n
+    for pontuacao in pontuacoes:
+        if pontuacao > media:
+            acima_da_media = acima_da_media + 1
+    ordenadas = sorted(pontuacoes)
+    ordenadas.reverse()
+    podio = ordenadas[:NUMERO_PODIO]
+    for pontuacao in podio:
+        texto_podio = texto_podio + str(pontuacao) + " "
+
+    # output
+    print("Pódio:", texto_podio)
+    print("Média:", round(media, 2))
+    print("Acima da média:", acima_da_media)
+  en: |
+    PODIUM_SIZE = 3
+
+    n = 0
+    scores = []
+    total = 0
+    above_average = 0
+    podium_text = ""
+
+    # input
+    n = int(input("How many students: "))
+    for i in range(n):
+        score = int(input("Score: "))
+        scores.append(score)
+        total = total + score
+
+    # processing
+    average = total / n
+    for score in scores:
+        if score > average:
+            above_average = above_average + 1
+    ordered = sorted(scores)
+    ordered.reverse()
+    podium = ordered[:PODIUM_SIZE]
+    for score in podium:
+        podium_text = podium_text + str(score) + " "
+
+    # output
+    print("Podium:", podium_text)
+    print("Average:", round(average, 2))
+    print("Above average:", above_average)

@@ -1,0 +1,159 @@
+# Currículo de Programação I, construído a partir dos materiais das aulas (materiais_aulas/).
+# Cada bloco ACUMULA o que os anteriores permitem.
+# Usado SÓ para verificar as soluções de referência dos problemas (app.tools.check_curriculum),
+# para garantir que cada problema pode ser resolvido com a matéria dada.
+# NUNCA é usado para restringir as submissões dos alunos.
+#
+# Vocabulário de "permite" (verificado com ast pelo check_curriculum):
+#   nos:      tipos de nó ast (ex. If, For, While, FunctionDef, List, Subscript...)
+#   builtins: funções embutidas que podem ser chamadas
+#   modulos:  imports permitidos (e atributos usados, ex. math.sqrt)
+#   metodos:  métodos chamados sobre objetos (ex. append)
+
+blocos:
+  - id: "1"
+    aberto: true
+    regiao: vila
+    nome: {pt: "Algoritmos e fluxogramas", en: "Algorithms and flowcharts"}
+    aulas: ["Aula I", "Aula II"]
+    resumo:
+      pt: "Problema, dados de entrada e resultado; algoritmo como sequência finita e não ambígua de passos; fluxogramas e Portugol. Sem código."
+      en: "Problem, input data and result; an algorithm as a finite, unambiguous sequence of steps; flowcharts and pseudocode. No code."
+    tipos_desafio: [quiz, decomposicao]
+    permite: {nos: [], builtins: [], modulos: [], metodos: []}
+
+  - id: "2"
+    aberto: true
+    regiao: floresta
+    nome: {pt: "Processamento sequencial", en: "Sequential processing"}
+    aulas: ["Aula II", "Aula III"]
+    resumo:
+      pt: "Tipos int, float, str, bool; variáveis; input() devolve texto; int()/float(); operadores + - * / // % ** e prioridade; math.sqrt, math.pi; round; \\n e \\t; troca de valores com aux; programa input → processamento → output."
+      en: "int, float, str, bool; variables; input() returns text; int()/float(); operators + - * / // % ** and precedence; math.sqrt, math.pi; round; \\n and \\t; swapping with a temp variable; input → processing → output."
+    tipos_desafio: [programa, bug, quiz]
+    permite:
+      nos: [Module, Expr, Assign, AugAssign, AnnAssign, Name, Load, Store, Constant, BinOp, UnaryOp,
+            Add, Sub, Mult, Div, FloorDiv, Mod, Pow, USub, UAdd, Call, keyword, Attribute,
+            Import, ImportFrom, alias, JoinedStr, FormattedValue, Tuple]
+      builtins: [input, print, int, float, str, round, abs, type]
+      modulos: {math: [sqrt, pi, pow, floor, ceil]}
+      metodos: []
+
+  - id: "3"
+    aberto: true
+    regiao: mercado
+    nome: {pt: "Decomposição", en: "Decomposition"}
+    aulas: ["Aula 3.5 (Operação Decomposição)"]
+    resumo:
+      pt: "Identificar entradas, variáveis (o que muda), constantes (o que é fixo) e a operação; constantes em MAIÚSCULAS."
+      en: "Identify inputs, variables (what changes), constants (what is fixed) and the operation; constants in UPPERCASE."
+    tipos_desafio: [decomposicao, programa, quiz]
+    permite: {nos: [], builtins: [], modulos: {}, metodos: []}   # igual ao bloco 2
+
+  - id: "4"
+    aberto: true
+    regiao: encruzilhada
+    nome: {pt: "Estruturas condicionais", en: "Conditionals"}
+    aulas: ["Aula IV (5 nov)"]
+    resumo:
+      pt: "Operadores de comparação == != < > <= >=; lógicos and, or, not; álgebra de Boole e leis de De Morgan; if / elif / else; condições aninhadas."
+      en: "Comparison operators == != < > <= >=; logical and, or, not; Boolean algebra and De Morgan's laws; if / elif / else; nested conditions."
+    tipos_desafio: [programa, tracar, bug, quiz]
+    permite:
+      nos: [If, IfExp, Compare, Eq, NotEq, Lt, LtE, Gt, GtE, BoolOp, And, Or, Not, Pass]
+      builtins: [bool]
+      modulos: {}
+      metodos: [lower, upper, strip]
+
+  - id: "5"
+    aberto: true
+    regiao: rio
+    nome: {pt: "Estruturas de repetição", en: "Loops"}
+    aulas: ["Estruturas de Repetição (for & while)"]
+    resumo:
+      pt: "for + range(); while com condição booleana; contadores e acumuladores inicializados antes do ciclo; validação de input; máximo/mínimo de N valores; erros a vigiar: off-by-one, acumulador não inicializado, ciclo infinito."
+      en: "for + range(); while with a boolean condition; counters and accumulators initialised before the loop; input validation; max/min of N values; watch out for off-by-one, uninitialised accumulators, infinite loops."
+    tipos_desafio: [programa, tracar, bug, quiz]
+    permite:
+      nos: [For, While, Break, Continue]
+      builtins: [range]
+      modulos: {}
+      metodos: []
+
+  - id: "6"
+    aberto: true
+    regiao: torre
+    nome: {pt: "Funções", en: "Functions"}
+    aulas: ["Modularização (já dada; sem slides)"]
+    resumo:
+      pt: "Abordagem top-down; def, parâmetros, return; funções que chamam funções; decompor um programa em funções."
+      en: "Top-down approach; def, parameters, return; functions calling functions; breaking a program into functions."
+    tipos_desafio: [funcao, programa, tracar, bug, quiz]
+    permite:
+      nos: [FunctionDef, arguments, arg, Return]
+      builtins: []
+      modulos: {}
+      metodos: []
+
+  - id: "6b"
+    aberto: false          # o professor abre no painel quando der recursividade
+    regiao: torre
+    nome: {pt: "Recursividade", en: "Recursion"}
+    aulas: []
+    resumo: {pt: "Funções que se chamam a si próprias; caso base e caso recursivo.", en: "Functions that call themselves; base case and recursive case."}
+    tipos_desafio: [funcao, tracar]
+    permite: {nos: [], builtins: [], modulos: {}, metodos: []}   # a recursão é detetada à parte
+
+  - id: "7"
+    aberto: true
+    regiao: cidadela
+    nome: {pt: "Listas (vetores)", en: "Lists (arrays)"}
+    aulas: ["Dados estruturados (já dada; sem slides)"]
+    resumo:
+      pt: "Criar listas, indexação, percorrer com for, append, len, soma/máximo à mão, ordenação e pesquisa."
+      en: "Creating lists, indexing, iterating with for, append, len, sum/max by hand, sorting and searching."
+    tipos_desafio: [funcao, programa, tracar, bug, quiz]
+    permite:
+      nos: [List, Subscript, Slice, In, NotIn]
+      builtins: [len, sum, max, min, sorted, list]
+      modulos: {}
+      metodos: [append, pop, insert, remove, index, count, sort, reverse, split, join]
+
+  - id: "7b"
+    aberto: false          # o professor abre no painel quando der matrizes
+    regiao: cidadela
+    nome: {pt: "Matrizes", en: "Matrices"}
+    aulas: []
+    resumo: {pt: "Listas de listas; percorrer linhas e colunas.", en: "Lists of lists; iterating rows and columns."}
+    tipos_desafio: [funcao, programa]
+    permite: {nos: [], builtins: [], modulos: {}, metodos: []}
+
+  - id: "mais_alem"
+    aberto: true            # opcional, sempre visível como "extra"
+    regiao: ilhas
+    nome: {pt: "Mais além", en: "Beyond"}
+    aulas: []
+    resumo:
+      pt: "Extra fora do programa: strings avançadas, dicionários, compreensões, complexidade, pesquisa binária, programação dinâmica."
+      en: "Extras beyond the syllabus: advanced strings, dictionaries, comprehensions, complexity, binary search, dynamic programming."
+    tipos_desafio: [funcao, programa]
+    permite: {livre: true}   # sem restrições de currículo
+
+# Ordem das regiões no mapa-mundo
+regioes:
+  - {id: vila,         emoji: "🏘️", nome: {pt: "Vila dos Algoritmos",       en: "Algorithm Village"}}
+  - {id: floresta,     emoji: "🌲", nome: {pt: "Floresta Sequencial",       en: "Sequential Forest"}}
+  - {id: mercado,      emoji: "🏪", nome: {pt: "Mercado da Decomposição",   en: "Decomposition Market"}}
+  - {id: encruzilhada, emoji: "🔀", nome: {pt: "Encruzilhada das Decisões", en: "Crossroads of Decisions"}}
+  - {id: rio,          emoji: "🌊", nome: {pt: "Rio dos Ciclos",            en: "River of Loops"}}
+  - {id: torre,        emoji: "🗼", nome: {pt: "Torre das Funções",         en: "Tower of Functions"}}
+  - {id: cidadela,     emoji: "🏰", nome: {pt: "Cidadela dos Vetores",      en: "Citadel of Arrays"}}
+  - {id: ilhas,        emoji: "🌌", nome: {pt: "Ilhas Distantes",           en: "Distant Isles"}}
+
+# Convenções do professor (as soluções de referência e os enunciados devem segui-las)
+convencoes:
+  - "Variáveis declaradas e inicializadas no topo antes de ler (numero = 0; numero = int(input(...)))."
+  - "Constantes em MAIÚSCULAS (NOTA_MINIMA = 10)."
+  - "Nomes em português, snake_case, descritivos (nota_final, não x)."
+  - "Comentários # input / # processamento / # output nos programas sequenciais."
+  - "Tom com humor do dia a dia (o gato, o café, o autocarro, o foguetão)."

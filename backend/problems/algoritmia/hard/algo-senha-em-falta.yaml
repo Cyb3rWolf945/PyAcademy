@@ -1,0 +1,82 @@
+# Arena de Algoritmia (hard): A senha que falta. Gerado em rascunho; revisão do professor pendente.
+id: algo-senha-em-falta
+titulo:
+  pt: A senha que falta
+  en: The missing ticket
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 1
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    Na fila da cantina distribuem-se senhas numeradas de `0` a `n`, mas só `n` senhas foram entregues, todas diferentes. Falta exatamente uma. Descobre qual.
+
+    Escreve `numero_em_falta(senhas)`, que recebe a lista das `n` senhas (por qualquer ordem, valores distintos entre `0` e `n`) e devolve o número que falta.
+
+    **Exemplo:** `[3, 0, 1]` devolve `2` (devia haver as senhas 0, 1, 2 e 3).
+  en: |
+    In the canteen queue, tickets numbered `0` to `n` are handed out, but only `n` tickets were given, all different. Exactly one is missing. Find out which.
+
+    Write `numero_em_falta(senhas)`, which receives the list of the `n` tickets (in any order, distinct values between `0` and `n`) and returns the missing number.
+
+    **Example:** `[3, 0, 1]` returns `2` (there should be tickets 0, 1, 2 and 3).
+assinatura: numero_em_falta(senhas)
+restricoes:
+  pt: 0 ≤ len(senhas) = n ≤ 10^5; valores distintos em [0, n]
+  en: 0 ≤ len(senhas) = n ≤ 10^5; distinct values in [0, n]
+exemplos:
+- args: [[3, 0, 1]]
+  devolve: 2
+testes:
+- args: [[3, 0, 1]]
+  devolve: 2
+- args: [[]]
+  devolve: 0
+- args: [[1]]
+  devolve: 0
+- args: [[0]]
+  devolve: 1
+- args: [[0, 1, 2, 3]]
+  devolve: 4
+- args: [[4, 2, 0, 1]]
+  devolve: 3
+- args: [[1, 2, 3, 4, 5]]
+  devolve: 0
+- args_gerador: '[[(i * 7919) % 100003 for i in range(100002)]]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: 'A soma de 0 a n tem fórmula direta: n·(n+1)/2. Compara com a soma do que tens.'
+  en: 'The sum from 0 to n has a direct formula: n·(n+1)/2. Compare it with the sum of what you have.'
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def numero_em_falta(senhas):
+      n = len(senhas)
+      esperado = n * (n + 1) // 2
+      return esperado - sum(senhas)
+solucao_ingenua: |
+  def numero_em_falta(senhas):
+      for i in range(len(senhas) + 1):
+          if i not in senhas:
+              return i
+editorial:
+  pt: |
+    **Ideia:** a soma de `0..n` é `n(n+1)/2`. A diferença para a soma das senhas entregues é a que falta.
+
+    **Passos:** 1) `n = len(senhas)`; 2) `esperado = n*(n+1)//2`; 3) devolver `esperado - sum(senhas)`.
+
+    **Complexidade:** tempo O(n), espaço O(1).
+
+    **Porque é que a ingénua falha:** `i not in senhas` é uma pesquisa linear para cada `i`, logo O(n²).
+  en: |
+    **Idea:** the sum of `0..n` is `n(n+1)/2`. The difference from the sum of the delivered tickets is the missing one.
+
+    **Steps:** 1) `n = len(senhas)`; 2) `esperado = n*(n+1)//2`; 3) return `esperado - sum(senhas)`.
+
+    **Complexity:** time O(n), space O(1).
+
+    **Why the naive one is slow:** `i not in senhas` is a linear search for each `i`, hence O(n²).

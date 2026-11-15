@@ -1,0 +1,78 @@
+# Problema bug gerado (bug); rascunho à espera de revisão do professor.
+id: bug-ciclo-infinito
+titulo:
+  pt: 'Bug: a fila que nunca acaba'
+  en: 'Bug: the queue that never ends'
+tipo: bug
+bloco: '5'
+regiao: rio
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |-
+    De quantas maneiras se podem ordenar `n` amigos na fila do café? É `n!` (o fatorial: 1 * 2 * ... * n, e 0! = 1). O programa fica preso e o café arrefece. Corrige-o.
+
+    Entrada: `n` (inteiro, de 0 a 10). Saída: o fatorial de `n`.
+  en: |-
+    In how many ways can `n` friends line up at the café? It is `n!` (the factorial: 1 * 2 * ... * n, and 0! = 1). The program gets stuck and the coffee goes cold. Fix it.
+
+    Input: `n` (integer, from 0 to 10). Output: the factorial of `n`.
+codigo_inicial: |
+  n = 0
+  fatorial = 1
+  i = 1
+
+  # input
+  n = int(input("Quantos amigos na fila: "))
+
+  # processamento
+  while i <= n:
+      fatorial = fatorial * i
+
+  # output
+  print(fatorial)
+exemplos:
+- &id001
+  stdin: '5
+
+    '
+  stdout: '120'
+testes:
+- *id001
+- stdin: '0
+
+    '
+  stdout: '1'
+- stdin: '1
+
+    '
+  stdout: '1'
+- stdin: '3
+
+    '
+  stdout: '6'
+- stdin: '10
+
+    '
+  stdout: '3628800'
+comparacao: numeros
+pistas:
+- pt: A condição do while só muda se alguma variável dela mudar dentro do ciclo. Quem muda `i`?
+  en: The while condition only changes if one of its variables changes inside the loop. Who changes `i`?
+limite_tempo_s: 1
+solucao_referencia: |
+  n = 0
+  fatorial = 1
+  i = 1
+
+  # input
+  n = int(input("Quantos amigos na fila: "))
+
+  # processamento
+  while i <= n:
+      fatorial = fatorial * i
+      i = i + 1
+
+  # output
+  print(fatorial)

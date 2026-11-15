@@ -1,0 +1,40 @@
+# Listas (bloco 7, cidadela): remover repetidos mantendo a primeira ocorrência.
+id: remover-duplicados
+titulo: {pt: "Sem repetidos, por favor", en: "No repeats, please"}
+tipo: funcao
+bloco: "7"
+regiao: cidadela
+dificuldade: 4
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Na lista de presenças da turma há nomes e números repetidos. Escreve a função remover_duplicados(valores) que devolve uma NOVA lista
+    sem repetidos, mantendo a ordem da primeira vez que cada valor aparece. Ex.: [4, 4, 2, 4, 1] devolve [4, 2, 1].
+    Se a lista estiver vazia, devolve uma lista vazia.
+  en: |
+    The class attendance list has repeated names and numbers. Write the function remover_duplicados(valores) that returns a NEW list
+    without repeats, keeping the order of the first time each value appears. E.g. [4, 4, 2, 4, 1] returns [4, 2, 1].
+    If the list is empty, return an empty list.
+assinatura: "remover_duplicados(valores)"
+exemplos:
+  - args: [[4, 4, 2, 4, 1]]
+    devolve: [4, 2, 1]
+testes:
+  - {args: [[1, 2, 1, 3, 2]], devolve: [1, 2, 3]}
+  - {args: [[]], devolve: []}
+  - {args: [[5, 5, 5]], devolve: [5]}
+  - {args: [["a", "b", "a"]], devolve: ["a", "b"]}
+  - {args: [[3, 1, 2]], devolve: [3, 1, 2]}
+comparacao: exato
+ordem_importa: true
+pistas:
+  - {pt: "Mantém uma lista de resultados e só acrescenta um valor se ainda não estiver lá (operador in).", en: "Keep a list of results and only add a value if it is not there yet (in operator)."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def remover_duplicados(valores):
+      resultado = []
+      for valor in valores:
+          if valor not in resultado:
+              resultado.append(valor)
+      return resultado

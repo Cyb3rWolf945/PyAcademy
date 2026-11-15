@@ -1,0 +1,33 @@
+# Quiz (bloco 4, encruzilhada): tabelas de verdade de and e or.
+id: quiz-tabela-verdade
+titulo: {pt: "Verdadeiro ou falso?", en: "True or false?"}
+tipo: quiz
+bloco: "4"
+regiao: encruzilhada
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Em Python, and só dá Verdadeiro se os dois lados forem Verdadeiros; or dá Verdadeiro se pelo menos um lado for Verdadeiro.
+    not inverte o valor. Responde sem executar o código.
+  en: |
+    In Python, and is only True if both sides are True; or is True if at least one side is True.
+    not flips the value. Answer without running the code.
+perguntas:
+  - pergunta: {pt: "Quanto dá True and not False ?", en: "What is True and not False ?"}
+    opcoes:
+      - {pt: "Verdadeiro", en: "True"}
+      - {pt: "Falso", en: "False"}
+    resposta: [0]
+  - pergunta: {pt: "Com A = Falso e B = Verdadeiro, quanto dá A or B ?", en: "With A = False and B = True, what is A or B ?"}
+    opcoes:
+      - {pt: "Verdadeiro", en: "True"}
+      - {pt: "Falso", en: "False"}
+    resposta: [0]
+  - pergunta: {pt: "Em que linha da tabela de verdade de A and B o resultado é Verdadeiro?", en: "In which row of the truth table of A and B is the result True?"}
+    opcoes:
+      - {pt: "A = Falso, B = Verdadeiro", en: "A = False, B = True"}
+      - {pt: "A = Verdadeiro, B = Verdadeiro", en: "A = True, B = True"}
+      - {pt: "A = Falso, B = Falso", en: "A = False, B = False"}
+    resposta: [1]

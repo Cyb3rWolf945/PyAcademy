@@ -1,0 +1,90 @@
+# Problema tracar gerado (tracar); rascunho à espera de revisão do professor.
+id: tracar-ordem-dos-ifs
+titulo:
+  pt: 'Traçar: a ordem dos if/elif'
+  en: 'Trace it: the order of if/elif'
+tipo: tracar
+bloco: '4'
+regiao: encruzilhada
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: 'Faz de computador: segue o código linha a linha, à mão, e diz o que acontece. Lembra-te: num `if/elif/else` só **um** ramo corre, o primeiro cuja condição for verdadeira; já dois `if` seguidos são independentes.'
+  en: 'Be the computer: follow the code line by line, by hand, and say what happens. Remember: in an `if/elif/else` only **one** branch runs, the first whose condition is true; two `if`s in a row are independent.'
+perguntas:
+- pergunta:
+    pt: O que escreve este programa?
+    en: What does this program print?
+  codigo: |
+    nota = 15
+    if nota >= 10:
+        print("Passou")
+    elif nota >= 14:
+        print("Bom aluno")
+    else:
+        print("Chumbou")
+  opcoes:
+  - pt: Passou
+    en: Passou
+  - pt: Bom aluno
+    en: Bom aluno
+  - pt: Chumbou
+    en: Chumbou
+  - pt: Passou e Bom aluno
+    en: Passou e Bom aluno
+  resposta:
+  - 0
+- pergunta:
+    pt: Qual é o valor de `racao` no fim do programa?
+    en: What is the value of `racao` at the end of the program?
+  codigo: |
+    fome = 5
+    racao = 0
+    if fome > 3:
+        racao = 1
+    if fome > 6:
+        racao = 2
+    else:
+        racao = 0
+  resposta_texto: '0'
+- pergunta:
+    pt: O que escreve este programa? (O que está entre aspas é o texto escrito no ecrã.)
+    en: What does this program print? (What is between quotes is the text printed on screen.)
+  codigo: |
+    idade = 17
+    dinheiro = 3
+    if idade >= 18:
+        print("Entra")
+    elif dinheiro >= 5:
+        print("Paga e entra")
+    if dinheiro < 5:
+        print("Sem troco")
+  resposta_texto: Sem troco
+- pergunta:
+    pt: Qual é o valor de `desconto` no fim?
+    en: What is the value of `desconto` at the end?
+  codigo: |
+    idade = 70
+    estudante = False
+    desconto = 0
+    if idade >= 65:
+        desconto = 50
+    elif estudante:
+        desconto = 30
+    else:
+        desconto = 10
+  opcoes:
+  - pt: '0'
+    en: '0'
+  - pt: '10'
+    en: '10'
+  - pt: '30'
+    en: '30'
+  - pt: '50'
+    en: '50'
+  resposta:
+  - 3
+pistas:
+- pt: Faz uma tabela com as variáveis e risca os ramos cuja condição é falsa. Depois do primeiro ramo verdadeiro de um elif, os restantes nem são testados.
+  en: Make a table with the variables and cross out the branches whose condition is false. After the first true branch of an elif, the rest are not even tested.

@@ -1,0 +1,41 @@
+# Mais além (ilhas): dicionários para contar palavras.
+id: frequencia-palavras
+titulo: {pt: "Quem mais se repete?", en: "Who repeats the most?"}
+tipo: funcao
+bloco: "mais_alem"
+regiao: ilhas
+dificuldade: 2
+origem: mais_alem
+estado: rascunho
+enunciado:
+  pt: |
+    Escreve a função frequencia_palavras(texto) que recebe um texto e devolve um dicionário: cada palavra (em minúsculas) é uma chave
+    e o valor é o número de vezes que aparece. As palavras são separadas por espaços (usa .split()).
+    Se o texto estiver vazio, devolve {}.
+  en: |
+    Write the function frequencia_palavras(texto) that receives a text and returns a dictionary: each word (in lowercase) is a key
+    and the value is the number of times it appears. Words are separated by spaces (use .split()).
+    If the text is empty, return {}.
+assinatura: "frequencia_palavras(texto)"
+exemplos:
+  - args: ["Ola ola mundo"]
+    devolve: {"ola": 2, "mundo": 1}
+testes:
+  - {args: ["Sim sim NAO"], devolve: {"sim": 2, "nao": 1}}
+  - {args: [""], devolve: {}}
+  - {args: ["A a a"], devolve: {"a": 3}}
+  - {args: ["um dois  três"], devolve: {"um": 1, "dois": 1, "três": 1}}
+comparacao: exato
+ordem_importa: false
+pistas:
+  - {pt: "Se a palavra já é chave do dicionário, soma 1; senão começa em 1.", en: "If the word is already a key in the dictionary, add 1; otherwise start it at 1."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def frequencia_palavras(texto):
+      contagem = {}
+      for palavra in texto.lower().split():
+          if palavra in contagem:
+              contagem[palavra] = contagem[palavra] + 1
+          else:
+              contagem[palavra] = 1
+      return contagem

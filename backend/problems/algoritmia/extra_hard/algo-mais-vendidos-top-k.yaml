@@ -1,0 +1,86 @@
+# Arena de Algoritmia (extra_hard): Os pratos mais pedidos. Gerado em rascunho; revisão do professor pendente.
+id: algo-mais-vendidos-top-k
+titulo:
+  pt: Os pratos mais pedidos
+  en: The most ordered dishes
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 3
+origem: mais_alem
+estado: rascunho
+nivel_algo: extra_hard
+enunciado:
+  pt: |
+    A cantina guardou a lista dos pratos pedidos durante o mês (um número por pedido). Quer afixar os `k` pratos mais pedidos.
+
+    Escreve `mais_pedidos(pedidos, k)`, que devolve a lista dos `k` valores que aparecem mais vezes. Garante-se que não há empates na fronteira (o `k`-ésimo mais frequente tem estritamente mais pedidos do que o seguinte). **A ordem do resultado não importa.**
+
+    **Exemplo:** `pedidos = [4, 4, 4, 9, 9, 7]`, `k = 2` devolve `[4, 9]` (por qualquer ordem), porque 4 aparece 3 vezes, 9 duas vezes e 7 uma.
+  en: |
+    The canteen kept the list of dishes ordered during the month (one number per order). It wants to post the `k` most ordered dishes.
+
+    Write `mais_pedidos(pedidos, k)`, which returns the list of the `k` values that appear most often. It is guaranteed that there are no ties at the boundary (the `k`-th most frequent has strictly more orders than the next one). **The order of the result does not matter.**
+
+    **Example:** `pedidos = [4, 4, 4, 9, 9, 7]`, `k = 2` returns `[4, 9]` (in any order), because 4 appears 3 times, 9 twice and 7 once.
+assinatura: mais_pedidos(pedidos, k)
+restricoes:
+  pt: 1 ≤ k ≤ nº de valores distintos; 1 ≤ len(pedidos) ≤ 10^5
+  en: 1 ≤ k ≤ number of distinct values; 1 ≤ len(pedidos) ≤ 10^5
+exemplos:
+- args: [[4, 4, 4, 9, 9, 7], 2]
+  devolve: [4, 9]
+testes:
+- args: [[4, 4, 4, 9, 9, 7], 2]
+  devolve: [4, 9]
+- args: [[5], 1]
+  devolve: [5]
+- args: [[4, 4, 4, 4, 9, 9, 9, 7, 7, 1], 3]
+  devolve: [4, 9, 7]
+- args: [[-1, -1, -2, -2, -2, 0], 1]
+  devolve: [-2]
+- args: [[8, 8, 8, 3, 3, 3, 3, 5], 2]
+  devolve: [3, 8]
+- args: [[1, 2, 2, 3, 3, 3], 3]
+  devolve: [3, 2, 1]
+- args: [[6, 6, 6, 6, 6, 2], 1]
+  devolve: [6]
+- args_gerador: '[[v for v in range(1, 447) for _ in range(v)], 10]'
+- args_gerador: '[[v for v in range(1, 447) for _ in range(v)], 300]'
+comparacao: exato
+ordem_importa: false
+pistas:
+- pt: Conta as frequências com um dicionário e depois escolhe os k maiores (heapq.nlargest ou ordenação).
+  en: Count frequencies with a dictionary and then pick the k largest (heapq.nlargest or sorting).
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  from collections import Counter
+
+  def mais_pedidos(pedidos, k):
+      contagem = Counter(pedidos)
+      return [valor for valor, _ in contagem.most_common(k)]
+solucao_ingenua: |
+  def mais_pedidos(pedidos, k):
+      pares = set()
+      for x in pedidos:
+          pares.add((pedidos.count(x), x))
+      ordenados = sorted(pares, reverse=True)
+      return [x for _, x in ordenados[:k]]
+editorial:
+  pt: |
+    **Ideia:** contar quantas vezes cada valor aparece (dicionário) e escolher os `k` com maior contagem.
+
+    **Passos:** 1) `Counter(pedidos)` conta tudo numa passagem; 2) `most_common(k)` devolve os `k` maiores (internamente usa um heap quando `k` é pequeno).
+
+    **Complexidade:** tempo O(n + d log k), com d o número de valores distintos; espaço O(d).
+
+    **Porque é que a ingénua falha:** chamar `pedidos.count(x)` por cada elemento da lista (e não por valor distinto) é O(n²).
+  en: |
+    **Idea:** count how many times each value appears (dictionary) and pick the `k` with the highest counts.
+
+    **Steps:** 1) `Counter(pedidos)` counts everything in one pass; 2) `most_common(k)` returns the top `k` (it uses a heap internally when `k` is small).
+
+    **Complexity:** time O(n + d log k), with d the number of distinct values; space O(d).
+
+    **Why the naive one is slow:** calling `pedidos.count(x)` for every list element (instead of per distinct value) is O(n²).

@@ -1,0 +1,33 @@
+# Quiz (bloco 5, rio): quando usar for e quando usar while.
+id: quiz-for-ou-while
+titulo: {pt: "Para ou enquanto?", en: "For or while?"}
+tipo: quiz
+bloco: "5"
+regiao: rio
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |
+    Os ciclos for repetem um número de vezes conhecido (ou uma sequência, como range). Os ciclos while repetem enquanto uma condição for verdadeira.
+    Escolhe o ciclo mais adequado para cada situação.
+  en: |
+    for loops repeat a known number of times (or over a sequence, like range). while loops repeat while a condition is true.
+    Choose the most suitable loop for each situation.
+perguntas:
+  - pergunta: {pt: "Vais ler exatamente 10 notas. Que ciclo usas?", en: "You will read exactly 10 grades. Which loop do you use?"}
+    opcoes:
+      - {pt: "while", en: "while"}
+      - {pt: "for", en: "for"}
+    resposta: [1]
+  - pergunta: {pt: "Não sabes quantas vezes vais repetir: o utilizador escreve 0 para parar. Que ciclo usas?", en: "You do not know how many times you will repeat: the user types 0 to stop. Which loop do you use?"}
+    opcoes:
+      - {pt: "for", en: "for"}
+      - {pt: "while", en: "while"}
+    resposta: [1]
+  - pergunta: {pt: "Quantas vezes repete for i in range(3): ?", en: "How many times does for i in range(3): repeat?"}
+    opcoes:
+      - {pt: "3 vezes (com i = 0, 1 e 2)", en: "3 times (with i = 0, 1 and 2)"}
+      - {pt: "4 vezes", en: "4 times"}
+      - {pt: "2 vezes (com i = 1 e 2)", en: "2 times (with i = 1 and 2)"}
+    resposta: [0]

@@ -1,0 +1,101 @@
+# Problema bug gerado (bug); rascunho à espera de revisão do professor.
+id: bug-elif-gato-com-fome
+titulo:
+  pt: 'Bug: o gato Bolacha nunca come bem'
+  en: 'Bug: Bolacha the cat never eats properly'
+tipo: bug
+bloco: '4'
+regiao: encruzilhada
+dificuldade: 2
+origem: novo
+estado: rascunho
+enunciado:
+  pt: |-
+    O gato Bolacha tem um nível de fome de 0 a 10 e o comedouro automático dá as doses de ração: fome **8 ou mais**, 3 doses; **5 ou mais**, 2 doses; **2 ou mais**, 1 dose; senão, 0. O gato está com fome nível 9 e o programa só lhe dá 1 dose (ele já anda a olhar para o teu pé). Corrige-o.
+
+    Entrada: o nível de fome (inteiro). Saída: o número de doses.
+  en: |-
+    Bolacha the cat has a hunger level from 0 to 10 and the automatic feeder gives portions of food: hunger **8 or more**, 3 portions; **5 or more**, 2 portions; **2 or more**, 1 portion; otherwise 0. The cat is at hunger level 9 and the program only gives 1 portion (he is already eyeing your foot). Fix it.
+
+    Input: the hunger level (integer). Output: the number of portions.
+codigo_inicial: |
+  fome = 0
+  doses = 0
+
+  # input
+  fome = int(input("Nível de fome do gato (0 a 10): "))
+
+  # processamento
+  if fome >= 2:
+      doses = 1
+  elif fome >= 5:
+      doses = 2
+  elif fome >= 8:
+      doses = 3
+  else:
+      doses = 0
+
+  # output
+  print(doses)
+exemplos:
+- &id001
+  stdin: '9
+
+    '
+  stdout: '3'
+testes:
+- *id001
+- stdin: '8
+
+    '
+  stdout: '3'
+- stdin: '7
+
+    '
+  stdout: '2'
+- stdin: '5
+
+    '
+  stdout: '2'
+- stdin: '4
+
+    '
+  stdout: '1'
+- stdin: '2
+
+    '
+  stdout: '1'
+- stdin: '1
+
+    '
+  stdout: '0'
+- stdin: '0
+
+    '
+  stdout: '0'
+comparacao: numeros
+pistas:
+- pt: Num if/elif só corre o primeiro ramo verdadeiro. Com fome = 9, qual é o primeiro ramo cuja condição é verdadeira?
+  en: In an if/elif only the first true branch runs. With hunger = 9, which is the first branch whose condition is true?
+- pt: Põe a condição mais exigente (>= 8) primeiro e vai afrouxando.
+  en: Put the strictest condition (>= 8) first and relax as you go.
+limite_tempo_s: 2
+solucao_referencia: |
+  fome = 0
+  doses = 0
+
+  # input
+  fome = int(input("Nível de fome do gato (0 a 10): "))
+
+  # processamento
+  if fome >= 8:
+      doses = 3
+  elif fome >= 5:
+      doses = 2
+  elif fome >= 2:
+      doses = 1
+  else:
+      doses = 0
+
+  # output
+  print(doses)

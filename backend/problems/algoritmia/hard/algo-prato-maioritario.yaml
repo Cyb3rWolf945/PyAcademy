@@ -1,0 +1,86 @@
+# Arena de Algoritmia (hard): O prato mais votado. Gerado em rascunho; revisão do professor pendente.
+id: algo-prato-maioritario
+titulo:
+  pt: O prato mais votado
+  en: The winning dish
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 2
+origem: mais_alem
+estado: rascunho
+nivel_algo: hard
+enunciado:
+  pt: |
+    Houve votação do prato do dia e um deles teve **mais de metade** dos votos. Descobre-o.
+
+    Escreve `maioria(votos)`, que recebe a lista de votos (números de pratos) e devolve o prato que aparece **mais de `len(votos) / 2` vezes**. Garante-se que existe sempre.
+
+    **Exemplo:** `[2, 2, 1, 1, 2]` devolve `2` (aparece 3 vezes em 5).
+  en: |
+    There was a vote for the dish of the day and one dish received **more than half** of the votes. Find it.
+
+    Write `maioria(votos)`, which receives the list of votes (dish numbers) and returns the dish that appears **more than `len(votos) / 2` times**. It is guaranteed to exist.
+
+    **Example:** `[2, 2, 1, 1, 2]` returns `2` (it appears 3 times out of 5).
+assinatura: maioria(votos)
+restricoes:
+  pt: 1 ≤ len(votos) ≤ 2·10^5; existe sempre um valor maioritário
+  en: 1 ≤ len(votos) ≤ 2·10^5; a majority value always exists
+exemplos:
+- args: [[2, 2, 1, 1, 2]]
+  devolve: 2
+testes:
+- args: [[2, 2, 1, 1, 2]]
+  devolve: 2
+- args: [[7]]
+  devolve: 7
+- args: [[3, 3]]
+  devolve: 3
+- args: [[1, 2, 1]]
+  devolve: 1
+- args: [[5, 5, 5, 1, 2]]
+  devolve: 5
+- args: [[-1, -1, -1, 4, 4]]
+  devolve: -1
+- args: [[9, 8, 9, 8, 9]]
+  devolve: 9
+- args_gerador: '[list(range(1, 100001)) + [0] * 100001]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: Conta cada valor com um dicionário, ou usa o truque do candidato que 'anula' votos diferentes.
+  en: Count each value with a dictionary, or use the trick of a candidate that 'cancels out' different votes.
+erros_comuns: []
+limite_tempo_s: 2
+solucao_referencia: |
+  def maioria(votos):
+      candidato = None
+      pontos = 0
+      for v in votos:
+          if pontos == 0:
+              candidato = v
+          pontos += 1 if v == candidato else -1
+      return candidato
+solucao_ingenua: |
+  def maioria(votos):
+      for v in votos:
+          if votos.count(v) > len(votos) / 2:
+              return v
+editorial:
+  pt: |
+    **Ideia:** (voto maioritário de Boyer–Moore) mantém um candidato e um contador. Um voto igual soma 1, um diferente subtrai 1; quando o contador chega a 0, o próximo voto passa a candidato. Como o maioritário tem mais de metade, sobrevive a todos os cancelamentos.
+
+    **Passos:** 1) `candidato`, `pontos = 0`; 2) para cada voto: se `pontos == 0`, trocar de candidato; ajustar `pontos`; 3) devolver o candidato.
+
+    **Complexidade:** tempo O(n), espaço O(1). (Um `Counter` também dá O(n) com espaço O(n).)
+
+    **Porque é que a ingénua falha:** chamar `votos.count(v)` para cada voto é O(n) × n = O(n²).
+  en: |
+    **Idea:** (Boyer–Moore majority vote) keep a candidate and a counter. An equal vote adds 1, a different one subtracts 1; when the counter hits 0, the next vote becomes the candidate. Since the majority value has more than half, it survives every cancellation.
+
+    **Steps:** 1) `candidato`, `pontos = 0`; 2) for each vote: if `pontos == 0`, switch candidate; adjust `pontos`; 3) return the candidate.
+
+    **Complexity:** time O(n), space O(1). (A `Counter` is also O(n) time with O(n) space.)
+
+    **Why the naive one is slow:** calling `votos.count(v)` for every vote is O(n) × n = O(n²).

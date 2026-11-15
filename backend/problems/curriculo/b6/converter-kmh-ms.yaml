@@ -1,0 +1,34 @@
+# Função (bloco 6, torre): conversão de km/h para m/s, devolvendo o valor.
+id: converter-kmh-ms
+titulo: {pt: "Do carro para a física", en: "From the car to physics"}
+tipo: funcao
+bloco: "6"
+regiao: torre
+dificuldade: 1
+origem: variacao_aula
+estado: rascunho
+enunciado:
+  pt: |
+    Na aula de Física, a velocidade do carro vem em km/h, mas a fórmula pede m/s. Escreve a função converter_kmh_ms(kmh)
+    que recebe uma velocidade em km/h e devolve a velocidade em m/s (divide por 3,6). Usa return; não uses input() nem print() dentro da função.
+  en: |
+    In the Physics class, the car's speed comes in km/h, but the formula needs m/s. Write the function converter_kmh_ms(kmh)
+    that receives a speed in km/h and returns the speed in m/s (divide by 3.6). Use return; do not use input() or print() inside the function.
+assinatura: "converter_kmh_ms(kmh)"
+exemplos:
+  - args: [54]
+    devolve: 15.0
+testes:
+  - {args: [36], devolve: 10.0}
+  - {args: [100], devolve: 27.78}
+  - {args: [0], devolve: 0.0}
+  - {args: [7.2], devolve: 2.0}
+  - {args: [90], devolve: 25.0}
+comparacao: numeros
+ordem_importa: true
+pistas:
+  - {pt: "Uma função é só uma conta com return: kmh / 3.6.", en: "A function is just a calculation with return: kmh / 3.6."}
+limite_tempo_s: 2
+solucao_referencia: |
+  def converter_kmh_ms(kmh):
+      return kmh / 3.6

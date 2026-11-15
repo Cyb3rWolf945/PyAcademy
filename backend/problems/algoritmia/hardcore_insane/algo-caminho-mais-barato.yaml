@@ -1,0 +1,117 @@
+# Arena de Algoritmia (hardcore_insane): O caminho mais barato. Gerado em rascunho; revisão do professor pendente.
+id: algo-caminho-mais-barato
+titulo:
+  pt: O caminho mais barato
+  en: The cheapest route
+tipo: funcao
+bloco: mais_alem
+regiao: ilhas
+dificuldade: 5
+origem: mais_alem
+estado: rascunho
+nivel_algo: hardcore_insane
+enunciado:
+  pt: |
+    A rede de comboios regionais tem `n` estações numeradas de `0` a `n-1`. Cada ligação `[a, b, custo]` pode ser feita nos **dois sentidos** pelo mesmo custo (número inteiro positivo; pode haver várias ligações entre as mesmas estações). Queres a viagem mais barata entre duas estações.
+
+    Escreve `caminho_mais_barato(n, ligacoes, origem, destino)`, que devolve o custo total mínimo, ou `-1` se não houver caminho. Se `origem == destino`, o custo é `0`.
+
+    **Exemplo:** `n = 4`, `ligacoes = [[0,1,4],[0,2,1],[2,1,2],[1,3,5]]`, de `0` a `3` devolve `8`, pelo caminho `0 → 2 → 1 → 3` (`1 + 2 + 5`), que é mais barato do que `0 → 1 → 3` (`4 + 5 = 9`).
+  en: |
+    The regional train network has `n` stations numbered `0` to `n-1`. Each link `[a, b, custo]` can be travelled in **both directions** for the same cost (a positive integer; there may be several links between the same stations). You want the cheapest trip between two stations.
+
+    Write `caminho_mais_barato(n, ligacoes, origem, destino)`, which returns the minimum total cost, or `-1` if there is no path. If `origem == destino`, the cost is `0`.
+
+    **Example:** `n = 4`, `ligacoes = [[0,1,4],[0,2,1],[2,1,2],[1,3,5]]`, from `0` to `3` returns `8`, via `0 → 2 → 1 → 3` (`1 + 2 + 5`), which is cheaper than `0 → 1 → 3` (`4 + 5 = 9`).
+assinatura: caminho_mais_barato(n, ligacoes, origem, destino)
+restricoes:
+  pt: 1 ≤ n ≤ 2·10^4; 0 ≤ len(ligacoes) ≤ 10^5; 1 ≤ custo ≤ 10^4
+  en: 1 ≤ n ≤ 2·10^4; 0 ≤ len(ligacoes) ≤ 10^5; 1 ≤ cost ≤ 10^4
+exemplos:
+- args: [4, [[0, 1, 4], [0, 2, 1], [2, 1, 2], [1, 3, 5]], 0, 3]
+  devolve: 8
+testes:
+- args: [4, [[0, 1, 4], [0, 2, 1], [2, 1, 2], [1, 3, 5]], 0, 3]
+  devolve: 8
+- args: [1, [], 0, 0]
+  devolve: 0
+- args: [2, [], 0, 1]
+  devolve: -1
+- args: [3, [[0, 1, 2], [1, 2, 3]], 2, 0]
+  devolve: 5
+- args: [3, [[0, 1, 2]], 0, 2]
+  devolve: -1
+- args: [3, [[0, 1, 5], [0, 1, 2], [1, 2, 1]], 0, 2]
+  devolve: 3
+- args: [5, [[0, 1, 1], [1, 2, 1], [2, 3, 1], [3, 4, 1], [0, 4, 10]], 0, 4]
+  devolve: 4
+- args: [4, [[0, 1, 1], [2, 3, 1]], 0, 3]
+  devolve: -1
+- args_gerador: '[20000, [[i, (i * 7 + 1) % 20000, 1 + (i * 13) % 17] for i in range(20000)] + [[i, (i + 1) % 20000, 5 + i % 11] for i in range(19999)], 0, 19999]'
+comparacao: numeros
+ordem_importa: true
+pistas:
+- pt: 'Algoritmo de Dijkstra: mantém as distâncias conhecidas e usa uma fila de prioridade (heapq) para tirar sempre a estação com a menor distância.'
+  en: 'Dijkstra''s algorithm: keep the known distances and use a priority queue (heapq) to always pull the station with the smallest distance.'
+erros_comuns: []
+limite_tempo_s: 3
+solucao_referencia: |
+  import heapq
+
+  def caminho_mais_barato(n, ligacoes, origem, destino):
+      vizinhos = [[] for _ in range(n)]
+      for a, b, custo in ligacoes:
+          vizinhos[a].append((b, custo))
+          vizinhos[b].append((a, custo))
+      INF = float("inf")
+      dist = [INF] * n
+      dist[origem] = 0
+      fila = [(0, origem)]
+      while fila:
+          d, u = heapq.heappop(fila)
+          if d > dist[u]:
+              continue
+          if u == destino:
+              return d
+          for v, custo in vizinhos[u]:
+              nd = d + custo
+              if nd < dist[v]:
+                  dist[v] = nd
+                  heapq.heappush(fila, (nd, v))
+      return -1
+solucao_ingenua: |
+  def caminho_mais_barato(n, ligacoes, origem, destino):
+      vizinhos = [[] for _ in range(n)]
+      for a, b, custo in ligacoes:
+          vizinhos[a].append((b, custo))
+          vizinhos[b].append((a, custo))
+      INF = float("inf")
+      dist = [INF] * n
+      dist[origem] = 0
+      por_ver = set(range(n))
+      while por_ver:
+          u = min(por_ver, key=lambda x: dist[x])
+          if dist[u] == INF:
+              break
+          por_ver.discard(u)
+          for v, custo in vizinhos[u]:
+              if dist[u] + custo < dist[v]:
+                  dist[v] = dist[u] + custo
+      return dist[destino] if dist[destino] != INF else -1
+editorial:
+  pt: |
+    **Ideia:** Dijkstra. Com custos positivos, a estação não visitada com menor distância já tem a distância final. Uma fila de prioridade (`heapq`) dá-nos essa estação em O(log n).
+
+    **Passos:** 1) construir a lista de vizinhos (nos dois sentidos); 2) `dist[origem] = 0` e `fila = [(0, origem)]`; 3) retirar `(d, u)`; se `d > dist[u]`, ignorar (entrada antiga); 4) para cada vizinho, se `d + custo` melhora, atualizar e empilhar; 5) devolver a distância do destino, ou `-1`.
+
+    **Complexidade:** tempo O((n + m) log n), espaço O(n + m).
+
+    **Porque é que a ingénua falha:** escolher a estação mais próxima por varrimento de todas as não visitadas custa O(n) por passo, ou seja O(n²) no total: 4·10^8 operações com n = 20 000.
+  en: |
+    **Idea:** Dijkstra. With positive costs, the unvisited station with the smallest distance already has its final distance. A priority queue (`heapq`) gives us that station in O(log n).
+
+    **Steps:** 1) build the neighbour lists (both directions); 2) `dist[origem] = 0` and `fila = [(0, origem)]`; 3) pop `(d, u)`; if `d > dist[u]`, skip (stale entry); 4) for each neighbour, if `d + custo` improves, update and push; 5) return the destination's distance, or `-1`.
+
+    **Complexity:** time O((n + m) log n), space O(n + m).
+
+    **Why the naive one is slow:** choosing the closest station by scanning all unvisited ones costs O(n) per step, so O(n²) overall: 4·10^8 operations with n = 20,000.
