@@ -167,3 +167,13 @@ async def delete_me(
     await db.commit()
     response.delete_cookie(COOKIE, path="/")
     return {"ok": True}
+
+
+@router.get("/session")
+async def session_info(request: Request, db: AsyncSession = Depends(get_db)):
+    """Como /me, mas sem sessão devolve 200 {"user": null} (não faz ruído de 401 na consola das páginas públicas)."""
+    try:
+        auth = await current_auth(request, db)
+    except ApiError:
+        return {"user": None}
+    return {"user": user_payload(auth.user), "csrf_token": auth.session.csrf_token}

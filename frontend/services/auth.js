@@ -10,7 +10,12 @@ function remember(data) {
   return user;
 }
 
-export async function loadMe() {
+// optional=true usa /api/session (200 mesmo sem sessão, sem 401 na consola) para páginas que não exigem login
+export async function loadMe({ optional = false } = {}) {
+  if (optional) {
+    const data = await api("GET", "/api/session");
+    return data.user ? remember(data) : null;
+  }
   try {
     return remember(await api("GET", "/api/me"));
   } catch (err) {

@@ -25,17 +25,22 @@ async def queue_position(db: AsyncSession, submission: Submission) -> int:
     return (await db.execute(select(func.count()).select_from(Job).where(Job.state == "queued", Job.id <= job.id))).scalar_one()
 
 
+async def find_existing(db: AsyncSession, user_id: int, client_id: uuid.UUID) -> Submission | None:
+    return await _existing(db, user_id, client_id)
+
+
 async def _existing(db: AsyncSession, user_id: int, client_id: uuid.UUID) -> Submission | None:
     return (await db.execute(select(Submission).where(Submission.user_id == user_id, Submission.client_id == client_id))).scalar_one_or_none()
 
 
 async def create_submission(
     db: AsyncSession, user: User, client_id: uuid.UUID, problem: Problem, code: str | None, answers: list | None, hints_used: int,
+    *, mode: str = "practice", rate_per_minute: int | None = None, allow_draft: bool = False,
 ) -> Submission:
     # idempotência: o mesmo client_id devolve a submissão que já existe (não conta para o limite)
     if (prev := await _existing(db, user.id, client_id)) is not None:
         return prev
-    if problem.estado != "aprovado" and user.role != Role.teacher:
+    if problem.estado != "aprovado" and user.role != Role.teacher and not allow_draft:  # torneio: o professor escolheu-o
         raise ApiError(404, "problem.not_found")
     spec = ProblemSpec.model_validate(problem.data)
 
@@ -44,7 +49,7 @@ async def create_submission(
             Submission.user_id == user.id, Submission.created_at > utcnow() - timedelta(seconds=60)
         )
     )).scalar_one()
-    if recent >= settings.submissions_per_minute:
+    if recent >= (rate_per_minute or settings.submissions_per_minute):
         raise ApiError(429, "submission.rate_limited")
 
     is_code = spec.tipo in CODE_TIPOS
@@ -60,7 +65,7 @@ async def create_submission(
         select(func.count()).select_from(HintUse).where(HintUse.user_id == user.id, HintUse.problem_slug == problem.slug)
     )).scalar_one()
     sub = Submission(
-        client_id=client_id, user_id=user.id, problem_slug=problem.slug, code=code or "", locale=user.locale,
+        client_id=client_id, user_id=user.id, problem_slug=problem.slug, code=code or "", locale=user.locale, mode=mode,
         hints_used=max(server_hints, min(hints_used, len(spec.pistas))),  # o servidor nunca desce o que registou
     )
     if not is_code:

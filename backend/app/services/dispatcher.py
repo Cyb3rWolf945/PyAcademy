@@ -13,7 +13,7 @@ from app.db import SessionLocal
 from app.models._base import utcnow
 from app.models.problem import Problem
 from app.models.submission import Job, Submission
-from app.services import feedback, runner_client
+from app.services import feedback, runner_client, tournament_scoring
 from app.services.problems import ProblemSpec
 
 log = logging.getLogger("pyarena.dispatcher")
@@ -110,6 +110,8 @@ async def _process(job_id: int, submission_id: int, attempts: int, post) -> None
             status=resp["status"], passed=resp["passed"], total=resp["total"], result=result, finished_at=utcnow()))
         await db.execute(update(Job).where(Job.id == job_id).values(state="done"))
         await db.commit()
+    if resp["status"] == "accepted":  # torneio: regista a missão resolvida (no-op se não for de torneio)
+        await tournament_scoring.on_submission_finished(submission_id)
 
 
 async def run_once(post=None) -> bool:

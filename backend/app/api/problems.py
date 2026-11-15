@@ -24,7 +24,8 @@ def _visible(auth: Auth, p: Problem) -> bool:
 async def list_problems(auth: Auth = Depends(active_auth), db: AsyncSession = Depends(get_db)):
     rows = (await db.execute(select(Problem).order_by(Problem.bloco, Problem.slug))).scalars()
     return {"problems": [
-        {"id": p.slug, "titulo": p.data["titulo"], "tipo": p.tipo, "bloco": p.bloco, "dificuldade": p.data["dificuldade"]}
+        {"id": p.slug, "titulo": p.data["titulo"], "tipo": p.tipo, "bloco": p.bloco, "dificuldade": p.data["dificuldade"],
+         **({"estado": p.estado} if auth.user.role == Role.teacher else {})}
         for p in rows if _visible(auth, p)
     ]}
 

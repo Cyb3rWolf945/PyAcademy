@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 ROOT = Path(__file__).resolve().parents[2]  # /app (ou a raiz do projeto)
 
 LOCALES = ("pt-PT", "en")
-THEMES = ("floresta",)  # os restantes temas chegam na fase 6
+THEMES = ("floresta", "masmorra", "oceano", "deserto", "neve", "noite")
 
 
 class Settings(BaseSettings):
@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     runner_token: str = ""
     runner_timeout_s: float = 60
     submissions_per_minute: int = 6
+    tournament_submissions_per_minute: int = 10
     max_code_bytes: int = 20 * 1024
     dispatch_concurrency: int = 4  # chamadas simultâneas ao runner, por worker da app
     job_stale_s: int = 60

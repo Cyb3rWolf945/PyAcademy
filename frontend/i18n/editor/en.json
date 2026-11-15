@@ -1,0 +1,10 @@
+{
+ "editor.symbols": "Code symbols",
+ "editor.indent": "Indent",
+ "editor.dedent": "Dedent",
+ "editor.left": "Cursor left",
+ "editor.right": "Cursor right",
+ "editor.placeholder": "Write your code here...",
+ "editor.pick_all": "Pick every correct option.",
+ "editor.your_answer": "Your answer"
+}

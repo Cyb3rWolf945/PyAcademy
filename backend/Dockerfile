@@ -44,7 +44,11 @@ COPY backend ./backend
 COPY runner ./runner
 COPY frontend ./frontend
 COPY --from=css /src/frontend/dist ./frontend/dist
-RUN chown -R pyarena:pyarena /app
+# Cache-busting: cada build põe o hash do CSS no link das páginas (app.css?v=<hash>),
+# para nenhum browser ficar com estilos antigos depois de uma atualização.
+RUN H=$(sha256sum frontend/dist/app.css | cut -c1-10) \
+    && find frontend -name '*.html' -not -path 'frontend/dist/*' -exec sed -i "s#/dist/app.css\"#/dist/app.css?v=${H}\"#g" {} + \
+    && chown -R pyarena:pyarena /app
 USER pyarena
 WORKDIR /app/backend
 EXPOSE 8000

@@ -16,16 +16,35 @@ def flatten(d: dict, prefix: str = "") -> dict[str, object]:
     return out
 
 
-def check_json(i18n_dir: Path) -> list[str]:
+def _check_pair(folder: Path, label: str) -> tuple[list[str], set[str]]:
     errors = []
-    pt = flatten(json.loads((i18n_dir / "pt-PT.json").read_text(encoding="utf-8")))
-    en = flatten(json.loads((i18n_dir / "en.json").read_text(encoding="utf-8")))
+    pt = flatten(json.loads((folder / "pt-PT.json").read_text(encoding="utf-8")))
+    en = flatten(json.loads((folder / "en.json").read_text(encoding="utf-8")))
     for k in sorted(pt.keys() - en.keys()):
-        errors.append(f"en.json: falta a chave '{k}'")
+        errors.append(f"{label}en.json: falta a chave '{k}'")
     for k in sorted(en.keys() - pt.keys()):
-        errors.append(f"pt-PT.json: falta a chave '{k}'")
+        errors.append(f"{label}pt-PT.json: falta a chave '{k}'")
     for name, d in (("pt-PT.json", pt), ("en.json", en)):
-        errors += [f"{name}: valor vazio em '{k}'" for k, v in d.items() if not (isinstance(v, str) and v.strip())]
+        errors += [f"{label}{name}: valor vazio em '{k}'" for k, v in d.items() if not (isinstance(v, str) and v.strip())]
+    return errors, set(pt)
+
+
+def check_json(i18n_dir: Path) -> list[str]:
+    """Ficheiro base (i18n/pt-PT.json + en.json) e cada área listada em i18n/areas.json."""
+    errors, seen = _check_pair(i18n_dir, "")
+    areas_file = i18n_dir / "areas.json"
+    areas = json.loads(areas_file.read_text(encoding="utf-8")) if areas_file.exists() else []
+    for area in areas:
+        folder = i18n_dir / area
+        if not (folder / "pt-PT.json").exists() or not (folder / "en.json").exists():
+            errors.append(f"{area}/: falta pt-PT.json ou en.json")
+            continue
+        errs, keys = _check_pair(folder, f"{area}/")
+        errors += errs
+        errors += [f"{area}/: chave '{k}' repetida noutro ficheiro" for k in sorted(keys & seen)]
+        seen |= keys
+    for folder in sorted(p for p in i18n_dir.iterdir() if p.is_dir() and p.name not in areas):
+        errors.append(f"{folder.name}/: área não listada em areas.json")
     return errors
 
 

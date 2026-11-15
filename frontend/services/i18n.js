@@ -26,8 +26,11 @@ export function applyI18n(root = document) {
 
 export async function setLocale(next, { save = true } = {}) {
   if (!LOCALES.includes(next)) next = "pt-PT";
-  const res = await fetch(`/i18n/${next}.json`, { credentials: "same-origin" });
-  dict = await res.json();
+  // Ficheiro base + um ficheiro por área (i18n/<area>/<locale>.json, listadas em i18n/areas.json).
+  const get = (url) => fetch(url, { credentials: "same-origin" }).then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+  const areas = await get("/i18n/areas.json");
+  const parts = await Promise.all([get(`/i18n/${next}.json`), ...(Array.isArray(areas) ? areas : []).map((a) => get(`/i18n/${a}/${next}.json`))]);
+  dict = Object.assign({}, ...parts);
   locale = next;
   document.documentElement.lang = next === "en" ? "en" : "pt-PT";
   if (save) { try { localStorage.setItem("pyarena.locale", next); } catch (_) { /* ignora */ } }

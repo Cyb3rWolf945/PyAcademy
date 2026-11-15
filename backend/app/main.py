@@ -7,10 +7,11 @@ from fastapi.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 from starlette.types import ASGIApp, Receive, Scope, Send
 
-from app.api import admin, auth, health, problems, submissions
+from app.api import admin, auth, health, problems, submissions, tournament, ws
 from app.config import settings
 from app.errors import install_error_handlers
-from app.services import dispatcher
+from app.realtime.pg_bus import hub
+from app.services import dispatcher, tournament_scoring
 
 
 class BodyLimitMiddleware:
@@ -48,15 +49,15 @@ class _TooLarge(Exception):
 
 
 class Frontend(StaticFiles):
-    """Estáticos com cache: html/js sem cache (revalida por ETag); /vendor longa; /dist 1 dia."""
+    """Estáticos com cache: html/js sem cache (revalida por ETag); /vendor longa; /dist e /i18n sem cache (ETag)."""
 
     def file_response(self, full_path, stat_result, scope, status_code=200):
         resp = super().file_response(full_path, stat_result, scope, status_code)
         path = scope.get("path", "")
         if path.startswith("/vendor/"):
             resp.headers["Cache-Control"] = "public, max-age=31536000, immutable"
-        elif path.startswith("/dist/"):
-            resp.headers["Cache-Control"] = "public, max-age=86400"
+        elif path.startswith("/dist/") or path.startswith("/i18n/"):
+            resp.headers["Cache-Control"] = "no-cache"  # revalida por ETag: nunca CSS/textos velhos depois de uma atualização
         else:
             resp.headers["Cache-Control"] = "no-cache"
         return resp
@@ -69,6 +70,8 @@ async def lifespan(_: FastAPI):
     if settings.runner_url:
         tasks = dispatcher.start(stop)
     yield
+    await hub.stop()  # fecha os WebSockets deste worker (os clientes reconectam)
+    await tournament_scoring.cancel_all()
     stop.set()
     for t in tasks:
         t.cancel()
@@ -79,7 +82,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title="PyArena", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
     app.add_middleware(BodyLimitMiddleware, max_bytes=settings.max_body_bytes)
     install_error_handlers(app)
-    for r in (health.router, auth.router, admin.router, problems.router, submissions.router):
+    for r in (health.router, auth.router, admin.router, problems.router, submissions.router, tournament.router, ws.router):
         app.include_router(r)
 
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)

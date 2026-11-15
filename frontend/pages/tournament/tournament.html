@@ -1,0 +1,26 @@
+<!doctype html>
+<!-- Torneio (aluno): entrar com código, lobby com agências, rondas, entre rondas, boss e pódio com diploma. -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-8">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="min-w-0 truncate text-xl text-accent" id="page-title">PyArena</h1>
+    <div class="flex items-center gap-2">
+      <span id="conn" hidden></span>
+      <div class="flex gap-2" data-lang-switch></div>
+    </div>
+  </header>
+  <main id="view" class="mx-auto grid max-w-3xl gap-4 p-4"></main>
+  <div id="mission-host"></div>
+  <script type="module" src="/pages/tournament/tournament.js"></script>
+</body>
+</html>

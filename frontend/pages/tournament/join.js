@@ -1,0 +1,28 @@
+// Entrar num torneio com o código de 6 letras (também aceita ?code= no URL e entra logo).
+import { el } from "../../components/dom.js";
+import { api, errorText } from "../../services/api.js";
+import { t } from "../../services/i18n.js";
+
+export function mountJoin(host, { code = "", error = "", onJoined }) {
+  const input = el("input", { class: "input-pixel text-center font-pixel text-2xl uppercase tracking-widest", name: "join_code", maxlength: 6, autocapitalize: "characters", autocomplete: "off", required: true, value: code.toUpperCase(), "aria-label": t("tournament.join_code") });
+  const msg = el("p", { class: "min-h-5 text-sm text-danger", role: "alert" }, error);
+  const btn = el("button", { class: "btn-pixel btn-pixel--accent btn-pixel--lg", type: "submit" }, t("tournament.join_button"));
+  const form = el("form", { class: "panel-pixel grid gap-3" },
+    el("h2", { class: "text-lg" }, t("tournament.join_title")),
+    el("p", { class: "text-sm text-muted" }, t("tournament.join_help")),
+    input, msg, btn);
+
+  async function join() {
+    const c = input.value.trim().toUpperCase();
+    if (!c) return;
+    btn.disabled = true; msg.textContent = "";
+    try {
+      const res = await api("POST", "/api/tournaments/join", { join_code: c }, { idempotent: true });
+      onJoined(res.tournament_id);
+    } catch (err) { msg.textContent = errorText(err); btn.disabled = false; }
+  }
+  form.addEventListener("submit", (e) => { e.preventDefault(); join(); });
+  host.replaceChildren(form);
+  if (code.length === 6 && !error) join();
+  return { update() {}, destroy() { host.replaceChildren(); } };
+}

@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Painel do professor: criar turmas, ver código de entrada, importar alunos por CSV e listá-los. -->
+<!-- Painel do professor: criar turmas, ver código de entrada, importar alunos por CSV, listá-los e gerir torneios. -->
 <html lang="pt-PT" data-theme="floresta">
 <head>
   <meta charset="utf-8">
@@ -16,7 +16,7 @@
     <h1 class="text-xl text-accent" data-i18n="admin.title"></h1>
     <div class="flex gap-2" data-lang-switch></div>
   </header>
-  <main class="mx-auto grid max-w-3xl gap-4 p-4">
+  <main class="mx-auto grid max-w-5xl gap-4 p-4">
     <form id="class-form" class="panel-pixel grid gap-3">
       <h2 class="text-lg" data-i18n="admin.new_class"></h2>
       <label class="grid gap-1 text-sm"><span data-i18n="field.class_name"></span>
@@ -53,6 +53,8 @@
       <h3 data-i18n="admin.students"></h3>
       <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="students-body"></tbody></table></div>
     </section>
+
+    <section id="tournaments" class="panel-pixel grid gap-3"></section>
   </main>
   <div data-bottom-nav></div>
   <script type="module" src="/pages/admin/admin.js"></script>

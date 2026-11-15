@@ -1,9 +1,21 @@
-// Ecrã de entrada: login e registo com código de turma. Depois de autenticar, vai para a página certa.
+// Ecrã de entrada: login, registo com código de turma, atalho de torneio e a ilha 3D (carregada depois do primeiro pixel).
 import { bootPage } from "../../services/page.js";
 import { login, join, homeFor } from "../../services/auth.js";
 import { errorText } from "../../services/api.js";
+import { currentTheme } from "../../services/theme.js";
+import { mountThemeSwitcher } from "../../components/theme-switcher.js";
+import { whenIdle } from "../../scenes/lazy.js";
+
+// A cena 3D só arranca com a página já desenhada; o import() não bloqueia nada.
+let lobby = null;
+whenIdle(async () => {
+  const { mountLobby } = await import("../../scenes/lobby-island.js");
+  lobby = await mountLobby(document.getElementById("hero"), { theme: currentTheme() });
+});
+document.addEventListener("themechange", (e) => lobby?.setTheme(e.detail));
 
 await bootPage({ access: "public" });
+mountThemeSwitcher(document.querySelector("[data-theme-switch]"));
 
 function wire(form, action) {
   const errorBox = form.querySelector("[data-error]");
@@ -17,6 +29,8 @@ function wire(form, action) {
       location.assign(homeFor(user));
     } catch (err) {
       errorBox.textContent = errorText(err); // textContent: nunca HTML em bruto
+      errorBox.classList.add("anim-shake");
+      setTimeout(() => errorBox.classList.remove("anim-shake"), 500);
       btn.disabled = false;
     }
   });

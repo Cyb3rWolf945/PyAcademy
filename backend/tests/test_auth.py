@@ -189,3 +189,13 @@ async def test_unknown_api_route_is_json_404(client):
 async def test_health_and_ready(client):
     assert (await client.get("/api/health")).json() == {"status": "ok"}
     assert (await client.get("/api/ready")).status_code == 200
+
+
+async def test_session_endpoint_and_all_themes(client, make_user):
+    assert (await client.get("/api/session")).json() == {"user": None}
+    await make_user("ana")
+    h = await login(client, "ana")
+    r = (await client.get("/api/session")).json()
+    assert r["user"]["username"] == "ana" and r["csrf_token"] == h["X-CSRF-Token"]
+    for th in ("floresta", "masmorra", "oceano", "deserto", "neve", "noite"):
+        assert (await client.patch("/api/me/preferences", json={"preferred_theme": th}, headers=h)).status_code == 200

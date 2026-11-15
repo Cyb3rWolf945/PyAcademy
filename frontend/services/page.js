@@ -9,7 +9,7 @@ import { mountBottomNav } from "../components/bottom-nav.js";
 export async function bootPage({ access = "user", nav = false } = {}) {
   applyTheme();
   await setLocale(initialLocale(), { save: false });
-  const me = await loadMe();
+  const me = await loadMe({ optional: access === "public" });
   if (access === "public") {
     if (me) { location.replace(homeFor(me)); return null; }
   } else {

@@ -1,0 +1,10 @@
+{
+ "editor.symbols": "Símbolos de código",
+ "editor.indent": "Indentar",
+ "editor.dedent": "Tirar indentação",
+ "editor.left": "Cursor para a esquerda",
+ "editor.right": "Cursor para a direita",
+ "editor.placeholder": "Escreve o teu código aqui...",
+ "editor.pick_all": "Escolhe todas as opções certas.",
+ "editor.your_answer": "A tua resposta"
+}

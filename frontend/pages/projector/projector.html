@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- Projetor do torneio (ecrã grande, 16:9): código de entrada, ronda, temporizador, ranking ao vivo, boss e pódio. -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2a1f">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="data:,">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="h-dvh overflow-hidden">
+  <div class="flex h-dvh flex-col gap-[1.2vw] p-[1.5vw]">
+    <header class="flex items-center justify-between gap-4">
+      <h1 id="title" class="min-w-0 truncate font-pixel text-[3vw] text-accent">PyArena</h1>
+      <div class="flex items-center gap-3">
+        <span id="conn"></span>
+        <button id="fs" type="button" class="btn-pixel btn-pixel--ghost" data-i18n-aria="projector.fullscreen">⛶</button>
+      </div>
+    </header>
+    <main id="stage" class="min-h-0 flex-1"></main>
+  </div>
+  <div id="toasts" class="pointer-events-none fixed bottom-[1.5vw] right-[1.5vw] z-40 grid w-[32vw] gap-2" aria-live="polite"></div>
+  <script type="module" src="/pages/projector/projector.js"></script>
+</body>
+</html>

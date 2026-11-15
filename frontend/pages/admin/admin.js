@@ -4,6 +4,7 @@ import { api, errorText } from "../../services/api.js";
 import { t } from "../../services/i18n.js";
 import { el } from "../../components/dom.js";
 import { toast } from "../../components/toast.js";
+import { initTournaments } from "./tournaments.js";
 
 const me = await bootPage({ access: "teacher", nav: true });
 if (me) init();
@@ -11,9 +12,11 @@ if (me) init();
 function init() {
   const $ = (id) => document.getElementById(id);
   let selected = null;
+  const tournaments = initTournaments(document.getElementById("tournaments"));
 
   async function loadClasses() {
     const { classes } = await api("GET", "/api/classes");
+    tournaments.setClasses(classes);
     $("no-classes").hidden = classes.length > 0;
     $("class-list").replaceChildren(...classes.map((c) =>
       el("li", {}, el("button", { class: "btn-pixel secondary w-full justify-between", type: "button", onclick: () => select(c) },
