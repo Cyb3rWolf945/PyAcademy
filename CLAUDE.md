@@ -29,7 +29,7 @@ Jogo web competitivo **e saudável** para alunos de **Programação I (Python)**
 backend/app/{models,api,realtime,services,tools}/   backend/problems/   backend/content/   backend/tests/
 runner/            # contentor isolado: sandbox, harness (stdin/stdout e chamadas), requirements.py
 frontend/{pages,components,services,scenes,i18n,styles,vendor,assets}/
-deploy/Caddyfile   docker-compose.yml   docs/PLANO.md   materiais_aulas/ (no .gitignore)
+deploy/Caddyfile   docker-compose.yml   docs/PLANO.md   materiais_aulas/ (versionado; repositório privado; nunca servido diretamente aos alunos)
 ```
 **pages** = ecrãs (1 HTML + 1 JS por pasta) · **components** = peças visuais reutilizáveis · **services** = comunicação (api, socket, storage, i18n, theme). Cada ficheiro é curto e começa com um **comentário em português a explicar para que serve**, porque o professor quer perceber o projeto. Código, identificadores e commits em inglês.
 

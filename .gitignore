@@ -1,5 +1,5 @@
-# Materiais das aulas (privados, nunca servidos aos alunos)
-materiais_aulas/
+# Os materiais das aulas (materiais_aulas/) estão versionados de propósito: manter o repositório PRIVADO.
+# Os slides convertidos (PNG) continuam fora do git, no volume Docker "slides".
 
 # Segredos e dados locais
 .env
