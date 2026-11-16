@@ -80,7 +80,7 @@ async def join(body: JoinIn, request: Request, db: AsyncSession = Depends(get_db
         await security.record_failure(db, JOIN_KEY, ip)
         raise ApiError(404, "class.invalid_code")
     user = User(
-        username=body.username, display_name=body.display_name, role=Role.student,
+        username=body.username, email=body.email, display_name=body.display_name, role=Role.student,
         password_hash=await security.hash_password(body.password), class_id=cls.id,
     )
     db.add(user)
@@ -88,7 +88,13 @@ async def join(body: JoinIn, request: Request, db: AsyncSession = Depends(get_db
         await db.flush()
     except IntegrityError:
         await db.rollback()
-        raise ApiError(409, "auth.username_taken")
+        existing_username = (await db.execute(select(User.id).where(User.username == body.username))).scalar_one_or_none()
+        if existing_username is not None:
+            raise ApiError(409, "auth.username_taken")
+        existing_email = (await db.execute(select(User.id).where(User.email == body.email))).scalar_one_or_none()
+        if existing_email is not None:
+            raise ApiError(409, "auth.email_taken")
+        raise ApiError(409, "common.invalid_request")
     return await start_session(db, user, request)
 
 

@@ -4,7 +4,7 @@ Bundle do editor de código usado em `components/editor.js`. Carregado só nas p
 Sem CDN: tudo compilado aqui, com versões fixas (`package-lock.json` incluído).
 
 - Ficheiro: `codemirror.js` (≈370 KB, ≈127 KB gzip)
-- sha256: `537528948ea136bbf2a2b350293c703583429d8df3a6d5b9b12008f4cff3b193`
+- sha256: `bfde5c4c85a4faf396cac87a48f41782f644d277d11ba99eef8eb86d07aea67e`
 - Origem do código: `src/entry.js` (Python, números de linha, indentação de 4 espaços, parênteses, tema via variáveis CSS `--c-*`)
 
 ## Versões

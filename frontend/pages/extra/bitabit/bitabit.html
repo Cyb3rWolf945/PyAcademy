@@ -1,0 +1,94 @@
+<!doctype html>
+<!-- Bit a Bit: jogo de conversão binário ↔ decimal (linhas que sobem). Três ecrãs: introdução, jogo e resultados. -->
+<html lang="pt-PT" data-theme="floresta">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#16241a">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <link rel="preload" as="font" type="font/woff2" href="/vendor/fonts/PressStart2P-latin.woff2" crossorigin>
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-6">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <div class="flex min-w-0 items-center gap-2">
+      <a class="btn-pixel btn-pixel--ghost" href="/pages/extra/extra.html" data-i18n-aria="bit.back" aria-label="Extra">&lt;</a>
+      <h1 class="truncate text-sm text-accent sm:text-xl" data-i18n="bit.title"></h1>
+    </div>
+    <div class="flex gap-2"><div data-score-hud></div><div class="flex gap-2" data-lang-switch></div></div>
+  </header>
+
+  <main class="mx-auto grid max-w-5xl gap-4 px-3">
+    <!-- introdução -->
+    <section id="screen-intro" class="panel-pixel bit-intro">
+      <h2 class="text-sm" data-i18n="bit.intro_title"></h2>
+      <p data-i18n="bit.intro_text"></p>
+      <ul class="bit-howto">
+        <li data-i18n="bit.how_bd"></li>
+        <li data-i18n="bit.how_db"></li>
+        <li data-i18n="bit.how_top"></li>
+        <li data-i18n="bit.how_keys"></li>
+      </ul>
+      <p class="bit-note" id="intro-note"></p>
+      <div class="flex flex-wrap gap-3">
+        <button type="button" class="btn-pixel btn-pixel--accent btn-pixel--lg" id="play" data-i18n="bit.play"></button>
+        <a class="btn-pixel btn-pixel--ghost" href="/pages/extra/extra.html" data-i18n="bit.back_extra"></a>
+      </div>
+    </section>
+
+    <!-- jogo -->
+    <section id="screen-game" class="bit-layout" hidden aria-label="Bit a Bit">
+      <aside class="bit-side panel-pixel">
+        <dl class="bit-stats">
+          <div><dt data-i18n="bit.score"></dt><dd id="st-score">0</dd></div>
+          <div><dt data-i18n="bit.level"></dt><dd id="st-level">1</dd></div>
+          <div><dt data-i18n="bit.left"></dt><dd id="st-left">8</dd></div>
+          <div><dt data-i18n="bit.streak"></dt><dd id="st-streak">0</dd></div>
+        </dl>
+        <div class="bit-btns">
+          <button type="button" class="btn-pixel secondary" id="b-pause" data-keep data-i18n="bit.pause"></button>
+          <button type="button" class="btn-pixel secondary" id="b-sound" data-keep aria-pressed="false" data-i18n="bit.sound_off"></button>
+          <button type="button" class="btn-pixel danger" id="b-end" data-keep data-i18n="bit.end"></button>
+        </div>
+        <p class="bit-note" id="game-note" hidden></p>
+      </aside>
+      <div class="bit-board panel-pixel panel-pixel--inset">
+        <div id="board" class="bit-stage"></div>
+        <div id="overlay" class="bit-overlay" hidden>
+          <p id="overlay-text" class="font-pixel text-xs"></p>
+          <button type="button" class="btn-pixel btn-pixel--accent" id="b-resume" data-keep data-i18n="bit.resume"></button>
+        </div>
+      </div>
+      <div id="controls" class="bit-ctl panel-pixel" hidden></div>
+    </section>
+
+    <!-- resultados -->
+    <section id="screen-over" class="bit-over" hidden aria-live="polite">
+      <div class="panel-pixel bit-result">
+        <h2 class="text-sm" id="res-title"></h2>
+        <p class="bit-big" id="res-score">0</p>
+        <p class="bit-note" id="res-note"></p>
+        <dl class="bit-stats bit-stats--res">
+          <div><dt data-i18n="bit.res_points"></dt><dd id="res-points">0</dd></div>
+          <div><dt data-i18n="bit.res_today"></dt><dd id="res-today">0/50</dd></div>
+          <div><dt data-i18n="bit.res_best"></dt><dd id="res-best">0</dd></div>
+        </dl>
+        <div class="flex flex-wrap gap-3">
+          <button type="button" class="btn-pixel btn-pixel--accent btn-pixel--lg" id="again" data-i18n="bit.again"></button>
+          <a class="btn-pixel btn-pixel--ghost" href="/pages/extra/extra.html" data-i18n="bit.back_extra"></a>
+        </div>
+      </div>
+      <div class="panel-pixel">
+        <h2 class="text-sm" data-i18n="bit.top_title"></h2>
+        <ol id="res-top" class="bit-top"></ol>
+        <p id="res-top-empty" class="bit-note" hidden data-i18n="bit.top_empty"></p>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/pages/extra/bitabit/bitabit.js"></script>
+</body>
+</html>

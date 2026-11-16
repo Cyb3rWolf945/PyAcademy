@@ -11,13 +11,19 @@ import { podium2d } from "./podium2d.js";
 import { myRow, myTeam } from "./ui.js";
 
 export function mountFinal(host, live) {
+  const back = el("a", {
+    href: "/",
+    class: "btn-pixel btn-pixel--ghost min-h-[44px] min-w-[44px] w-fit px-3 text-xl",
+    "aria-label": t("tournament.back_home"),
+    title: t("tournament.back_home"),
+  }, "←");
   const head = el("section", { class: "panel-pixel grid gap-3" });
   const podiumHost = el("div");
   const lbHost = el("div");
   const diplomaBox = el("section", { class: "panel-pixel grid gap-3" });
   const lbBox = el("section", { class: "panel-pixel grid gap-2" }, el("h3", { class: "text-base" }, t("tournament.final_ranking")), lbHost);
   const bracketHost = el("div");
-  host.replaceChildren(head, el("section", { class: "panel-pixel grid gap-2" }, podiumHost), diplomaBox, lbBox, el("section", { class: "panel-pixel grid gap-2" }, bracketHost));
+  host.replaceChildren(back, head, el("section", { class: "panel-pixel grid gap-2" }, podiumHost), diplomaBox, lbBox, el("section", { class: "panel-pixel grid gap-2" }, bracketHost));
   const bracket = mountBracket(bracketHost, { meId: live.snap().me?.user_id });
   const lb = mountLeaderboard(lbHost, { meKey: live.snap().me?.participant_key });
   let preview = null;

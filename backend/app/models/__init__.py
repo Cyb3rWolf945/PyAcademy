@@ -1,6 +1,7 @@
 # Importa todos os modelos para o Alembic e o SQLModel os conhecerem.
 from app.models.academy import AcademyActivityLog, AcademyProgress, SlideDeck
 from app.models.audit import AuditLog
+from app.models.extra import BitabitGame, ExtraSettings, PokerAction, PokerConsent, PokerEvent, PokerHand, PokerSeat, PokerTable
 from app.models.points import UserPoints
 from app.models.problem import Problem
 from app.models.session import AuthSession, LoginAttempt
@@ -11,4 +12,4 @@ from app.models.tournament import (
 )
 from app.models.user import Role, SchoolClass, User
 
-__all__ = ["AcademyActivityLog", "AcademyProgress", "SlideDeck", "UserPoints", "TournamentGroup", "AuditLog", "AuthSession", "HintUse", "Job", "LoginAttempt", "Presence", "Problem", "Role", "SchoolClass", "Submission", "User", "Tournament", "TournamentBonus", "TournamentEvent", "TournamentHintUse", "TournamentPlayer", "TournamentRound", "TournamentSolve", "TournamentSubmission", "TournamentTeam"]
+__all__ = ["BitabitGame", "ExtraSettings", "PokerAction", "PokerConsent", "PokerEvent", "PokerHand", "PokerSeat", "PokerTable", "AcademyActivityLog", "AcademyProgress", "SlideDeck", "UserPoints", "TournamentGroup", "AuditLog", "AuthSession", "HintUse", "Job", "LoginAttempt", "Presence", "Problem", "Role", "SchoolClass", "Submission", "User", "Tournament", "TournamentBonus", "TournamentEvent", "TournamentHintUse", "TournamentPlayer", "TournamentRound", "TournamentSolve", "TournamentSubmission", "TournamentTeam"]

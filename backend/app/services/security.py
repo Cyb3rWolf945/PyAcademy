@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import secrets
 from datetime import timedelta
+from urllib.parse import urlsplit
 
 from argon2 import PasswordHasher
 from argon2.exceptions import InvalidHashError, VerificationError
@@ -66,12 +67,27 @@ async def create_session(db: AsyncSession, user_id: int) -> tuple[str, AuthSessi
     return token, row
 
 
+def _origin_matches(value: str, pattern: str) -> bool:
+    """Compara uma origem exata ou um wildcard explícito no host."""
+    parsed_value, parsed_pattern = urlsplit(value.rstrip("/")), urlsplit(pattern.rstrip("/"))
+    if not parsed_value.scheme or not parsed_value.netloc or parsed_value.path:
+        return False
+    if parsed_value.scheme != parsed_pattern.scheme or not parsed_pattern.netloc:
+        return False
+    if parsed_pattern.hostname and parsed_pattern.hostname.startswith("*."):
+        suffix = parsed_pattern.hostname[1:]
+        return parsed_value.hostname is not None and parsed_value.hostname.endswith(suffix) and parsed_value.hostname != suffix[1:]
+    return parsed_value.netloc == parsed_pattern.netloc
+
+
 def origin_ok(origin: str | None, referer: str | None) -> bool:
-    allowed = {item.strip().rstrip("/") for item in settings.public_origin.split(",") if item.strip()}
+    allowed = [item.strip().rstrip("/") for item in settings.public_origin.split(",") if item.strip()]
     if origin:
-        return origin.rstrip("/") in allowed
+        return any(_origin_matches(origin, pattern) for pattern in allowed)
     if referer:
-        return any(referer == item or referer.startswith(item + "/") for item in allowed)
+        referer_origin = referer.split("/", 3)
+        if len(referer_origin) >= 3:
+            return any(_origin_matches("/".join(referer_origin[:3]), pattern) for pattern in allowed)
     return False
 
 

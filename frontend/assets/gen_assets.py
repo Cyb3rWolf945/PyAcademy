@@ -795,6 +795,11 @@ def paint_campus(L, S):
             d.rectangle((x0, roof_y0, x1, roof_y1), fill=rgba("#d8dbe0"))
             d.rectangle((x0, roof_y0, x1, roof_y0 + 1), fill=rgba("#f2f4f7"))
             d.rectangle((x1, roof_y0, x1, y1), fill=rgba("#a63018"))
+    if L.get("extra"):  # mesa de cartas e painel de bits à porta do pavilhão
+        tx, tz, tw, td = L["extra"]["table"]
+        R([tx, tz, tw, td], "#2f8f4a"); R([tx + 0.2, tz + 0.25, 0.4, 0.5], "#ffffff")
+        px0, pz0, pw, pd = L["extra"]["panel"]
+        R([px0, pz0 - 0.3, pw, 0.5], "#1c2340"); R([px0 + 0.15, pz0 - 0.2, pw - 0.3, 0.25], "#52e3ee")
     # muro de entrada
     wx, wz, ww = L["wall"]
     R([wx, wz, ww, 0.5], "#f4f1ea")
@@ -808,6 +813,146 @@ def build_campus():
     out.mkdir(parents=True, exist_ok=True)
     paint_campus(L, 6).save(out / "poster.png")
     paint_campus(L, 3).save(out / "poster-small.png")
+
+
+# ---------- Extra: cartas de poker (52 + verso), fichas e ícones dos jogos (originais, desenhados por código) ----------
+GLYPH = {  # fonte 3x5 para os valores
+    "A": ["010", "101", "111", "101", "101"], "K": ["101", "101", "110", "101", "101"], "Q": ["111", "101", "101", "111", "001"],
+    "J": ["001", "001", "001", "101", "010"], "0": ["111", "101", "101", "101", "111"], "1": ["110", "010", "010", "010", "111"],
+    "2": ["110", "001", "010", "100", "111"], "3": ["110", "001", "010", "001", "110"], "4": ["101", "101", "111", "001", "001"],
+    "5": ["111", "100", "110", "001", "110"], "6": ["011", "100", "111", "101", "111"], "7": ["111", "001", "010", "010", "010"],
+    "8": ["111", "101", "111", "101", "111"], "9": ["111", "101", "111", "001", "110"],
+}
+SUIT7 = {
+    "s": ["...#...", "..###..", ".#####.", "#######", "#######", "...#...", "..###.."],
+    "h": [".##.##.", "#######", "#######", "#######", ".#####.", "..###..", "...#..."],
+    "d": ["...#...", "..###..", ".#####.", "#######", ".#####.", "..###..", "...#..."],
+    "c": ["..###..", "..###..", "##.#.##", "#######", "#######", "...#...", "..###.."],
+}
+RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+INK, RED_INK, PAPER = "#1b1424", "#d62f3a", "#fbfaf4"
+
+
+def _put(im, bits, x, y, scale, color):
+    for r, row in enumerate(bits):
+        for c, ch in enumerate(row):
+            if ch in "#1":
+                for dy in range(scale):
+                    for dx in range(scale):
+                        px, py = x + c * scale + dx, y + r * scale + dy
+                        if 0 <= px < im.width and 0 <= py < im.height:
+                            im.putpixel((px, py), rgba(color))
+
+
+def card_face(rank, suit, big):
+    W, H = (48, 64) if big else (24, 32)
+    gs, ss, ps = (2, 1, 3) if big else (1, 1, 1)  # escala do valor, do naipe pequeno e do naipe central
+    col = RED_INK if suit in "hd" else INK
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.rectangle((1, 0, W - 2, H - 1), fill=rgba(INK)); d.rectangle((0, 1, W - 1, H - 2), fill=rgba(INK))
+    d.rectangle((1, 1, W - 2, H - 2), fill=rgba(PAPER))
+    d.rectangle((1, 1, W - 2, 1), fill=rgba("#ffffff"))
+    glyphs = [GLYPH[ch] for ch in rank]
+    gw = (3 * len(glyphs) + (len(glyphs) - 1)) * gs
+    corner = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gx = 3
+    for g in glyphs:
+        _put(corner, g, gx, 3, gs, col); gx += 4 * gs
+    _put(corner, SUIT7[suit], 3, 3 + 5 * gs + 2, ss, col)
+    im.alpha_composite(corner)
+    im.alpha_composite(corner.rotate(180))
+    # centro: naipe grande (cartas de figuras levam a letra, em moldura colorida)
+    cx, cy = (W - 7 * ps) // 2, (H - 7 * ps) // 2
+    if rank in ("J", "Q", "K"):
+        bw, bh = (24, 34) if big else (12, 16)
+        bx, by = (W - bw) // 2, (H - bh) // 2
+        d.rectangle((bx, by, bx + bw - 1, by + bh - 1), fill=rgba(mix(col, "#ffffff", 0.82)), outline=rgba(col))
+        _put(im, GLYPH[rank], bx + (bw - 3 * (3 if big else 2)) // 2, by + (bh - 5 * (3 if big else 2)) // 2 - (2 if big else 1), 3 if big else 2, col)
+        _put(im, SUIT7[suit], (W - 7 * ps) // 2 if big else (W - 7) // 2, by + bh - 7 * (2 if big else 1) - 2, 2 if big else 1, col)
+    else:
+        n = 1 if rank == "A" else int(rank)
+        if n == 1:
+            _put(im, SUIT7[suit], cx, cy, ps, col)
+        elif not big:
+            _put(im, SUIT7[suit], (W - 7) // 2, (H - 7) // 2, 1, col)       # cartas pequenas: só o naipe ao centro
+        else:
+            top, bot = 12, H - 12 - 7
+            lin = lambda k: [top + (bot - top) * i // max(1, k - 1) for i in range(k)]
+            cl, cr_, cc = W // 2 - 10, W // 2 + 3, W // 2 - 3
+            k = {4: 2, 5: 2, 6: 3, 7: 3, 8: 3, 9: 4, 10: 4}.get(n, 0)
+            if n in (2, 3):
+                for y in ([top, bot] if n == 2 else lin(3)): _put(im, SUIT7[suit], cc, y, 1, col)
+            else:
+                ys = lin(k)
+                for y in ys: _put(im, SUIT7[suit], cl, y, 1, col); _put(im, SUIT7[suit], cr_, y, 1, col)
+                if n == 5: _put(im, SUIT7[suit], cc, (top + bot) // 2, 1, col)
+                if n == 7: _put(im, SUIT7[suit], cc, (ys[0] + ys[1]) // 2, 1, col)
+                if n == 8: _put(im, SUIT7[suit], cc, (ys[0] + ys[1]) // 2, 1, col); _put(im, SUIT7[suit], cc, (ys[1] + ys[2]) // 2, 1, col)
+                if n == 9: _put(im, SUIT7[suit], cc, (ys[1] + ys[2]) // 2, 1, col)
+                if n == 10: _put(im, SUIT7[suit], cc, (ys[0] + ys[1]) // 2, 1, col); _put(im, SUIT7[suit], cc, (ys[2] + ys[3]) // 2, 1, col)
+    return im
+
+
+def card_back(big, emblem):
+    W, H = (48, 64) if big else (24, 32)
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.rectangle((1, 0, W - 2, H - 1), fill=rgba(INK)); d.rectangle((0, 1, W - 1, H - 2), fill=rgba(INK))
+    d.rectangle((1, 1, W - 2, H - 2), fill=rgba("#f4f1e8"))
+    d.rectangle((3, 3, W - 4, H - 4), fill=rgba("#2a3b7a"))
+    for y in range(4, H - 4):
+        for x in range(4, W - 4):
+            if (x + y) % 4 == 0: im.putpixel((x, y), rgba("#3a52a3"))
+    d.rectangle((3, 3, W - 4, H - 4), outline=rgba("#ffd23f"))
+    e = emblem.resize((16 if not big else 32,) * 2, Image.NEAREST) if emblem.width != (32 if big else 16) else emblem
+    box = Image.new("RGBA", (e.width + 4, e.height + 4), rgba("#f4f1e8")); box.alpha_composite(e, (2, 2))
+    im.alpha_composite(box, ((W - box.width) // 2, (H - box.height) // 2))
+    return im
+
+
+def chip(color, size):
+    S = size
+    im = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    dark = mix(color, "#000000", 0.45)
+    d.ellipse((0, 0, S - 1, S - 1), fill=rgba(INK))
+    d.ellipse((1, 1, S - 2, S - 2), fill=rgba(color))
+    import math
+    for k in range(8):  # marcas brancas na orla
+        a = k * math.pi / 4
+        cx, cy = S / 2 + math.cos(a) * (S / 2 - 3), S / 2 + math.sin(a) * (S / 2 - 3)
+        r = max(1, S // 12)
+        d.rectangle((cx - r, cy - r, cx + r - (1 if r == 1 else 0), cy + r - (1 if r == 1 else 0)), fill=rgba("#ffffff" if color != "#f4f1e8" else "#8a8a99"))
+    q = S // 4
+    d.ellipse((q, q, S - 1 - q, S - 1 - q), fill=rgba(dark)); d.ellipse((q + 1, q + 1, S - 2 - q, S - 2 - q), fill=rgba(color))
+    d.point((S // 4 + 1, S // 4 + 1), fill=rgba("#ffffff"))
+    return im
+
+
+def build_extra(emb):
+    cards = ASSETS / "sprites/cards"
+    for big, sub in ((False, "sm"), (True, "lg")):
+        (cards / sub).mkdir(parents=True, exist_ok=True)
+        for r in RANKS:
+            for su in "shdc":
+                card_face(r, su, big).save(cards / sub / f"{r}{su}.png")
+        card_back(big, emb[32 if big else 16]).save(cards / sub / "back.png")
+    ch = ASSETS / "sprites/chips"; ch.mkdir(parents=True, exist_ok=True)
+    for name, hexc in {"white": "#f4f1e8", "red": "#d94a4a", "blue": "#3f7fe0", "green": "#3fae5a", "black": "#3a3a48"}.items():
+        for S in (16, 32): chip(hexc, S).save(ch / f"{name}-{S}.png")
+    ic = ASSETS / "sprites/icons"
+    # ícone do poker: carta com espada + ficha
+    im, d = canvas(); d.rectangle((2, 1, 10, 13), fill=rgba("#fbfaf4"), outline=rgba(INK)); _put(im, SUIT7["s"], 3, 4, 1, INK); d.ellipse((8, 8, 15, 15), fill=rgba("#d94a4a"), outline=rgba(INK)); d.ellipse((10, 10, 13, 13), outline=rgba("#ffffff")); im.save(ic / "poker.png")
+    # Bit a Bit: 4 bits acesos/apagados
+    im, d = canvas(); d.rectangle((0, 3, 15, 12), fill=rgba("#1c2340"), outline=rgba(INK))
+    for i, on in enumerate([1, 0, 1, 1]):
+        d.rectangle((1 + i * 4, 5, 3 + i * 4, 10), fill=rgba("#52e3ee" if on else "#3a4570"))
+        if on: d.point((2 + i * 4, 7), fill=rgba("#ffffff"))
+    im.save(ic / "bitabit.png")
+    # Extra (navegação): comando de jogo
+    im, d = canvas(); d.rectangle((1, 4, 14, 12), fill=rgba("#8a97ab"), outline=rgba(INK)); d.rectangle((3, 7, 6, 8), fill=rgba(INK)); d.rectangle((4, 6, 5, 9), fill=rgba(INK))
+    d.rectangle((10, 6, 11, 7), fill=rgba("#e8484f")); d.rectangle((12, 8, 13, 9), fill=rgba("#ffd23f")); d.rectangle((2, 5, 13, 5), fill=rgba("#d5dde8")); im.save(ic / "extra.png")
 
 
 # ---------- favicon e ícones PWA ----------
@@ -840,5 +985,6 @@ if __name__ == "__main__":
     build_academy()
     build_campus()
     emb = build_upt()
+    build_extra(emb)
     build_pwa(emb)
     print("ok")

@@ -5,6 +5,7 @@ import { t } from "../../services/i18n.js";
 import { api, errorText } from "../../services/api.js";
 import { draftKey, loadDraft, saveDraft, flushDraft, submitWithQueue, onQueueEvent, queuedSubmissions } from "../../services/storage.js";
 import { mountCodeEditor, mountQuestions } from "../../components/editor.js";
+import { mountCodeHelper } from "../../components/code-helper.js";
 import { isTouch } from "../../components/symbol-bar.js";
 import { pick, stars, renderMarkdown } from "./lib.js";
 import { renderResult } from "./result.js";
@@ -20,6 +21,7 @@ export function mountMission(host, { mission, ctx = {} }) {
   const hintUrl = ctx.hintUrl || ((s, n) => (ctx.tournamentId ? `/api/tournaments/${ctx.tournamentId}/hints/${s}/${n}` : `/api/problems/${s}/hints/${n}`));
   let tab = "statement";
   let editor = null, questions = null;
+  let codeHelper = null;
   let destroyed = false, busy = false, waitingClient = null, pollToken = 0;
   const hints = {}; // n -> texto (pistas já abertas)
   let hintsOpened = mission.hints_opened || 0;
@@ -217,7 +219,16 @@ export function mountMission(host, { mission, ctx = {} }) {
     const start = draft != null ? draft : starter;
     mountCodeEditor(editorHost, {
       value: start, ariaLabel: t("tournament.tab_code"), onChange: (v) => saveDraft(key, v), symbolHost,
-    }).then((ed) => { if (destroyed) ed.destroy(); else editor = ed; refreshSubmit(); });
+    }).then((ed) => {
+      if (destroyed) ed.destroy();
+      else {
+        editor = ed;
+        if (ctx.tournamentId != null) {
+          codeHelper = mountCodeHelper(editorHost, { mission, editor });
+        }
+      }
+      refreshSubmit();
+    });
     // nada bloqueia a escrita: o editor monta de forma assíncrona e o botão só espera por ele
     submitBtn.disabled = true;
   } else {
@@ -245,6 +256,7 @@ export function mountMission(host, { mission, ctx = {} }) {
       flushDraft(key); offQueue();
       vv?.removeEventListener("resize", fit); vv?.removeEventListener("scroll", fit);
       document.removeEventListener("localechange", onLocale);
+      codeHelper?.destroy();
       editor?.destroy();
       host.replaceChildren();
     },

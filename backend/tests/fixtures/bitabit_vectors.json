@@ -1,0 +1,1155 @@
+{
+ "spec": "Ver o coment\u00e1rio no topo de backend/app/services/bitabit.py: mulberry32(seed) -> [0,1); por linha k duas chamadas (u1 -> kind: u1<0.5 ? 'b2d':'d2b'; u2 -> value = 1+floor(u2*(2^bits-1))); bits 4/6/8 (n\u00edvel 1/2/3+), 10 linhas por n\u00edvel, 80 linhas.",
+ "rows_per_level": 10,
+ "max_rows": 80,
+ "score": {
+  "formula": "(bits*5 + max(0, 20 - floor(t_ms/300))) * level",
+  "cases": [
+   {
+    "bits": 4,
+    "level": 1,
+    "t_ms": 300,
+    "score": 39
+   },
+   {
+    "bits": 8,
+    "level": 3,
+    "t_ms": 9000,
+    "score": 120
+   },
+   {
+    "bits": 6,
+    "level": 2,
+    "t_ms": 1500,
+    "score": 90
+   }
+  ]
+ },
+ "vectors": [
+  {
+   "seed": 1,
+   "rng": [
+    0.6270739405881613,
+    0.002735721180215478,
+    0.5274470399599522,
+    0.9810509674716741,
+    0.9683778982143849,
+    0.281103502959013,
+    0.6128388606011868,
+    0.7207431411370635
+   ],
+   "rows": [
+    {
+     "k": 0,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 1
+    },
+    {
+     "k": 1,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 15
+    },
+    {
+     "k": 2,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 5
+    },
+    {
+     "k": 3,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 11
+    },
+    {
+     "k": 4,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 15
+    },
+    {
+     "k": 5,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 8
+    },
+    {
+     "k": 6,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 7
+    },
+    {
+     "k": 7,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 3
+    },
+    {
+     "k": 8,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 2
+    },
+    {
+     "k": 9,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 12
+    },
+    {
+     "k": 10,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 13
+    },
+    {
+     "k": 11,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 27
+    },
+    {
+     "k": 12,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 51
+    },
+    {
+     "k": 13,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 13
+    },
+    {
+     "k": 14,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 35
+    },
+    {
+     "k": 15,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 13
+    },
+    {
+     "k": 16,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 29
+    },
+    {
+     "k": 17,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 63
+    },
+    {
+     "k": 18,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 48
+    },
+    {
+     "k": 19,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 21
+    },
+    {
+     "k": 20,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 64
+    },
+    {
+     "k": 21,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 186
+    },
+    {
+     "k": 22,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 33
+    },
+    {
+     "k": 23,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 13
+    },
+    {
+     "k": 24,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 221
+    },
+    {
+     "k": 25,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 253
+    },
+    {
+     "k": 26,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 103
+    },
+    {
+     "k": 27,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 173
+    },
+    {
+     "k": 28,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 236
+    },
+    {
+     "k": 29,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 235
+    }
+   ]
+  },
+  {
+   "seed": 42,
+   "rng": [
+    0.6011037519201636,
+    0.44829055899754167,
+    0.8524657934904099,
+    0.6697340414393693,
+    0.17481389874592423,
+    0.5265925421845168,
+    0.2732279943302274,
+    0.6247446539346129
+   ],
+   "rows": [
+    {
+     "k": 0,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 7
+    },
+    {
+     "k": 1,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 11
+    },
+    {
+     "k": 2,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 8
+    },
+    {
+     "k": 3,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 10
+    },
+    {
+     "k": 4,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 8
+    },
+    {
+     "k": 5,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 14
+    },
+    {
+     "k": 6,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 5
+    },
+    {
+     "k": 7,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 8
+    },
+    {
+     "k": 8,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 10
+    },
+    {
+     "k": 9,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 8
+    },
+    {
+     "k": 10,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 4
+    },
+    {
+     "k": 11,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 2
+    },
+    {
+     "k": 12,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 4
+    },
+    {
+     "k": 13,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 50
+    },
+    {
+     "k": 14,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 2
+    },
+    {
+     "k": 15,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 54
+    },
+    {
+     "k": 16,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 51
+    },
+    {
+     "k": 17,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 29
+    },
+    {
+     "k": 18,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 4
+    },
+    {
+     "k": 19,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 38
+    },
+    {
+     "k": 20,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 165
+    },
+    {
+     "k": 21,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 78
+    },
+    {
+     "k": 22,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 219
+    },
+    {
+     "k": 23,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 53
+    },
+    {
+     "k": 24,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 75
+    },
+    {
+     "k": 25,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 169
+    },
+    {
+     "k": 26,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 177
+    },
+    {
+     "k": 27,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 23
+    },
+    {
+     "k": 28,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 110
+    },
+    {
+     "k": 29,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 36
+    }
+   ]
+  },
+  {
+   "seed": 12345,
+   "rng": [
+    0.9797282677609473,
+    0.3067522644996643,
+    0.484205421525985,
+    0.817934412509203,
+    0.5094283693470061,
+    0.34747186047025025,
+    0.07375754183158278,
+    0.7663964673411101
+   ],
+   "rows": [
+    {
+     "k": 0,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 5
+    },
+    {
+     "k": 1,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 13
+    },
+    {
+     "k": 2,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 6
+    },
+    {
+     "k": 3,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 12
+    },
+    {
+     "k": 4,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 13
+    },
+    {
+     "k": 5,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 15
+    },
+    {
+     "k": 6,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 15
+    },
+    {
+     "k": 7,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 4
+    },
+    {
+     "k": 8,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 5
+    },
+    {
+     "k": 9,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 13
+    },
+    {
+     "k": 10,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 50
+    },
+    {
+     "k": 11,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 42
+    },
+    {
+     "k": 12,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 5
+    },
+    {
+     "k": 13,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 13
+    },
+    {
+     "k": 14,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 7
+    },
+    {
+     "k": 15,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 5
+    },
+    {
+     "k": 16,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 59
+    },
+    {
+     "k": 17,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 14
+    },
+    {
+     "k": 18,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 43
+    },
+    {
+     "k": 19,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 4
+    },
+    {
+     "k": 20,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 180
+    },
+    {
+     "k": 21,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 10
+    },
+    {
+     "k": 22,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 231
+    },
+    {
+     "k": 23,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 215
+    },
+    {
+     "k": 24,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 67
+    },
+    {
+     "k": 25,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 132
+    },
+    {
+     "k": 26,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 78
+    },
+    {
+     "k": 27,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 219
+    },
+    {
+     "k": 28,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 228
+    },
+    {
+     "k": 29,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 4
+    }
+   ]
+  },
+  {
+   "seed": 4294967295,
+   "rng": [
+    0.8964226141106337,
+    0.189478256739676,
+    0.7156526781618595,
+    0.9440599093213677,
+    0.8452364315744489,
+    0.5391399988438934,
+    0.6804977387655526,
+    0.4755720964167267
+   ],
+   "rows": [
+    {
+     "k": 0,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 3
+    },
+    {
+     "k": 1,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 15
+    },
+    {
+     "k": 2,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 9
+    },
+    {
+     "k": 3,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 8
+    },
+    {
+     "k": 4,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 15
+    },
+    {
+     "k": 5,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 3
+    },
+    {
+     "k": 6,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 12
+    },
+    {
+     "k": 7,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 12
+    },
+    {
+     "k": 8,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 2
+    },
+    {
+     "k": 9,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 6
+    },
+    {
+     "k": 10,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 59
+    },
+    {
+     "k": 11,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 54
+    },
+    {
+     "k": 12,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 6
+    },
+    {
+     "k": 13,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 18
+    },
+    {
+     "k": 14,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 2
+    },
+    {
+     "k": 15,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 16
+    },
+    {
+     "k": 16,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 28
+    },
+    {
+     "k": 17,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 25
+    },
+    {
+     "k": 18,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 39
+    },
+    {
+     "k": 19,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 17
+    },
+    {
+     "k": 20,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 204
+    },
+    {
+     "k": 21,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 71
+    },
+    {
+     "k": 22,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 191
+    },
+    {
+     "k": 23,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 192
+    },
+    {
+     "k": 24,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 246
+    },
+    {
+     "k": 25,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 252
+    },
+    {
+     "k": 26,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 109
+    },
+    {
+     "k": 27,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 134
+    },
+    {
+     "k": 28,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 65
+    },
+    {
+     "k": 29,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 103
+    }
+   ]
+  },
+  {
+   "seed": 3735928559,
+   "rng": [
+    0.9413696140982211,
+    0.26719574979506433,
+    0.772033357527107,
+    0.35816076025366783,
+    0.47554167779162526,
+    0.8382313968613744,
+    0.11277393717318773,
+    0.3172087538987398
+   ],
+   "rows": [
+    {
+     "k": 0,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 5
+    },
+    {
+     "k": 1,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 6
+    },
+    {
+     "k": 2,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 13
+    },
+    {
+     "k": 3,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 5
+    },
+    {
+     "k": 4,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 4
+    },
+    {
+     "k": 5,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 7
+    },
+    {
+     "k": 6,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 8
+    },
+    {
+     "k": 7,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 13
+    },
+    {
+     "k": 8,
+     "level": 1,
+     "bits": 4,
+     "kind": "d2b",
+     "value": 7
+    },
+    {
+     "k": 9,
+     "level": 1,
+     "bits": 4,
+     "kind": "b2d",
+     "value": 11
+    },
+    {
+     "k": 10,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 34
+    },
+    {
+     "k": 11,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 40
+    },
+    {
+     "k": 12,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 31
+    },
+    {
+     "k": 13,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 8
+    },
+    {
+     "k": 14,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 28
+    },
+    {
+     "k": 15,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 34
+    },
+    {
+     "k": 16,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 39
+    },
+    {
+     "k": 17,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 15
+    },
+    {
+     "k": 18,
+     "level": 2,
+     "bits": 6,
+     "kind": "d2b",
+     "value": 22
+    },
+    {
+     "k": 19,
+     "level": 2,
+     "bits": 6,
+     "kind": "b2d",
+     "value": 37
+    },
+    {
+     "k": 20,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 113
+    },
+    {
+     "k": 21,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 154
+    },
+    {
+     "k": 22,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 26
+    },
+    {
+     "k": 23,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 15
+    },
+    {
+     "k": 24,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 45
+    },
+    {
+     "k": 25,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 202
+    },
+    {
+     "k": 26,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 239
+    },
+    {
+     "k": 27,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 205
+    },
+    {
+     "k": 28,
+     "level": 3,
+     "bits": 8,
+     "kind": "d2b",
+     "value": 40
+    },
+    {
+     "k": 29,
+     "level": 3,
+     "bits": 8,
+     "kind": "b2d",
+     "value": 226
+    }
+   ]
+  }
+ ]
+}

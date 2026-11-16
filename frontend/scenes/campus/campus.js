@@ -254,6 +254,17 @@ export async function mountCampus(host, { theme, onHotspot, lift = 0, isTeacher 
   // auditório A: volume mais alto no telhado; pavilhão com telhado azulado
   flat.box(36.2, 5.2, 25, 39.8, 6.8, 27.6, 0xb9bdc5);
   flat.box(4.4, 2.6, 11.4, 12.4, 3.6, 15.3, 0x5d7ea8);
+  // detalhe da porta do pavilhão (Atividades extra): mesa de cartas e painel de bits luminoso
+  if (L.extra) {
+    const [tx, tz, tw, td] = L.extra.table, [px0, pz0, pw, pd] = L.extra.panel;
+    flat.box(tx + 0.1, 0, tz + 0.1, tx + 0.3, 0.8, tz + 0.3, 0x6b4423); flat.box(tx + tw - 0.3, 0, tz + td - 0.3, tx + tw - 0.1, 0.8, tz + td - 0.1, 0x6b4423);
+    flat.box(tx, 0.8, tz, tx + tw, 1.0, tz + td, 0x2f8f4a);
+    flat.box(tx + 0.2, 1.0, tz + 0.25, tx + 0.55, 1.05, tz + 0.7, 0xffffff); flat.box(tx + 0.7, 1.0, tz + 0.4, tx + 1.05, 1.05, tz + 0.85, 0xffffff);
+    flat.box(tx + 1.2, 1.0, tz + 0.2, tx + 1.4, 1.2, tz + 0.4, 0xd94a4a);
+    flat.box(px0 + 0.1, 0, pz0, px0 + 0.25, 2.2, pz0 + 0.12, 0x3b3f46); flat.box(px0 + pw - 0.25, 0, pz0, px0 + pw - 0.1, 2.2, pz0 + 0.12, 0x3b3f46);
+    flat.box(px0, 1.0, pz0, px0 + pw, 2.4, pz0 + pd, 0x1c2340);
+    for (let i = 0; i < 4; i++) glow.box(px0 + 0.15 + i * 0.37, 1.35, pz0 + pd, px0 + 0.4 + i * 0.37, 2.0, pz0 + pd + 0.06, i % 3 === 1 ? 0x3a4570 : 0x52e3ee);
+  }
   // passadiço metálico entre o pente e o bloco B
   const [bx0, bz0, bx1, bz1] = L.bridge;
   flat.box(bx0, 2.8, bz0, bx1, 3.1, bz1, 0xc9cdd3);

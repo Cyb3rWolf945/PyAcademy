@@ -26,6 +26,13 @@ def check_password(v: str) -> str:
     return v
 
 
+def clean_student_email(v: str) -> str:
+    v = v.strip().lower()
+    if "@" not in v or v.count("@") != 1 or not v.split("@", 1)[0] or not v.endswith("@ipt.pt"):
+        raise ValueError("invalid student email")
+    return v
+
+
 class Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -47,11 +54,13 @@ class LoginIn(Strict):
 
 class JoinIn(Strict):
     join_code: str
+    email: str
     username: str
     display_name: str
     password: str
 
     _u = field_validator("username")(clean_username)
+    _e = field_validator("email")(clean_student_email)
     _d = field_validator("display_name")(clean_display_name)
     _p = field_validator("password")(check_password)
 

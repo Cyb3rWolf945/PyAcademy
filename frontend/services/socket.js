@@ -9,7 +9,18 @@ const WS_RETRY_IN_POLLING_MS = 30000;
 
 // connectTournament(id, {onEvent(ev), onStatus(status), onResync(snapshot)}) -> {close(), setLastSeq(n), lastSeq()}
 // status: "online" | "reconnecting" | "offline"
-export function connectTournament(id, { onEvent, onStatus, onResync, onClock, lastSeq: initialSeq = 0 }) {
+export function connectTournament(id, opts) {
+  return connectChannel({
+    ...opts,
+    wsPath: `/ws/tournaments/${id}`,
+    fetchSnapshot: () => api("GET", `/api/tournaments/${id}/state`),
+    fetchEvents: (after) => api("GET", `/api/tournaments/${id}/events?after=${after}`),
+  });
+}
+
+// Canal genérico (também usado pelo poker): wsPath = caminho do WebSocket; fetchSnapshot() = estado completo (resync);
+// fetchEvents(after) = eventos em falta para o polling de reserva (opcional: sem ele, o polling faz só resync de 5 em 5 s).
+export function connectChannel({ wsPath, fetchSnapshot, fetchEvents, onEvent, onStatus, onResync, onClock, lastSeq: initialSeq = 0 }) {
   let lastSeq = initialSeq;
   let ws = null;
   let closed = false;
@@ -37,7 +48,7 @@ export function connectTournament(id, { onEvent, onStatus, onResync, onClock, la
 
   async function resync() {
     try {
-      const snap = await api("GET", `/api/tournaments/${id}/state`);
+      const snap = await fetchSnapshot();
       if (typeof snap.last_seq === "number") lastSeq = Math.max(lastSeq, snap.last_seq);
       onResync?.(snap);
     } catch (_) { /* a próxima reconexão ou poll tenta outra vez */ }
@@ -45,7 +56,7 @@ export function connectTournament(id, { onEvent, onStatus, onResync, onClock, la
 
   function wsUrl() {
     const proto = location.protocol === "https:" ? "wss:" : "ws:";
-    return `${proto}//${location.host}/ws/tournaments/${id}?last_seq=${lastSeq}`;
+    return `${proto}//${location.host}${wsPath}?last_seq=${lastSeq}`;
   }
 
   function open() {
@@ -89,9 +100,12 @@ export function connectTournament(id, { onEvent, onStatus, onResync, onClock, la
   async function poll() {
     if (closed || !polling) return;
     try {
-      const res = await api("GET", `/api/tournaments/${id}/events?after=${lastSeq}`);
-      if (res.resync) await resync();
-      else for (const ev of res.events || []) deliver(ev);
+      if (!fetchEvents) await resync();
+      else {
+        const res = await fetchEvents(lastSeq);
+        if (res.resync) await resync();
+        else for (const ev of res.events || []) deliver(ev);
+      }
       setStatus("reconnecting"); // dados a chegar, mas sem tempo real
     } catch (_) { setStatus("offline"); }
     pollTimer = setTimeout(poll, POLL_MS);
@@ -111,7 +125,7 @@ export function connectTournament(id, { onEvent, onStatus, onResync, onClock, la
     clearInterval(wsRetryTimer);
   }
 
-  const onNetUp = () => { if (!ws && !closed) { failures = 0; clearTimeout(retryTimer); stopPolling(); open(); } };
+  const onNetUp = () => { if (ws && ws.readyState === 1 && !closed) { setStatus("online"); return; } if (!ws && !closed) { failures = 0; clearTimeout(retryTimer); stopPolling(); open(); } };
   const onNetDown = () => { if (!closed && status === "online") setStatus("offline"); };
   addEventListener("online", onNetUp);
   addEventListener("offline", onNetDown);

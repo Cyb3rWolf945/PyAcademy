@@ -18,6 +18,7 @@ class User(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     username: str = Field(unique=True, index=True, max_length=32)
+    email: str | None = Field(default=None, unique=True, index=True, max_length=254)
     display_name: str = Field(max_length=40)
     password_hash: str
     role: Role = Field(default=Role.student)

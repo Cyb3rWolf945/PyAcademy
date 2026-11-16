@@ -97,7 +97,7 @@ async def main():
     cls = (await teacher.post("/api/classes", {"name": f"E2E elim {RUN}"})).json()
     students = [U() for _ in range(N)]
     for i, s in enumerate(students):
-        await s.auth("/api/auth/join", {"join_code": cls["join_code"], "username": f"el{RUN}_a{i:02d}", "display_name": f"Aluno{i:02d}", "password": "e2e-password-1"})
+        await s.auth("/api/auth/join", {"join_code": cls["join_code"], "email": f"el{RUN}_a{i:02d}@ipt.pt", "username": f"el{RUN}_a{i:02d}", "display_name": f"Aluno{i:02d}", "password": "e2e-password-1"})
     by_id = {s.id: s for s in students}
     r = await teacher.post("/api/tournaments", {"class_id": cls["id"], "name": f"Elim {RUN}"})  # formato por omissão
     check(r.status_code == 201 and r.json()["format"] == "eliminatoria", "torneio Eliminatória criado por omissão")

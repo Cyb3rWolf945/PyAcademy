@@ -6,7 +6,7 @@ import { pick } from "../pages/challenge/lib.js";
 import { mountSymbolBar } from "./symbol-bar.js";
 
 let cmPromise = null;
-const loadCodeMirror = () => (cmPromise ??= import("/vendor/codemirror/codemirror.js?v=53752894").catch((e) => { cmPromise = null; throw e; }));
+const loadCodeMirror = () => (cmPromise ??= import("/vendor/codemirror/codemirror.js?v=bfde5c4c").catch((e) => { cmPromise = null; throw e; }));
 
 // Editor de reserva: textarea simples com as mesmas operações (indent/dedent/insert...)
 function textareaEditor(host, { doc, onChange, readOnly, ariaLabel }) {
@@ -29,7 +29,26 @@ function textareaEditor(host, { doc, onChange, readOnly, ariaLabel }) {
   const move = (d) => { ta.focus(); ta.setSelectionRange(ta.selectionStart + d, ta.selectionStart + d); };
   return {
     getValue: () => ta.value,
+    getCompletionContext: () => {
+      const before = ta.value.slice(0, ta.selectionStart);
+      const match = /[A-Za-z_][A-Za-z0-9_]*$/.exec(before);
+      return { prefix: match?.[0] || "", from: ta.selectionStart - (match?.[0]?.length || 0) };
+    },
+    getCompletionPosition: () => {
+      const rect = ta.getBoundingClientRect();
+      const before = ta.value.slice(0, ta.selectionStart);
+      const lines = before.split("\n");
+      const style = getComputedStyle(ta);
+      const lineHeight = Number.parseFloat(style.lineHeight) || 22;
+      return { left: rect.left + 8, top: rect.top + 8 + (lines.length - 1) * lineHeight, height: lineHeight };
+    },
     setValue: (v) => { ta.value = v; onChange?.(v); },
+    insertCompletion: (text, from, cursorOffset = text.length) => {
+      ta.setRangeText(text, from, ta.selectionStart, "end");
+      ta.setSelectionRange(from + cursorOffset, from + cursorOffset);
+      ta.dispatchEvent(new Event("input"));
+      ta.focus();
+    },
     focus: () => ta.focus(), insert,
     indent: () => insert("    "),
     dedent: () => {

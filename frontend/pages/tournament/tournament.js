@@ -18,11 +18,6 @@ import { el } from "../../components/dom.js";
 
 const me = await bootPage({ access: "guest" });
 
-const LAST_KEY = "pyarena.tournament";
-const remember = (id) => { try { localStorage.setItem(LAST_KEY, String(id)); } catch (_) { /* ignora */ } };
-const recall = () => { try { return localStorage.getItem(LAST_KEY); } catch (_) { return null; } };
-const forget = () => { try { localStorage.removeItem(LAST_KEY); } catch (_) { /* ignora */ } };
-
 function main() {
   const view = document.getElementById("view");
   if (me?.role === "teacher") {
@@ -44,7 +39,7 @@ function main() {
     current = mountJoin(view, { code: params.get("code") || "", error, guest: !me, onJoined: (id) => start(id) });
   }
 
-  async function start(id, { fromRecall = false } = {}) {
+  async function start(id) {
     live?.destroy();
     current?.destroy(); current = null; kind = null;
     live = createLive(id, {
@@ -54,14 +49,13 @@ function main() {
     });
     try { await live.start(); }
     catch (err) {
-      forget(); live = null;
+      live = null;
       history.replaceState(null, "", location.pathname);
       // Um id guardado pode pertencer a outro torneio, turma ou conta. Nesse
       // caso não bloqueamos a entrada atual com um erro de um torneio antigo.
-      showJoin(fromRecall ? "" : errorText(err));
+      showJoin(errorText(err));
       return;
     }
-    remember(id);
     history.replaceState(null, "", `${location.pathname}?id=${id}`);
     document.getElementById("conn").hidden = false;
     render();
@@ -113,8 +107,8 @@ function main() {
     current?.destroy(); current = null; kind = null; render();
   });
 
-  const id = params.get("id") || (params.get("code") ? null : recall());
-  if (id) start(id, { fromRecall: !params.get("id") && !params.get("code") });
+  const id = params.get("id");
+  if (id) start(id);
   else showJoin();
 }
 

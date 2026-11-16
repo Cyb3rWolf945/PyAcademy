@@ -69,5 +69,7 @@
   "campus.go": "Entrar",
   "campus.cancel": "Cancelar",
   "campus.confirm": "Ir para {name}?",
-  "campus.login_first": "Inicia sessão ou entra com o código da turma para usar este edifício."
+  "campus.login_first": "Inicia sessão ou entra com o código da turma para usar este edifício.",
+ "nav.extra": "Extra",
+ "campus.extra": "Atividades extra"
 }

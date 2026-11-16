@@ -88,29 +88,59 @@ async def test_bad_origin_rejected(client, make_user):
     assert r.status_code == 200
 
 
+async def test_ngrok_origin_and_local_aliases_are_allowed(client, make_user):
+    await make_user("ana")
+    headers = await login(client, "ana")
+    from app.config import settings
+
+    original = settings.public_origin
+    settings.public_origin = "https://testserver,http://localhost:8080,http://127.0.0.1:8080,https://*.ngrok-free.app"
+    try:
+        for origin in ("http://localhost:8080", "http://127.0.0.1:8080", "https://abc123.ngrok-free.app"):
+            response = await client.patch(
+                "/api/me/preferences",
+                json={"locale": "en"},
+                headers={**headers, "Origin": origin},
+            )
+            assert response.status_code == 200
+    finally:
+        settings.public_origin = original
+
+
 async def test_join_with_class_code(client, make_user, make_class):
     t = await make_user("prof1", Role.teacher)
     await make_class(t.id, code="ABC234")
-    r = await client.post("/api/auth/join", json={"join_code": "abc234", "username": "Rui", "display_name": "Rui P.", "password": "password-9"})
+    r = await client.post("/api/auth/join", json={"join_code": "abc234", "email": "rui@ipt.pt", "username": "Rui", "display_name": "Rui P.", "password": "password-9"})
     assert r.status_code == 200
     assert r.json()["user"]["username"] == "rui" and r.json()["user"]["class_id"] is not None
     assert (await client.get("/api/me")).status_code == 200
-    r = await client.post("/api/auth/join", json={"join_code": "ABC234", "username": "rui", "display_name": "x", "password": "password-9"})
+    r = await client.post("/api/auth/join", json={"join_code": "ABC234", "email": "outro@ipt.pt", "username": "rui", "display_name": "x", "password": "password-9"})
     assert r.status_code == 409 and r.json() == {"error": "auth.username_taken"}
 
 
 async def test_join_bad_code_and_rate_limit(client):
-    body = {"join_code": "ZZZZZZ", "username": "rui", "display_name": "Rui", "password": "password-9"}
+    body = {"join_code": "ZZZZZZ", "email": "rui@ipt.pt", "username": "rui", "display_name": "Rui", "password": "password-9"}
     for _ in range(30):
         r = await client.post("/api/auth/join", json=body)
         assert r.status_code == 404 and r.json() == {"error": "class.invalid_code"}
     assert (await client.post("/api/auth/join", json=body)).status_code == 429
 
 
+async def test_join_requires_ipt_email(client, make_user, make_class):
+    teacher = await make_user("prof1", Role.teacher)
+    await make_class(teacher.id, code="ABC234")
+    body = {"join_code": "ABC234", "email": "aluno@example.com", "username": "aluno", "display_name": "Aluno", "password": "password-9"}
+    assert (await client.post("/api/auth/join", json=body)).status_code == 422
+    valid = await client.post("/api/auth/join", json={**body, "email": " Aluno@IPT.PT "})
+    assert valid.status_code == 200 and valid.json()["user"]["username"] == "aluno"
+    duplicate = await client.post("/api/auth/join", json={**body, "username": "outro", "email": "aluno@ipt.pt"})
+    assert duplicate.status_code == 409 and duplicate.json() == {"error": "auth.email_taken"}
+
+
 async def test_join_limit_does_not_block_a_classroom(client, make_user, make_class):
     t = await make_user("prof1", Role.teacher)
     await make_class(t.id, code="ABC234")
-    bad = {"join_code": "ZZZZZZ", "username": "rui", "display_name": "Rui", "password": "password-9"}
+    bad = {"join_code": "ZZZZZZ", "email": "rui@ipt.pt", "username": "rui", "display_name": "Rui", "password": "password-9"}
     for _ in range(10):  # 10 códigos errados do mesmo IP (NAT da sala) não bloqueiam
         assert (await client.post("/api/auth/join", json=bad)).status_code == 404
     ok = await client.post("/api/auth/join", json={**bad, "join_code": "ABC234"})
@@ -154,7 +184,7 @@ async def test_xss_display_name_is_plain_data(client, make_user, make_class):
     t = await make_user("prof1", Role.teacher)
     await make_class(t.id)
     payload = "<script>alert(1)</script>"
-    r = await client.post("/api/auth/join", json={"join_code": "ABC234", "username": "xss", "display_name": payload, "password": "password-9"})
+    r = await client.post("/api/auth/join", json={"join_code": "ABC234", "email": "xss@ipt.pt", "username": "xss", "display_name": payload, "password": "password-9"})
     assert r.status_code == 200
     me = await client.get("/api/me")
     assert me.headers["content-type"].startswith("application/json")

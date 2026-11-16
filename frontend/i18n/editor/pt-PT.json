@@ -6,5 +6,14 @@
  "editor.right": "Cursor para a direita",
  "editor.placeholder": "Escreve o teu código aqui...",
  "editor.pick_all": "Escolhe todas as opções certas.",
- "editor.your_answer": "A tua resposta"
+ "editor.your_answer": "A tua resposta",
+ "editor.helper_title": "Auxiliar de código",
+ "editor.helper_hint": "Usa Ctrl+Espaço ou Cmd+Espaço para ver sugestões. ↑↓ escolhe e Enter insere.",
+ "editor.helper_close": "Fechar auxiliar",
+ "editor.helper_no_match": "Não encontrei sugestões para este prefixo.",
+ "editor.helper_exercise_function": "função do exercício",
+ "editor.helper_exercise_word": "nome do enunciado",
+ "editor.helper_your_code": "já usado no código",
+ "editor.helper_condition": "estrutura condicional",
+ "editor.helper_loop": "estrutura de repetição"
 }

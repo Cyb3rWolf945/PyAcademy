@@ -30,6 +30,7 @@ class Conn:
     ready: bool = False  # só recebe eventos "ao vivo" depois do replay inicial
     lock: asyncio.Lock = field(default_factory=asyncio.Lock)
     dead: bool = False
+    visible: object = None  # (evento, user_id) -> bool; preenchido pelo Hub (eventos privados, ex. cartas fechadas)
 
     async def send_json(self, data: dict) -> bool:
         try:
@@ -48,7 +49,7 @@ class Conn:
             for ev in evs:
                 if ev["seq"] <= self.sent_seq or self.dead:
                     continue
-                if not events.visible_to(ev, self.user_id):
+                if not self.visible(ev, self.user_id):
                     self.sent_seq = ev["seq"]
                     continue
                 if not await self.send_json(ev):
@@ -57,7 +58,10 @@ class Conn:
 
 
 class Hub:
-    def __init__(self) -> None:
+    def __init__(self, channel=events.channel, fetch=events.events_after, visible=events.visible_to) -> None:
+        """channel(tid) -> nome do canal NOTIFY; fetch(db, tid, after, limit) -> eventos; visible(ev, user_id) -> bool.
+        Por omissão serve os torneios; o poker usa o mesmo mecanismo com os seus canais e eventos privados."""
+        self.channel, self.fetch, self.visible = channel, fetch, visible
         self.sockets: dict[int, set[Conn]] = {}
         self._pg: asyncpg.Connection | None = None
         self._listening: set[int] = set()
@@ -95,6 +99,7 @@ class Hub:
 
     async def subscribe(self, conn: Conn) -> None:
         self.ensure_started()
+        conn.visible = self.visible
         self.sockets.setdefault(conn.tid, set()).add(conn)
         async with self._lk:
             if self._pg is not None and conn.tid not in self._listening:
@@ -122,7 +127,7 @@ class Hub:
                 ready = [c for c in self.sockets.get(tid, ()) if c.ready and not c.dead]
                 if ready:
                     async with SessionLocal() as db:
-                        evs = await events.events_after(db, tid, min(c.sent_seq for c in ready), limit=1000)
+                        evs = await self.fetch(db, tid, min(c.sent_seq for c in ready), limit=1000)
                     if evs:
                         await asyncio.gather(*(c.send_events(evs) for c in ready))
                 if self._fan.get(tid) == "again":
@@ -136,7 +141,7 @@ class Hub:
 
     # ---- ligação LISTEN ----
     async def _listen(self, tid: int) -> None:
-        await self._pg.add_listener(events.channel(tid), self._on_notify)
+        await self._pg.add_listener(self.channel(tid), self._on_notify)
         self._listening.add(tid)
 
     def _on_notify(self, _conn, _pid, channel: str, _payload: str) -> None:

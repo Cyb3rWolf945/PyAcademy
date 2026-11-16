@@ -69,5 +69,7 @@
   "campus.go": "Go",
   "campus.cancel": "Cancel",
   "campus.confirm": "Go to {name}?",
-  "campus.login_first": "Log in or join with your class code to use this building."
+  "campus.login_first": "Log in or join with your class code to use this building.",
+ "nav.extra": "Extra",
+ "campus.extra": "Extra activities"
 }

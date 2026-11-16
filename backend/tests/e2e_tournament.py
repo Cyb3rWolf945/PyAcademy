@@ -47,7 +47,7 @@ class User:
         return r.json()["user"]
 
     async def join_class(self, code, username):
-        r = await self.c.post("/api/auth/join", json={"join_code": code, "username": username, "display_name": username.split("_")[-1].capitalize(), "password": "e2e-password-1"})
+        r = await self.c.post("/api/auth/join", json={"join_code": code, "email": f"{username}@ipt.pt", "username": username, "display_name": username.split("_")[-1].capitalize(), "password": "e2e-password-1"})
         check(r.status_code == 200, f"aluno {username} entrou na turma ({r.status_code} {r.text[:80]})")
         self.h = {"X-CSRF-Token": r.json()["csrf_token"]}
         return r.json()["user"]

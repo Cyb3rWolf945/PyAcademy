@@ -1,0 +1,24 @@
+<!doctype html>
+<!-- Extra (hub): atividades extracurriculares. Dois cartões grandes (Poker e Bit a Bit), saldos, regras curtas e, para o professor, as definições da turma. -->
+<html lang="pt-PT" data-theme="campus">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e8f0da">
+  <title>PyArena</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <script src="/services/theme-boot.js"></script>
+  <link rel="stylesheet" href="/dist/app.css">
+</head>
+<body class="min-h-dvh pb-24 lg:pb-0 lg:pl-56">
+  <header class="flex items-center justify-between gap-2 p-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <h1 class="text-xl text-accent" data-i18n="hub.title"></h1>
+    <div class="flex gap-2"><div data-theme-switch></div><div class="flex gap-2" data-lang-switch></div></div>
+  </header>
+  <main id="extra" class="enter-stagger mx-auto grid max-w-4xl gap-4 p-4"></main>
+  <div data-bottom-nav></div>
+  <script type="module" src="/pages/extra/extra.js"></script>
+</body>
+</html>

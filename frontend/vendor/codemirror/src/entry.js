@@ -65,7 +65,24 @@ export function createEditor(parent, { doc = "", onChange, readOnly = false, pla
   return {
     view,
     getValue: () => view.state.doc.toString(),
+    getCompletionContext: () => {
+      const { head } = view.state.selection.main;
+      const line = view.state.doc.lineAt(head);
+      const before = line.text.slice(0, head - line.from);
+      const match = /[A-Za-z_][A-Za-z0-9_]*$/.exec(before);
+      return { prefix: match?.[0] || "", from: head - (match?.[0]?.length || 0) };
+    },
+    getCompletionPosition: () => {
+      const { head } = view.state.selection.main;
+      const rect = view.coordsAtPos(head);
+      return rect ? { left: rect.left, top: rect.bottom, height: rect.height } : null;
+    },
     setValue: (text) => view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: text } }),
+    insertCompletion: (text, from, cursorOffset = text.length) => {
+      const head = view.state.selection.main.head;
+      view.dispatch({ changes: { from, to: head, insert: text }, selection: { anchor: from + cursorOffset } });
+      view.focus();
+    },
     focus: () => view.focus(),
     setReadOnly: (v) => view.dispatch({ effects: readOnlyC.reconfigure(EditorState.readOnly.of(v)) }),
     insert: (text) => { view.dispatch(view.state.replaceSelection(text)); view.focus(); },

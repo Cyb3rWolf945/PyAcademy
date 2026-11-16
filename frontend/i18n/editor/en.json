@@ -6,5 +6,14 @@
  "editor.right": "Cursor right",
  "editor.placeholder": "Write your code here...",
  "editor.pick_all": "Pick every correct option.",
- "editor.your_answer": "Your answer"
+ "editor.your_answer": "Your answer",
+ "editor.helper_title": "Code helper",
+ "editor.helper_hint": "Use Ctrl+Space or Cmd+Space for suggestions. Use ↑↓ to choose and Enter to insert.",
+ "editor.helper_close": "Close helper",
+ "editor.helper_no_match": "No suggestions match this prefix.",
+ "editor.helper_exercise_function": "exercise function",
+ "editor.helper_exercise_word": "statement name",
+ "editor.helper_your_code": "already used in code",
+ "editor.helper_condition": "conditional structure",
+ "editor.helper_loop": "loop structure"
 }

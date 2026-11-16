@@ -7,6 +7,7 @@ const ITEMS = [
   ["nav.duel", "duel", "/pages/soon/soon.html?m=duel"],
   ["nav.tournament", "tournament", "/pages/tournament/tournament.html"],
   ["nav.ranking", "ranking", "/pages/soon/soon.html?m=ranking"],
+  ["nav.extra", "extra", "/pages/extra/extra.html"],
   ["nav.profile", "profile", "/pages/profile/profile.html"],
 ];
 
@@ -34,7 +35,7 @@ export function mountBottomNav(host) {
   nav.id = "main-nav";
   nav.append(toggle);
   for (const [key, icon, href, dir] of ITEMS) {
-    const active = href.split("?")[0] === here || (dir === "academy" && here.startsWith("/pages/module/"));
+    const active = href.split("?")[0] === here || (href === "/pages/extra/extra.html" && here.startsWith("/pages/extra/")) || (dir === "academy" && here.startsWith("/pages/module/"));
     nav.append(el("a", { href, "aria-current": active ? "page" : null, title: t(key), "data-title-key": key },
       el("img", { class: "sprite", src: dir ? `/assets/sprites/academy/${icon}.png` : `/assets/sprites/icons/${icon}.png`, width: 28, height: 28, alt: "" }),
       el("span", { "data-i18n": key }, t(key))));
