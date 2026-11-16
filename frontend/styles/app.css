@@ -879,8 +879,8 @@ a.acad-card:active { transform: translateY(3px); }
 .pk-quick { min-height: 44px; padding-inline: .6rem; }
 .pk-raise-out { margin-left: auto; font: 700 1rem var(--f-pixel, monospace); color: var(--c-accent); }
 .pk-slider { width: 100%; min-height: 44px; accent-color: var(--c-accent); }
-.pk-btnrow { display: grid; grid-template-columns: 1fr 1.2fr 1.4fr; gap: .4rem; }
-.pk-btn { min-height: 52px; font-size: .72rem; padding-inline: .4rem; }
+.pk-btnrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.75rem, 1fr)); gap: .4rem; }
+.pk-btn { min-height: 52px; font-size: .72rem; padding-inline: .4rem; min-width: 0; white-space: normal; text-wrap: balance; }
 .pk-hint { text-align: center; font: .9rem system-ui, sans-serif; color: var(--c-muted); }
 .pk-log { list-style: none; margin: 0; padding: .4rem .6rem; display: grid; gap: 2px; background: var(--c-surface); font: .75rem system-ui, sans-serif; color: var(--c-muted); min-height: 3rem; }
 .pk-log li:last-child { color: var(--c-text); font-weight: 600; }
