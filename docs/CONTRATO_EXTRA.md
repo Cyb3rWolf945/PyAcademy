@@ -124,3 +124,15 @@ Ambos em pixel art, com os temas da app e o mesmo sistema de design (skills `pix
   - `scenes/campus/**`, `assets/gen_assets.py` + os sprites;
   - `styles/app.css` (só acrescentar, numa secção `/* extra (D) */`; P e B acrescentam secções suas `/* poker (P) */` e `/* bitabit (B) */`);
   - `frontend/i18n/extra/*` (só `hub.*`) e `frontend/i18n/home/*` (`nav.extra`).
+
+## 7. Notas de implementação (o que ficou diferente do contrato)
+- A migração é a **`0007_extra`** (a 0006 já era `tournament_guests`).
+- O `amount` de uma ação é **"subir para"**, ou seja, o total apostado nesta ronda.
+- As cartas dos adversários **só** aparecem no evento WS `showdown` e nunca no snapshot. O toast do fim da mão usa `hand_ended.nets`.
+- **Potes:**
+  - durante a mão, o snapshot mostra `display_pots`: só há side pot onde há um jogador all-in, e nunca pela diferença das blinds;
+  - na distribuição usam-se os `side_pots` completos.
+- Endpoints extra:
+  - `POST /api/extra/poker/tables/{id}/back` (voltar de `away`/`sitting_out`);
+  - `GET …/events?after=` (o fallback de polling).
+- Bit a Bit: 10 linhas por nível e 80 no máximo. A pontuação de uma linha é `(bits*5 + max(0, 20 - floor(t_ms/300))) * nível`. A especificação exata do gerador está em `backend/app/services/bitabit.py`.

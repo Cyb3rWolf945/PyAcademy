@@ -16,6 +16,7 @@
 8. [Guia do professor](#8-guia-do-professor)
 9. [Problemas de rede e perguntas frequentes](#9-problemas-de-rede-e-perguntas-frequentes)
 10. [Modos em breve](#10-modos-em-breve)
+11. [Atividades extra: Poker e Bit a Bit](#11-atividades-extra-poker-e-bit-a-bit)
 
 ---
 
@@ -254,6 +255,43 @@ Estes modos aparecem com o selo **"Em breve"** no ecrã principal:
 | 🗡️ **Arena de Algoritmia** | Exercícios ao estilo LeetCode em 3 níveis: **Hard** (≈ fácil), **Extra Hard** (≈ médio) e **Hardcore Insane** (≈ difícil), com testes grandes (soluções lentas dão "tempo excedido") e explicação depois de resolver |
 | ⚔️ **Duelo** | 1 contra 1 com um colega, por código de convite, à melhor de 3, com rating ELO |
 | 📊 **Ranking** | Rankings da turma, semanais e de honras ("Bom adversário", "Solução elegante", "Fair play") |
+
+---
+
+## 11. Atividades extra: Poker e Bit a Bit
+
+A aba **Extra** (no menu, ou no **pavilhão desportivo** do campus 3D) tem dois jogos fora do currículo. A tua nota não depende deles.
+
+### 🃏 Poker (Texas Hold'em, 2 a 10 jogadores)
+- **Jogas com pontos reais de score:** o que ganhas sai dos colegas, e o que perdes vai para eles. Por isso, no primeiro acesso tens de **aceitar** um aviso.
+- **De onde vêm as fichas:** por omissão, dos **pontos de torneio** (mais o que já ganhaste ou perdeste no poker). O professor pode mudar para "todos os pontos".
+- **Proteções:**
+  - entras numa mesa com 10 a 200 pontos, e nunca mais de metade do teu saldo;
+  - podes perder no máximo **100 pontos por dia**; ao chegar a esse limite, sais da mesa no fim da mão;
+  - só jogas com colegas da tua turma.
+- **Regras:**
+  - Texas Hold'em sem limite, blinds 1/2;
+  - tens **30 s** para cada jogada; se o tempo acabar, o jogo faz check se puder, senão desiste por ti, e ficas "ausente" (o botão **Voltar à mesa** põe-te outra vez a jogar).
+- **No fim de cada mão** aparece quanto ganhaste ou perdeste ("+12 pts" / "−8 pts"), e isso conta logo no leaderboard.
+
+### 🔢 Bit a Bit (ganhar pontos)
+- As linhas sobem: em cada uma convertes **binário → decimal** (escreves o número) ou **decimal → binário** (ligas os bits) antes de chegarem ao topo.
+- **Níveis:** de 10 em 10 linhas o jogo acelera e passa de 4 para 6 e depois 8 bits.
+- **Pontuação:** respostas mais rápidas valem mais.
+- **Pontos de score:** 1 ponto por cada 100 de pontuação, até **50 pontos por dia**. As partidas a mais contam só para o teu recorde.
+- **Teclado:**
+  - setas para escolher o bit, Espaço para o ligar ou desligar;
+  - números + Enter para escrever o decimal;
+  - P ou Esc para pausa.
+
+### Para o professor
+Na página **Extra**, o professor pode:
+- ligar e desligar o poker;
+- escolher a fonte dos pontos (torneios / todos);
+- mudar os limites (buy-in e perda diária);
+- decidir se os alunos podem criar mesas.
+
+O histórico completo de cada mão, com todas as cartas, fica guardado para auditoria (`GET /api/extra/poker/hands`).
 
 ---
 

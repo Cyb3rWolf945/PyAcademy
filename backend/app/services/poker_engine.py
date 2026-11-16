@@ -292,8 +292,8 @@ def display_pots(players: list[dict]) -> list[dict]:
             pots.append({"amount": cur})
             cur = 0
     if cur:
-        if pots and not any(p["total"] > max(caps) and not p["folded"] for p in players):
-            pots[-1]["amount"] += cur  # dinheiro acima do último all-in sem ninguém vivo para o disputar
+        if pots and sum(1 for p in players if p["total"] > max(caps) and not p["folded"]) < 2:
+            pots[-1]["amount"] += cur  # excesso que ninguém disputa (aposta ainda não paga): fica no último pote
         else:
             pots.append({"amount": cur})
     return pots
