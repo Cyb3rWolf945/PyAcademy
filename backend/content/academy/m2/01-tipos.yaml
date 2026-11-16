@@ -1,0 +1,116 @@
+id: m2-01-tipos
+modulo: m2
+ordem: 1
+titulo:
+  pt: Tipos de dados
+  en: Data types
+aprender:
+  pt: |-
+    Antes de calcular seja o que for, cada valor tem um **tipo**: diz ao computador que "forma" de dado lá vai caber.
+
+    - **inteiro** (`int`): `idade = 20`
+    - **real** (`float`): `pi = 3.14`
+    - **texto** (`str`): `nome = "António"`
+    - **lógico** (`bool`): `ativo = True`
+
+    Em Python **nunca declaras o tipo**: ele é deduzido do valor que guardas. O lógico (verdadeiro ou falso) só vai ganhar utilidade quando houver decisões.
+  en: |-
+    Before calculating anything, every value has a **type**: it tells the computer what "shape" of data will fit.
+
+    - **integer** (`int`): `idade = 20`
+    - **real** (`float`): `pi = 3.14`
+    - **text** (`str`): `nome = "António"`
+    - **logical** (`bool`): `ativo = True`
+
+    In Python you **never declare the type**: it is deduced from the value you store. The logical type (true or false) will only become useful once there are decisions.
+exemplo:
+  id: tipos
+  titulo:
+    pt: Os tipos de dados
+    en: Data types
+  corpo:
+  - id: t1
+    tipo: definir
+    texto:
+      pt: definir inteiro idade = 20
+      en: define integer idade = 20
+    py: idade = 20
+  - id: t2
+    tipo: definir
+    texto:
+      pt: definir real pi = 3.14
+      en: define real pi = 3.14
+    py: pi = 3.14
+  - id: t3
+    tipo: definir
+    texto:
+      pt: definir texto nome = "António"
+      en: define text nome = "António"
+    py: nome = "António"
+  - id: t4
+    tipo: definir
+    texto:
+      pt: definir logico ativo = verdadeiro
+      en: define boolean ativo = true
+    py: ativo = True
+slides:
+- deck: aula-2
+  de: 25
+  ate: 25
+leitura:
+  pt: Python Basics, cap. 3.3 — Criar uma variável
+  en: Python Basics, ch. 3.3 — Create a variable
+pistas:
+- pt: 'Reparar: tem ponto decimal? É real. Está entre aspas? É texto.'
+  en: 'Look: does it have a decimal point? It is real. Is it in quotes? It is text.'
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: Olha para cada valor e diz de que tipo é.
+    en: Look at each value and say what type it is.
+  pergunta:
+    pt: Quais destes valores são do tipo texto (str)?
+    en: Which of these values are of type text (str)?
+  opcoes:
+  - pt: '"António"'
+    en: '"António"'
+  - pt: '"20"'
+    en: '"20"'
+  - pt: '20'
+    en: '20'
+  - pt: '3.14'
+    en: '3.14'
+  resposta:
+  - 0
+  - 1
+  explicacao:
+    pt: 'O que está entre aspas é texto, mesmo que pareça um número: "20" não é o mesmo que 20.'
+    en: 'Anything in quotes is text, even if it looks like a number: "20" is not the same as 20.'
+- tipo: completar
+  enunciado:
+    pt: Completa o valor real.
+    en: Complete the real value.
+  lacunas:
+  - stmt: t2
+    lado: py
+    modelo:
+      pt: pi = ___
+      en: pi = ___
+    respostas:
+    - '3.14'
+  explicacao:
+    pt: 3.14 é um número com parte decimal, por isso é do tipo real (float).
+    en: 3.14 is a number with a decimal part, so it is of type real (float).
+verificacao:
+  pergunta:
+    pt: Qual é o tipo do valor 3.14?
+    en: What is the type of the value 3.14?
+  opcoes:
+  - pt: int
+    en: int
+  - pt: float
+    en: float
+  - pt: str
+    en: str
+  resposta:
+  - 1

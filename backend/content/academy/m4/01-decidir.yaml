@@ -1,0 +1,65 @@
+id: m4-01-decidir
+modulo: m4
+ordem: 1
+titulo: {pt: "Ensinar o programa a decidir", en: "Teaching the program to decide"}
+aprender:
+  pt: |
+    Até agora os nossos programas corriam sempre do início ao fim, sem desvios. Hoje damos-lhes a capacidade de **escolher um caminho** consoante as condições.
+
+    Está por todo o lado. **Face ID**: se a cara corresponder, desbloqueia; senão, pede o código. **Spotify/TikTok**: se gostaste de conteúdo parecido, mostra mais; senão, sugere outra coisa. **Semáforo inteligente**: se há peões à espera, abre o verde para eles. **Um jogo**: se as vidas chegarem a zero, é *game over*.
+
+    No fundo, todas estas situações são um **se... senão** (`if`/`else`). No fluxograma, a decisão é sempre um **losango** com duas saídas: **Sim** e **Não**.
+  en: |
+    So far our programs always ran from start to finish, with no detours. Today we give them the ability to **choose a path** depending on conditions.
+
+    It is everywhere. **Face ID**: if the face matches, unlock; otherwise, ask for the passcode. **Spotify/TikTok**: if you liked similar content, show more; otherwise, suggest something else. **Smart traffic light**: if pedestrians are waiting, turn green for them. **A game**: if lives reach zero, it is game over.
+
+    Deep down, all of these are an **if... else** (`if`/`else`). In a flowchart, a decision is always a **diamond** with two exits: **Yes** and **No**.
+slides:
+  - {deck: aula-4, de: 3, ate: 3}
+leitura:
+  pt: "Python Basics, cap. 8.1–8.3 — Comparar valores, lógica e controlo de fluxo"
+  en: "Python Basics, ch. 8.1–8.3 — Compare values, add logic and control the flow"
+pistas:
+  - pt: "Procura a frase 'se isto acontecer, faz aquilo; senão, faz outra coisa'."
+    en: "Look for the sentence 'if this happens, do that; otherwise, do something else'."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Qual destas situações precisa de uma decisão?"
+      en: "Which of these situations needs a decision?"
+    pergunta:
+      pt: "Qual destes programas tem de escolher entre dois caminhos?"
+      en: "Which of these programs has to choose between two paths?"
+    opcoes:
+      - {pt: "Somar duas notas e mostrar o resultado", en: "Add two marks and show the result"}
+      - {pt: "Desbloquear o telemóvel só se a cara corresponder", en: "Unlock the phone only if the face matches"}
+      - {pt: "Mostrar a mensagem \"Bem-vindo\" sempre que o programa começa", en: "Show \"Welcome\" every time the program starts"}
+    resposta: [1]
+    explicacao:
+      pt: "Só o Face ID escolhe: se a cara corresponder, desbloqueia; senão, pede o código. Os outros dois fazem sempre a mesma coisa."
+      en: "Only Face ID chooses: if the face matches, unlock; otherwise, ask for the code. The other two always do the same thing."
+  - tipo: pergunta
+    enunciado:
+      pt: "Qual é a forma do bloco de decisão no fluxograma?"
+      en: "What shape is the decision block in a flowchart?"
+    pergunta:
+      pt: "Como se desenha uma decisão no fluxograma?"
+      en: "How is a decision drawn in a flowchart?"
+    opcoes:
+      - {pt: "Um losango com as saídas Sim e Não", en: "A diamond with Yes and No exits"}
+      - {pt: "Um retângulo com uma única seta", en: "A rectangle with a single arrow"}
+      - {pt: "Um paralelogramo", en: "A parallelogram"}
+    resposta: [0]
+    explicacao:
+      pt: "O losango tem sempre pelo menos duas saídas: Sim e Não. O paralelogramo é para ler e escrever."
+      en: "The diamond always has at least two exits: Yes and No. The parallelogram is for reading and writing."
+verificacao:
+  pergunta:
+    pt: "Num jogo, \"se as vidas chegarem a zero, é game over\" é um exemplo de quê?"
+    en: "In a game, \"if lives reach zero, it is game over\" is an example of what?"
+  opcoes:
+    - {pt: "Uma decisão (if/else)", en: "A decision (if/else)"}
+    - {pt: "Uma variável", en: "A variable"}
+    - {pt: "Uma leitura de dados", en: "Reading data"}
+  resposta: [0]

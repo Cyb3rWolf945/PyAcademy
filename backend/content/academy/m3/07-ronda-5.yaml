@@ -1,0 +1,124 @@
+id: m3-07-ronda-5
+modulo: m3
+ordem: 7
+titulo:
+  pt: 'Ronda 5: aniversário, paragens e impressão 3D'
+  en: 'Round 5: birthday, stops and 3D printing'
+aprender:
+  pt: |-
+    Ronda difícil, com pontos a dobrar: **fatura com desconto de aniversário** (15 % só na mesa do aniversariante), **viagem com paragens** (15 minutos extra por paragem) e **orçamento de impressão 3D**.
+
+    Na impressão 3D, o peso da peça é a **variável**. O custo por grama e a taxa de preparação da impressora são **constantes**.
+
+    Operação: `(peso × custo por grama) + taxa de preparação`. Os parênteses mostram o que se calcula primeiro.
+  en: |-
+    Hard round, double points: **invoice with birthday discount** (15 % only on the birthday table), **trip with stops** (15 extra minutes per stop) and **3D printing quote**.
+
+    In 3D printing the weight of the part is the **variable**. The cost per gram and the printer set-up fee are **constants**.
+
+    Operation: `(weight × cost per gram) + set-up fee`. The parentheses show what is calculated first.
+exemplo:
+  id: impressao-3d
+  titulo:
+    pt: Orçamento de impressão 3D
+    en: 3D printing quote
+  corpo:
+  - id: k1
+    tipo: definir
+    texto:
+      pt: definir constante CUSTO_GRAMA = 0.05
+      en: define constant CUSTO_GRAMA = 0.05
+    py: CUSTO_GRAMA = 0.05
+  - id: k2
+    tipo: definir
+    texto:
+      pt: definir constante TAXA_PREPARACAO = 2.0
+      en: define constant TAXA_PREPARACAO = 2.0
+    py: TAXA_PREPARACAO = 2.0
+  - id: v1
+    tipo: definir
+    texto:
+      pt: definir real peso = 0.0
+      en: define real peso = 0.0
+    py: peso = 0.0
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler peso
+      en: read peso
+    py: 'peso = float(input("Peso da peça (g): "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: custo = (peso * CUSTO_GRAMA) + TAXA_PREPARACAO
+      en: custo = (peso * CUSTO_GRAMA) + TAXA_PREPARACAO
+    py: custo = (peso * CUSTO_GRAMA) + TAXA_PREPARACAO
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Custo = " + custo
+      en: write "Cost = " + custo
+    py: print("Custo:", custo)
+slides:
+- deck: aula-3-5
+  de: 22
+  ate: 22
+pistas:
+- pt: 'Dois valores fixos e um que muda: o que muda é o que o utilizador escreve.'
+  en: 'Two fixed values and one that changes: what changes is what the user types.'
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: 'Missão 1: fatura com desconto de aniversário.'
+    en: 'Mission 1: invoice with birthday discount.'
+  pergunta:
+    pt: Quais são as variáveis?
+    en: Which are the variables?
+  opcoes:
+  - pt: valor da mesa do aniversariante
+    en: birthday table value
+  - pt: valor das outras mesas
+    en: value of the other tables
+  - pt: desconto = 15 %
+    en: discount = 15 %
+  resposta:
+  - 0
+  - 1
+  explicacao:
+    pt: 'Os dois valores mudam de festa para festa. Os 15 % são fixos: constante.'
+    en: 'Both values change from party to party. The 15 % is fixed: a constant.'
+- tipo: completar
+  enunciado:
+    pt: Completa a fórmula da missão.
+    en: Complete the mission formula.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: custo = (peso * CUSTO_GRAMA) + ___
+      en: custo = (peso * CUSTO_GRAMA) + ___
+    respostas:
+    - TAXA_PREPARACAO
+  explicacao:
+    pt: A taxa de preparação paga-se uma vez, seja qual for o peso.
+    en: The set-up fee is paid once, whatever the weight.
+- tipo: ordenar_python
+  enunciado:
+    pt: Põe as linhas de Python pela ordem certa (constantes e variáveis no topo).
+    en: Put the lines of Python in the right order (constants and variables at the top).
+  explicacao:
+    pt: 'A convenção do professor: constantes em MAIÚSCULAS e variáveis inicializadas no topo; depois input, processamento e output.'
+    en: 'The teacher''s convention: constants in UPPERCASE and variables initialised at the top; then input, processing and output.'
+verificacao:
+  pergunta:
+    pt: 'Viagem com paragens: qual é a constante?'
+    en: 'Trip with stops: which is the constant?'
+  opcoes:
+  - pt: tempo por paragem = 15 min
+    en: time per stop = 15 min
+  - pt: número de paragens
+    en: number of stops
+  - pt: distância
+    en: distance
+  resposta:
+  - 0

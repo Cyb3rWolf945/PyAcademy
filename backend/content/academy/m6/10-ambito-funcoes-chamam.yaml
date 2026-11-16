@@ -1,0 +1,84 @@
+id: m6-10-ambito-funcoes-chamam
+modulo: m6
+ordem: 10
+titulo: {pt: "Âmbito e funções que chamam funções", en: "Scope and functions calling functions"}
+aprender:
+  pt: |
+    Uma variável criada **dentro** de uma função só existe enquanto ela corre: é **local**. Em `contar_ate_tres()`, a variável `contador` deixa de existir quando a função acaba. Se a usares fora, dá `NameError: name 'contador' is not defined`. Para levares o valor para fora, a função tem de o **devolver** com `return`.
+
+    Uma função também pode **chamar outra**, e isso é DRY outra vez. A `media_lista` não reescreve o ciclo de soma: usa a `soma_lista` que já tens e divide pelo número de elementos.
+
+    É assim que se constrói um programa maior: pequenas caixas, cada uma com uma tarefa, a usarem-se umas às outras.
+  en: |
+    A variable created **inside** a function only exists while it runs: it is **local**. In `contar_ate_tres()`, the variable `contador` stops existing when the function ends. If you use it outside, you get `NameError: name 'contador' is not defined`. To take the value out, the function must **return** it with `return`.
+
+    A function can also **call another**, and that is DRY again. `media_lista` does not rewrite the sum loop: it uses the `soma_lista` you already have and divides by the number of elements.
+
+    This is how bigger programs are built: small boxes, each with one task, using one another.
+exemplo:
+  id: media-lista
+  titulo: {pt: "Média de uma lista", en: "Average of a list"}
+  funcoes:
+    - id: f_soma
+      nome: soma_lista
+      params: "numeros"
+      texto: {pt: "soma_lista(numeros)", en: "soma_lista(numeros)"}
+      corpo:
+        - {id: sd, tipo: definir, texto: {pt: "soma = 0", en: "soma = 0"}, py: "soma = 0"}
+        - id: sf
+          tipo: para
+          texto: {pt: "para cada numero em numeros", en: "for each numero in numeros"}
+          py: "for numero in numeros"
+          corpo:
+            - {id: sc, tipo: calcular, texto: {pt: "soma = soma + numero", en: "soma = soma + numero"}, py: "soma = soma + numero"}
+        - {id: sr, tipo: devolver, texto: {pt: "devolver soma", en: "return soma"}, py: "return soma"}
+    - id: f_media
+      nome: media_lista
+      params: "numeros"
+      texto: {pt: "media_lista(numeros)", en: "media_lista(numeros)"}
+      corpo:
+        - {id: mr, tipo: devolver, texto: {pt: "devolver soma_lista(numeros) / len(numeros)", en: "return soma_lista(numeros) / len(numeros)"}, py: "return soma_lista(numeros) / len(numeros)"}
+  corpo:
+    - {id: e1, tipo: escrever, texto: {pt: 'escrever "Média:" e media_lista([4, 8, 15, 16, 23, 42])', en: 'write "Média:" and media_lista([4, 8, 15, 16, 23, 42])'}, py: 'print("Média:", media_lista([4, 8, 15, 16, 23, 42]))'}
+slides:
+  - {deck: funcoes, de: 20, ate: 21}
+leitura:
+  pt: "Python Basics, cap. 6.6 — Âmbito das variáveis"
+  en: "Python Basics, ch. 6.6 — Variable scope"
+pistas:
+  - pt: "Uma variável local morre quando a função termina."
+    en: "A local variable dies when the function ends."
+  - pt: "Para usar o resultado de uma função lá fora, ela tem de o devolver."
+    en: "To use a function's result outside, it must return it."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Uma função cria `contador` com um for e, depois de ela acabar, o programa faz print(contador)."
+      en: "A function creates `contador` with a for and, after it ends, the program does print(contador)."
+    pergunta:
+      pt: "O que acontece nesse print?"
+      en: "What happens at that print?"
+    opcoes:
+      - {pt: "NameError: o contador era local e já não existe", en: "NameError: contador was local and no longer exists"}
+      - {pt: "Mostra o último valor do contador", en: "It shows the last value of contador"}
+      - {pt: "Mostra 0", en: "It shows 0"}
+    resposta: [0]
+    explicacao:
+      pt: "As variáveis criadas dentro da função só existem lá dentro. Para usar o valor fora, devolve-se com return."
+      en: "Variables created inside a function only exist in there. To use the value outside, return it."
+  - tipo: ligar
+    enunciado:
+      pt: "Liga cada bloco à sua linha de Python, incluindo as pílulas das duas funções."
+      en: "Match each block to its line of Python, including the start pills of both functions."
+    explicacao:
+      pt: "A media_lista é só um return que chama soma_lista: reaproveita o ciclo de soma em vez de o reescrever."
+      en: "media_lista is just a return that calls soma_lista: it reuses the sum loop instead of rewriting it."
+verificacao:
+  pergunta:
+    pt: "Porque é que media_lista usa soma_lista em vez de ter o seu próprio ciclo?"
+    en: "Why does media_lista use soma_lista instead of having its own loop?"
+  opcoes:
+    - {pt: "Para não repetir o ciclo de soma (DRY)", en: "So it does not repeat the sum loop (DRY)"}
+    - {pt: "Porque o Python obriga", en: "Because Python requires it"}
+    - {pt: "Porque assim corre mais depressa", en: "Because it runs faster that way"}
+  resposta: [0]

@@ -341,6 +341,66 @@ async def test_content_cache_reloads_on_change(tmp_path, monkeypatch):
     root = tmp_path / "acad"
     shutil.copytree(FIX, root)
     monkeypatch.setattr(settings, "academy_dir", root)
-    assert len(academy_content.get_content().sections) == 6
+    assert len(academy_content.get_content().sections) == 8
     (root / "m2" / "01-m2.yaml").unlink()
-    assert len(academy_content.get_content().sections) == 5
+    assert len(academy_content.get_content().sections) == 7
+
+
+# ---------------- funções (§14) ----------------
+async def test_functions_schema_defects(tmp_path):
+    root = tmp_path / "acad"
+    shutil.copytree(FIX, root)
+    base = (root / "m4" / "01-funcoes.yaml").read_text(encoding="utf-8")
+
+    def bad(name, text):
+        (root / "m4" / f"{name}.yaml").write_text(text.replace("id: m4-01-funcoes", f"id: x-{name}"), encoding="utf-8")
+
+    bad("20-devolver-main", base.replace('{id: m3, tipo: escrever, texto: {pt: Escrever total, en: Print total}, py: "print(total)"}',
+                                         '{id: m3, tipo: devolver, texto: {pt: D, en: D}, py: "return total"}'))
+    bad("21-alvo", base.replace("alvo: f1", "alvo: f9"))
+    bad("22-id-dup", base.replace("id: m1,", "id: f1a,"))
+    bad("23-nome-dup", base.replace("  corpo:\n    - {id: m1", "  corpo:\n    - {id: m1").replace("    - id: f1\n", "    - id: f1\n").replace("nome: soma_lista", "nome: soma_lista", 1))
+    bad("24-ids-main", base.replace("tipo: ordenar_python, alvo: f1", "tipo: ordenar_python, alvo: f1, ids: [m1, m2]"))
+    bad("25-py-lacuna", base.replace("stmt: f1c", "stmt: m1"))  # m1 está no principal, a atividade tem alvo f1
+    errors, _ = validate_academy.validate(root, tmp_path / "nada")
+    text = "\n".join(errors)
+    for needle in ("20-devolver-main", "21-alvo", "22-id-dup", "24-ids-main", "25-py-lacuna"):
+        assert needle in text, needle
+    assert "só pode estar dentro de uma função" in text and "não é uma função do exemplo" in text and "ids repetidos" in text
+    dup = base.replace("devolve_tipo: float\n", "devolve_tipo: float\n").replace("  corpo:\n    - {id: m1", "    - id: f2\n      nome: soma_lista\n      corpo:\n        - {id: g1, tipo: escrever, texto: {pt: a, en: a}, py: \"print(1)\"}\n  corpo:\n    - {id: m1")
+    bad("26-nomes", dup)
+    errors, _ = validate_academy.validate(root, tmp_path / "nada")
+    assert any("26-nomes" in e and "nomes repetidos" in e for e in errors)
+
+
+async def test_function_activities_respect_alvo(make_user, new_client, monkeypatch):
+    monkeypatch.setattr(academy, "open_blocks", lambda: {"4"})
+    c, h = await _user(make_user, new_client)
+    sec = (await c.get("/api/academy/sections/m4-01-funcoes")).json()
+    py, lig, comp = sec["atividades"]
+    assert py["alvo"] == "f1" and sorted(py["itens"]) == ["f1a", "f1b", "f1d"] and py["itens"] != ["f1a", "f1b", "f1d"]  # só o corpo da função
+    assert lig["ids"] == ["f1", "m1", "m2", "m3"]  # sem alvo: o principal + as pílulas das funções (↔ linhas def)
+    assert "alvo" not in lig and sorted(lig["linhas"]) == sorted(lig["ids"]) and lig["linhas"] != lig["ids"]
+    assert comp["alvo"] == "f1" and comp["lacunas"][0]["stmt"] == "f1c"
+    assert "+" not in json.dumps(sec["atividades"][2]["lacunas"]) and "resposta" not in json.dumps(sec)
+
+    async def ans(idx, body, sid="m4-01-funcoes"):
+        r = await c.post(f"/api/academy/sections/{sid}/activities/{idx}/answer", json={"resposta": body}, headers=h)
+        assert r.status_code == 200, r.text
+        return r.json()
+
+    assert (await ans(0, {"ordem": ["f1a", "f1b", "f1d"]}))["correta"] is True
+    r = await ans(0, {"ordem": ["f1d", "f1b", "f1a"]})
+    assert r["correta"] is False and r["detalhe"] == {"erradas": [0, 2]}
+    assert (await ans(0, {"ordem": ["m1", "m2", "m3"]}))["correta"] is False  # o principal não conta
+    ids = lig["ids"]
+    assert (await ans(1, {"pares": {i: i for i in ids}}))["correta"] is True  # inclui a pílula da função ↔ linha def
+    r = await ans(1, {"pares": {**{i: i for i in ids}, "f1": "m1", "m1": "f1"}})
+    assert r["correta"] is False and sorted(r["detalhe"]["erradas"]) == ["f1", "m1"]
+    assert (await ans(2, {"valores": [" + "]}))["correta"] is True and (await ans(2, {"valores": ["-"]}))["correta"] is False
+    await _complete(c, h, "m4-01-funcoes", escolha=(0,))
+    s2 = (await c.get("/api/academy/sections/m4-02-fluxo")).json()
+    flu, lig2 = s2["atividades"]
+    assert sorted(flu["itens"]) == ["f1a", "f1b", "f1d"] and lig2["alvo"] == "f1" and lig2["ids"] == ["f1a", "f1b", "f1c", "f1d"]  # com alvo, sem o id da função
+    assert (await ans(0, {"ordem": ["f1a", "f1b", "f1d"]}, "m4-02-fluxo"))["correta"] is True
+    assert (await ans(1, {"pares": {i: i for i in lig2["ids"]}}, "m4-02-fluxo"))["correta"] is True

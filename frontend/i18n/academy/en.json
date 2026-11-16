@@ -135,5 +135,10 @@
  "ui.slides.next": "Next slide",
  "ui.slides.close": "Close",
  "ui.piece.setas": "Arrows",
- "ui.piece.processo": "Process"
+ "ui.piece.processo": "Process",
+ "fx.main": "Main program",
+ "fx.k_chamar": "Call function",
+ "fx.k_devolver": "Return",
+ "fx.k_funcao": "Function",
+ "ui.mod.preview": "Preview (teacher)"
 }

@@ -1,0 +1,99 @@
+id: m7-07-pesquisa-linear
+modulo: m7
+ordem: 7
+titulo: {pt: "Pesquisa linear", en: "Linear search"}
+aprender:
+  pt: |
+    **Requisito:** dada uma lista e um valor, devolver o **índice** onde ele aparece, ou **-1** se não existir.
+
+    A **pesquisa linear** vê os elementos **um a um**, do início ao fim. Percorremos os índices com `for i in range(len(valores))` e, se `valores[i] == alvo`, **devolvemos `i`** logo ali: o `return` termina a função.
+
+    Só **depois** do ciclo, quando nenhum elemento serviu, é que devolvemos `-1`. O `-1` nunca é um índice válido, por isso serve de sinal de "não encontrado".
+
+    Este é um bom momento para lembrar o `return` dentro de um `if`: assim que corre, a função acaba.
+  en: |
+    **Requirement:** given a list and a value, return the **index** where it appears, or **-1** if it does not exist.
+
+    **Linear search** looks at the elements **one by one**, from start to end. We go through the indexes with `for i in range(len(valores))` and, if `valores[i] == alvo`, we **return `i`** right there: `return` ends the function.
+
+    Only **after** the loop, when no element matched, do we return `-1`. `-1` is never a valid index, so it works as a "not found" signal.
+
+    A good moment to recall `return` inside an `if`: as soon as it runs, the function ends.
+exemplo:
+  id: pesquisa-linear
+  titulo: {pt: "Onde está o 16?", en: "Where is the 16?"}
+  funcoes:
+    - id: f
+      nome: pesquisar
+      params: "valores, alvo"
+      texto: {pt: "pesquisar(valores, alvo)", en: "pesquisar(valores, alvo)"}
+      corpo:
+        - id: fp
+          tipo: para
+          texto: {pt: "para i de 0 a len(valores) - 1", en: "for i from 0 to len(valores) - 1"}
+          py: "for i in range(len(valores))"
+          corpo:
+            - id: fs
+              tipo: se
+              cond: {pt: "valores[i] == alvo ?", en: "valores[i] == alvo ?"}
+              py: "valores[i] == alvo"
+              sim:
+                - {id: fr1, tipo: devolver, texto: {pt: "Devolver i", en: "Return i"}, py: "return i"}
+              nao: []
+        - {id: fr2, tipo: devolver, texto: {pt: "Devolver -1", en: "Return -1"}, py: "return -1"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "notas = [14, 9, 16, 12]", en: "notas = [14, 9, 16, 12]"}, py: "notas = [14, 9, 16, 12]"}
+    - {id: c1, tipo: chamar, texto: {pt: "posicao = pesquisar(notas, 16)", en: "posicao = pesquisar(notas, 16)"}, py: "posicao = pesquisar(notas, 16)"}
+    - {id: e, tipo: escrever, texto: {pt: "escrever posicao", en: "write posicao"}, py: "print(posicao)"}
+  demoPath: [d1, c1, f, fp, fs, fp, fs, fp, fs, fr1, e]
+slides:
+  - {deck: funcoes, de: 14, ate: 15}
+leitura:
+  pt: "Python Basics, cap. 9.2 — Listas"
+  en: "Python Basics, ch. 9.2 — Lists"
+pistas:
+  - pt: "O `return -1` só pode estar depois do ciclo. Porquê?"
+    en: "The `return -1` can only be after the loop. Why?"
+atividades:
+  - tipo: ordenar_python
+    alvo: f
+    enunciado:
+      pt: "Põe as peças da função pela ordem certa."
+      en: "Put the pieces of the function in the right order."
+    explicacao:
+      pt: "Primeiro o ciclo que procura, e só depois o `return -1`, quando nada foi encontrado."
+      en: "First the loop that searches, and only afterwards `return -1`, when nothing was found."
+  - tipo: completar
+    alvo: f
+    enunciado:
+      pt: "Completa o valor de \"não encontrado\"."
+      en: "Complete the \"not found\" value."
+    lacunas:
+      - {stmt: fr2, lado: py, modelo: {pt: "return ___", en: "return ___"}, respostas: ["-1"]}
+    explicacao:
+      pt: "-1 não é um índice válido, por isso indica que o valor não existe."
+      en: "-1 is not a valid index, so it signals that the value does not exist."
+  - tipo: pergunta
+    enunciado:
+      pt: "Com `notas = [14, 9, 16, 12]`."
+      en: "With `notas = [14, 9, 16, 12]`."
+    pergunta:
+      pt: "O que devolve `pesquisar(notas, 20)`?"
+      en: "What does `pesquisar(notas, 20)` return?"
+    opcoes:
+      - {pt: "-1", en: "-1"}
+      - {pt: "None", en: "None"}
+      - {pt: "4", en: "4"}
+    resposta: [0]
+    explicacao:
+      pt: "Nenhuma nota é 20: o ciclo acaba sem `return` e a função devolve -1."
+      en: "No mark is 20: the loop ends without a `return` and the function returns -1."
+verificacao:
+  pergunta:
+    pt: "Com `notas = [14, 9, 16, 12]`, o que devolve `pesquisar(notas, 16)`?"
+    en: "With `notas = [14, 9, 16, 12]`, what does `pesquisar(notas, 16)` return?"
+  opcoes:
+    - {pt: "2", en: "2"}
+    - {pt: "3", en: "3"}
+    - {pt: "16", en: "16"}
+  resposta: [0]

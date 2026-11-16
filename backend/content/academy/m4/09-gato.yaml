@@ -1,0 +1,101 @@
+id: m4-09-gato
+modulo: m4
+ordem: 9
+titulo: {pt: "O gato avalia-te", en: "The cat judges you"}
+aprender:
+  pt: |
+    Dado o nível de fome do gato (0 a 10), o programa prevê a reação: **0 a 3**, ronrona satisfeito; **4 a 7**, mia uma vez (é só um aviso); **8 a 10**, ataca-te o tornozelo às 6 da manhã. **Extra:** se for fim de semana **e** a fome for 10, o gato revira a caixa do croquete toda.
+
+    São três faixas mais uma condição que combina duas coisas com `and`. Declara `fome` e `fim_de_semana` no topo.
+
+    A **ordem importa**: o Python corre o primeiro ramo verdadeiro e ignora o resto. A condição com `and` é um caso especial, por isso vem **primeiro**. Se a pusesses depois de um ramo que já apanha a fome 10, nunca seria alcançada.
+  en: |
+    Given the cat's hunger level (0 to 10), the program predicts the reaction: **0 to 3**, purrs contentedly; **4 to 7**, meows once (just a warning); **8 to 10**, attacks your ankle at 6 a.m. **Extra:** if it is the weekend **and** hunger is 10, the cat knocks over the whole kibble box.
+
+    That is three bands plus one condition combining two things with `and`. Declare `fome` and `fim_de_semana` at the top.
+
+    **Order matters**: Python runs the first true branch and ignores the rest. The `and` condition is a special case, so it goes **first**. If you put it after a branch that already catches hunger 10, it would never be reached.
+exemplo:
+  id: gato
+  titulo: {pt: "O gato avalia-te", en: "The cat judges you"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "declarar: fome = 0", en: "declare: fome = 0"}, py: "fome = 0"}
+    - {id: d2, tipo: definir, texto: {pt: "declarar: fim_de_semana = False", en: "declare: fim_de_semana = False"}, py: "fim_de_semana = False"}
+    - {id: l1, tipo: ler, texto: {pt: "ler fome", en: "read fome"}, py: 'fome = int(input("Nível de fome do gato (0 a 10): "))'}
+    - {id: l2, tipo: ler, texto: {pt: "ler fim_de_semana", en: "read fim_de_semana"}, py: 'fim_de_semana = input("É fim de semana? (sim/não): ") == "sim"'}
+    - id: s1
+      tipo: se
+      cond: {pt: "fim_de_semana and fome == 10 ?", en: "fim_de_semana and fome == 10 ?"}
+      py: "fim_de_semana and fome == 10"
+      sim:
+        - {id: e1, tipo: escrever, texto: {pt: "Revira a caixa do croquete toda", en: "Knocks over the whole kibble box"}, py: 'print("Revira a caixa do croquete toda")'}
+      nao:
+        - id: s2
+          tipo: se
+          cond: {pt: "fome <= 3 ?", en: "fome <= 3 ?"}
+          py: "fome <= 3"
+          sim:
+            - {id: e2, tipo: escrever, texto: {pt: "Ronrona satisfeito", en: "Purrs contentedly"}, py: 'print("Ronrona satisfeito")'}
+          nao:
+            - id: s3
+              tipo: se
+              cond: {pt: "fome <= 7 ?", en: "fome <= 7 ?"}
+              py: "fome <= 7"
+              sim:
+                - {id: e3, tipo: escrever, texto: {pt: "Mia uma vez, é só um aviso", en: "Meows once, just a warning"}, py: 'print("Mia uma vez, é só um aviso")'}
+              nao:
+                - {id: e4, tipo: escrever, texto: {pt: "Ataca-te o tornozelo às 6 da manhã", en: "Attacks your ankle at 6 a.m."}, py: 'print("Ataca-te o tornozelo às 6 da manhã")'}
+  demoPath: [d1, d2, l1, l2, s1, s2, s3, e4]
+slides:
+  - {deck: aula-4, de: 18, ate: 18}
+  - {deck: aula-4, de: 23, ate: 24}
+leitura:
+  pt: "Python Basics, cap. 8.2–8.3 — Lógica e controlo de fluxo"
+  en: "Python Basics, ch. 8.2–8.3 — Logic and control flow"
+pistas:
+  - pt: "Qual é o caso mais especial? Esse tem de ser testado primeiro."
+    en: "Which is the most special case? That one must be tested first."
+  - pt: "Com `fome <= 3` e depois `fome <= 7`, a segunda condição só apanha 4 a 7."
+    en: "With `fome <= 3` and then `fome <= 7`, the second condition only catches 4 to 7."
+atividades:
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "Declaram-se as variáveis, leem-se os dados e só depois se decide, com o caso especial do `and` à cabeça da cadeia."
+      en: "Declare the variables, read the data and only then decide, with the special `and` case at the head of the chain."
+  - tipo: completar
+    enunciado:
+      pt: "Completa as condições."
+      en: "Complete the conditions."
+    lacunas:
+      - {stmt: s1, lado: py, modelo: {pt: "fim_de_semana ___ fome == 10", en: "fim_de_semana ___ fome == 10"}, respostas: ["and"]}
+      - {stmt: s3, lado: py, modelo: {pt: "fome <= ___", en: "fome <= ___"}, respostas: ["7"]}
+    explicacao:
+      pt: "O caso especial precisa das duas coisas ao mesmo tempo (`and`). E o último `elif` apanha a fome até 7, ficando o `else` para 8 a 10."
+      en: "The special case needs both things at once (`and`). And the last `elif` catches hunger up to 7, leaving the `else` for 8 to 10."
+  - tipo: pergunta
+    enunciado:
+      pt: "Imagina que alguém troca a ordem e põe `elif fome >= 8` (o ataque) **antes** da condição com `and`."
+      en: "Imagine someone swaps the order and puts `elif fome >= 8` (the attack) **before** the `and` condition."
+    pergunta:
+      pt: "O que acontece com fome 10 num fim de semana?"
+      en: "What happens with hunger 10 on a weekend?"
+    opcoes:
+      - {pt: "O ataque ao tornozelo corre primeiro e a caixa do croquete nunca é revirada", en: "The ankle attack runs first and the kibble box is never knocked over"}
+      - {pt: "Correm os dois ramos, um a seguir ao outro", en: "Both branches run, one after the other"}
+      - {pt: "Nada muda, a ordem não importa", en: "Nothing changes, order does not matter"}
+    resposta: [0]
+    explicacao:
+      pt: "Só corre o primeiro ramo verdadeiro. Se o `fome >= 8` vier antes, o caso especial fica inalcançável. Por isso vai primeiro."
+      en: "Only the first true branch runs. If `fome >= 8` comes first, the special case becomes unreachable. That is why it goes first."
+verificacao:
+  pergunta:
+    pt: "Com `fome = 10` e `fim_de_semana = False`, o que faz o gato?"
+    en: "With `fome = 10` and `fim_de_semana = False`, what does the cat do?"
+  opcoes:
+    - {pt: "Ataca-te o tornozelo às 6 da manhã", en: "Attacks your ankle at 6 a.m."}
+    - {pt: "Revira a caixa do croquete toda", en: "Knocks over the whole kibble box"}
+    - {pt: "Ronrona satisfeito", en: "Purrs contentedly"}
+  resposta: [0]

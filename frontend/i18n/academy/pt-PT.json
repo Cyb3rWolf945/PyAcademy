@@ -135,5 +135,10 @@
  "ui.slides.next": "Slide seguinte",
  "ui.slides.close": "Fechar",
  "ui.piece.setas": "Setas",
- "ui.piece.processo": "Processo"
+ "ui.piece.processo": "Processo",
+ "fx.main": "Programa principal",
+ "fx.k_chamar": "Chamar função",
+ "fx.k_devolver": "Devolver",
+ "fx.k_funcao": "Função",
+ "ui.mod.preview": "Pré-visualização (professor)"
 }

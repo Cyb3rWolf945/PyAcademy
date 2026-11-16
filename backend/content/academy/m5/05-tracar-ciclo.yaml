@@ -1,0 +1,98 @@
+id: m5-05-tracar-ciclo
+modulo: m5
+ordem: 5
+titulo: {pt: "Vamos traçar o ciclo", en: "Let's trace the loop"}
+aprender:
+  pt: |
+    **Traçar** é seguir o programa à mão, linha a linha, apontando como as variáveis mudam. É a melhor forma de perceber um ciclo e de caçar erros.
+
+    Usamos as mesmas 3 notas de sempre: **14, 9 e 16**, com `n = 3`. No arranque, `soma = 0`. Depois de cada volta:
+
+    - volta 1: `nota = 14`, `soma = 14`
+    - volta 2: `nota = 9`, `soma = 23`
+    - volta 3: `nota = 16`, `soma = 39`
+
+    Acabado o ciclo, `media = soma / n = 39 / 3 = 13.0`. Repara: `soma` e `media` **já existiam antes do ciclo começar**, o ciclo só os vai atualizando.
+  en: |
+    **Tracing** means following the program by hand, line by line, noting how the variables change. It is the best way to understand a loop and to hunt for bugs.
+
+    We use the same 3 marks as always: **14, 9 and 16**, with `n = 3`. At the start, `soma = 0`. After each turn:
+
+    - turn 1: `nota = 14`, `soma = 14`
+    - turn 2: `nota = 9`, `soma = 23`
+    - turn 3: `nota = 16`, `soma = 39`
+
+    When the loop ends, `media = soma / n = 39 / 3 = 13.0`. Notice: `soma` and `media` **already existed before the loop started**, the loop just keeps updating them.
+exemplo:
+  id: tracar-media
+  titulo: {pt: "Média de N notas (a traçar)", en: "Average of N marks (to trace)"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "n = 0", en: "n = 0"}, py: "n = 0"}
+    - {id: d2, tipo: definir, texto: {pt: "soma = 0", en: "soma = 0"}, py: "soma = 0"}
+    - {id: d3, tipo: definir, texto: {pt: "nota = 0", en: "nota = 0"}, py: "nota = 0"}
+    - {id: d4, tipo: definir, texto: {pt: "media = 0", en: "media = 0"}, py: "media = 0"}
+    - {id: l1, tipo: ler, texto: {pt: "ler n", en: "read n"}, py: 'n = int(input("Quantas notas? "))'}
+    - id: p
+      tipo: para
+      texto: {pt: "para i de 0 a n-1", en: "for i from 0 to n-1"}
+      py: "for i in range(n)"
+      corpo:
+        - {id: l2, tipo: ler, texto: {pt: "ler nota", en: "read nota"}, py: 'nota = float(input("Nota: "))'}
+        - {id: c1, tipo: calcular, texto: {pt: "soma = soma + nota", en: "soma = soma + nota"}, py: "soma = soma + nota"}
+    - {id: c2, tipo: calcular, texto: {pt: "media = soma / n", en: "media = soma / n"}, py: "media = soma / n"}
+    - {id: e, tipo: escrever, texto: {pt: "escrever media", en: "write media"}, py: "print(media)"}
+  demoPath: [d1, d2, d3, d4, l1, p, l2, c1, p, l2, c1, p, l2, c1, p, c2, e]
+slides:
+  - {deck: ciclos, de: 13, ate: 13}
+pistas:
+  - pt: "Faz uma tabela no caderno: uma linha por volta e uma coluna por variável."
+    en: "Make a table in your notebook: one row per turn and one column per variable."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Notas 14, 9 e 16, com `n = 3` e `soma = 0` no arranque."
+      en: "Marks 14, 9 and 16, with `n = 3` and `soma = 0` at the start."
+    pergunta:
+      pt: "Quanto vale `soma` no fim da 2.ª volta?"
+      en: "What is `soma` at the end of the 2nd turn?"
+    opcoes:
+      - {pt: "23", en: "23"}
+      - {pt: "9", en: "9"}
+      - {pt: "39", en: "39"}
+    resposta: [0]
+    explicacao:
+      pt: "Volta 1: 0 + 14 = 14. Volta 2: 14 + 9 = 23. Só na 3.ª volta chega a 39."
+      en: "Turn 1: 0 + 14 = 14. Turn 2: 14 + 9 = 23. Only on the 3rd turn does it reach 39."
+  - tipo: pergunta
+    enunciado:
+      pt: "O ciclo terminou. Continuamos com as mesmas notas."
+      en: "The loop is done. Same marks as before."
+    pergunta:
+      pt: "Quais são os valores finais de `soma`, `nota` e `media`?"
+      en: "What are the final values of `soma`, `nota` and `media`?"
+    opcoes:
+      - {pt: "soma = 39, nota = 16, media = 13.0", en: "soma = 39, nota = 16, media = 13.0"}
+      - {pt: "soma = 39, nota = 14, media = 13.0", en: "soma = 39, nota = 14, media = 13.0"}
+      - {pt: "soma = 16, nota = 16, media = 13.0", en: "soma = 16, nota = 16, media = 13.0"}
+    resposta: [0]
+    explicacao:
+      pt: "`nota` guarda só a **última** nota lida (16), `soma` guarda o total (39) e `media` é 39 / 3 = 13.0."
+      en: "`nota` holds only the **last** mark read (16), `soma` holds the total (39) and `media` is 39 / 3 = 13.0."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a linha que calcula a média depois do ciclo."
+      en: "Complete the line that computes the average after the loop."
+    lacunas:
+      - {stmt: c2, lado: py, modelo: {pt: "media = soma / ___", en: "media = soma / ___"}, respostas: ["n"]}
+    explicacao:
+      pt: "Dividimos o total pelo número de notas: 39 / 3 = 13.0."
+      en: "We divide the total by the number of marks: 39 / 3 = 13.0."
+verificacao:
+  pergunta:
+    pt: "O que guarda `nota` quando o ciclo termina?"
+    en: "What does `nota` hold when the loop ends?"
+  opcoes:
+    - {pt: "A última nota lida", en: "The last mark read"}
+    - {pt: "A soma de todas as notas", en: "The sum of all marks"}
+    - {pt: "A média", en: "The average"}
+  resposta: [0]

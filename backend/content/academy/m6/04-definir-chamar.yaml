@@ -1,0 +1,66 @@
+id: m6-04-definir-chamar
+modulo: m6
+ordem: 4
+titulo: {pt: "Definir e chamar uma função", en: "Defining and calling a function"}
+aprender:
+  pt: |
+    Com `def` **defines** uma função: dizes ao Python o que ela faz, **mas ela não corre**. Só corre quando a **chamas** pelo nome, com parênteses.
+
+    No exemplo, o `print` aparece **uma vez** no código, mas corre **duas vezes**, porque chamamos `saudar()` duas vezes. É exatamente o que o DRY pedia. Podes chamar quantas vezes quiseres, sem reescrever o corpo.
+
+    No fluxograma, a função é desenhada à parte, e cada chamada aparece como um bloco com duas barras laterais. Toca num bloco para ver a linha de Python.
+  en: |
+    With `def` you **define** a function: you tell Python what it does, **but it does not run**. It only runs when you **call** it by name, with parentheses.
+
+    In the example the `print` appears **once** in the code but runs **twice**, because we call `saudar()` twice. That is exactly what DRY asked for. You can call it as many times as you like without rewriting the body.
+
+    In the flowchart the function is drawn separately, and each call appears as a block with two side bars. Tap a block to see its line of Python.
+exemplo:
+  id: saudar
+  titulo: {pt: "Saudar duas vezes", en: "Greeting twice"}
+  funcoes:
+    - id: f_saudar
+      nome: saudar
+      params: ""
+      texto: {pt: "saudar()", en: "saudar()"}
+      corpo:
+        - {id: e1, tipo: escrever, texto: {pt: 'escrever "Olá, Leonardo!"', en: 'write "Olá, Leonardo!"'}, py: 'print("Olá, Leonardo!")'}
+  corpo:
+    - {id: c1, tipo: chamar, texto: {pt: "chamar saudar()", en: "call saudar()"}, py: "saudar()"}
+    - {id: c2, tipo: chamar, texto: {pt: "chamar saudar()", en: "call saudar()"}, py: "saudar()"}
+slides:
+  - {deck: funcoes, de: 10, ate: 10}
+leitura:
+  pt: "Python Basics, cap. 6.2 — Escrever a tua própria função"
+  en: "Python Basics, ch. 6.2 — Write your own function"
+pistas:
+  - pt: "Definir descreve; chamar executa."
+    en: "Defining describes; calling executes."
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Põe pela ordem o que o Python faz ao correr este programa."
+      en: "Put in order what Python does when it runs this program."
+    itens:
+      - {id: s1, texto: {pt: "Lê o def e guarda a função saudar (sem a executar)", en: "Reads the def and stores the function saudar (without running it)"}}
+      - {id: s2, texto: {pt: "Primeira chamada saudar(): corre o print", en: "First call saudar(): runs the print"}}
+      - {id: s3, texto: {pt: "Segunda chamada saudar(): corre o print outra vez", en: "Second call saudar(): runs the print again"}}
+    explicacao:
+      pt: "Primeiro a definição (que só guarda a função) e depois cada chamada, que é o que a faz correr."
+      en: "First the definition (which only stores the function) and then each call, which is what makes it run."
+  - tipo: ligar
+    enunciado:
+      pt: "Liga cada bloco do fluxograma à sua linha de Python."
+      en: "Match each flowchart block to its line of Python."
+    explicacao:
+      pt: "A pílula de início da função liga-se ao def, o print ao corpo, e cada chamada ao seu saudar()."
+      en: "The function's start pill matches the def, the print matches the body, and each call matches its saudar()."
+verificacao:
+  pergunta:
+    pt: "Quantas vezes é que o print corre neste programa?"
+    en: "How many times does the print run in this program?"
+  opcoes:
+    - {pt: "Nenhuma, definir não executa", en: "Never, defining does not execute"}
+    - {pt: "Uma vez, porque está escrito uma vez", en: "Once, because it is written once"}
+    - {pt: "Duas vezes, uma por cada chamada", en: "Twice, once per call"}
+  resposta: [2]

@@ -1,0 +1,65 @@
+id: m4-02-operadores
+modulo: m4
+ordem: 2
+titulo: {pt: "Operadores de comparação e lógicos", en: "Comparison and logical operators"}
+aprender:
+  pt: |
+    Para decidir, o programa precisa de dois tipos de operadores. Os de **comparação** comparam dois valores: `==` (igual a), `!=` (diferente de), `>`, `<`, `>=` e `<=`. O resultado é sempre `True` ou `False`.
+
+    Os **lógicos** combinam várias condições: `and` só é verdadeiro se **ambas** forem verdadeiras, `or` é verdadeiro se **pelo menos uma** for, e `not` **inverte** o valor.
+
+    Cuidado com um engano clássico: `=` **guarda** um valor (`idade = 18`), enquanto `==` **compara** (`idade == 18`).
+  en: |
+    To decide, the program needs two kinds of operators. **Comparison** operators compare two values: `==` (equal to), `!=` (different from), `>`, `<`, `>=` and `<=`. The result is always `True` or `False`.
+
+    **Logical** operators combine several conditions: `and` is true only if **both** are true, `or` is true if **at least one** is, and `not` **flips** the value.
+
+    Beware of a classic slip: `=` **stores** a value (`idade = 18`), while `==` **compares** (`idade == 18`).
+slides:
+  - {deck: aula-4, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 8.1–8.2 — Comparar valores e acrescentar lógica"
+  en: "Python Basics, ch. 8.1–8.2 — Compare values and add logic"
+pistas:
+  - pt: "Lembra-te: um `=` guarda, dois `==` comparam."
+    en: "Remember: one `=` stores, two `==` compare."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Qual operador pergunta se dois valores são iguais?"
+      en: "Which operator asks whether two values are equal?"
+    pergunta:
+      pt: "Qual destes operadores **compara** se `nota` é igual a 10?"
+      en: "Which of these operators **compares** whether `nota` equals 10?"
+    opcoes:
+      - {pt: "nota = 10", en: "nota = 10"}
+      - {pt: "nota == 10", en: "nota == 10"}
+      - {pt: "nota != 10", en: "nota != 10"}
+    resposta: [1]
+    explicacao:
+      pt: "`==` compara e dá True ou False. `=` guarda um valor e `!=` pergunta se são diferentes."
+      en: "`==` compares and gives True or False. `=` stores a value and `!=` asks whether they differ."
+  - tipo: pergunta
+    enunciado:
+      pt: "Combina condições com `and`, `or` e `not`."
+      en: "Combine conditions with `and`, `or` and `not`."
+    pergunta:
+      pt: "Com `idade = 17` e `tem_carta = True`, qual é o valor de `idade >= 18 and tem_carta`?"
+      en: "With `idade = 17` and `tem_carta = True`, what is the value of `idade >= 18 and tem_carta`?"
+    opcoes:
+      - {pt: "True", en: "True"}
+      - {pt: "False", en: "False"}
+      - {pt: "Dá erro", en: "It raises an error"}
+    resposta: [1]
+    explicacao:
+      pt: "`idade >= 18` é False. Como o `and` exige que ambas sejam verdadeiras, o resultado é False."
+      en: "`idade >= 18` is False. Since `and` needs both to be true, the result is False."
+verificacao:
+  pergunta:
+    pt: "O que faz o operador `or`?"
+    en: "What does the `or` operator do?"
+  opcoes:
+    - {pt: "É verdadeiro se pelo menos uma das condições for verdadeira", en: "It is true if at least one of the conditions is true"}
+    - {pt: "É verdadeiro só se ambas as condições forem verdadeiras", en: "It is true only if both conditions are true"}
+    - {pt: "Inverte o valor da condição", en: "It flips the value of the condition"}
+  resposta: [0]

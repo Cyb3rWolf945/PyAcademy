@@ -1,0 +1,66 @@
+id: m4-05-if-elif-else
+modulo: m4
+ordem: 5
+titulo: {pt: "if / elif / else: o esqueleto e a indentação", en: "if / elif / else: the skeleton and indentation"}
+aprender:
+  pt: |
+    O esqueleto tem três peças. `if condição_1:` corre o seu bloco se a condição for `True`. `elif condição_2:` só é testado se a anterior for `False`. `else:` apanha tudo o resto, e por isso **não leva condição**.
+
+    Cada condição termina em **dois pontos** (`:`) e o bloco seguinte tem de estar **indentado** (4 espaços). É assim que o Python sabe o que pertence a cada ramo.
+
+    Só **um** ramo corre: o primeiro cuja condição for verdadeira. Os `elif` e o `else` são opcionais, e podes ter vários `elif`.
+  en: |
+    The skeleton has three pieces. `if condition_1:` runs its block if the condition is `True`. `elif condition_2:` is only tested if the previous one was `False`. `else:` catches everything else, so it **takes no condition**.
+
+    Each condition ends with a **colon** (`:`) and the block that follows must be **indented** (4 spaces). That is how Python knows what belongs to each branch.
+
+    Only **one** branch runs: the first whose condition is true. The `elif`s and the `else` are optional, and you can have several `elif`s.
+slides:
+  - {deck: aula-4, de: 6, ate: 6}
+leitura:
+  pt: "Python Basics, cap. 8.3 — Controlar o fluxo do programa (if, elif, else)"
+  en: "Python Basics, ch. 8.3 — Control the flow of your program (if, elif, else)"
+pistas:
+  - pt: "O `else` apanha o que sobra, por isso não tem condição."
+    en: "`else` catches what is left, so it has no condition."
+  - pt: "Sem indentação, o Python não sabe que a linha pertence ao ramo."
+    en: "Without indentation, Python does not know the line belongs to the branch."
+atividades:
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Põe as peças do esqueleto pela ordem em que aparecem no Python."
+      en: "Put the pieces of the skeleton in the order they appear in Python."
+    itens:
+      - {id: i1, texto: {pt: "if condição_1:", en: "if condition_1:"}}
+      - {id: i2, texto: {pt: "    # executa se condição_1 for True", en: "    # runs if condition_1 is True"}}
+      - {id: i3, texto: {pt: "elif condição_2:", en: "elif condition_2:"}}
+      - {id: i4, texto: {pt: "    # executa se condição_1 for False e condição_2 for True", en: "    # runs if condition_1 is False and condition_2 is True"}}
+      - {id: i5, texto: {pt: "else:", en: "else:"}}
+      - {id: i6, texto: {pt: "    # executa se nenhuma condição acima for True", en: "    # runs if no condition above is True"}}
+    explicacao:
+      pt: "Primeiro o `if`, depois os `elif` e por fim o `else`, cada um com o seu bloco indentado por baixo."
+      en: "First the `if`, then the `elif`s and finally the `else`, each with its indented block below."
+  - tipo: pergunta
+    enunciado:
+      pt: "Repara nos detalhes do esqueleto."
+      en: "Look at the details of the skeleton."
+    pergunta:
+      pt: "O que é obrigatório numa linha `if`?"
+      en: "What is required on an `if` line?"
+    opcoes:
+      - {pt: "Terminar em dois pontos e ter o bloco seguinte indentado", en: "End with a colon and have the next block indented"}
+      - {pt: "Ter sempre um `else` a seguir", en: "Always be followed by an `else`"}
+      - {pt: "Terminar em ponto e vírgula", en: "End with a semicolon"}
+    resposta: [0]
+    explicacao:
+      pt: "Os dois pontos e a indentação são obrigatórios. O `else` e o `elif` são opcionais."
+      en: "The colon and the indentation are mandatory. `else` and `elif` are optional."
+verificacao:
+  pergunta:
+    pt: "Quando corre o bloco do `else`?"
+    en: "When does the `else` block run?"
+  opcoes:
+    - {pt: "Quando nenhuma das condições anteriores for verdadeira", en: "When none of the previous conditions is true"}
+    - {pt: "Sempre, a seguir ao `if`", en: "Always, right after the `if`"}
+    - {pt: "Quando a condição do `else` for verdadeira", en: "When the `else` condition is true"}
+  resposta: [0]

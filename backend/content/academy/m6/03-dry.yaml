@@ -1,0 +1,71 @@
+id: m6-03-dry
+modulo: m6
+ordem: 3
+titulo: {pt: "DRY: Don't Repeat Yourself", en: "DRY: Don't Repeat Yourself"}
+aprender:
+  pt: |
+    **DRY** quer dizer *Don't Repeat Yourself*: não te repitas. Se a mesma lógica aparece em mais do que um sítio, deve existir **num único sítio** e ser chamada de onde for preciso.
+
+    As vantagens são três:
+
+    - escreves a lógica **uma vez** e testas **uma vez**;
+    - um erro corrige-se **num único sítio**, não em todas as cópias;
+    - o código que chama a função fica mais curto e fácil de ler: diz **o quê**, não **como**.
+
+    Uma função é precisamente essa caixa: um bloco de código com um nome, que chamas sempre que precisares.
+  en: |
+    **DRY** stands for *Don't Repeat Yourself*. If the same logic shows up in more than one place, it should exist **in one single place** and be called from wherever it is needed.
+
+    There are three benefits:
+
+    - you write the logic **once** and test it **once**;
+    - a bug is fixed **in one place**, not in every copy;
+    - the code that calls the function is shorter and easier to read: it says **what**, not **how**.
+
+    A function is exactly that box: a block of code with a name that you call whenever you need it.
+slides:
+  - {deck: funcoes, de: 9, ate: 9}
+pistas:
+  - pt: "Pensa no trabalho de mudar uma mensagem de erro que aparece em 3 sítios."
+    en: "Think about the work of changing an error message that appears in 3 places."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Aplica o princípio DRY."
+      en: "Apply the DRY principle."
+    pergunta:
+      pt: "Quais destas são vantagens de escrever a lógica uma só vez?"
+      en: "Which of these are benefits of writing the logic only once?"
+    opcoes:
+      - {pt: "Um erro corrige-se num único sítio", en: "A bug is fixed in one place"}
+      - {pt: "Testas a lógica uma vez", en: "You test the logic once"}
+      - {pt: "O código que a chama fica mais curto", en: "The code that calls it gets shorter"}
+      - {pt: "O Python passa a correr o dobro da velocidade", en: "Python runs twice as fast"}
+    resposta: [0, 1, 2]
+    explicacao:
+      pt: "DRY dá-te menos código, menos sítios para errar e menos testes. Não acelera o Python."
+      en: "DRY gives you less code, fewer places to go wrong and fewer tests. It does not speed up Python."
+  - tipo: pergunta
+    enunciado:
+      pt: "Decide quando aplicar DRY."
+      en: "Decide when to apply DRY."
+    pergunta:
+      pt: "Quando é que o DRY te manda criar uma função?"
+      en: "When does DRY tell you to create a function?"
+    opcoes:
+      - {pt: "Quando o mesmo bloco de lógica aparece em mais do que um sítio", en: "When the same block of logic appears in more than one place"}
+      - {pt: "Sempre que escreves uma linha de código", en: "Every time you write a line of code"}
+      - {pt: "Só quando o programa tem mais de 100 linhas", en: "Only when the program has more than 100 lines"}
+    resposta: [0]
+    explicacao:
+      pt: "O sinal é o código repetido, não o tamanho do programa."
+      en: "The signal is repeated code, not the size of the program."
+verificacao:
+  pergunta:
+    pt: "O que significa DRY?"
+    en: "What does DRY stand for?"
+  opcoes:
+    - {pt: "Don't Repeat Yourself", en: "Don't Repeat Yourself"}
+    - {pt: "Do Run Yearly", en: "Do Run Yearly"}
+    - {pt: "Data Ready Yesterday", en: "Data Ready Yesterday"}
+  resposta: [0]

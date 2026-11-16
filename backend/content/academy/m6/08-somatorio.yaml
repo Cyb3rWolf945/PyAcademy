@@ -1,0 +1,70 @@
+id: m6-08-somatorio
+modulo: m6
+ordem: 8
+titulo: {pt: "Somatório numa função", en: "A summation in a function"}
+aprender:
+  pt: |
+    Voltemos às duas turmas, agora com o ciclo **embrulhado numa função**. O ciclo de soma passa a existir num único sítio, e para somar uma terceira lista só tens de chamar `soma_lista(...)` outra vez.
+
+    A função recebe a lista (`numeros`), usa um **acumulador** que começa em 0 (somar 0 não muda nada), percorre a lista e **devolve** a soma.
+
+    O mesmo padrão serve para o **produtório** (o fatorial): só muda o valor inicial do acumulador, que passa a **1**, e a operação, que passa a `*`. Se começasse em 0, o resultado seria sempre 0.
+  en: |
+    Back to the two classes, now with the loop **wrapped in a function**. The sum loop now exists in one single place, and to sum a third list you just call `soma_lista(...)` again.
+
+    The function receives the list (`numeros`), uses an **accumulator** that starts at 0 (adding 0 changes nothing), walks the list and **returns** the sum.
+
+    The same pattern works for the **product** (the factorial): only the accumulator's starting value changes, to **1**, and the operation, to `*`. If it started at 0, the result would always be 0.
+exemplo:
+  id: soma-lista
+  titulo: {pt: "Soma de uma lista", en: "Sum of a list"}
+  funcoes:
+    - id: f_soma_lista
+      nome: soma_lista
+      params: "numeros"
+      texto: {pt: "soma_lista(numeros)", en: "soma_lista(numeros)"}
+      corpo:
+        - {id: fd, tipo: definir, texto: {pt: "soma = 0", en: "soma = 0"}, py: "soma = 0"}
+        - id: ff
+          tipo: para
+          texto: {pt: "para cada numero em numeros", en: "for each numero in numeros"}
+          py: "for numero in numeros"
+          corpo:
+            - {id: fc, tipo: calcular, texto: {pt: "soma = soma + numero", en: "soma = soma + numero"}, py: "soma = soma + numero"}
+        - {id: fr, tipo: devolver, texto: {pt: "devolver soma", en: "return soma"}, py: "return soma"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "notas_turma_a = [14, 9, 16, 12]", en: "notas_turma_a = [14, 9, 16, 12]"}, py: "notas_turma_a = [14, 9, 16, 12]"}
+    - {id: d2, tipo: definir, texto: {pt: "notas_turma_b = [18, 7, 15, 20, 11]", en: "notas_turma_b = [18, 7, 15, 20, 11]"}, py: "notas_turma_b = [18, 7, 15, 20, 11]"}
+    - {id: e1, tipo: escrever, texto: {pt: 'escrever "Soma da turma A:" e soma_lista(notas_turma_a)', en: 'write "Soma da turma A:" and soma_lista(notas_turma_a)'}, py: 'print("Soma da turma A:", soma_lista(notas_turma_a))'}
+    - {id: e2, tipo: escrever, texto: {pt: 'escrever "Soma da turma B:" e soma_lista(notas_turma_b)', en: 'write "Soma da turma B:" and soma_lista(notas_turma_b)'}, py: 'print("Soma da turma B:", soma_lista(notas_turma_b))'}
+slides:
+  - {deck: funcoes, de: 17, ate: 18}
+pistas:
+  - pt: "O acumulador tem de ser criado antes do ciclo e devolvido depois dele."
+    en: "The accumulator must be created before the loop and returned after it."
+atividades:
+  - tipo: ordenar_python
+    alvo: f_soma_lista
+    enunciado:
+      pt: "Põe pela ordem as linhas do corpo de soma_lista."
+      en: "Put the lines of the soma_lista body in order."
+    explicacao:
+      pt: "Primeiro o acumulador a 0, depois o ciclo que soma e, no fim, o return. Se o return estivesse dentro do ciclo, a função terminava logo na primeira volta."
+      en: "First the accumulator at 0, then the loop that sums and, at the end, the return. If the return were inside the loop, the function would end on the first pass."
+  - tipo: ligar
+    alvo: f_soma_lista
+    enunciado:
+      pt: "Liga cada bloco de soma_lista à sua linha de Python."
+      en: "Match each soma_lista block to its line of Python."
+    explicacao:
+      pt: "Cada bloco do fluxograma da função tem a sua linha, incluindo a pílula de início, que corresponde ao def."
+      en: "Each block of the function's flowchart has its line, including the start pill, which matches the def."
+verificacao:
+  pergunta:
+    pt: "Numa função que calcula um produtório (fatorial), com que valor começa o acumulador?"
+    en: "In a function that computes a product (factorial), what value does the accumulator start with?"
+  opcoes:
+    - {pt: "0, como no somatório", en: "0, as in the summation"}
+    - {pt: "1, porque multiplicar por 1 não muda nada", en: "1, because multiplying by 1 changes nothing"}
+    - {pt: "O primeiro número da lista, sempre", en: "The first number in the list, always"}
+  resposta: [1]

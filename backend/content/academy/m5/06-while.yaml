@@ -1,0 +1,83 @@
+id: m5-06-while
+modulo: m5
+ordem: 6
+titulo: {pt: "while: repetir enquanto", en: "while: repeat as long as"}
+aprender:
+  pt: |
+    O `while` repete o corpo **enquanto uma condição for `True`**. No fluxograma, é um losango: com **True** executa o corpo e volta ao losango; com **False** sai do ciclo.
+
+    A condição é a mesma de um `if` (comparações, `and`, `or`, `not`), só que é **reavaliada a cada volta**.
+
+    Usamos `while` quando **não sabemos à partida quantas vezes** vai repetir: depende de uma condição, não de uma contagem fixa.
+
+    Exemplo: `contador = 0`, depois `while contador < 5:` com `print(contador)` e `contador = contador + 1`. Escreve 0 1 2 3 4 e pára quando `contador` chega a 5.
+  en: |
+    `while` repeats the body **as long as a condition is `True`**. In the flowchart it is a diamond: on **True** it runs the body and returns to the diamond; on **False** it leaves the loop.
+
+    The condition is the same as in an `if` (comparisons, `and`, `or`, `not`), only it is **re-evaluated on every turn**.
+
+    We use `while` when **we do not know up front how many times** it will repeat: it depends on a condition, not on a fixed count.
+
+    Example: `contador = 0`, then `while contador < 5:` with `print(contador)` and `contador = contador + 1`. It prints 0 1 2 3 4 and stops when `contador` reaches 5.
+exemplo:
+  id: while-contador
+  titulo: {pt: "Contador com while", en: "Counter with while"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "contador = 0", en: "contador = 0"}, py: "contador = 0"}
+    - id: w
+      tipo: enquanto
+      cond: {pt: "contador < 5 ?", en: "contador < 5 ?"}
+      py: "contador < 5"
+      corpo:
+        - {id: e, tipo: escrever, texto: {pt: "escrever contador", en: "write contador"}, py: "print(contador)"}
+        - {id: c, tipo: calcular, texto: {pt: "contador = contador + 1", en: "contador = contador + 1"}, py: "contador = contador + 1"}
+  demoPath: [d, w, e, c, w, e, c, w, e, c]
+slides:
+  - {deck: ciclos, de: 15, ate: 15}
+leitura:
+  pt: "Python Basics, cap. 8.5 — Sair do padrão (ciclos while)"
+  en: "Python Basics, ch. 8.5 — Break out of the pattern (while loops)"
+pistas:
+  - pt: "A condição é avaliada antes de cada volta, incluindo a primeira."
+    en: "The condition is checked before each turn, including the first."
+atividades:
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "O contador tem de existir antes de o `while` o testar."
+      en: "The counter must exist before the `while` tests it."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a condição para escrever de 0 a 4."
+      en: "Complete the condition to print from 0 to 4."
+    lacunas:
+      - {stmt: w, lado: py, modelo: {pt: "contador < ___", en: "contador < ___"}, respostas: ["5"]}
+    explicacao:
+      pt: "Com `contador < 5`, o ciclo pára quando o contador chega a 5, que já não é escrito."
+      en: "With `contador < 5`, the loop stops when the counter reaches 5, which is no longer printed."
+  - tipo: pergunta
+    enunciado:
+      pt: "Escolhe o ciclo certo."
+      en: "Pick the right loop."
+    pergunta:
+      pt: "Quando usamos `while`?"
+      en: "When do we use `while`?"
+    opcoes:
+      - {pt: "Quando não sabemos à partida quantas vezes vai repetir", en: "When we do not know up front how many times it will repeat"}
+      - {pt: "Quando queremos repetir sempre exatamente 10 vezes", en: "When we always want exactly 10 repetitions"}
+      - {pt: "Só quando há números", en: "Only when there are numbers"}
+    resposta: [0]
+    explicacao:
+      pt: "O `while` depende de uma condição, e não de uma contagem fixa."
+      en: "`while` depends on a condition, not on a fixed count."
+verificacao:
+  pergunta:
+    pt: "Quando pára um `while`?"
+    en: "When does a `while` stop?"
+  opcoes:
+    - {pt: "Quando a condição passa a False", en: "When the condition becomes False"}
+    - {pt: "Quando chega ao fim do corpo", en: "When it reaches the end of the body"}
+    - {pt: "Quando o Python se cansa", en: "When Python gets tired"}
+  resposta: [0]

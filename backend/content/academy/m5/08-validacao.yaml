@@ -1,0 +1,82 @@
+id: m5-08-validacao
+modulo: m5
+ordem: 8
+titulo: {pt: "Validação de input com while", en: "Input validation with while"}
+aprender:
+  pt: |
+    Problema: pedir um número **até que seja positivo**. Não sabemos quantas tentativas o utilizador vai precisar, e é por isso que o `while` é a ferramenta certa.
+
+    O padrão tem três passos: **lê** uma vez antes do ciclo; **enquanto** o valor for inválido (`numero <= 0`), avisa e **lê outra vez**; no fim, usa o valor já bom.
+
+    A leitura **dentro** do ciclo é essencial: é ela que atualiza a condição a cada tentativa. Sem ela, o utilizador nunca teria nova oportunidade e o ciclo não acabava.
+  en: |
+    Problem: ask for a number **until it is positive**. We do not know how many attempts the user will need, which is why `while` is the right tool.
+
+    The pattern has three steps: **read** once before the loop; **while** the value is invalid (`numero <= 0`), warn and **read again**; at the end, use the now-good value.
+
+    The read **inside** the loop is essential: it is what updates the condition on every attempt. Without it, the user would never get another chance and the loop would never end.
+exemplo:
+  id: validacao-positivo
+  titulo: {pt: "Pedir um número positivo", en: "Ask for a positive number"}
+  corpo:
+    - {id: l1, tipo: ler, texto: {pt: "ler numero", en: "read numero"}, py: 'numero = float(input("Número positivo: "))'}
+    - id: w
+      tipo: enquanto
+      cond: {pt: "numero <= 0 ?", en: "numero <= 0 ?"}
+      py: "numero <= 0"
+      corpo:
+        - {id: e1, tipo: escrever, texto: {pt: "Inválido, tenta outra vez", en: "Invalid, try again"}, py: 'print("Inválido, tenta outra vez.")'}
+        - {id: l2, tipo: ler, texto: {pt: "ler numero", en: "read numero"}, py: 'numero = float(input("Número positivo: "))'}
+    - {id: e2, tipo: escrever, texto: {pt: "escrever 'Obrigado:' e numero", en: "write 'Obrigado:' and numero"}, py: 'print("Obrigado:", numero)'}
+  demoPath: [l1, w, e1, l2, w, e1, l2, w, e2]
+slides:
+  - {deck: ciclos, de: 16, ate: 16}
+leitura:
+  pt: "Python Basics, cap. 8.5 — Sair do padrão (ciclos while)"
+  en: "Python Basics, ch. 8.5 — Break out of the pattern (while loops)"
+pistas:
+  - pt: "A condição do `while` descreve o que está **errado**, não o que está certo."
+    en: "The `while` condition describes what is **wrong**, not what is right."
+  - pt: "Dentro do ciclo tem de haver algo que possa mudar o `numero`."
+    en: "Inside the loop there must be something that can change `numero`."
+atividades:
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "Lê-se uma vez, valida-se no ciclo e só no fim se agradece."
+      en: "Read once, validate in the loop and only at the end say thanks."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a condição de repetição: repete enquanto o número não for positivo."
+      en: "Complete the repeat condition: repeat while the number is not positive."
+    lacunas:
+      - {stmt: w, lado: py, modelo: {pt: "numero ___ 0", en: "numero ___ 0"}, respostas: ["<="]}
+    explicacao:
+      pt: "O zero também é inválido (não é positivo), por isso `<=` e não `<`."
+      en: "Zero is also invalid (it is not positive), so `<=` and not `<`."
+  - tipo: pergunta
+    enunciado:
+      pt: "Pensa na leitura dentro do ciclo."
+      en: "Think about the read inside the loop."
+    pergunta:
+      pt: "Para que serve o segundo `input` dentro do `while`?"
+      en: "What is the second `input` inside the `while` for?"
+    opcoes:
+      - {pt: "Para atualizar `numero` e a condição poder mudar a cada tentativa", en: "To update `numero` so the condition can change on every attempt"}
+      - {pt: "Para ler dois números ao mesmo tempo", en: "To read two numbers at once"}
+      - {pt: "Não serve para nada", en: "It serves no purpose"}
+    resposta: [0]
+    explicacao:
+      pt: "Sem esta leitura, `numero` nunca mudava e o ciclo repetia para sempre."
+      en: "Without this read, `numero` would never change and the loop would repeat forever."
+verificacao:
+  pergunta:
+    pt: "Porque usamos `while` na validação e não `for`?"
+    en: "Why do we use `while` for validation and not `for`?"
+  opcoes:
+    - {pt: "Porque não sabemos quantas tentativas serão precisas", en: "Because we do not know how many attempts will be needed"}
+    - {pt: "Porque o `for` não funciona com números", en: "Because `for` does not work with numbers"}
+    - {pt: "Porque o `while` é mais rápido", en: "Because `while` is faster"}
+  resposta: [0]

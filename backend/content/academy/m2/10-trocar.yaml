@@ -1,0 +1,129 @@
+id: m2-10-trocar
+modulo: m2
+ordem: 10
+titulo:
+  pt: Trocar valores com aux
+  en: Swapping values with aux
+aprender:
+  pt: |-
+    Problema: ler dois inteiros, trocá-los entre si e mostrar o resultado. Com `a = 3` e `b = 5`, o programa mostra `a = 5 b = 3`.
+
+    Porquê a variável `aux`? Sem ela, `a = b` **apagava o valor de a** antes de o guardarmos. Por isso: primeiro guardas o `a` em `aux`, depois `a = b` e, por fim, `b = aux`.
+
+    Pensa em dois copos com líquidos diferentes: para os trocares, precisas de um terceiro copo vazio. (Em Python existe também `a, b = b, a`.)
+  en: |-
+    Problem: read two integers, swap them and show the result. With `a = 3` and `b = 5`, the program shows `a = 5 b = 3`.
+
+    Why the `aux` variable? Without it, `a = b` would **erase the value of a** before we stored it. So: first store `a` in `aux`, then `a = b` and, finally, `b = aux`.
+
+    Think of two glasses with different drinks: to swap them you need a third, empty glass. (Python also has `a, b = b, a`.)
+exemplo:
+  id: trocar
+  titulo:
+    pt: Trocar valores
+    en: Swapping values
+  corpo:
+  - id: d
+    tipo: definir
+    texto:
+      pt: definir inteiro a, b, aux
+      en: define integer a, b, aux
+    py: null
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler a
+      en: read a
+    py: 'a = int(input("a: "))'
+  - id: l2
+    tipo: ler
+    texto:
+      pt: ler b
+      en: read b
+    py: 'b = int(input("b: "))'
+  - id: c1
+    tipo: calcular
+    texto:
+      pt: aux = a
+      en: aux = a
+    py: aux = a
+  - id: c2
+    tipo: calcular
+    texto:
+      pt: a = b
+      en: a = b
+    py: a = b
+  - id: c3
+    tipo: calcular
+    texto:
+      pt: b = aux
+      en: b = aux
+    py: b = aux
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "a = " + a + " b = " + b
+      en: write "a = " + a + " b = " + b
+    py: print("a =", a, "b =", b)
+slides:
+- deck: aula-2
+  de: 38
+  ate: 38
+pistas:
+- pt: Precisas de um terceiro sítio para guardar um dos valores.
+  en: You need a third place to hold one of the values.
+atividades:
+- tipo: ordenar_python
+  enunciado:
+    pt: Põe as linhas de Python pela ordem certa.
+    en: Put the lines of Python in the right order.
+  explicacao:
+    pt: 'A ordem das três trocas é essencial: guardar, copiar, repor.'
+    en: 'The order of the three swap lines is essential: save, copy, restore.'
+- tipo: completar
+  enunciado:
+    pt: Completa a última troca.
+    en: Complete the last swap.
+  lacunas:
+  - stmt: c3
+    lado: py
+    modelo:
+      pt: b = ___
+      en: b = ___
+    respostas:
+    - aux
+  explicacao:
+    pt: aux guarda o valor antigo de a, que agora vai para b.
+    en: aux holds the old value of a, which now goes to b.
+- tipo: pergunta
+  enunciado:
+    pt: E se fizeres a = b logo no início, sem aux?
+    en: What if you do a = b right at the start, without aux?
+  pergunta:
+    pt: O que se passa?
+    en: What happens?
+  opcoes:
+  - pt: O valor original de a perde-se
+    en: The original value of a is lost
+  - pt: Os valores trocam na mesma
+    en: The values swap anyway
+  - pt: O Python dá erro
+    en: Python raises an error
+  resposta:
+  - 0
+  explicacao:
+    pt: a = b apaga o que havia em a. Já não há como recuperar esse valor para pôr em b.
+    en: a = b erases what was in a. There is no way left to recover that value and put it in b.
+verificacao:
+  pergunta:
+    pt: Para que serve a variável aux?
+    en: What is the aux variable for?
+  opcoes:
+  - pt: Guardar um valor para não o perdermos na troca
+    en: To hold a value so we do not lose it in the swap
+  - pt: Somar a e b
+    en: To add a and b
+  - pt: Ler o teclado
+    en: To read the keyboard
+  resposta:
+  - 0

@@ -1,0 +1,110 @@
+id: m2-05-escapes
+modulo: m2
+ordem: 5
+titulo:
+  pt: '\n e \t: caracteres especiais'
+  en: '\n and \t: special characters'
+aprender:
+  pt: |-
+    Dentro de um texto, certas combinações que começam por `\` não são letras: são **sequências de escape**. Dizem ao computador para fazer algo especial.
+
+    - `\n` muda de linha;
+    - `\t` faz uma tabulação;
+    - `\"` mostra umas aspas dentro do texto;
+    - `\\` mostra uma barra invertida.
+
+    O `print()` já muda de linha sozinho no fim. O `\n` serve para partir o texto em várias linhas **dentro da mesma instrução**.
+  en: |-
+    Inside a text, certain combinations starting with `\` are not letters: they are **escape sequences**. They tell the computer to do something special.
+
+    - `\n` starts a new line;
+    - `\t` makes a tab;
+    - `\"` shows quotes inside the text;
+    - `\\` shows a backslash.
+
+    `print()` already starts a new line by itself at the end. `\n` is for splitting the text into several lines **within the same instruction**.
+exemplo:
+  id: escapes
+  titulo:
+    pt: Mudança de linha e caracteres especiais
+    en: Newlines and special characters
+  corpo:
+  - id: e1
+    tipo: escrever
+    texto:
+      pt: escrever "Linha 1\nLinha 2"
+      en: write "Line 1\nLine 2"
+    py: print("Linha 1\nLinha 2")
+  - id: e2
+    tipo: escrever
+    texto:
+      pt: escrever "Nome:\tAntónio"
+      en: write "Name:\tAntónio"
+    py: print("Nome:\tAntónio")
+  - id: e3
+    tipo: escrever
+    texto:
+      pt: escrever "Disse \"olá\""
+      en: write "He said \"hello\""
+    py: print("Disse \"olá\"")
+  - id: e4
+    tipo: escrever
+    texto:
+      pt: escrever "C:\\dados"
+      en: write "C:\\dados"
+    py: print("C:\\dados")
+slides:
+- deck: aula-2
+  de: 30
+  ate: 30
+pistas:
+- pt: n de nova linha; t de tabulação.
+  en: n for new line; t for tab.
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: Imagina print("A\nB").
+    en: Imagine print("A\nB").
+  pergunta:
+    pt: O que aparece no ecrã?
+    en: What appears on screen?
+  opcoes:
+  - pt: A numa linha e B na linha seguinte
+    en: A on one line and B on the next
+  - pt: A\nB tal e qual
+    en: A\nB exactly as written
+  - pt: AB
+    en: AB
+  resposta:
+  - 0
+  explicacao:
+    pt: 'O \n não se vê: faz o texto continuar na linha seguinte.'
+    en: 'The \n is not shown: it makes the text continue on the next line.'
+- tipo: completar
+  enunciado:
+    pt: Completa para o nome aparecer afastado da etiqueta por uma tabulação.
+    en: Complete so the name is set apart from the label by a tab.
+  lacunas:
+  - stmt: e2
+    lado: py
+    modelo:
+      pt: print("Nome:___António")
+      en: print("Nome:___António")
+    respostas:
+    - \t
+  explicacao:
+    pt: \t é a tabulação, o que dá o espaço largo entre as duas palavras.
+    en: \t is the tab, which gives the wide gap between the two words.
+verificacao:
+  pergunta:
+    pt: Qual sequência muda de linha dentro de um texto?
+    en: Which sequence starts a new line inside a text?
+  opcoes:
+  - pt: \n
+    en: \n
+  - pt: \t
+    en: \t
+  - pt: \\
+    en: \\
+  resposta:
+  - 0

@@ -1,0 +1,119 @@
+id: m2-06-operacoes
+modulo: m2
+ordem: 6
+titulo:
+  pt: Operações e prioridade
+  en: Operations and precedence
+aprender:
+  pt: |-
+    Os operadores são: `+` soma, `-` subtração, `*` multiplicação, `/` divisão, `//` divisão inteira, `%` resto e `**` potência.
+
+    Três diferenças a ter em conta: a potência é `**` (e não `^`); `7 / 2` dá `3.5` (para a parte inteira usa `7 // 2`, que dá `3`); e `input()` devolve texto.
+
+    A **prioridade** é esta: 1.º parênteses, 2.º `**`, 3.º `*`, `/`, `//`, `%`, 4.º `+` e `-`. Com a mesma prioridade, da esquerda para a direita. Por isso `5 + 4 * 3 ** 2 - (1 * 6) * 2` dá `5 + 36 - 12 = 29`.
+  en: |-
+    The operators are: `+` addition, `-` subtraction, `*` multiplication, `/` division, `//` integer division, `%` remainder and `**` power.
+
+    Three differences to keep in mind: power is `**` (not `^`); `7 / 2` gives `3.5` (for the whole part use `7 // 2`, which gives `3`); and `input()` returns text.
+
+    The **precedence** is: 1st parentheses, 2nd `**`, 3rd `*`, `/`, `//`, `%`, 4th `+` and `-`. Same precedence goes left to right. So `5 + 4 * 3 ** 2 - (1 * 6) * 2` gives `5 + 36 - 12 = 29`.
+exemplo:
+  id: prioridade
+  titulo:
+    pt: Operações e prioridade
+    en: Operations and precedence
+  corpo:
+  - id: c
+    tipo: calcular
+    texto:
+      pt: resultado = 5 + 4 * 3 ** 2 - (1 * 6) * 2
+      en: resultado = 5 + 4 * 3 ** 2 - (1 * 6) * 2
+    py: resultado = 5 + 4 * 3 ** 2 - (1 * 6) * 2
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever resultado
+      en: write resultado
+    py: print(resultado)
+slides:
+- deck: aula-2
+  de: 31
+  ate: 31
+leitura:
+  pt: Python Basics, cap. 5 — Números e matemática
+  en: Python Basics, ch. 5 — Numbers and math
+pistas:
+- pt: Faz primeiro o que está entre parênteses, depois as potências.
+  en: Do what is in parentheses first, then the powers.
+atividades:
+- tipo: ordenar_lista
+  enunciado:
+    pt: Põe as operações pela ordem em que o Python as calcula.
+    en: Put the operations in the order Python calculates them.
+  itens:
+  - id: p1
+    texto:
+      pt: Parênteses ( )
+      en: Parentheses ( )
+  - id: p2
+    texto:
+      pt: Potência **
+      en: Power **
+  - id: p3
+    texto:
+      pt: Multiplicação, divisão, // e %
+      en: Multiplication, division, // and %
+  - id: p4
+    texto:
+      pt: Soma e subtração
+      en: Addition and subtraction
+  explicacao:
+    pt: Parênteses primeiro, depois a potência, depois multiplicar e dividir e, por fim, somar e subtrair.
+    en: Parentheses first, then power, then multiply and divide and, finally, add and subtract.
+- tipo: completar
+  enunciado:
+    pt: Completa o operador da potência.
+    en: Complete the power operator.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: resultado = 5 + 4 * 3 ___ 2 - (1 * 6) * 2
+      en: resultado = 5 + 4 * 3 ___ 2 - (1 * 6) * 2
+    respostas:
+    - '**'
+  explicacao:
+    pt: A potência escreve-se ** em Python. 3 ** 2 é 9.
+    en: Power is written ** in Python. 3 ** 2 is 9.
+- tipo: pergunta
+  enunciado:
+    pt: 'Python não é Portugol: repara na divisão.'
+    en: 'Python is not Portugol: mind the division.'
+  pergunta:
+    pt: Quanto dá 7 // 2?
+    en: What is 7 // 2?
+  opcoes:
+  - pt: '3'
+    en: '3'
+  - pt: '3.5'
+    en: '3.5'
+  - pt: '4'
+    en: '4'
+  resposta:
+  - 0
+  explicacao:
+    pt: '// é a divisão inteira: fica só a parte inteira, 3. O 7 / 2 é que dá 3.5.'
+    en: '// is integer division: only the whole part, 3, is kept. It is 7 / 2 that gives 3.5.'
+verificacao:
+  pergunta:
+    pt: Quanto dá 2 ** 3?
+    en: What is 2 ** 3?
+  opcoes:
+  - pt: '6'
+    en: '6'
+  - pt: '8'
+    en: '8'
+  - pt: '9'
+    en: '9'
+  resposta:
+  - 1

@@ -1,0 +1,83 @@
+id: m7-04-append
+modulo: m7
+ordem: 4
+titulo: {pt: "Construir uma lista com append", en: "Building a list with append"}
+aprender:
+  pt: |
+    Muitas vezes a lista não existe à partida: vais **construí-la** à medida que lês os valores. Começas com uma **lista vazia**, `notas = []`, e usas `notas.append(nota)` para **acrescentar ao fim**.
+
+    Padrão: ler `n`, repetir `n` vezes (`for i in range(n)`), em cada volta **ler** um valor e fazê-lo `append`. No fim, a lista tem `n` elementos pela ordem de entrada.
+
+    Atenção: `append` **altera a lista** e não devolve nada. Escreve `notas.append(nota)` sozinho, sem `notas = notas.append(...)`.
+  en: |
+    Often the list does not exist up front: you **build it** as you read values. You start with an **empty list**, `notas = []`, and use `notas.append(nota)` to **add to the end**.
+
+    Pattern: read `n`, repeat `n` times (`for i in range(n)`), on each turn **read** a value and `append` it. At the end, the list has `n` elements in input order.
+
+    Careful: `append` **changes the list** and returns nothing. Write `notas.append(nota)` on its own, never `notas = notas.append(...)`.
+exemplo:
+  id: construir-lista
+  titulo: {pt: "Ler N notas para uma lista", en: "Reading N marks into a list"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "n = 0", en: "n = 0"}, py: "n = 0"}
+    - {id: d2, tipo: definir, texto: {pt: "nota = 0", en: "nota = 0"}, py: "nota = 0"}
+    - {id: d3, tipo: definir, texto: {pt: "notas = []", en: "notas = []"}, py: "notas = []"}
+    - {id: l1, tipo: ler, texto: {pt: "ler n", en: "read n"}, py: 'n = int(input("Quantas notas? "))'}
+    - id: p
+      tipo: para
+      texto: {pt: "para i de 0 a n-1", en: "for i from 0 to n-1"}
+      py: "for i in range(n)"
+      corpo:
+        - {id: l2, tipo: ler, texto: {pt: "ler nota", en: "read nota"}, py: 'nota = float(input("Nota: "))'}
+        - {id: c, tipo: calcular, texto: {pt: "notas.append(nota)", en: "notas.append(nota)"}, py: "notas.append(nota)"}
+    - {id: e, tipo: escrever, texto: {pt: "escrever notas", en: "write notas"}, py: "print(notas)"}
+  demoPath: [d1, d2, d3, l1, p, l2, c, p, l2, c, p, l2, c, p, e]
+slides:
+  - {deck: funcoes, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 9.2 — Listas"
+  en: "Python Basics, ch. 9.2 — Lists"
+pistas:
+  - pt: "A lista começa vazia, antes do ciclo."
+    en: "The list starts empty, before the loop."
+atividades:
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa (o ciclo conta como um bloco)."
+      en: "Put the pieces of the program in the right order (the loop counts as one block)."
+    explicacao:
+      pt: "Inicializa-se tudo (a lista vazia incluída), lê-se `n`, corre-se o ciclo e só no fim se escreve a lista."
+      en: "Initialise everything (the empty list included), read `n`, run the loop and only at the end write the list."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a linha que acrescenta a nota à lista."
+      en: "Complete the line that adds the mark to the list."
+    lacunas:
+      - {stmt: c, lado: py, modelo: {pt: "notas.___(nota)", en: "notas.___(nota)"}, respostas: ["append"]}
+    explicacao:
+      pt: "`append` acrescenta ao fim da lista."
+      en: "`append` adds to the end of the list."
+  - tipo: pergunta
+    enunciado:
+      pt: "Com `n = 3` e as notas 14, 9 e 16 (nesta ordem)."
+      en: "With `n = 3` and marks 14, 9 and 16 (in this order)."
+    pergunta:
+      pt: "O que escreve o último `print(notas)`?"
+      en: "What does the last `print(notas)` write?"
+    opcoes:
+      - {pt: "[14.0, 9.0, 16.0]", en: "[14.0, 9.0, 16.0]"}
+      - {pt: "[16.0, 9.0, 14.0]", en: "[16.0, 9.0, 14.0]"}
+      - {pt: "[]", en: "[]"}
+    resposta: [0]
+    explicacao:
+      pt: "`append` acrescenta ao fim, por isso a ordem de entrada mantém-se. Como usámos `float`, aparecem com `.0`."
+      en: "`append` adds to the end, so input order is kept. Since we used `float`, they show with `.0`."
+verificacao:
+  pergunta:
+    pt: "Como começa uma lista que vais construir com `append`?"
+    en: "How does a list you will build with `append` start?"
+  opcoes:
+    - {pt: "Vazia: `notas = []`", en: "Empty: `notas = []`"}
+    - {pt: "Com zeros: `notas = 0`", en: "With zeros: `notas = 0`"}
+    - {pt: "Sem declarar", en: "Undeclared"}
+  resposta: [0]

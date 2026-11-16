@@ -1,7 +1,7 @@
 // Fluxograma vetorial (SVG) no estilo limpo dos slides do professor: pílula verde, paralelogramo e retângulo lilás,
 // losango azul-escuro, setas finas. NÃO é pixel art. Desenha-se a partir do modelo (model.js), por isso bate sempre
 // certo com o Python. Todo o SVG é criado com createElementNS (nunca HTML em bruto); as cores vêm do CSS (.fx-*).
-import { pickText, labelOf, familyOf } from "./model.js";
+import { pickText, labelOf, familyOf, fnSignature, allStmts } from "./model.js";
 import { t, getLocale } from "../../services/i18n.js";
 import { el } from "../dom.js";
 
@@ -44,35 +44,38 @@ function shapeNode(kind, s, locale, text) {
   const th = lines.length * LH;
   let w, h;
   if (isDec) { w = Math.max(120, tw / 0.6 + 12); h = Math.max(64, th / 0.35); }
-  else if (kind === "pill") { w = Math.max(96, tw + 44); h = 38; }
-  else { w = Math.max(100, tw + 2 * 12 + (kind === "io" ? 2 * SKEW : 0)); h = Math.max(40, th + 18); }
+  else if (kind === "pill") { w = Math.max(96, tw + 44); h = Math.max(38, th + 16); }
+  else { w = Math.max(100, tw + 2 * 12 + (kind === "io" ? 2 * SKEW : kind === "call" ? 24 : 0)); h = Math.max(40, th + 18); }
   return { w, h, lines, stmt: s };
 }
 
 function layoutNode(kind, s, text, locale) {
   const n = shapeNode(kind, s, locale, text);
   return {
-    l: n.w / 2, r: n.w / 2, h: n.h, dw: n.w, dh: n.h,
+    l: n.w / 2, r: n.w / 2, h: n.h, dw: n.w, dh: n.h, terminal: s?.tipo === "devolver",
     items: [{ shape: kind, stmtId: s?.id ?? null, tipo: s?.tipo ?? kind, text, lines: n.lines, x: -n.w / 2, y: 0, w: n.w, h: n.h }],
   };
 }
 
 function layoutSeq(stmts, locale) {
   const items = [];
-  let y = 0, l = 0, r = 0, prevBottom = null;
+  let y = 0, l = 0, r = 0, prevBottom = null, terminal = false;
   for (const s of stmts) {
     const lay = layoutStmt(s, locale);
-    if (prevBottom != null) items.push(edge([[0, prevBottom], [0, y]]));
+    if (prevBottom != null && !terminal) items.push(edge([[0, prevBottom], [0, y]]));
+    terminal = !!lay.terminal;
     items.push(...shift(lay.items, 0, y));
     l = Math.max(l, lay.l); r = Math.max(r, lay.r);
     prevBottom = y + lay.h;
     y = prevBottom + GAP;
   }
-  return { l, r, h: prevBottom ?? 0, items };
+  return { l, r, h: prevBottom ?? 0, items, terminal };
 }
 
 function layoutStmt(s, locale) {
-  if (s.tipo === "inicio" || s.tipo === "fim") return layoutNode("pill", s, s.label, locale);
+  if (s.tipo === "inicio" || s.tipo === "fim" || s.tipo === "funcao") return layoutNode("pill", s, s.label, locale);
+  if (s.tipo === "devolver") return layoutNode("pill", s, labelOf(s, locale), locale);
+  if (s.tipo === "chamar") return layoutNode("call", s, labelOf(s, locale), locale);
   if (s.tipo === "se") return layoutSe(s, locale);
   if (s.tipo === "enquanto" || s.tipo === "para") return layoutLoop(s, locale);
   return layoutNode(familyOf(s.tipo), s, labelOf(s, locale), locale);
@@ -97,14 +100,15 @@ function layoutSe(s, locale) {
     if (branch.items.length) {
       items.push(edge([[vx, cy], [a, cy], [a, y0]], true, { text: label, x: a + (anchor === "end" ? -7 : 7), y: cy + 20, anchor }));
       items.push(...shift(branch.items, a, y0));
-      items.push(edge([[a, bottom], [a, joinY], [0, joinY]], false));
+      if (!branch.terminal) items.push(edge([[a, bottom], [a, joinY], [0, joinY]], false)); // um `devolver` termina o ramo: não junta ao fim comum
     } else {
       items.push(edge([[vx, cy], [a, cy], [a, joinY], [0, joinY]], false, { text: label, x: a + (anchor === "end" ? -7 : 7), y: cy + 20, anchor }));
     }
   };
   side(aL, sim, bottomL, -dw / 2, t("fx.yes"), "end");
   side(aR, nao, bottomR, dw / 2, t("fx.no"), "start");
-  return { l: Math.max(-aL + sim.l, dw / 2), r: Math.max(aR + nao.r, dw / 2), h: joinY, items };
+  const bothEnd = sim.items.length && nao.items.length && sim.terminal && nao.terminal; // os dois ramos terminam: nada depois
+  return { l: Math.max(-aL + sim.l, -aL + 34, dw / 2), r: Math.max(aR + nao.r, aR + 34, dw / 2), h: bothEnd ? Math.max(bottomL, bottomR) : joinY, items, terminal: !!bothEnd };
 }
 
 function layoutLoop(s, locale) {
@@ -152,7 +156,9 @@ function drawShape(it) {
   else if (it.shape === "dec") shape = svgEl("polygon", { points: `${cx},${y} ${x + w},${cy} ${cx},${y + h} ${x},${cy}` });
   else shape = svgEl("rect", { x, y, width: w, height: h });
   shape.setAttribute("class", "fx-shape");
-  return [shape, drawText(it.lines, cx, cy)];
+  const extra = it.shape === "call" // processo pré-definido: retângulo com duas barras verticais junto às margens
+    ? [svgEl("line", { class: "fx-bar", x1: x + 9, y1: y, x2: x + 9, y2: y + h }), svgEl("line", { class: "fx-bar", x1: x + w - 9, y1: y, x2: x + w - 9, y2: y + h })] : [];
+  return [shape, ...extra, drawText(it.lines, cx, cy)];
 }
 
 function drawEdge(e) {
@@ -173,49 +179,106 @@ function drawEdge(e) {
   return g;
 }
 
-// renderFlowchart(container, program, {locale, onSelect, highlight}) -> {select(stmtId), clear(), destroy(), relayout()}
-export function renderFlowchart(container, program, { locale = getLocale(), onSelect, highlight = null } = {}) {
-  const lay = layoutSeq([
-    { tipo: "inicio", id: null, label: t("fx.start") },
-    ...program.corpo,
-    { tipo: "fim", id: null, label: t("fx.end") },
-  ], locale);
-  const minX = -lay.l - MARGIN, W = lay.l + lay.r + 2 * MARGIN, H = lay.h + 2 * MARGIN;
-  // O texto nunca desce abaixo de ~13 px: o SVG não encolhe além de 93% do tamanho natural (o cartão faz scroll se faltar largura)
-  const svg = svgEl("svg", { class: "fx-svg", viewBox: `${minX} ${-MARGIN} ${W} ${H}`, width: Math.round(W), height: Math.round(H), role: "group", "aria-label": pickText(program.titulo, locale) });
-  const nodes = new Map(); // stmtId -> <g>
-  const edges = svgEl("g"), shapes = svgEl("g");
-  svg.append(edges, shapes);
-  for (const it of lay.items) {
-    if (it.points) { edges.append(drawEdge(it)); continue; }
-    const g = svgEl("g", { class: `fx-block fx-${it.shape}`, "data-stmt": it.stmtId ?? "" });
-    g.append(...drawShape(it));
-    if (it.stmtId) {
-      g.setAttribute("role", "button");
-      g.setAttribute("tabindex", "0");
-      g.setAttribute("aria-pressed", "false");
-      g.setAttribute("aria-label", `${t(`fx.k_${it.tipo}`)}: ${it.text}`);
-      nodes.set(it.stmtId, g);
-      const pick = () => { select(it.stmtId); onSelect?.(it.stmtId); };
-      g.addEventListener("click", pick);
-      g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pick(); } });
-    }
-    shapes.append(g);
+// Um ramo/corpo "termina" se acaba num `devolver` (ou num `se` em que os dois ramos terminam): não leva pílula "Fim"
+const endsTerminal = (stmts) => {
+  const last = stmts[stmts.length - 1];
+  if (!last) return false;
+  if (last.tipo === "devolver") return true;
+  return last.tipo === "se" && endsTerminal(last.sim || []) && endsTerminal(last.nao || []);
+};
+
+// renderFlowchart(container, program, {locale, onSelect, highlight, alvo}) -> {select(stmtId), clear(), destroy(), ids()}
+// Desenha o programa principal e, ao lado (por baixo se não couber), cada função como um fluxograma à parte.
+// Com `alvo` (id de uma função) desenha só essa função.
+export function renderFlowchart(container, program, { locale = getLocale(), onSelect, highlight = null, alvo = null } = {}) {
+  const funcs = (program.funcoes || []).filter((f) => !alvo || f.id === alvo);
+  const showMain = !alvo && !((program.corpo || []).length === 0 && funcs.length);
+  const charts = [];
+  if (showMain) charts.push({ title: funcs.length ? t("fx.main") : null, label: pickText(program.titulo, locale), stmts: [{ tipo: "inicio", id: null, label: t("fx.start") }, ...program.corpo, { tipo: "fim", id: null, label: t("fx.end") }] });
+  for (const f of funcs) {
+    const body = f.corpo || [];
+    charts.push({ title: fnSignature(f), fn: f, label: fnSignature(f), stmts: [{ tipo: "funcao", id: f.id, label: fnSignature(f) }, ...body, ...(endsTerminal(body) ? [] : [{ tipo: "fim", id: null, label: t("fx.end") }])] });
   }
-  // Cartão: barra com o botão "Ver inteiro / Tamanho legível" e a dica de scroll, e a zona com o SVG
+
+  const nodes = new Map(); // stmtId -> <g>
+  const titles = new Map(); // funcao.id -> título
+  const all = new Map([...allStmts(program)].map((x) => [x.id, x]));
+  const names = (program.funcoes || []).map((f) => [f.nome, f.id]);
+  const fnOfStmt = (id) => {
+    if (titles.has(id)) return id; // a própria pílula de início da função
+    const st = all.get(id);
+    if (!st?.py) return null;
+    return names.find(([nome]) => new RegExp(`\\b${nome}\\s*\\(`).test(st.py))?.[1] ?? null; // chamadas a funções do programa
+  };
+  const svgs = [];
+  const multi = el("div", { class: "fx-multi" });
+  let current = null;
+
+  function select(id, { scroll = false } = {}) {
+    clear();
+    const g = nodes.get(id);
+    if (!g) return;
+    current = id;
+    g.classList.add("is-selected");
+    g.setAttribute("aria-pressed", "true");
+    const fid = fnOfStmt(id);
+    if (fid) titles.get(fid)?.classList.add("is-called"); // realça o título da função chamada
+    if (scroll) g.scrollIntoView?.({ block: "nearest", inline: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+  function clear() {
+    if (current) {
+      const g = nodes.get(current);
+      g?.classList.remove("is-selected");
+      g?.setAttribute("aria-pressed", "false");
+    }
+    for (const h of titles.values()) h.classList.remove("is-called");
+    current = null;
+  }
+
+  for (const c of charts) {
+    const lay = layoutSeq(c.stmts, locale);
+    const minX = -lay.l - MARGIN, W = lay.l + lay.r + 2 * MARGIN, H = lay.h + 2 * MARGIN;
+    const svg = svgEl("svg", { class: "fx-svg", viewBox: `${minX} ${-MARGIN} ${W} ${H}`, width: Math.round(W), height: Math.round(H), role: "group", "aria-label": c.label });
+    const edges = svgEl("g"), shapes = svgEl("g");
+    svg.append(edges, shapes);
+    for (const it of lay.items) {
+      if (it.points) { edges.append(drawEdge(it)); continue; }
+      const g = svgEl("g", { class: `fx-block fx-${it.shape}`, "data-stmt": it.stmtId ?? "" });
+      g.append(...drawShape(it));
+      if (it.stmtId) {
+        g.setAttribute("role", "button");
+        g.setAttribute("tabindex", "0");
+        g.setAttribute("aria-pressed", "false");
+        g.setAttribute("aria-label", `${t(`fx.k_${it.tipo}`)}: ${it.text}`);
+        nodes.set(it.stmtId, g);
+        const pick = () => { select(it.stmtId); onSelect?.(it.stmtId); };
+        g.addEventListener("click", pick);
+        g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pick(); } });
+      }
+      shapes.append(g);
+    }
+    svgs.push({ svg, W });
+    const title = c.title ? el("h4", { class: `fx-fn-title${c.fn ? " is-fn" : ""}`, "data-fn": c.fn?.id ?? "" }, c.title) : null;
+    if (c.fn) titles.set(c.fn.id, title);
+    multi.append(el("div", { class: "fx-chart-item" }, ...(title ? [title] : []), svg));
+  }
+
+  // Cartão: barra com o botão "Ver inteiro / Tamanho legível" e a dica de scroll, e a zona com os SVG
   const FLOOR = 0.93;
   const store = { get() { try { return sessionStorage.getItem("fx.fit") === "1"; } catch (_) { return false; } }, set(v) { try { sessionStorage.setItem("fx.fit", v ? "1" : "0"); } catch (_) { /* ignora */ } } };
   let fitAll = store.get();
   const toggle = el("button", { type: "button", class: "fx-toggle", hidden: true });
   const hint = el("span", { class: "fx-hint", hidden: true });
   const bar = el("div", { class: "fx-bar" }, hint, toggle);
-  const scroller = el("div", { class: "fx-scroll" }, svg);
+  const scroller = el("div", { class: "fx-scroll" }, multi);
   const wrapEl = el("div", { class: "fx-scroll-wrap" }, scroller);
   container.classList.add("fx-chart");
   container.replaceChildren(bar, wrapEl);
+  const maxW = Math.max(...svgs.map((x) => x.W));
   function refresh() {
-    svg.style.minWidth = fitAll ? "0" : `${Math.round(W * FLOOR)}px`;
-    const narrow = scroller.clientWidth < W * FLOOR - 1; // o diagrama não cabe no tamanho legível
+    // O texto nunca desce abaixo de ~13 px: cada SVG não encolhe além de 93% do tamanho natural (os gráficos passam para a linha de baixo)
+    for (const { svg, W } of svgs) svg.style.minWidth = fitAll ? "0" : `${Math.round(W * FLOOR)}px`;
+    const narrow = scroller.clientWidth < maxW * FLOOR - 1;
     toggle.hidden = !narrow;
     toggle.textContent = fitAll ? t("fx.fit_readable") : t("fx.fit_all");
     toggle.setAttribute("aria-pressed", String(fitAll));
@@ -229,27 +292,9 @@ export function renderFlowchart(container, program, { locale = getLocale(), onSe
   const ro = new ResizeObserver(refresh);
   ro.observe(scroller);
   refresh();
-  if (!fitAll && scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2; // começa centrado no eixo
+  if (!fitAll && scroller.scrollWidth > scroller.clientWidth && svgs.length === 1) scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2; // começa centrado no eixo
   requestAnimationFrame(refresh);
 
-  let current = null;
-  function select(id, { scroll = false } = {}) {
-    clear();
-    const g = nodes.get(id);
-    if (!g) return;
-    current = id;
-    g.classList.add("is-selected");
-    g.setAttribute("aria-pressed", "true");
-    if (scroll) g.scrollIntoView?.({ block: "nearest", inline: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  }
-  function clear() {
-    if (current) {
-      const g = nodes.get(current);
-      g?.classList.remove("is-selected");
-      g?.setAttribute("aria-pressed", "false");
-    }
-    current = null;
-  }
   if (highlight) select(highlight);
   return { select, clear, destroy() { ro.disconnect(); container.replaceChildren(); }, get selected() { return current; }, ids: () => [...nodes.keys()] };
 }

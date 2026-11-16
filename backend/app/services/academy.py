@@ -117,14 +117,17 @@ def _shuffled(items: list, seed: str) -> list:
 
 
 def _stmt_ids(sec: ac.Section, a) -> list[str]:
-    """Ids da atividade por ordem do programa: ligar = todos os stmts com py; ordenar_python = 1.º nível com py;
+    """Ids da atividade por ordem do programa, no âmbito certo (programa principal ou função `alvo`):
+    ligar = stmts com py (e, sem alvo, também as funções: pílula ↔ linha def); ordenar_python = 1.º nível com py;
     ordenar_fluxograma = 1.º nível."""
+    ex = sec.exemplo
+    body = ac.scope_body(ex, a.alvo)
     if a.tipo == "ligar":
-        pool = [s.id for s in ac.walk(sec.exemplo.corpo) if s.py]
+        pool = ([f.id for f in ex.funcoes] if a.alvo is None else []) + [s.id for s in ac.walk(body) if s.py]
     elif a.tipo == "ordenar_python":
-        pool = [s.id for s in sec.exemplo.corpo if s.py]
+        pool = [s.id for s in body if s.py]
     else:
-        pool = [s.id for s in sec.exemplo.corpo]
+        pool = [s.id for s in body]
     return [i for i in pool if a.ids is None or i in a.ids]
 
 
@@ -132,6 +135,8 @@ def activity_public(sec: ac.Section, idx: int, user_id: int) -> dict:
     a = sec.atividades[idx]
     seed = f"{user_id}:{sec.id}:{idx}"
     base = {"idx": idx, "tipo": a.tipo, "enunciado": a.enunciado.model_dump()}
+    if getattr(a, "alvo", None):
+        base["alvo"] = a.alvo  # função onde a atividade trabalha
     if a.tipo == "ligar":
         ids = _stmt_ids(sec, a)
         base["ids"], base["linhas"] = ids, _shuffled(ids, seed)  # a coluna do Python nunca vem por ordem

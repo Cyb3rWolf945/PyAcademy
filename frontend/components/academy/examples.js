@@ -67,4 +67,88 @@ export const EXAMPLES = [
   },
 ];
 
+// ---- Funções (deck "modularização": slides 14, 15, 17, 19). Python igual ao dos slides, sem os números de linha. ----
+const tx = (pt, en) => ({ pt, en });
+
+EXAMPLES.push(
+  {
+    id: "soma-lista-turmas",
+    titulo: tx("Soma de duas turmas com uma função", "Sum of two classes with one function"),
+    funcoes: [{
+      id: "f", nome: "soma_lista", params: "numeros",
+      corpo: [
+        { id: "f1", tipo: "definir", texto: tx("soma = 0", "soma = 0"), py: "soma = 0" },
+        {
+          id: "fp", tipo: "para", texto: tx("para cada numero em numeros", "for each numero in numeros"), py: "for numero in numeros",
+          corpo: [{ id: "f2", tipo: "calcular", texto: tx("soma = soma + numero", "soma = soma + numero"), py: "soma = soma + numero" }],
+        },
+        { id: "f3", tipo: "devolver", texto: tx("Devolver soma", "Return soma"), py: "return soma" },
+      ],
+    }],
+    corpo: [
+      { id: "ta", tipo: "definir", texto: tx("notas_turma_a = [14, 9, 16, 12]", "notas_turma_a = [14, 9, 16, 12]"), py: "notas_turma_a = [14, 9, 16, 12]" },
+      { id: "tb", tipo: "definir", texto: tx("notas_turma_b = [18, 7, 15, 20, 11]", "notas_turma_b = [18, 7, 15, 20, 11]"), py: "notas_turma_b = [18, 7, 15, 20, 11]" },
+      { id: "ca", tipo: "chamar", branco_antes: true, texto: tx('escrever "Soma da turma A:" e soma_lista(notas_turma_a)', 'write "Sum of class A:" and soma_lista(notas_turma_a)'), py: 'print("Soma da turma A:", soma_lista(notas_turma_a))' },
+      { id: "cb", tipo: "chamar", texto: tx('escrever "Soma da turma B:" e soma_lista(notas_turma_b)', 'write "Sum of class B:" and soma_lista(notas_turma_b)'), py: 'print("Soma da turma B:", soma_lista(notas_turma_b))' },
+    ],
+    demoPath: ["ta", "tb", "ca", "f", "f1", "fp", "f2", "fp", "f2", "fp", "f3", "cb", "f"],
+  },
+  {
+    id: "dobro-return",
+    titulo: tx("dobro com return", "dobro with return"),
+    funcoes: [{
+      id: "f", nome: "dobro", params: "numero",
+      corpo: [{ id: "f1", tipo: "devolver", texto: tx("Devolver numero * 2", "Return numero * 2"), py: "return numero * 2" }],
+    }],
+    corpo: [
+      { id: "c", tipo: "chamar", texto: tx("resultado = dobro(5)", "resultado = dobro(5)"), py: "resultado = dobro(5)" },
+      { id: "e", tipo: "escrever", texto: tx("escrever resultado", "write resultado"), py: "print(resultado)" },
+    ],
+    demoPath: ["c", "f", "f1", "e"],
+  },
+  {
+    id: "media-segura",
+    titulo: tx("Vários return: media_segura", "Several returns: media_segura"),
+    funcoes: [{
+      id: "f", nome: "media_segura", params: "numeros",
+      corpo: [
+        {
+          id: "s", tipo: "se", cond: tx("len(numeros) == 0 ?", "len(numeros) == 0 ?"), py: "len(numeros) == 0",
+          sim: [{ id: "r1", tipo: "devolver", texto: tx('Devolver "não"', 'Return "não"'), py: 'return "não"' }], nao: [],
+        },
+        { id: "r2", tipo: "devolver", texto: tx("Devolver soma_lista(numeros) / len(numeros)", "Return soma_lista(numeros) / len(numeros)"), py: "return soma_lista(numeros) / len(numeros)" },
+      ],
+    }],
+    corpo: [],
+    demoPath: ["f", "s", "r1"],
+  },
+  {
+    id: "pedir-numero-positivo",
+    titulo: tx("Validação sem repetir", "Validation without repeating"),
+    funcoes: [{
+      id: "f", nome: "pedir_numero_positivo", params: "mensagem",
+      corpo: [
+        { id: "f1", tipo: "definir", texto: tx("valor = -1", "valor = -1"), py: "valor = -1" },
+        {
+          id: "w", tipo: "enquanto", cond: tx("valor <= 0 ?", "valor <= 0 ?"), py: "valor <= 0",
+          corpo: [
+            { id: "l", tipo: "ler", texto: tx("ler valor", "read valor"), py: "valor = int(input(mensagem))" },
+            {
+              id: "s", tipo: "se", cond: tx("valor <= 0 ?", "valor <= 0 ?"), py: "valor <= 0",
+              sim: [{ id: "e", tipo: "escrever", texto: tx("Tem de ser um número positivo.", "It must be a positive number."), py: 'print("Tem de ser um número positivo.")' }], nao: [],
+            },
+          ],
+        },
+        { id: "r", tipo: "devolver", texto: tx("Devolver valor", "Return valor"), py: "return valor" },
+      ],
+    }],
+    corpo: [
+      { id: "c1", tipo: "chamar", texto: tx('idade = pedir_numero_positivo("Idade: ")', 'idade = pedir_numero_positivo("Idade: ")'), py: 'idade = pedir_numero_positivo("Idade: ")' },
+      { id: "c2", tipo: "chamar", texto: tx('peso = pedir_numero_positivo("Peso: ")', 'peso = pedir_numero_positivo("Peso: ")'), py: 'peso = pedir_numero_positivo("Peso: ")' },
+      { id: "c3", tipo: "chamar", texto: tx('altura = pedir_numero_positivo("Altura: ")', 'altura = pedir_numero_positivo("Altura: ")'), py: 'altura = pedir_numero_positivo("Altura: ")' },
+    ],
+    demoPath: ["c1", "f", "f1", "w", "l", "s", "e", "w", "l", "s", "w", "r", "c2"],
+  },
+);
+
 export const exampleById = (id) => EXAMPLES.find((e) => e.id === id) || EXAMPLES[0];

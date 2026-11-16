@@ -1,0 +1,90 @@
+id: m7-06-maximo
+modulo: m7
+ordem: 6
+titulo: {pt: "O maior valor à mão", en: "The largest value by hand"}
+aprender:
+  pt: |
+    **Requisito:** dada uma lista **não vazia** de notas, escrever a maior, **sem usar `max()`**.
+
+    Ideia: começa por assumir que o **primeiro** elemento é o maior (`maximo = notas[0]`). Depois percorre a lista e, sempre que encontras um valor **maior** do que o `maximo`, atualizas o `maximo`.
+
+    No fim, `maximo` tem o maior valor. Repara que o `if` só tem ramo **Sim**: quando a condição é falsa, não há nada a fazer e o ciclo segue.
+
+    Porque não começar com `maximo = 0`? Com notas todas negativas, o resultado estaria errado. Começar no primeiro elemento é seguro.
+  en: |
+    **Requirement:** given a **non-empty** list of marks, write the largest one, **without using `max()`**.
+
+    Idea: start by assuming the **first** element is the largest (`maximo = notas[0]`). Then go through the list and, whenever you find a value **larger** than `maximo`, update `maximo`.
+
+    At the end, `maximo` holds the largest value. Notice that the `if` only has a **Yes** branch: when the condition is false there is nothing to do and the loop goes on.
+
+    Why not start with `maximo = 0`? With all-negative values the result would be wrong. Starting at the first element is safe.
+exemplo:
+  id: maximo-lista
+  titulo: {pt: "A melhor nota", en: "The best mark"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "notas = [14, 9, 16, 12]", en: "notas = [14, 9, 16, 12]"}, py: "notas = [14, 9, 16, 12]"}
+    - {id: d2, tipo: definir, texto: {pt: "maximo = notas[0]", en: "maximo = notas[0]"}, py: "maximo = notas[0]"}
+    - id: p
+      tipo: para
+      texto: {pt: "para cada nota em notas", en: "for each nota in notas"}
+      py: "for nota in notas"
+      corpo:
+        - id: s
+          tipo: se
+          cond: {pt: "nota > maximo ?", en: "nota > maximo ?"}
+          py: "nota > maximo"
+          sim:
+            - {id: c, tipo: calcular, texto: {pt: "maximo = nota", en: "maximo = nota"}, py: "maximo = nota"}
+          nao: []
+    - {id: e, tipo: escrever, texto: {pt: 'escrever "Máximo:" e maximo', en: 'write "Máximo:" and maximo'}, py: 'print("Máximo:", maximo)'}
+  demoPath: [d1, d2, p, s, p, s, p, s, c, p, s, p, e]
+slides:
+  - {deck: funcoes, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 9.2 — Listas"
+  en: "Python Basics, ch. 9.2 — Lists"
+pistas:
+  - pt: "O primeiro elemento é o melhor candidato até prova em contrário."
+    en: "The first element is the best candidate until proven otherwise."
+atividades:
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "A lista e o candidato inicial vêm antes do ciclo, e o resultado só se escreve depois."
+      en: "The list and the initial candidate come before the loop, and the result is only written afterwards."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a condição."
+      en: "Complete the condition."
+    lacunas:
+      - {stmt: s, lado: py, modelo: {pt: "nota ___ maximo", en: "nota ___ maximo"}, respostas: [">"]}
+    explicacao:
+      pt: "Só atualizamos quando a nota é **maior** do que o máximo atual."
+      en: "We only update when the mark is **larger** than the current maximum."
+  - tipo: pergunta
+    enunciado:
+      pt: "Segue o programa com `[14, 9, 16, 12]`."
+      en: "Follow the program with `[14, 9, 16, 12]`."
+    pergunta:
+      pt: "Quantas vezes é executado `maximo = nota`?"
+      en: "How many times is `maximo = nota` executed?"
+    opcoes:
+      - {pt: "1 vez, só com o 16", en: "1 time, only with 16"}
+      - {pt: "4 vezes", en: "4 times"}
+      - {pt: "0 vezes", en: "0 times"}
+    resposta: [0]
+    explicacao:
+      pt: "O máximo começa em 14. Só o 16 é maior, e o 12 já não vence o 16."
+      en: "The maximum starts at 14. Only 16 is larger, and 12 does not beat 16."
+verificacao:
+  pergunta:
+    pt: "Porque é que `maximo` começa em `notas[0]` e não em 0?"
+    en: "Why does `maximo` start at `notas[0]` and not 0?"
+  opcoes:
+    - {pt: "Porque funciona sempre, mesmo com valores negativos", en: "Because it always works, even with negative values"}
+    - {pt: "Porque o 0 não é um número válido", en: "Because 0 is not a valid number"}
+    - {pt: "Porque o Python obriga", en: "Because Python requires it"}
+  resposta: [0]

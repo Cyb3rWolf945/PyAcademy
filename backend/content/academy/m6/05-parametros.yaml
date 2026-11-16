@@ -1,0 +1,72 @@
+id: m6-05-parametros
+modulo: m6
+ordem: 5
+titulo: {pt: "Parâmetros e argumentos", en: "Parameters and arguments"}
+aprender:
+  pt: |
+    Uma função é como uma **receita**: os passos são sempre os mesmos, mas os ingredientes podem mudar. Esses ingredientes são os **parâmetros**.
+
+    Em `def saudar_aluno(nome):`, `nome` é o **parâmetro**, uma variável de entrada que só existe dentro da função. `"Edgar"` e `"Rhyanne"` são os **argumentos**: o valor concreto que entra em `nome` em cada chamada.
+
+    Assim a mesma função serve para qualquer aluno, sem copiares o `print`. Na próxima secção vês como documentar os tipos e dar valores por omissão.
+  en: |
+    A function is like a **recipe**: the steps are always the same but the ingredients can change. Those ingredients are the **parameters**.
+
+    In `def saudar_aluno(nome):`, `nome` is the **parameter**, an input variable that only exists inside the function. `"Edgar"` and `"Rhyanne"` are the **arguments**: the concrete value that goes into `nome` on each call.
+
+    So the same function works for any student, without copying the `print`. In the next section you see how to document types and give default values.
+exemplo:
+  id: saudar-aluno
+  titulo: {pt: "Saudar um aluno", en: "Greeting a student"}
+  funcoes:
+    - id: f_saudar_aluno
+      nome: saudar_aluno
+      params: "nome"
+      texto: {pt: "saudar_aluno(nome)", en: "saudar_aluno(nome)"}
+      corpo:
+        - {id: e1, tipo: escrever, texto: {pt: 'escrever "Olá," nome "! Bem-vindo à aula."', en: 'write "Olá," nome "! Bem-vindo à aula."'}, py: 'print("Olá,", nome + "! Bem-vindo à aula.")'}
+  corpo:
+    - {id: c1, tipo: chamar, texto: {pt: 'chamar saudar_aluno("Edgar")', en: 'call saudar_aluno("Edgar")'}, py: 'saudar_aluno("Edgar")'}
+    - {id: c2, tipo: chamar, texto: {pt: 'chamar saudar_aluno("Rhyanne")', en: 'call saudar_aluno("Rhyanne")'}, py: 'saudar_aluno("Rhyanne")'}
+slides:
+  - {deck: funcoes, de: 11, ate: 13}
+leitura:
+  pt: "Python Basics, cap. 6.2 — Parâmetros e argumentos"
+  en: "Python Basics, ch. 6.2 — Parameters and arguments"
+pistas:
+  - pt: "O parâmetro está no def; o argumento está na chamada."
+    en: "The parameter is in the def; the argument is in the call."
+atividades:
+  - tipo: completar
+    enunciado:
+      pt: "Completa a segunda chamada, para saudar a Rhyanne."
+      en: "Complete the second call so it greets Rhyanne."
+    lacunas:
+      - {stmt: c2, lado: py, modelo: {pt: 'saudar_aluno("___")', en: 'saudar_aluno("___")'}, respostas: ["Rhyanne"]}
+    explicacao:
+      pt: "\"Rhyanne\" é o argumento: entra no parâmetro `nome` e aparece na saudação."
+      en: "\"Rhyanne\" is the argument: it goes into the parameter `nome` and shows up in the greeting."
+  - tipo: pergunta
+    enunciado:
+      pt: "Quantas vezes corre o print deste programa?"
+      en: "How many times does this program's print run?"
+    pergunta:
+      pt: "Com as duas chamadas, saudar_aluno(\"Edgar\") e saudar_aluno(\"Rhyanne\"), quantas saudações aparecem?"
+      en: "With the two calls, saudar_aluno(\"Edgar\") and saudar_aluno(\"Rhyanne\"), how many greetings appear?"
+    opcoes:
+      - {pt: "Duas, uma para cada aluno", en: "Two, one for each student"}
+      - {pt: "Uma, só para o Edgar", en: "One, only for Edgar"}
+      - {pt: "Nenhuma, definir não executa", en: "None, defining does not execute"}
+    resposta: [0]
+    explicacao:
+      pt: "Cada chamada executa o corpo uma vez, com o argumento que lhe passas."
+      en: "Each call runs the body once, with the argument you pass."
+verificacao:
+  pergunta:
+    pt: "Em saudar_aluno(\"Edgar\"), o que é \"Edgar\"?"
+    en: "In saudar_aluno(\"Edgar\"), what is \"Edgar\"?"
+  opcoes:
+    - {pt: "O parâmetro", en: "The parameter"}
+    - {pt: "O argumento", en: "The argument"}
+    - {pt: "O nome da função", en: "The function name"}
+  resposta: [1]

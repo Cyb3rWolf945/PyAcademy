@@ -1,0 +1,121 @@
+id: m3-04-ronda-2
+modulo: m3
+ordem: 4
+titulo:
+  pt: 'Ronda 2: água, cão e Uber'
+  en: 'Round 2: water, dog and Uber'
+aprender:
+  pt: |-
+    Ronda fácil-média: **água na viagem** (1 garrafa por pessoa a cada 2 horas), **idade do cão** (1 ano de cão = 7 anos humanos) e **corrida de Uber** (taxa fixa de 2 € mais 0,80 € por km).
+
+    No Uber há **duas constantes**: a taxa fixa e o preço por quilómetro. A única variável são os quilómetros percorridos.
+
+    A operação é `taxa fixa + (km × preço por km)`: primeiro o que se paga por quilómetro, depois soma-se a taxa.
+  en: |-
+    Easy-medium round: **water for the trip** (1 bottle per person every 2 hours), **dog's age** (1 dog year = 7 human years) and **Uber ride** (2 € fixed fee plus 0.80 € per km).
+
+    The Uber has **two constants**: the fixed fee and the price per kilometre. The only variable is the distance travelled.
+
+    The operation is `fixed fee + (km × price per km)`: first what you pay per kilometre, then add the fee.
+exemplo:
+  id: uber
+  titulo:
+    pt: Corrida de Uber
+    en: Uber ride
+  corpo:
+  - id: k1
+    tipo: definir
+    texto:
+      pt: definir constante TAXA_FIXA = 2.0
+      en: define constant TAXA_FIXA = 2.0
+    py: TAXA_FIXA = 2.0
+  - id: k2
+    tipo: definir
+    texto:
+      pt: definir constante PRECO_KM = 0.8
+      en: define constant PRECO_KM = 0.8
+    py: PRECO_KM = 0.8
+  - id: v1
+    tipo: definir
+    texto:
+      pt: definir real km = 0.0
+      en: define real km = 0.0
+    py: km = 0.0
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler km
+      en: read km
+    py: 'km = float(input("Quilómetros: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: custo = TAXA_FIXA + (km * PRECO_KM)
+      en: custo = TAXA_FIXA + (km * PRECO_KM)
+    py: custo = TAXA_FIXA + (km * PRECO_KM)
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Custo = " + custo
+      en: write "Cost = " + custo
+    py: print("Custo:", custo)
+slides:
+- deck: aula-3-5
+  de: 11
+  ate: 11
+pistas:
+- pt: Duas constantes, uma variável. Qual é a que o utilizador escreve?
+  en: Two constants, one variable. Which one does the user type?
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: 'Missão 2: idade do cão.'
+    en: 'Mission 2: dog''s age.'
+  pergunta:
+    pt: Qual é a constante?
+    en: Which is the constant?
+  opcoes:
+  - pt: idade do cão
+    en: dog's age
+  - pt: fator de conversão = 7
+    en: conversion factor = 7
+  resposta:
+  - 1
+  explicacao:
+    pt: A idade do cão muda de cão para cão. O 7 é sempre o mesmo, por isso é a constante.
+    en: The dog's age changes from dog to dog. The 7 is always the same, so it is the constant.
+- tipo: completar
+  enunciado:
+    pt: Completa a fórmula da missão.
+    en: Complete the mission formula.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: custo = TAXA_FIXA + (km * ___)
+      en: custo = TAXA_FIXA + (km * ___)
+    respostas:
+    - PRECO_KM
+  explicacao:
+    pt: Cada quilómetro custa PRECO_KM, e a TAXA_FIXA paga-se sempre uma vez.
+    en: Each kilometre costs PRECO_KM, and TAXA_FIXA is paid once, always.
+- tipo: ordenar_python
+  enunciado:
+    pt: Põe as linhas de Python pela ordem certa (constantes e variáveis no topo).
+    en: Put the lines of Python in the right order (constants and variables at the top).
+  explicacao:
+    pt: 'A convenção do professor: constantes em MAIÚSCULAS e variáveis inicializadas no topo; depois input, processamento e output.'
+    en: 'The teacher''s convention: constants in UPPERCASE and variables initialised at the top; then input, processing and output.'
+verificacao:
+  pergunta:
+    pt: 'Viagem de carro: qual é a operação?'
+    en: 'Car trip: which is the operation?'
+  opcoes:
+  - pt: número de pessoas × (horas de viagem ÷ 2)
+    en: number of people × (hours of travel ÷ 2)
+  - pt: número de pessoas + horas de viagem
+    en: number of people + hours of travel
+  - pt: horas de viagem × 2
+    en: hours of travel × 2
+  resposta:
+  - 0

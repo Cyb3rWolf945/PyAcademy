@@ -1,0 +1,116 @@
+id: m3-05-ronda-3
+modulo: m3
+ordem: 5
+titulo:
+  pt: 'Ronda 3: autonomia, salário e desconto'
+  en: 'Round 3: range, salary and discount'
+aprender:
+  pt: |-
+    Ronda média: **autonomia do carro** (6 litros a cada 100 km), **salário do mês** (salário base mais horas extra) e **livro com desconto** de 10 % do clube de leitura.
+
+    Na autonomia, o consumo (6 L/100 km) é a constante e os litros no depósito são a variável. A operação é `(litros ÷ consumo) × 100`.
+
+    Os parênteses deixam claro o que se calcula primeiro: a divisão, e só depois a multiplicação por 100.
+  en: |-
+    Medium round: **car range** (6 litres per 100 km), **monthly salary** (base salary plus overtime hours) and **book with discount**, a 10 % reading-club discount.
+
+    For the range, the consumption (6 L/100 km) is the constant and the litres in the tank are the variable. The operation is `(litres ÷ consumption) × 100`.
+
+    The parentheses make clear what is calculated first: the division, and only then the multiplication by 100.
+exemplo:
+  id: autonomia
+  titulo:
+    pt: Autonomia do carro
+    en: Car range
+  corpo:
+  - id: k1
+    tipo: definir
+    texto:
+      pt: definir constante CONSUMO = 6
+      en: define constant CONSUMO = 6
+    py: CONSUMO = 6
+  - id: v1
+    tipo: definir
+    texto:
+      pt: definir real litros = 0.0
+      en: define real litros = 0.0
+    py: litros = 0.0
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler litros
+      en: read litros
+    py: 'litros = float(input("Litros no depósito: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: autonomia = (litros / CONSUMO) * 100
+      en: autonomia = (litros / CONSUMO) * 100
+    py: autonomia = (litros / CONSUMO) * 100
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Autonomia (km) = " + autonomia
+      en: write "Range (km) = " + autonomia
+    py: print("Autonomia (km):", autonomia)
+slides:
+- deck: aula-3-5
+  de: 15
+  ate: 15
+pistas:
+- pt: Se o valor é sempre igual, para todos os casos, é constante.
+  en: If the value is always the same, for every case, it is a constant.
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: 'Missão 2: salário do mês.'
+    en: 'Mission 2: monthly salary.'
+  pergunta:
+    pt: Quais são as variáveis?
+    en: Which are the variables?
+  opcoes:
+  - pt: salário base
+    en: base salary
+  - pt: horas extra
+    en: overtime hours
+  - pt: valor da hora extra
+    en: overtime hourly rate
+  resposta:
+  - 0
+  - 1
+  explicacao:
+    pt: O valor da hora extra é fixo, é a constante. O salário base e as horas extra mudam de pessoa para pessoa.
+    en: The overtime rate is fixed, it is the constant. The base salary and the overtime hours change from person to person.
+- tipo: completar
+  enunciado:
+    pt: Completa a fórmula da missão.
+    en: Complete the mission formula.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: autonomia = (litros / ___) * 100
+      en: autonomia = (litros / ___) * 100
+    respostas:
+    - CONSUMO
+  explicacao:
+    pt: Dividir os litros pelo consumo diz quantas “vezes 100 km” o depósito dá.
+    en: Dividing the litres by the consumption tells how many “times 100 km” the tank gives.
+- tipo: ligar
+  enunciado:
+    pt: Liga cada bloco do fluxograma à sua linha de Python.
+    en: Match each flowchart block to its line of Python.
+  explicacao:
+    pt: 'Constantes e variáveis ficam definidas no topo, depois lê-se, calcula-se e escreve-se: a mesma ordem nas duas vistas.'
+    en: 'Constants and variables are defined at the top, then read, calculate, write: the same order in both views.'
+verificacao:
+  pergunta:
+    pt: 'Livro com desconto: qual é a constante?'
+    en: 'Book with discount: which is the constant?'
+  opcoes:
+  - pt: desconto = 10 %
+    en: discount = 10 %
+  - pt: preço de capa
+    en: cover price
+  resposta:
+  - 0

@@ -1,0 +1,67 @@
+id: m5-10-for-ou-while
+modulo: m5
+ordem: 10
+titulo: {pt: "for ou while? Como decidir", en: "for or while? How to decide"}
+aprender:
+  pt: |
+    **Usa `for`** quando sabes **quantas vezes** repetir à partida, ou estás a percorrer uma sequência (0 a n-1, ou um intervalo). Exemplos: "repete 10 vezes", "para cada nota de 30 alunos".
+
+    **Usa `while`** quando o número de repetições **depende de uma condição** e não é fixo: estás a validar algo ou à espera de um evento. Exemplos: "até o input ser válido", "enquanto houver stock".
+
+    Dica da investigação em ensino de programação: quem aprende `while` primeiro tende a usá-lo para tudo, mesmo quando o `for` seria mais simples. Por isso começámos pelo `for`.
+
+    Teste rápido: consigo dizer **o número de voltas antes de começar**? Se sim, `for`. Se não, `while`.
+  en: |
+    **Use `for`** when you know **how many times** to repeat up front, or you are going through a sequence (0 to n-1, or a range). Examples: "repeat 10 times", "for each mark of 30 students".
+
+    **Use `while`** when the number of repetitions **depends on a condition** and is not fixed: you are validating something or waiting for an event. Examples: "until the input is valid", "while there is stock".
+
+    A tip from programming-education research: those who learn `while` first tend to use it for everything, even when `for` would be simpler. That is why we started with `for`.
+
+    Quick test: can I state **the number of turns before I start**? If yes, `for`. If not, `while`.
+slides:
+  - {deck: ciclos, de: 19, ate: 19}
+leitura:
+  pt: "Python Basics, cap. 6.4 e 8.5 — Correr em círculos; Sair do padrão"
+  en: "Python Basics, ch. 6.4 and 8.5 — Run in circles; Break out of the pattern"
+pistas:
+  - pt: "Pergunta-te: sei quantas voltas vai dar antes de o programa arrancar?"
+    en: "Ask yourself: do I know how many turns it will take before the program starts?"
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Escolhe o ciclo para a tarefa."
+      en: "Pick the loop for the task."
+    pergunta:
+      pt: "Calcular a média das notas de 30 alunos. Que ciclo é mais natural?"
+      en: "Compute the average of the marks of 30 students. Which loop is more natural?"
+    opcoes:
+      - {pt: "`for`, porque sabemos que são 30", en: "`for`, because we know there are 30"}
+      - {pt: "`while`, porque depende de uma condição", en: "`while`, because it depends on a condition"}
+    resposta: [0]
+    explicacao:
+      pt: "A contagem é conhecida à partida (30), por isso o `for` é mais direto."
+      en: "The count is known up front (30), so `for` is more direct."
+  - tipo: pergunta
+    enunciado:
+      pt: "Mais um cenário."
+      en: "One more scenario."
+    pergunta:
+      pt: "Pedir uma password até o utilizador acertar. Que ciclo é mais natural?"
+      en: "Ask for a password until the user gets it right. Which loop is more natural?"
+    opcoes:
+      - {pt: "`while`, porque não sabemos quantas tentativas serão precisas", en: "`while`, because we do not know how many attempts will be needed"}
+      - {pt: "`for`, porque há sempre exatamente 3 tentativas", en: "`for`, because there are always exactly 3 attempts"}
+    resposta: [0]
+    explicacao:
+      pt: "O número de voltas depende de uma condição (acertar), por isso é um caso de `while`."
+      en: "The number of turns depends on a condition (getting it right), so this is a `while` case."
+verificacao:
+  pergunta:
+    pt: "\"Enquanto houver stock, vender\" pede que ciclo?"
+    en: "\"While there is stock, sell\" calls for which loop?"
+  opcoes:
+    - {pt: "`while`: o número de voltas depende de uma condição", en: "`while`: the number of turns depends on a condition"}
+    - {pt: "`for`: o número de voltas é fixo", en: "`for`: the number of turns is fixed"}
+    - {pt: "Nenhum, não é um ciclo", en: "Neither, it is not a loop"}
+  resposta: [0]

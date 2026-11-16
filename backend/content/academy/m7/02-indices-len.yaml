@@ -1,0 +1,67 @@
+id: m7-02-indices-len
+modulo: m7
+ordem: 2
+titulo: {pt: "Índices e len", en: "Indexes and len"}
+aprender:
+  pt: |
+    Numa lista de `n` elementos, os índices vão de **0 a n-1**. A primeira posição é `lista[0]` e a **última** é `lista[len(lista) - 1]`. (Também há `lista[-1]`, mas hoje fica o caminho explícito.)
+
+    Se pedires um índice que não existe, o Python avisa com um **`IndexError`**: *list index out of range*. Com 4 notas, `notas[4]` falha, porque o último índice válido é 3.
+
+    O erro é de propósito neste exemplo: ver o `IndexError` uma vez no ecrã ajuda a não o repetir. É o primo do *off-by-one* dos ciclos.
+  en: |
+    In a list of `n` elements, the indexes go from **0 to n-1**. The first position is `lista[0]` and the **last** is `lista[len(lista) - 1]`. (There is also `lista[-1]`, but today we keep to the explicit way.)
+
+    If you ask for an index that does not exist, Python complains with an **`IndexError`**: *list index out of range*. With 4 marks, `notas[4]` fails, because the last valid index is 3.
+
+    The error is on purpose in this example: seeing the `IndexError` once on screen helps you not to repeat it. It is the cousin of the *off-by-one* from loops.
+exemplo:
+  id: indices-notas
+  titulo: {pt: "Índices de uma lista de notas", en: "Indexes of a list of marks"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "notas = [14, 9, 16, 12]", en: "notas = [14, 9, 16, 12]"}, py: "notas = [14, 9, 16, 12]"}
+    - {id: e1, tipo: escrever, texto: {pt: "escrever notas[0]", en: "write notas[0]"}, py: "print(notas[0])"}
+    - {id: e2, tipo: escrever, texto: {pt: "escrever notas[len(notas) - 1]", en: "write notas[len(notas) - 1]"}, py: "print(notas[len(notas) - 1])"}
+    - {id: e3, tipo: escrever, texto: {pt: "escrever notas[4]  (IndexError!)", en: "write notas[4]  (IndexError!)"}, py: "print(notas[4])"}
+slides:
+  - {deck: funcoes, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 9.2 — Listas"
+  en: "Python Basics, ch. 9.2 — Lists"
+pistas:
+  - pt: "Com 4 elementos, os índices válidos são 0, 1, 2 e 3."
+    en: "With 4 elements, the valid indexes are 0, 1, 2 and 3."
+atividades:
+  - tipo: completar
+    enunciado:
+      pt: "Completa para escrever a última nota."
+      en: "Complete it to write the last mark."
+    lacunas:
+      - {stmt: e2, lado: py, modelo: {pt: "print(notas[len(notas) - ___])", en: "print(notas[len(notas) - ___])"}, respostas: ["1"]}
+    explicacao:
+      pt: "`len(notas)` é 4 e o último índice é 3, ou seja, `len(notas) - 1`."
+      en: "`len(notas)` is 4 and the last index is 3, that is, `len(notas) - 1`."
+  - tipo: pergunta
+    enunciado:
+      pt: "Segue o programa até ao fim."
+      en: "Follow the program to the end."
+    pergunta:
+      pt: "O que acontece na linha `print(notas[4])`?"
+      en: "What happens on the line `print(notas[4])`?"
+    opcoes:
+      - {pt: "IndexError: não existe o índice 4", en: "IndexError: there is no index 4"}
+      - {pt: "Escreve 12", en: "It writes 12"}
+      - {pt: "Escreve None", en: "It writes None"}
+    resposta: [0]
+    explicacao:
+      pt: "Há 4 notas, com índices de 0 a 3. O índice 4 não existe."
+      en: "There are 4 marks, with indexes 0 to 3. Index 4 does not exist."
+verificacao:
+  pergunta:
+    pt: "Numa lista com 6 elementos, qual é o último índice válido?"
+    en: "In a list with 6 elements, what is the last valid index?"
+  opcoes:
+    - {pt: "5", en: "5"}
+    - {pt: "6", en: "6"}
+    - {pt: "7", en: "7"}
+  resposta: [0]

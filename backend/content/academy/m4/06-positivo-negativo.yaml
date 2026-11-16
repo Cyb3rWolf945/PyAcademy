@@ -1,0 +1,82 @@
+id: m4-06-positivo-negativo
+modulo: m4
+ordem: 6
+titulo: {pt: "Positivo, negativo ou zero", en: "Positive, negative or zero"}
+aprender:
+  pt: |
+    O utilizador introduz um número e o programa diz se é **positivo**, **negativo** ou **zero**. Há três resultados possíveis, mas só precisamos de **duas condições**: o zero é tudo o que sobra depois de excluir as outras duas.
+
+    No fluxograma há dois losangos em cadeia: `numero > 0 ?` e, no ramo **Não**, `numero < 0 ?`. No Python, essa cadeia é `if`, `elif` e `else`.
+
+    Convenção da cadeira: a variável é **declarada com atribuição** no topo, antes de qualquer leitura.
+  en: |
+    The user types a number and the program says whether it is **positive**, **negative** or **zero**. There are three possible results, but we only need **two conditions**: zero is whatever is left after excluding the other two.
+
+    The flowchart has two diamonds in a chain: `numero > 0 ?` and, on the **No** branch, `numero < 0 ?`. In Python, that chain is `if`, `elif` and `else`.
+
+    Course convention: the variable is **declared with an assignment** at the top, before any reading.
+exemplo:
+  id: positivo-negativo
+  titulo: {pt: "Positivo, negativo ou zero", en: "Positive, negative or zero"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "numero int = 0", en: "numero int = 0"}, py: "numero = 0"}
+    - {id: l, tipo: ler, texto: {pt: "ler numero", en: "read numero"}, py: 'numero = int(input("Introduz um número: "))'}
+    - id: s1
+      tipo: se
+      cond: {pt: "numero > 0 ?", en: "numero > 0 ?"}
+      py: "numero > 0"
+      sim:
+        - {id: e1, tipo: escrever, texto: {pt: "Positivo", en: "Positive"}, py: 'print("Positivo")'}
+      nao:
+        - id: s2
+          tipo: se
+          cond: {pt: "numero < 0 ?", en: "numero < 0 ?"}
+          py: "numero < 0"
+          sim:
+            - {id: e2, tipo: escrever, texto: {pt: "Negativo", en: "Negative"}, py: 'print("Negativo")'}
+          nao:
+            - {id: e3, tipo: escrever, texto: {pt: "Zero", en: "Zero"}, py: 'print("Zero")'}
+  demoPath: [d, l, s1, s2, e3]
+slides:
+  - {deck: aula-4, de: 7, ate: 10}
+leitura:
+  pt: "Python Basics, cap. 8.3 — Controlar o fluxo do programa"
+  en: "Python Basics, ch. 8.3 — Control the flow of your program"
+pistas:
+  - pt: "O ramo Não do primeiro losango leva ao segundo losango."
+    en: "The No branch of the first diamond leads to the second diamond."
+  - pt: "O `else` não precisa de condição: apanha o zero."
+    en: "The `else` needs no condition: it catches zero."
+atividades:
+  - tipo: ligar
+    enunciado:
+      pt: "Liga cada bloco do fluxograma à sua linha de Python."
+      en: "Match each flowchart block to its line of Python."
+    explicacao:
+      pt: "Cada losango é um `if`/`elif` e cada escrita é um `print`. O ramo Não do último losango é o `else`."
+      en: "Each diamond is an `if`/`elif` and each write is a `print`. The No branch of the last diamond is the `else`."
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "Declara-se a variável, lê-se o número e só depois se decide. A cadeia if/elif/else conta como um único bloco."
+      en: "Declare the variable, read the number and only then decide. The if/elif/else chain counts as a single block."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a segunda condição."
+      en: "Complete the second condition."
+    lacunas:
+      - {stmt: s2, lado: py, modelo: {pt: "numero ___ 0", en: "numero ___ 0"}, respostas: ["<"]}
+    explicacao:
+      pt: "O segundo losango pergunta se o número é negativo: `numero < 0`."
+      en: "The second diamond asks whether the number is negative: `numero < 0`."
+verificacao:
+  pergunta:
+    pt: "Para classificar positivo, negativo ou zero, quantas condições são precisas?"
+    en: "To classify positive, negative or zero, how many conditions are needed?"
+  opcoes:
+    - {pt: "Duas: o zero é o que sobra no else", en: "Two: zero is what is left in the else"}
+    - {pt: "Três, uma para cada resultado", en: "Three, one for each result"}
+    - {pt: "Uma só", en: "Just one"}
+  resposta: [0]

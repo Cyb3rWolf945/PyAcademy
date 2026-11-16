@@ -1,0 +1,114 @@
+id: m2-08-programa-completo
+modulo: m2
+ordem: 8
+titulo:
+  pt: 'Programa completo: área do círculo'
+  en: 'Complete program: area of the circle'
+aprender:
+  pt: |-
+    Juntando tudo: **ler → calcular → escrever**. É a arquitetura de qualquer algoritmo sequencial, e podes pensar nela como **input, processamento, output**.
+
+    O programa lê o raio, calcula a área `π × r²` e escreve-a. Duas coisas diferentes do pseudocódigo: a potência `^` vira `**`, e o `_PI` vira `math.pi`, que precisa de `import math` no início.
+
+    O `math` é uma biblioteca: um conjunto de funções e valores já escritos, prontos a usar.
+  en: |-
+    Putting it all together: **read → calculate → write**. It is the architecture of any sequential algorithm, and you can think of it as **input, processing, output**.
+
+    The program reads the radius, calculates the area `π × r²` and writes it. Two things differ from pseudocode: the power `^` becomes `**`, and `_PI` becomes `math.pi`, which needs `import math` at the top.
+
+    `math` is a library: a set of ready-made functions and values, ready to use.
+exemplo:
+  id: area-circulo
+  titulo:
+    pt: Área do círculo
+    en: Area of the circle
+  corpo:
+  - id: i
+    tipo: definir
+    texto:
+      pt: usar a biblioteca math (pi)
+      en: use the math library (pi)
+    py: import math
+  - id: l
+    tipo: ler
+    texto:
+      pt: ler r
+      en: read r
+    py: 'r = float(input("Raio: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: A = _PI * r ^ 2
+      en: A = _PI * r ^ 2
+    py: area = math.pi * r ** 2
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Área = " + A
+      en: write "Área = " + A
+    py: print("Área =", area)
+slides:
+- deck: aula-2
+  de: 33
+  ate: 33
+leitura:
+  pt: Python Basics, cap. 5 — Números e matemática
+  en: Python Basics, ch. 5 — Numbers and math
+pistas:
+- pt: 'input, processamento, output: a ordem do programa.'
+  en: 'input, processing, output: the order of the program.'
+atividades:
+- tipo: ordenar_python
+  enunciado:
+    pt: Põe as linhas de Python pela ordem certa.
+    en: Put the lines of Python in the right order.
+  explicacao:
+    pt: O import vem primeiro, depois o input, o processamento e o output.
+    en: The import comes first, then input, processing and output.
+- tipo: pergunta
+  enunciado:
+    pt: Classifica cada linha do programa.
+    en: Classify each line of the program.
+  pergunta:
+    pt: Qual linha é o PROCESSAMENTO?
+    en: Which line is the PROCESSING?
+  opcoes:
+  - pt: 'r = float(input("Raio: "))'
+    en: 'r = float(input("Raio: "))'
+  - pt: area = math.pi * r ** 2
+    en: area = math.pi * r ** 2
+  - pt: print("Área =", area)
+    en: print("Área =", area)
+  resposta:
+  - 1
+  explicacao:
+    pt: Ler é input, calcular é processamento e print é output.
+    en: Reading is input, calculating is processing and print is output.
+- tipo: completar
+  enunciado:
+    pt: Completa a fórmula da área.
+    en: Complete the area formula.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: area = math.___ * r ** 2
+      en: area = math.___ * r ** 2
+    respostas:
+    - pi
+  explicacao:
+    pt: math.pi é o valor de π, que a biblioteca math nos dá.
+    en: math.pi is the value of π, which the math library gives us.
+verificacao:
+  pergunta:
+    pt: Para usar math.pi, o que tens de escrever no início?
+    en: To use math.pi, what must you write at the top?
+  opcoes:
+  - pt: import math
+    en: import math
+  - pt: include math
+    en: include math
+  - pt: math = pi
+    en: math = pi
+  resposta:
+  - 0

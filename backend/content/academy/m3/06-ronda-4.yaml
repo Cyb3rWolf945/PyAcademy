@@ -1,0 +1,133 @@
+id: m3-06-ronda-4
+modulo: m3
+ordem: 6
+titulo:
+  pt: 'Ronda 4: impressões, gorjeta e câmbio'
+  en: 'Round 4: printing, tip and exchange'
+aprender:
+  pt: |-
+    Ronda média-difícil: **fatura de impressões**, **gorjeta** (sempre 10 % da conta) e **câmbio** de euros para dólares com uma taxa fixa.
+
+    Na fatura há **duas variáveis** (páginas a cores e a preto e branco) e **duas constantes** (o preço de cada tipo de página). Dá nomes que se leiam bem: `PRECO_COR`, `PRECO_PB`.
+
+    A operação soma duas multiplicações: `(cores × preço a cores) + (p/b × preço a p/b)`.
+  en: |-
+    Medium-hard round: **print invoice**, **restaurant tip** (always 10 % of the bill) and **currency exchange** from euros to dollars at a fixed rate.
+
+    The invoice has **two variables** (colour and black-and-white pages) and **two constants** (the price of each kind of page). Choose names that read well: `PRECO_COR`, `PRECO_PB`.
+
+    The operation adds two multiplications: `(colour × colour price) + (b/w × b/w price)`.
+exemplo:
+  id: impressoes
+  titulo:
+    pt: Fatura de impressões
+    en: Print invoice
+  corpo:
+  - id: k1
+    tipo: definir
+    texto:
+      pt: definir constante PRECO_COR = 0.2
+      en: define constant PRECO_COR = 0.2
+    py: PRECO_COR = 0.2
+  - id: k2
+    tipo: definir
+    texto:
+      pt: definir constante PRECO_PB = 0.05
+      en: define constant PRECO_PB = 0.05
+    py: PRECO_PB = 0.05
+  - id: v1
+    tipo: definir
+    texto:
+      pt: definir inteiro paginas_cor = 0
+      en: define integer paginas_cor = 0
+    py: paginas_cor = 0
+  - id: v2
+    tipo: definir
+    texto:
+      pt: definir inteiro paginas_pb = 0
+      en: define integer paginas_pb = 0
+    py: paginas_pb = 0
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler paginas_cor
+      en: read paginas_cor
+    py: 'paginas_cor = int(input("Páginas a cores: "))'
+  - id: l2
+    tipo: ler
+    texto:
+      pt: ler paginas_pb
+      en: read paginas_pb
+    py: 'paginas_pb = int(input("Páginas a preto e branco: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: total = (paginas_cor * PRECO_COR) + (paginas_pb * PRECO_PB)
+      en: total = (paginas_cor * PRECO_COR) + (paginas_pb * PRECO_PB)
+    py: total = (paginas_cor * PRECO_COR) + (paginas_pb * PRECO_PB)
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Total = " + total
+      en: write "Total = " + total
+    py: print("Total:", total)
+slides:
+- deck: aula-3-5
+  de: 18
+  ate: 18
+pistas:
+- pt: Quantos valores o utilizador tem de escrever? Esses são as variáveis.
+  en: How many values does the user have to type? Those are the variables.
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: 'Missão 2: gorjeta no restaurante.'
+    en: 'Mission 2: restaurant tip.'
+  pergunta:
+    pt: Qual é a variável?
+    en: Which is the variable?
+  opcoes:
+  - pt: valor da conta
+    en: bill value
+  - pt: percentagem de gorjeta = 10 %
+    en: tip percentage = 10 %
+  resposta:
+  - 0
+  explicacao:
+    pt: 'O valor da conta muda de mesa para mesa. Os 10 % são sempre iguais: constante.'
+    en: 'The bill value changes from table to table. The 10 % is always the same: a constant.'
+- tipo: completar
+  enunciado:
+    pt: Completa a fórmula da missão.
+    en: Complete the mission formula.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: total = (paginas_cor * PRECO_COR) + (paginas_pb * ___)
+      en: total = (paginas_cor * PRECO_COR) + (paginas_pb * ___)
+    respostas:
+    - PRECO_PB
+  explicacao:
+    pt: As páginas a preto e branco multiplicam pelo seu próprio preço.
+    en: The black-and-white pages are multiplied by their own price.
+- tipo: ordenar_fluxograma
+  enunciado:
+    pt: Põe os blocos do fluxograma pela ordem certa.
+    en: Put the flowchart blocks in the right order.
+  explicacao:
+    pt: Primeiro definem-se as constantes e as variáveis, depois lê-se, calcula-se e só no fim se escreve.
+    en: First define the constants and variables, then read, calculate and only at the end write.
+verificacao:
+  pergunta:
+    pt: 'Câmbio de moeda: qual é a operação?'
+    en: 'Currency exchange: which is the operation?'
+  opcoes:
+  - pt: montante em euros × taxa de câmbio
+    en: amount in euros × exchange rate
+  - pt: montante em euros ÷ taxa de câmbio
+    en: amount in euros ÷ exchange rate
+  - pt: montante em euros + taxa de câmbio
+    en: amount in euros + exchange rate
+  resposta:
+  - 0

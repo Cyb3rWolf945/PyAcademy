@@ -1,0 +1,133 @@
+id: m3-08-boss
+modulo: m3
+ordem: 8
+titulo:
+  pt: 'Boss: o orçamento da festa'
+  en: 'Boss: the party budget'
+aprender:
+  pt: |-
+    Missão final, o problema "impossível": organizar o orçamento de uma festa de aniversário. Há um número de convidados, um menu igual para todos a um custo fixo por pessoa (por exemplo 12 € por pessoa), o aluguer da sala (valor fixo) e um desconto quando o grupo é grande.
+
+    Decompõe: a **variável** é o número de convidados. As **constantes** são o custo da comida por pessoa, o aluguer da sala e o desconto.
+
+    Operação: `(nº de convidados × custo de comida por pessoa) + aluguer da sala − desconto`. Por agora o desconto é um valor fixo; escolher o desconto *conforme* o tamanho do grupo é coisa para as decisões (`if`).
+  en: |-
+    Final mission, the "impossible" problem: plan the budget of a birthday party. There is a number of guests, a menu equal for everyone at a fixed cost per person (for example 12 € per person), the room rental (fixed value) and a discount when the group is large.
+
+    Decompose: the **variable** is the number of guests. The **constants** are the food cost per person, the room rental and the discount.
+
+    Operation: `(number of guests × food cost per person) + room rental − discount`. For now the discount is a fixed value; choosing the discount *depending on* the group size is a job for decisions (`if`).
+exemplo:
+  id: festa
+  titulo:
+    pt: Orçamento da festa
+    en: Party budget
+  corpo:
+  - id: k1
+    tipo: definir
+    texto:
+      pt: definir constante CUSTO_COMIDA = 12.0
+      en: define constant CUSTO_COMIDA = 12.0
+    py: CUSTO_COMIDA = 12.0
+  - id: k2
+    tipo: definir
+    texto:
+      pt: definir constante ALUGUER_SALA = 150.0
+      en: define constant ALUGUER_SALA = 150.0
+    py: ALUGUER_SALA = 150.0
+  - id: k3
+    tipo: definir
+    texto:
+      pt: definir constante DESCONTO = 50.0
+      en: define constant DESCONTO = 50.0
+    py: DESCONTO = 50.0
+  - id: v1
+    tipo: definir
+    texto:
+      pt: definir inteiro convidados = 0
+      en: define integer convidados = 0
+    py: convidados = 0
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler convidados
+      en: read convidados
+    py: 'convidados = int(input("Número de convidados: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: custo_total = (convidados * CUSTO_COMIDA) + ALUGUER_SALA - DESCONTO
+      en: custo_total = (convidados * CUSTO_COMIDA) + ALUGUER_SALA - DESCONTO
+    py: custo_total = (convidados * CUSTO_COMIDA) + ALUGUER_SALA - DESCONTO
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Custo total = " + custo_total
+      en: write "Total cost = " + custo_total
+    py: print("Custo total:", custo_total)
+slides:
+- deck: aula-3-5
+  de: 25
+  ate: 25
+pistas:
+- pt: Quantos valores o utilizador escreve? Só um.
+  en: How many values does the user type? Only one.
+atividades:
+- tipo: ligar
+  enunciado:
+    pt: Liga cada bloco do fluxograma à sua linha de Python.
+    en: Match each flowchart block to its line of Python.
+  explicacao:
+    pt: 'Constantes e variáveis ficam definidas no topo, depois lê-se, calcula-se e escreve-se: a mesma ordem nas duas vistas.'
+    en: 'Constants and variables are defined at the top, then read, calculate, write: the same order in both views.'
+- tipo: completar
+  enunciado:
+    pt: Completa a operação do orçamento.
+    en: Complete the budget operation.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: custo_total = (convidados * CUSTO_COMIDA) + ___ - DESCONTO
+      en: custo_total = (convidados * CUSTO_COMIDA) + ___ - DESCONTO
+    respostas:
+    - ALUGUER_SALA
+  explicacao:
+    pt: O aluguer soma-se uma vez e o desconto subtrai-se no fim.
+    en: The rental is added once and the discount is subtracted at the end.
+- tipo: pergunta
+  enunciado:
+    pt: Decompõe o problema final.
+    en: Decompose the final problem.
+  pergunta:
+    pt: Quais são as constantes do orçamento da festa?
+    en: Which are the constants of the party budget?
+  opcoes:
+  - pt: custo de comida por pessoa
+    en: food cost per person
+  - pt: aluguer da sala
+    en: room rental
+  - pt: desconto
+    en: discount
+  - pt: número de convidados
+    en: number of guests
+  resposta:
+  - 0
+  - 1
+  - 2
+  explicacao:
+    pt: 'Os três valores são fixos. O número de convidados é o que muda de festa para festa: a variável.'
+    en: 'All three values are fixed. The number of guests is what changes from party to party: the variable.'
+verificacao:
+  pergunta:
+    pt: Qual é a operação do orçamento da festa?
+    en: Which is the party budget operation?
+  opcoes:
+  - pt: (nº de convidados × custo de comida) + aluguer − desconto
+    en: (number of guests × food cost) + rental − discount
+  - pt: nº de convidados + custo de comida + aluguer + desconto
+    en: number of guests + food cost + rental + discount
+  - pt: (nº de convidados + aluguer) × desconto
+    en: (number of guests + rental) × discount
+  resposta:
+  - 0

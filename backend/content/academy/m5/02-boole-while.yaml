@@ -1,0 +1,62 @@
+id: m5-02-boole-while
+modulo: m5
+ordem: 2
+titulo: {pt: "Recap relâmpago: Boole, o motor do while", en: "Quick recap: Boole, the engine of while"}
+aprender:
+  pt: |
+    Recordamos o essencial: `and` é `True` só se **ambas** forem `True`; `or` é `True` se **pelo menos uma** for; `not` **inverte** o valor.
+
+    As Leis de De Morgan: `not (A or B) == (not A) and (not B)` e `not (A and B) == (not A) or (not B)`.
+
+    Porque voltamos a isto? Estas condições booleanas vão ser o **motor do `while`**: um ciclo repete **enquanto** uma condição booleana for `True`. É a mesma condição de um `if`, só que agora é reavaliada a cada volta.
+  en: |
+    A refresher on the essentials: `and` is `True` only if **both** are `True`; `or` is `True` if **at least one** is; `not` **flips** the value.
+
+    De Morgan's laws: `not (A or B) == (not A) and (not B)` and `not (A and B) == (not A) or (not B)`.
+
+    Why come back to this? These boolean conditions are going to be the **engine of `while`**: a loop repeats **as long as** a boolean condition is `True`. It is the same condition as in an `if`, only now it is re-evaluated on every turn.
+slides:
+  - {deck: ciclos, de: 7, ate: 7}
+pistas:
+  - pt: "Um ciclo continua enquanto a condição for True e pára quando passa a False."
+    en: "A loop keeps going while the condition is True and stops when it becomes False."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Aplica De Morgan."
+      en: "Apply De Morgan."
+    pergunta:
+      pt: "Qual é equivalente a `not (A or B)`?"
+      en: "Which is equivalent to `not (A or B)`?"
+    opcoes:
+      - {pt: "(not A) and (not B)", en: "(not A) and (not B)"}
+      - {pt: "(not A) or (not B)", en: "(not A) or (not B)"}
+      - {pt: "A and B", en: "A and B"}
+    resposta: [0]
+    explicacao:
+      pt: "Ao passar o `not` para dentro, o `or` vira `and`."
+      en: "When the `not` goes inside, `or` becomes `and`."
+  - tipo: pergunta
+    enunciado:
+      pt: "Liga a lógica aos ciclos."
+      en: "Link logic to loops."
+    pergunta:
+      pt: "Num `while`, o que decide se o ciclo repete mais uma volta?"
+      en: "In a `while`, what decides whether the loop goes around once more?"
+    opcoes:
+      - {pt: "Uma condição booleana, avaliada a cada volta", en: "A boolean condition, evaluated on every turn"}
+      - {pt: "Um número fixo de repetições escolhido à partida", en: "A fixed number of repetitions chosen up front"}
+      - {pt: "O número de linhas do corpo", en: "The number of lines in the body"}
+    resposta: [0]
+    explicacao:
+      pt: "O `while` repete enquanto a condição for True. É por isso que a álgebra de Boole é o seu motor."
+      en: "`while` repeats while the condition is True. That is why Boolean algebra is its engine."
+verificacao:
+  pergunta:
+    pt: "Com `x = 5`, quanto vale `x > 3 and x < 4`?"
+    en: "With `x = 5`, what is `x > 3 and x < 4`?"
+  opcoes:
+    - {pt: "False", en: "False"}
+    - {pt: "True", en: "True"}
+    - {pt: "Dá erro", en: "It raises an error"}
+  resposta: [0]

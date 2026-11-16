@@ -1,0 +1,97 @@
+id: m7-08-ordenar
+modulo: m7
+ordem: 8
+titulo: {pt: "Ordenar: sort() vs sorted()", en: "Sorting: sort() vs sorted()"}
+aprender:
+  pt: |
+    Há duas formas de ordenar. `sorted(notas)` devolve uma **lista nova** ordenada e **deixa a original como estava**. `notas.sort()` **ordena a própria lista** (altera-a) e **devolve `None`**.
+
+    Armadilha clássica: `notas = notas.sort()` deixa `notas` a valer `None`. Escreve `notas.sort()` sozinho.
+
+    Uma lista ordenada também ajuda noutras tarefas. Por exemplo, **contar quantos estão acima da média**: calculas a média (`sum(notas) / len(notas)`), percorres a lista e, por cada `nota > media`, somas 1 a um contador.
+  en: |
+    There are two ways to sort. `sorted(notas)` returns a **new** sorted list and **leaves the original as it was**. `notas.sort()` **sorts the list itself** (changes it) and **returns `None`**.
+
+    Classic trap: `notas = notas.sort()` leaves `notas` equal to `None`. Write `notas.sort()` on its own.
+
+    A list can also help with other tasks. For example, **counting how many are above the average**: compute the average (`sum(notas) / len(notas)`), go through the list and, for each `nota > media`, add 1 to a counter.
+exemplo:
+  id: ordenar-lista
+  titulo: {pt: "Ordenar e contar acima da média", en: "Sorting and counting above average"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "notas = [14, 9, 16, 12]", en: "notas = [14, 9, 16, 12]"}, py: "notas = [14, 9, 16, 12]"}
+    - {id: d2, tipo: definir, texto: {pt: "acima = 0", en: "acima = 0"}, py: "acima = 0"}
+    - {id: c1, tipo: calcular, texto: {pt: "ordenadas = sorted(notas)", en: "ordenadas = sorted(notas)"}, py: "ordenadas = sorted(notas)"}
+    - {id: e1, tipo: escrever, texto: {pt: "escrever ordenadas", en: "write ordenadas"}, py: "print(ordenadas)"}
+    - {id: e2, tipo: escrever, texto: {pt: "escrever notas", en: "write notas"}, py: "print(notas)"}
+    - {id: c2, tipo: calcular, texto: {pt: "notas.sort()", en: "notas.sort()"}, py: "notas.sort()"}
+    - {id: e3, tipo: escrever, texto: {pt: "escrever notas", en: "write notas"}, py: "print(notas)"}
+    - {id: c3, tipo: calcular, texto: {pt: "media = sum(notas) / len(notas)", en: "media = sum(notas) / len(notas)"}, py: "media = sum(notas) / len(notas)"}
+    - id: p
+      tipo: para
+      texto: {pt: "para cada nota em notas", en: "for each nota in notas"}
+      py: "for nota in notas"
+      corpo:
+        - id: s
+          tipo: se
+          cond: {pt: "nota > media ?", en: "nota > media ?"}
+          py: "nota > media"
+          sim:
+            - {id: c4, tipo: calcular, texto: {pt: "acima = acima + 1", en: "acima = acima + 1"}, py: "acima = acima + 1"}
+          nao: []
+    - {id: e4, tipo: escrever, texto: {pt: 'escrever "Acima da média:" e acima', en: 'write "Acima da média:" and acima'}, py: 'print("Acima da média:", acima)'}
+slides:
+  - {deck: funcoes, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 9.3 — Listas: copiar e ordenar"
+  en: "Python Basics, ch. 9.3 — Lists: copying and sorting"
+pistas:
+  - pt: "Depois de `sorted(notas)`, a lista original mudou?"
+    en: "After `sorted(notas)`, did the original list change?"
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Segue as linhas 3 a 5 do programa."
+      en: "Follow lines 3 to 5 of the program."
+    pergunta:
+      pt: "Depois de `ordenadas = sorted(notas)`, o que escreve `print(notas)`?"
+      en: "After `ordenadas = sorted(notas)`, what does `print(notas)` write?"
+    opcoes:
+      - {pt: "[14, 9, 16, 12], a original não mudou", en: "[14, 9, 16, 12], the original did not change"}
+      - {pt: "[9, 12, 14, 16]", en: "[9, 12, 14, 16]"}
+      - {pt: "None", en: "None"}
+    resposta: [0]
+    explicacao:
+      pt: "`sorted` cria uma lista nova. Só `notas.sort()` altera a original."
+      en: "`sorted` creates a new list. Only `notas.sort()` changes the original."
+  - tipo: pergunta
+    enunciado:
+      pt: "Cuidado com o que `sort()` devolve."
+      en: "Mind what `sort()` returns."
+    pergunta:
+      pt: "Depois de `notas = notas.sort()`, quanto vale `notas`?"
+      en: "After `notas = notas.sort()`, what is `notas`?"
+    opcoes:
+      - {pt: "None", en: "None"}
+      - {pt: "A lista ordenada", en: "The sorted list"}
+      - {pt: "Uma lista vazia", en: "An empty list"}
+    resposta: [0]
+    explicacao:
+      pt: "`sort()` altera a lista e devolve `None`. Atribuir esse resultado apaga a lista."
+      en: "`sort()` changes the list and returns `None`. Assigning that result wipes the list."
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "A média tem de existir antes do ciclo que a compara com cada nota, e o resultado escreve-se no fim."
+      en: "The average must exist before the loop that compares it with each mark, and the result is written at the end."
+verificacao:
+  pergunta:
+    pt: "Com `[14, 9, 16, 12]` (média 12.75), quantas notas estão acima da média?"
+    en: "With `[14, 9, 16, 12]` (average 12.75), how many marks are above average?"
+  opcoes:
+    - {pt: "2 (14 e 16)", en: "2 (14 and 16)"}
+    - {pt: "3", en: "3"}
+    - {pt: "1", en: "1"}
+  resposta: [0]

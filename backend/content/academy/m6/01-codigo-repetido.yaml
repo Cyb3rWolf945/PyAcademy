@@ -1,0 +1,81 @@
+id: m6-01-codigo-repetido
+modulo: m6
+ordem: 1
+titulo: {pt: "O problema do código repetido", en: "The problem of repeated code"}
+aprender:
+  pt: |
+    Temos duas listas de notas e queremos a soma de cada uma. Fazemos o ciclo para a turma A, copiamos e colamos para a turma B e **só mudamos o nome da lista**.
+
+    Funciona, mas repara no que se repete: **o mesmo ciclo de soma, duas vezes**. Se encontrares um erro nele, tens de o corrigir nos dois sítios. E da próxima vez que precisares de somar uma lista, vais copiar outra vez.
+
+    Quando vires o mesmo bloco de código em mais do que um sítio, é um sinal. Hoje aprendes a resolvê-lo.
+  en: |
+    We have two lists of marks and want the sum of each. We write the loop for class A, copy and paste it for class B and **only change the list name**.
+
+    It works, but notice what repeats: **the same sum loop, twice**. If you find a bug in it, you have to fix it in both places. And next time you need to sum a list, you will copy it again.
+
+    When you see the same block of code in more than one place, that is a sign. Today you learn to fix it.
+exemplo:
+  id: soma-repetida
+  titulo: {pt: "Soma das duas turmas (copiada)", en: "Sum of both classes (copied)"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "notas_turma_a = [14, 9, 16, 12]", en: "notas_turma_a = [14, 9, 16, 12]"}, py: "notas_turma_a = [14, 9, 16, 12]"}
+    - {id: d2, tipo: definir, texto: {pt: "soma_a = 0", en: "soma_a = 0"}, py: "soma_a = 0"}
+    - id: f1
+      tipo: para
+      texto: {pt: "para cada nota em notas_turma_a", en: "for each nota in notas_turma_a"}
+      py: "for nota in notas_turma_a"
+      corpo:
+        - {id: c1, tipo: calcular, texto: {pt: "soma_a = soma_a + nota", en: "soma_a = soma_a + nota"}, py: "soma_a = soma_a + nota"}
+    - {id: e1, tipo: escrever, texto: {pt: 'escrever "Soma da turma A:" e soma_a', en: 'write "Soma da turma A:" and soma_a'}, py: 'print("Soma da turma A:", soma_a)'}
+    - {id: d3, tipo: definir, texto: {pt: "notas_turma_b = [18, 7, 15, 20, 11]", en: "notas_turma_b = [18, 7, 15, 20, 11]"}, py: "notas_turma_b = [18, 7, 15, 20, 11]"}
+    - {id: d4, tipo: definir, texto: {pt: "soma_b = 0", en: "soma_b = 0"}, py: "soma_b = 0"}
+    - id: f2
+      tipo: para
+      texto: {pt: "para cada nota em notas_turma_b", en: "for each nota in notas_turma_b"}
+      py: "for nota in notas_turma_b"
+      corpo:
+        - {id: c2, tipo: calcular, texto: {pt: "soma_b = soma_b + nota", en: "soma_b = soma_b + nota"}, py: "soma_b = soma_b + nota"}
+    - {id: e2, tipo: escrever, texto: {pt: 'escrever "Soma da turma B:" e soma_b', en: 'write "Soma da turma B:" and soma_b'}, py: 'print("Soma da turma B:", soma_b)'}
+slides:
+  - {deck: funcoes, de: 3, ate: 5}
+pistas:
+  - pt: "Compara os dois blocos: o que muda de um para o outro, e o que fica igual?"
+    en: "Compare the two blocks: what changes from one to the other, and what stays the same?"
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Olha para o programa das duas turmas."
+      en: "Look at the two-class program."
+    pergunta:
+      pt: "O que se repete, quase igual, nos dois blocos?"
+      en: "What repeats, almost identical, in both blocks?"
+    opcoes:
+      - {pt: "O ciclo que soma as notas", en: "The loop that adds up the marks"}
+      - {pt: "As notas de cada turma", en: "Each class's marks"}
+      - {pt: "O texto das mensagens (\"Soma da turma A\" e \"B\")", en: "The message text (\"Soma da turma A\" and \"B\")"}
+    resposta: [0]
+    explicacao:
+      pt: "As notas e as mensagens são diferentes de turma para turma. O que se repete é o ciclo de soma, e é esse que vamos embrulhar numa função."
+      en: "The marks and messages differ from class to class. What repeats is the sum loop, and that is what we will wrap in a function."
+  - tipo: ordenar_lista
+    enunciado:
+      pt: "Põe pela ordem o que fazes quando reparas em código repetido."
+      en: "Put in order what you do when you notice repeated code."
+    itens:
+      - {id: p1, texto: {pt: "Reparar que o mesmo bloco aparece mais do que uma vez", en: "Notice that the same block appears more than once"}}
+      - {id: p2, texto: {pt: "Dar um nome a esse bloco (criar uma função)", en: "Give that block a name (create a function)"}}
+      - {id: p3, texto: {pt: "Escrever o bloco uma única vez, dentro da função", en: "Write the block just once, inside the function"}}
+      - {id: p4, texto: {pt: "Chamar a função sempre que precisares", en: "Call the function whenever you need it"}}
+    explicacao:
+      pt: "Primeiro reparas, depois dás nome ao bloco, escreves a lógica uma vez e chamas a função onde for preciso."
+      en: "First you notice, then you name the block, write the logic once and call the function wherever it is needed."
+verificacao:
+  pergunta:
+    pt: "Qual é o risco de copiar e colar o mesmo ciclo em vários sítios?"
+    en: "What is the risk of copy-pasting the same loop in several places?"
+  opcoes:
+    - {pt: "O Python não deixa correr o programa", en: "Python will not run the program"}
+    - {pt: "Se houver um erro, tens de o corrigir em todas as cópias", en: "If there is a bug, you must fix it in every copy"}
+    - {pt: "O programa fica mais rápido", en: "The program gets faster"}
+  resposta: [1]

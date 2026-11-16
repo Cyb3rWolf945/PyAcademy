@@ -1,0 +1,69 @@
+id: m5-07-foguetao
+modulo: m5
+ordem: 7
+titulo: {pt: "Contagem decrescente do foguetão", en: "Rocket countdown"}
+aprender:
+  pt: |
+    Fazer uma contagem decrescente de 5 até 1, estilo "descolagem de foguetão". Começamos com `t = 5` e, **enquanto `t > 0`**, escrevemos `t` e diminuímos 1.
+
+    No fim, **fora do ciclo** (sem indentação), escrevemos "Descolagem!", uma só vez.
+
+    Este exemplo também dava para fazer com `for i in range(5, 0, -1)`. Quando sabemos a contagem à partida, o `for` costuma ser mais direto. Mas o `while` mostra bem a ideia: a variável de controlo (`t`) é atualizada **dentro** do ciclo.
+  en: |
+    A countdown from 5 to 1, "rocket liftoff" style. We start with `t = 5` and, **while `t > 0`**, we write `t` and subtract 1.
+
+    At the end, **outside the loop** (no indentation), we write "Descolagem!" ("Liftoff!"), just once.
+
+    This example could also be done with `for i in range(5, 0, -1)`. When we know the count up front, `for` is usually more direct. But `while` shows the idea well: the control variable (`t`) is updated **inside** the loop.
+exemplo:
+  id: foguetao
+  titulo: {pt: "Contagem decrescente do foguetão", en: "Rocket countdown"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "t = 5", en: "t = 5"}, py: "t = 5"}
+    - id: w
+      tipo: enquanto
+      cond: {pt: "t > 0 ?", en: "t > 0 ?"}
+      py: "t > 0"
+      corpo:
+        - {id: e1, tipo: escrever, texto: {pt: "escrever t", en: "write t"}, py: "print(t)"}
+        - {id: c, tipo: calcular, texto: {pt: "t = t - 1", en: "t = t - 1"}, py: "t = t - 1"}
+    - {id: e2, tipo: escrever, texto: {pt: 'escrever "Descolagem!"', en: 'write "Liftoff!"'}, py: 'print("Descolagem!")'}
+  demoPath: [d, w, e1, c, w, e1, c, w, e1, c, w, e2]
+slides:
+  - {deck: ciclos, de: 17, ate: 17}
+pistas:
+  - pt: "O \"Descolagem!\" está fora do ciclo: só corre quando a condição passa a False."
+    en: "\"Descolagem!\" is outside the loop: it only runs once the condition becomes False."
+atividades:
+  - tipo: ligar
+    enunciado:
+      pt: "Liga cada bloco do fluxograma à sua linha de Python."
+      en: "Match each flowchart block to its line of Python."
+    explicacao:
+      pt: "O losango é o `while`, o corpo é o `print` e a subtração, e a saída do ciclo leva ao \"Descolagem!\"."
+      en: "The diamond is the `while`, the body is the `print` and the subtraction, and the loop exit leads to \"Descolagem!\"."
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "Primeiro `t = 5`, depois o ciclo, e só no fim a descolagem, quando o ciclo acaba."
+      en: "First `t = 5`, then the loop, and only at the end the liftoff, once the loop is over."
+  - tipo: completar
+    enunciado:
+      pt: "Completa o passo que faz a contagem descer."
+      en: "Complete the step that makes the count go down."
+    lacunas:
+      - {stmt: c, lado: py, modelo: {pt: "t = t - ___", en: "t = t - ___"}, respostas: ["1"]}
+    explicacao:
+      pt: "Cada volta tira 1 a `t`, até a condição `t > 0` deixar de ser verdadeira."
+      en: "Each turn takes 1 off `t`, until the condition `t > 0` stops being true."
+verificacao:
+  pergunta:
+    pt: "O que escreve o programa, por ordem?"
+    en: "What does the program print, in order?"
+  opcoes:
+    - {pt: "5 4 3 2 1 e depois Descolagem!", en: "5 4 3 2 1 and then Descolagem!"}
+    - {pt: "5 4 3 2 1 0 e depois Descolagem!", en: "5 4 3 2 1 0 and then Descolagem!"}
+    - {pt: "Descolagem! e depois 5 4 3 2 1", en: "Descolagem! and then 5 4 3 2 1"}
+  resposta: [0]

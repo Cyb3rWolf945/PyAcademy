@@ -1,0 +1,75 @@
+id: m5-03-for-range
+modulo: m5
+ordem: 3
+titulo: {pt: "for e range: contagem simples", en: "for and range: simple counting"}
+aprender:
+  pt: |
+    Problema: escrever os números de 1 a 5, um por linha. Em Python: `for i in range(1, 6):` com `print(i)` indentado por baixo.
+
+    Saída: 1 2 3 4 5. Repara que `range(1, 6)` **não inclui o 6**: o limite superior fica de fora. `range(n)` vai de 0 a `n-1`.
+
+    Erro clássico, o *off-by-one*: com `range(1, 5)` só imprimes 1 2 3 4, e falta o 5. Confundir `range(n)` com "repete n vezes a contar de 1" dá sempre um a menos.
+
+    No fluxograma, `i = 1`, a condição `i <= 5`, escrever `i` e `i = i + 1`: o `for` faz estes passos todos por ti.
+  en: |
+    Problem: write the numbers from 1 to 5, one per line. In Python: `for i in range(1, 6):` with an indented `print(i)` below.
+
+    Output: 1 2 3 4 5. Notice that `range(1, 6)` **does not include 6**: the upper limit is left out. `range(n)` goes from 0 to `n-1`.
+
+    The classic *off-by-one* error: with `range(1, 5)` you only print 1 2 3 4, and 5 is missing. Mixing up `range(n)` with "repeat n times counting from 1" is always one short.
+
+    In the flowchart, `i = 1`, the condition `i <= 5`, write `i` and `i = i + 1`: the `for` does all these steps for you.
+exemplo:
+  id: contagem-simples
+  titulo: {pt: "Contagem de 1 a 5", en: "Counting from 1 to 5"}
+  corpo:
+    - id: p
+      tipo: para
+      texto: {pt: "para i de 1 a 5", en: "for i from 1 to 5"}
+      py: "for i in range(1, 6)"
+      corpo:
+        - {id: e, tipo: escrever, texto: {pt: "escrever i", en: "write i"}, py: "print(i)"}
+  demoPath: [p, e, e, e, e, e]
+slides:
+  - {deck: ciclos, de: 11, ate: 11}
+  - {deck: ciclos, de: 14, ate: 14}
+leitura:
+  pt: "Python Basics, cap. 6.4 — Correr em círculos (ciclos for e while)"
+  en: "Python Basics, ch. 6.4 — Run in circles (for and while loops)"
+pistas:
+  - pt: "O limite superior do `range` nunca entra na contagem."
+    en: "The upper limit of `range` is never part of the count."
+atividades:
+  - tipo: completar
+    enunciado:
+      pt: "Completa o `range` para contar de 1 até 5, inclusive."
+      en: "Complete the `range` to count from 1 up to 5, inclusive."
+    lacunas:
+      - {stmt: p, lado: py, modelo: {pt: "for i in range(1, ___)", en: "for i in range(1, ___)"}, respostas: ["6"]}
+    explicacao:
+      pt: "O limite superior fica de fora, por isso para chegar a 5 o `range` acaba em 6."
+      en: "The upper limit is left out, so to reach 5 the `range` ends at 6."
+  - tipo: pergunta
+    enunciado:
+      pt: "Caça o *off-by-one*."
+      en: "Hunt the *off-by-one*."
+    pergunta:
+      pt: "O que imprime `for i in range(1, 5): print(i)`?"
+      en: "What does `for i in range(1, 5): print(i)` print?"
+    opcoes:
+      - {pt: "1 2 3 4", en: "1 2 3 4"}
+      - {pt: "1 2 3 4 5", en: "1 2 3 4 5"}
+      - {pt: "0 1 2 3 4", en: "0 1 2 3 4"}
+    resposta: [0]
+    explicacao:
+      pt: "O 5 fica de fora. Para incluir o 5 é preciso `range(1, 6)`."
+      en: "5 is left out. To include 5 you need `range(1, 6)`."
+verificacao:
+  pergunta:
+    pt: "Quantas vezes corre o corpo de `for i in range(1, 6)`?"
+    en: "How many times does the body of `for i in range(1, 6)` run?"
+  opcoes:
+    - {pt: "5 vezes (i = 1, 2, 3, 4, 5)", en: "5 times (i = 1, 2, 3, 4, 5)"}
+    - {pt: "6 vezes", en: "6 times"}
+    - {pt: "4 vezes", en: "4 times"}
+  resposta: [0]

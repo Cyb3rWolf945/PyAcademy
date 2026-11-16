@@ -1,0 +1,129 @@
+id: m3-02-briefing-troco
+modulo: m3
+ordem: 2
+titulo:
+  pt: 'Briefing: o troco'
+  en: 'Briefing: the change'
+aprender:
+  pt: |-
+    Exemplo guiado: o troco numa compra no supermercado.
+
+    - **Dados de entrada:** o valor pago e o valor da compra.
+    - **Variáveis:** `valor_pago` e `valor_compra`, porque mudam a cada compra.
+    - **Constantes:** nenhuma, não há aqui nenhum valor fixo.
+    - **Operação:** valor pago − valor da compra.
+
+    Repara que o programa segue o estilo das aulas: variáveis inicializadas no topo, depois **ler**, **calcular** e **escrever**.
+  en: |-
+    Guided example: the change on a supermarket purchase.
+
+    - **Input data:** the amount paid and the purchase value.
+    - **Variables:** `valor_pago` and `valor_compra`, because they change with each purchase.
+    - **Constants:** none, there is no fixed value here.
+    - **Operation:** amount paid − purchase value.
+
+    Notice that the program follows the style from class: variables initialised at the top, then **read**, **calculate** and **write**.
+exemplo:
+  id: troco
+  titulo:
+    pt: O troco
+    en: The change
+  corpo:
+  - id: v1
+    tipo: definir
+    texto:
+      pt: definir real valor_pago = 0.0
+      en: define real valor_pago = 0.0
+    py: valor_pago = 0.0
+  - id: v2
+    tipo: definir
+    texto:
+      pt: definir real valor_compra = 0.0
+      en: define real valor_compra = 0.0
+    py: valor_compra = 0.0
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler valor_pago
+      en: read valor_pago
+    py: 'valor_pago = float(input("Valor pago: "))'
+  - id: l2
+    tipo: ler
+    texto:
+      pt: ler valor_compra
+      en: read valor_compra
+    py: 'valor_compra = float(input("Valor da compra: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: troco = valor_pago - valor_compra
+      en: troco = valor_pago - valor_compra
+    py: troco = valor_pago - valor_compra
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Troco = " + troco
+      en: write "Change = " + troco
+    py: print("Troco:", troco)
+slides:
+- deck: aula-3-5
+  de: 6
+  ate: 6
+pistas:
+- pt: O troco é o que sobra de uma nota depois de pagar a compra.
+  en: The change is what is left of a note after paying for the purchase.
+atividades:
+- tipo: ligar
+  enunciado:
+    pt: Liga cada bloco do fluxograma à sua linha de Python.
+    en: Match each flowchart block to its line of Python.
+  explicacao:
+    pt: 'Constantes e variáveis ficam definidas no topo, depois lê-se, calcula-se e escreve-se: a mesma ordem nas duas vistas.'
+    en: 'Constants and variables are defined at the top, then read, calculate, write: the same order in both views.'
+- tipo: completar
+  enunciado:
+    pt: Completa a operação do troco.
+    en: Complete the change operation.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: troco = valor_pago ___ valor_compra
+      en: troco = valor_pago ___ valor_compra
+    respostas:
+    - '-'
+  explicacao:
+    pt: O troco é o que sobra do valor pago depois de tirar o valor da compra.
+    en: The change is what is left of the amount paid after taking out the purchase value.
+- tipo: pergunta
+  enunciado:
+    pt: Procura valores fixos no problema do troco.
+    en: Look for fixed values in the change problem.
+  pergunta:
+    pt: Quantas constantes tem o problema do troco?
+    en: How many constants does the change problem have?
+  opcoes:
+  - pt: Nenhuma
+    en: None
+  - pt: Uma
+    en: One
+  - pt: Duas
+    en: Two
+  resposta:
+  - 0
+  explicacao:
+    pt: Os dois valores mudam a cada compra, por isso são variáveis. Não há nada fixo.
+    en: Both values change with each purchase, so they are variables. Nothing is fixed.
+verificacao:
+  pergunta:
+    pt: Qual é a operação do troco?
+    en: What is the change operation?
+  opcoes:
+  - pt: valor pago − valor da compra
+    en: amount paid − purchase value
+  - pt: valor da compra − valor pago
+    en: purchase value − amount paid
+  - pt: valor pago + valor da compra
+    en: amount paid + purchase value
+  resposta:
+  - 0

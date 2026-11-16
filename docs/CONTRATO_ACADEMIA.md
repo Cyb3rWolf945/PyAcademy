@@ -238,3 +238,43 @@ Texto **original**, curto e encorajador, em PT-PT (+EN). Usa os exemplos e a voz
   5. *Segundos em minutos*: `completar` (`//` e `%`) + `ordenar_fluxograma` (Ex. 3.2).
   6. *Desafio: km/h → m/s*: `ordenar_fluxograma` + `completar` (Ex. 4.1).
 - Cada secção tem `verificacao` (1 pergunta), 1–2 `pistas` e 1–2 `atividades`, de 3 a 6 min. Os `exemplo` seguem as convenções do professor e o Python **igual ao dos slides**.
+
+---
+
+# Extensão M6 — Funções no modelo (fluxograma + Python)
+
+Fonte: `materiais_aulas/modularização.pdf`, importado como deck **`funcoes`** (24 slides). Abrange: recap, código repetido, funções embutidas e bibliotecas (`random`), DRY, `def` e chamada, parâmetros/argumentos, type hints, valores por omissão, `return` vs `print`, vários `return` com `if`, somatório/produtório, validação sem *boilerplate*, âmbito local/global e funções que chamam funções.
+
+## 14. Modelo do programa: novos campos e tipos
+```js
+Program = {
+  id, titulo,
+  funcoes?: [ { id, nome: "soma_lista", params: "numeros", texto?: {pt,en}, corpo: [Stmt...] } ],
+  corpo: [Stmt...]            // programa principal
+}
+Stmt += 
+  | { id, tipo: "chamar",   texto: {pt,en}, py: "soma_a = soma_lista(notas_turma_a)" }   // chamada usada como instrução
+  | { id, tipo: "devolver", texto: {pt,en}, py: "return soma" }                           // só dentro de uma função
+```
+- Em `params` vai o texto exato dentro dos parênteses, incluindo type hints e valores por omissão (ex. `"nome, saudacao=\"Olá\""` ou `"largura: float, altura: float"`); o retorno anotado pode ir em `devolve_tipo: "float"` (→ `def f(...) -> float:`).
+- **`toPython`:** primeiro cada função (`def nome(params):` + corpo indentado; a linha `def` tem `stmtId = funcao.id`), uma linha em branco entre funções e antes do principal, depois o `corpo` principal. As linhas em branco não têm `stmtId`.
+- **Fluxograma:**
+  - **o principal** fica como hoje (Início … Fim). Uma instrução `chamar` desenha-se como **processo pré-definido**: um retângulo lilás com **duas barras verticais** junto às margens esquerda e direita (símbolo padrão de sub-rotina);
+  - **cada função** é desenhada como um **fluxograma à parte**, ao lado do principal (por baixo no telemóvel), com o título `nome(params)`. Começa numa pílula verde com o texto `nome(params)` em vez de "Início" e termina numa pílula com "Devolver …" (o bloco `devolver`) ou "Fim" se não houver `return`;
+  - um `devolver` dentro de um ramo (`se`) é um terminal nesse ramo, sem ligar ao fim comum;
+  - as chamadas `chamar` ficam ligadas visualmente à função: ao tocar numa chamada, o título da função correspondente fica realçado (por `nome`).
+- **Ligação:** bloco ↔ linha como hoje; a linha `def` fica ligada à pílula de início da função.
+- **Atividades:** `ordenar_python`, `ordenar_fluxograma`, `ligar` e `completar` aceitam um campo opcional `alvo: <funcao.id>` para trabalharem só dentro do corpo dessa função (sem `alvo` = programa principal). `ligar` pode também incluir os ids das funções (pílula de início ↔ linha `def`).
+- O validador garante: nomes de função únicos; `devolver` só dentro de funções; `alvo` existente; ids únicos em todo o programa (principal + funções).
+
+## 15. Conteúdo M6 — Funções (deck `funcoes`), +8 pts por secção
+1. **O problema do código repetido** (slides 3–5): o exemplo das duas somas de turmas copiadas; pergunta "o que se repete?".
+2. **Já usamos funções** (7–8): `int`, `float(input())`, `len`, `print`, métodos `lower/upper`, biblioteca `random.randint`.
+3. **DRY: Don't Repeat Yourself** (9).
+4. **Definir e chamar** (10): `def saudar()` chamada duas vezes; definir ≠ executar; `ordenar_python`.
+5. **Parâmetros e argumentos** (11–13): `saudar_aluno(nome)`, argumentos "Edgar"/"Rhyanne"; type hints como documentação; valor por omissão e a regra da ordem; `completar` + `pergunta`.
+6. **`return` vs `print`** (14–15): `dobro` com `print` vs com `return`; o `return` termina a função; vários `return` guardados por `if` (losango → saídas diferentes); `pergunta` + `completar`.
+7. **Somatório numa função** (17–18): `soma_lista` + chamadas para as duas turmas (exemplo com `funcoes`); `ligar` + `ordenar_python` com `alvo`; somatório (acumulador em 0) vs produtório (acumulador em 1).
+8. **Validação sem repetir** (19): `pedir_numero_positivo(mensagem)` com `while` + 3 chamadas.
+9. **Âmbito local vs global** (20) e **funções que chamam funções** (21): `NameError` do `contador` local; `media_lista` usa `soma_lista`.
+O Python dos exemplos é **igual ao dos slides**. Leitura: Python Basics cap. 6.1–6.3 e 6.6.

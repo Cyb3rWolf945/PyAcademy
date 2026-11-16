@@ -1,0 +1,40 @@
+id: m4-01-funcoes
+modulo: m4
+ordem: 1
+titulo: {pt: Funções, en: Functions}
+aprender: {pt: Texto, en: Text}
+exemplo:
+  id: soma
+  titulo: {pt: Soma, en: Sum}
+  funcoes:
+    - id: f1
+      nome: soma_lista
+      params: "numeros: list"
+      devolve_tipo: float
+      texto: {pt: Soma de uma lista, en: Sum of a list}
+      corpo:
+        - {id: f1a, tipo: definir, texto: {pt: soma a 0, en: sum to 0}, py: "soma = 0"}
+        - id: f1b
+          tipo: para
+          texto: {pt: Para cada número, en: For each number}
+          py: "for n in numeros"
+          corpo:
+            - {id: f1c, tipo: calcular, texto: {pt: Somar, en: Add}, py: "soma = soma + n"}
+        - {id: f1d, tipo: devolver, texto: {pt: Devolver soma, en: Return sum}, py: "return soma"}
+  corpo:
+    - {id: m1, tipo: definir, texto: {pt: Notas, en: Grades}, py: "notas = [10, 12]"}
+    - {id: m2, tipo: chamar, texto: {pt: Chamar soma_lista, en: Call soma_lista}, py: "total = soma_lista(notas)"}
+    - {id: m3, tipo: escrever, texto: {pt: Escrever total, en: Print total}, py: "print(total)"}
+atividades:
+  - {tipo: ordenar_python, alvo: f1, enunciado: {pt: Ordena a função, en: Order the function}, explicacao: {pt: X, en: X}}
+  - {tipo: ligar, enunciado: {pt: Liga, en: Link}, explicacao: {pt: X, en: X}}
+  - tipo: completar
+    alvo: f1
+    enunciado: {pt: Completa, en: Complete}
+    explicacao: {pt: X, en: X}
+    lacunas:
+      - {stmt: f1c, lado: py, modelo: {pt: "soma = soma ___ n", en: "soma = soma ___ n"}, respostas: ["+"]}
+verificacao:
+  pergunta: {pt: "Qual?", en: "Which?"}
+  opcoes: [{pt: A, en: A}, {pt: B, en: B}]
+  resposta: [0]

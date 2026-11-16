@@ -22,14 +22,15 @@ class Bi(Strict):
     en: str = Field(min_length=1)
 
 
-SIMPLE = ("definir", "ler", "calcular", "escrever")
+SIMPLE = ("definir", "ler", "calcular", "escrever", "chamar", "devolver")
+FUNC_NAME_RE = r"^[A-Za-z_][A-Za-z0-9_]{0,40}$"
 ID_RE = r"^[a-z0-9][a-z0-9_-]{0,79}$"
 STMT_RE = r"^[A-Za-z0-9_-]{1,40}$"
 
 
 class Stmt(Strict):
     id: str = Field(pattern=STMT_RE)
-    tipo: Literal["definir", "ler", "calcular", "escrever", "se", "enquanto", "para"]
+    tipo: Literal["definir", "ler", "calcular", "escrever", "chamar", "devolver", "se", "enquanto", "para"]
     texto: Bi | None = None
     cond: Bi | None = None
     py: str | None = None  # None: bloco só do fluxograma (não tem linha de Python)
@@ -57,11 +58,34 @@ class Stmt(Strict):
 Stmt.model_rebuild()
 
 
+class Funcao(Strict):
+    """Função do programa (def). `params` é o texto exato entre parênteses (type hints e valores por omissão incluídos)."""
+    id: str = Field(pattern=STMT_RE)
+    nome: str = Field(pattern=FUNC_NAME_RE)
+    params: str = Field(default="", max_length=200, pattern=r"^[^\n]*$")
+    texto: Bi | None = None
+    devolve_tipo: str | None = Field(default=None, max_length=40)
+    corpo: list[Stmt] = Field(min_length=1)
+
+
 class Program(Strict):
     id: str = Field(pattern=STMT_RE)
     titulo: Bi
+    funcoes: list[Funcao] = []
     corpo: list[Stmt] = Field(min_length=1)
     demoPath: list[str] | None = None
+
+    @model_validator(mode="after")
+    def _functions(self):
+        names = [f.nome for f in self.funcoes]
+        if len(set(names)) != len(names):
+            raise ValueError("funcoes: nomes repetidos")
+        ids = [s.id for s in all_stmts(self)] + [f.id for f in self.funcoes]
+        if len(set(ids)) != len(ids):
+            raise ValueError("exemplo: ids repetidos (stmts e funções partilham o mesmo espaço de ids)")
+        if any(s.tipo == "devolver" for s in walk(self.corpo)):
+            raise ValueError("'devolver' só pode estar dentro de uma função")
+        return self
 
 
 def walk(stmts: list[Stmt]):
@@ -70,6 +94,18 @@ def walk(stmts: list[Stmt]):
         yield from walk(s.sim)
         yield from walk(s.nao)
         yield from walk(s.corpo)
+
+
+def all_stmts(p: "Program"):
+    """Todas as instruções do programa: principal e corpos das funções."""
+    yield from walk(p.corpo)
+    for f in p.funcoes:
+        yield from walk(f.corpo)
+
+
+def scope_body(p: "Program", alvo: str | None) -> list[Stmt]:
+    """Corpo onde a atividade trabalha: o do programa principal ou o da função `alvo`."""
+    return next(f for f in p.funcoes if f.id == alvo).corpo if alvo else p.corpo
 
 
 class SlideRef(Strict):
@@ -124,16 +160,19 @@ class Base(Strict):
 class Ligar(Base):
     tipo: Literal["ligar"]
     ids: list[str] | None = None
+    alvo: str | None = None
 
 
 class OrdenarFluxo(Base):
     tipo: Literal["ordenar_fluxograma"]
     ids: list[str] | None = None
+    alvo: str | None = None
 
 
 class OrdenarPython(Base):
     tipo: Literal["ordenar_python"]
     ids: list[str] | None = None
+    alvo: str | None = None
 
 
 class Item(Strict):
@@ -162,6 +201,7 @@ class Lacuna(Strict):
 class Completar(Base):
     tipo: Literal["completar"]
     lacunas: list[Lacuna] = Field(min_length=1)
+    alvo: str | None = None
 
 
 class Pergunta(Base):
@@ -196,31 +236,38 @@ class Section(Strict):
 
     @model_validator(mode="after")
     def _semantics(self):
-        ids = {s.id for s in walk(self.exemplo.corpo)} if self.exemplo else set()
-        if self.exemplo and len(ids) != len(list(walk(self.exemplo.corpo))):
-            raise ValueError("exemplo: stmt ids repetidos")
+        ex = self.exemplo
         for n, a in enumerate(self.atividades):
-            if a.tipo in USES_EXEMPLO and self.exemplo is None:
+            if a.tipo in USES_EXEMPLO and ex is None:
                 raise ValueError(f"atividade {n} ({a.tipo}) precisa de 'exemplo' na secção")
+            if a.tipo not in USES_EXEMPLO:
+                continue
+            fids = {f.id for f in ex.funcoes}
+            if a.alvo is not None and a.alvo not in fids:
+                raise ValueError(f"atividade {n}: alvo '{a.alvo}' não é uma função do exemplo")
+            body = scope_body(ex, a.alvo)
             if a.tipo in ("ligar", "ordenar_fluxograma", "ordenar_python") and a.ids is not None:
-                top = {s.id for s in self.exemplo.corpo}
-                with_py = {s.id for s in walk(self.exemplo.corpo) if s.py}
-                allowed = {"ligar": with_py, "ordenar_python": top & with_py, "ordenar_fluxograma": top}[a.tipo]
+                top = {s.id for s in body}
+                with_py = {s.id for s in walk(body) if s.py}
+                allowed = {"ligar": with_py | (fids if a.alvo is None else set()), "ordenar_python": top & with_py, "ordenar_fluxograma": top}[a.tipo]
                 bad = [i for i in a.ids if i not in allowed]
                 if bad or len(set(a.ids)) != len(a.ids) or len(a.ids) < 2:
                     raise ValueError(f"atividade {n}: ids inválidos {bad}")
             if a.tipo == "completar":
+                scope = {s.id: s for s in walk(body)}
                 for lac in a.lacunas:
-                    if lac.stmt not in ids:
-                        raise ValueError(f"atividade {n}: stmt '{lac.stmt}' não existe no exemplo")
-                    if lac.lado == "py" and not next(s for s in walk(self.exemplo.corpo) if s.id == lac.stmt).py:
+                    if lac.stmt not in scope:
+                        raise ValueError(f"atividade {n}: stmt '{lac.stmt}' não existe no exemplo (alvo={a.alvo})")
+                    if lac.lado == "py" and not scope[lac.stmt].py:
                         raise ValueError(f"atividade {n}: stmt '{lac.stmt}' não tem py (lado py)")
+        if ex is not None:
+            valid = {s.id for s in all_stmts(ex)} | {f.id for f in ex.funcoes}
+            for sid in ex.demoPath or []:
+                if sid not in valid:
+                    raise ValueError(f"demoPath: stmt '{sid}' não existe")
+        for n, a in enumerate(self.atividades):
             if a.tipo == "ordenar_lista" and len({i.id for i in a.itens}) != len(a.itens):
                 raise ValueError(f"atividade {n}: ids de itens repetidos")
-        if self.exemplo:
-            for sid in self.exemplo.demoPath or []:
-                if sid not in ids:
-                    raise ValueError(f"demoPath: stmt '{sid}' não existe")
         return self
 
 

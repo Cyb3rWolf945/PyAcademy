@@ -1,0 +1,83 @@
+id: m3-01-missao
+modulo: m3
+ordem: 1
+titulo:
+  pt: 'A missão: noção de problema'
+  en: 'The mission: what a problem is'
+aprender:
+  pt: |-
+    A loja XPTO perdeu o controlo dos preços e das contas. Só as melhores agências de decomposição a conseguem salvar!
+
+    Um **problema** é uma situação difícil, uma pergunta sem resposta que precisa de uma solução: parte de **dados de entrada** e chega a um **resultado**.
+
+    Antes de programar, a missão é sempre a mesma: perceber **o que entra** (as variáveis, que mudam de caso para caso), **o que é fixo** (as constantes) e **que operação** leva dos dados ao resultado. Isto chama-se **decompor** o problema.
+  en: |-
+    The XPTO store has lost control of its prices and bills. Only the best decomposition agencies can save the day!
+
+    A **problem** is a hard situation, a question without an answer that needs a solution: it starts from **input data** and reaches a **result**.
+
+    Before programming the mission is always the same: work out **what goes in** (the variables, which change from case to case), **what is fixed** (the constants) and **which operation** leads from the data to the result. This is called **decomposing** the problem.
+slides:
+- deck: aula-3-5
+  de: 2
+  ate: 3
+pistas:
+- pt: 'Pensa em três coisas: o que entra, o que é fixo e o que se calcula.'
+  en: 'Think of three things: what goes in, what is fixed and what is calculated.'
+atividades:
+- tipo: ordenar_lista
+  enunciado:
+    pt: Põe pela ordem as quatro perguntas de uma boa decomposição.
+    en: Put the four questions of a good decomposition in order.
+  itens:
+  - id: a
+    texto:
+      pt: Quais são os dados de entrada?
+      en: What are the input data?
+  - id: b
+    texto:
+      pt: O que varia de caso para caso (variáveis)?
+      en: What changes from case to case (variables)?
+  - id: c
+    texto:
+      pt: O que é fixo (constantes)?
+      en: What is fixed (constants)?
+  - id: d
+    texto:
+      pt: Que operação dá o resultado?
+      en: Which operation gives the result?
+  explicacao:
+    pt: Primeiro o que entra, depois o que muda e o que é fixo, e só então a operação que liga tudo.
+    en: First what goes in, then what changes and what is fixed, and only then the operation that ties it all together.
+- tipo: pergunta
+  enunciado:
+    pt: Aplica a ideia a um problema do dia a dia.
+    en: Apply the idea to an everyday problem.
+  pergunta:
+    pt: O que é um problema, para um programador?
+    en: What is a problem, for a programmer?
+  opcoes:
+  - pt: Uma situação com dados de partida em que queremos chegar a um resultado
+    en: A situation with starting data where we want to reach a result
+  - pt: Um erro no programa
+    en: A bug in the program
+  - pt: Um programa que já está escrito
+    en: A program that is already written
+  resposta:
+  - 0
+  explicacao:
+    pt: 'Antes de haver erros ou programas há o problema: dados de entrada e um resultado a descobrir.'
+    en: 'Before there are bugs or programs there is the problem: input data and a result to find.'
+verificacao:
+  pergunta:
+    pt: Qual destas NÃO é uma pergunta da decomposição?
+    en: Which of these is NOT a question of decomposition?
+  opcoes:
+  - pt: Que operação dá o resultado?
+    en: Which operation gives the result?
+  - pt: O que é fixo?
+    en: What is fixed?
+  - pt: Qual é a cor do ecrã?
+    en: What colour is the screen?
+  resposta:
+  - 2

@@ -1,0 +1,60 @@
+id: m4-04-de-morgan
+modulo: m4
+ordem: 4
+titulo: {pt: "Leis de De Morgan", en: "De Morgan's laws"}
+aprender:
+  pt: |
+    Quando precisas de **negar uma condição composta**, as Leis de De Morgan poupam-te erros. São duas equivalências: `not (A and B)` é o mesmo que `(not A) or (not B)`, e `not (A or B)` é o mesmo que `(not A) and (not B)`.
+
+    Regra prática: ao passar o `not` para dentro dos parênteses, **o `and` vira `or` e o `or` vira `and`**.
+
+    Exemplo: "Não (ter idade válida **e** ter saldo suficiente)" é o mesmo que "não ter idade válida **ou** não ter saldo suficiente". Basta falhar uma das duas para a porta fechar.
+  en: |
+    When you need to **negate a compound condition**, De Morgan's laws save you from mistakes. There are two equivalences: `not (A and B)` is the same as `(not A) or (not B)`, and `not (A or B)` is the same as `(not A) and (not B)`.
+
+    Rule of thumb: when you push the `not` inside the parentheses, **`and` becomes `or` and `or` becomes `and`**.
+
+    Example: "Not (having a valid age **and** enough balance)" is the same as "not having a valid age **or** not having enough balance". Failing just one of the two is enough to close the door.
+pistas:
+  - pt: "Ao entrar o `not`, o `and` troca por `or` (e vice-versa), e cada condição leva o seu `not`."
+    en: "When `not` goes in, `and` swaps to `or` (and vice versa), and each condition gets its own `not`."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Aplica a primeira lei."
+      en: "Apply the first law."
+    pergunta:
+      pt: "Qual expressão é equivalente a `not (A and B)`?"
+      en: "Which expression is equivalent to `not (A and B)`?"
+    opcoes:
+      - {pt: "(not A) or (not B)", en: "(not A) or (not B)"}
+      - {pt: "(not A) and (not B)", en: "(not A) and (not B)"}
+      - {pt: "not A and B", en: "not A and B"}
+    resposta: [0]
+    explicacao:
+      pt: "O `and` vira `or` e cada parte leva o seu `not`: (not A) or (not B)."
+      en: "`and` becomes `or` and each part gets its own `not`: (not A) or (not B)."
+  - tipo: pergunta
+    enunciado:
+      pt: "Aplica a segunda lei."
+      en: "Apply the second law."
+    pergunta:
+      pt: "Qual expressão é equivalente a `not (chove or neva)`?"
+      en: "Which expression is equivalent to `not (chove or neva)`?"
+    opcoes:
+      - {pt: "(not chove) and (not neva)", en: "(not chove) and (not neva)"}
+      - {pt: "(not chove) or (not neva)", en: "(not chove) or (not neva)"}
+      - {pt: "chove and neva", en: "chove and neva"}
+    resposta: [0]
+    explicacao:
+      pt: "Não chover **e** não nevar: é o `or` que vira `and`."
+      en: "Not raining **and** not snowing: the `or` becomes `and`."
+verificacao:
+  pergunta:
+    pt: "\"Não (ter idade válida e ter saldo suficiente)\" é o mesmo que:"
+    en: "\"Not (having a valid age and enough balance)\" is the same as:"
+  opcoes:
+    - {pt: "Não ter idade válida OU não ter saldo suficiente", en: "Not having a valid age OR not having enough balance"}
+    - {pt: "Não ter idade válida E não ter saldo suficiente", en: "Not having a valid age AND not having enough balance"}
+    - {pt: "Ter idade válida OU ter saldo suficiente", en: "Having a valid age OR having enough balance"}
+  resposta: [0]

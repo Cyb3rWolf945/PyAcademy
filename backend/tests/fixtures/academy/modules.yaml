@@ -3,3 +3,4 @@
 - {id: m1, ordem: 1, titulo: {pt: Um, en: One}, descricao: {pt: D1, en: D1}, icone: m1, peca: ler-escrever, dificuldade: 1, bloco: "1"}
 - {id: m2, ordem: 2, titulo: {pt: Dois, en: Two}, descricao: {pt: D2, en: D2}, icone: m2, peca: calcular, dificuldade: 2, bloco: "2"}
 - {id: m3, ordem: 3, titulo: {pt: Tres, en: Three}, descricao: {pt: D3, en: D3}, icone: m3, peca: decisao, dificuldade: 2, bloco: "3"}
+- {id: m4, ordem: 4, titulo: {pt: Quatro, en: Four}, descricao: {pt: D4, en: D4}, icone: m4, peca: ciclo, dificuldade: 3, bloco: "4"}

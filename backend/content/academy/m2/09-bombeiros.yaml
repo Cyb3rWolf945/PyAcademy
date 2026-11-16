@@ -1,0 +1,120 @@
+id: m2-09-bombeiros
+modulo: m2
+ordem: 9
+titulo:
+  pt: 'Carro de bombeiros: Pitágoras'
+  en: 'Fire engine: Pythagoras'
+aprender:
+  pt: |-
+    Problema: dados o comprimento da escada e a altura do prédio, qual é a distância do carro de bombeiros ao prédio?
+
+    A escada, a altura e a distância formam um triângulo retângulo. Pelo teorema de Pitágoras, a distância é `√(comprimento² − altura²)`.
+
+    Em Python, `sqrt` precisa de `import math` e a potência escreve-se `**`. Com uma escada de 10 e um prédio de 6, o programa mostra `8.0`.
+  en: |-
+    Problem: given the ladder length and the building height, what is the distance from the fire engine to the building?
+
+    The ladder, the height and the distance form a right triangle. By the Pythagorean theorem, the distance is `√(length² − height²)`.
+
+    In Python, `sqrt` needs `import math` and power is written `**`. With a ladder of 10 and a building of 6, the program shows `8.0`.
+exemplo:
+  id: bombeiros
+  titulo:
+    pt: Carro de bombeiros
+    en: Fire engine
+  corpo:
+  - id: i
+    tipo: definir
+    texto:
+      pt: usar a biblioteca math (sqrt)
+      en: use the math library (sqrt)
+    py: import math
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler comprimento
+      en: read comprimento
+    py: 'comprimento = float(input("Comprimento da escada: "))'
+  - id: l2
+    tipo: ler
+    texto:
+      pt: ler altura
+      en: read altura
+    py: 'altura = float(input("Altura do prédio: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: distancia = sqrt(comprimento ^ 2 - altura ^ 2)
+      en: distancia = sqrt(comprimento ^ 2 - altura ^ 2)
+    py: distancia = math.sqrt(comprimento ** 2 - altura ** 2)
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Distância = " + distancia
+      en: write "Distância = " + distancia
+    py: print("Distância ao prédio =", distancia)
+slides:
+- deck: aula-2
+  de: 37
+  ate: 37
+leitura:
+  pt: Python Basics, cap. 5 — Números e matemática
+  en: Python Basics, ch. 5 — Numbers and math
+pistas:
+- pt: 'Decompõe: dois dados de entrada e uma fórmula de Pitágoras.'
+  en: 'Decompose: two inputs and a Pythagoras formula.'
+atividades:
+- tipo: ordenar_fluxograma
+  enunciado:
+    pt: Põe os blocos do fluxograma pela ordem certa.
+    en: Put the flowchart blocks in the right order.
+  explicacao:
+    pt: Primeiro as leituras, depois o cálculo (que precisa dos dois valores) e só no fim o resultado.
+    en: First the reads, then the calculation (which needs both values) and only at the end the result.
+- tipo: completar
+  enunciado:
+    pt: Completa a potência do comprimento.
+    en: Complete the length power.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: distancia = math.sqrt(comprimento ** ___ - altura ** 2)
+      en: distancia = math.sqrt(comprimento ** ___ - altura ** 2)
+    respostas:
+    - '2'
+  explicacao:
+    pt: É o comprimento ao quadrado, tal como diz o teorema de Pitágoras.
+    en: It is the length squared, as the Pythagorean theorem says.
+- tipo: pergunta
+  enunciado:
+    pt: 'Com escada de 10 e prédio de 6:'
+    en: 'With a ladder of 10 and a building of 6:'
+  pergunta:
+    pt: Quanto mostra o programa?
+    en: What does the program show?
+  opcoes:
+  - pt: '8.0'
+    en: '8.0'
+  - pt: '4.0'
+    en: '4.0'
+  - pt: '64.0'
+    en: '64.0'
+  resposta:
+  - 0
+  explicacao:
+    pt: 10² − 6² = 100 − 36 = 64, e a raiz quadrada de 64 é 8.
+    en: 10² − 6² = 100 − 36 = 64, and the square root of 64 is 8.
+verificacao:
+  pergunta:
+    pt: Que linha é preciso acrescentar para usar math.sqrt?
+    en: Which line must be added to use math.sqrt?
+  opcoes:
+  - pt: import math
+    en: import math
+  - pt: sqrt = 2
+    en: sqrt = 2
+  - pt: from sqrt import math
+    en: from sqrt import math
+  resposta:
+  - 0

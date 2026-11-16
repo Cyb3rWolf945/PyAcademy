@@ -1,0 +1,98 @@
+id: m6-07-return-print
+modulo: m6
+ordem: 7
+titulo: {pt: "return vs print", en: "return vs print"}
+aprender:
+  pt: |
+    `print` **só mostra** algo no ecrã. Quem chamou a função não recebe nenhum valor para usar depois. O `return` **devolve** o valor a quem chamou, e esse decide o que fazer com ele: mostrá-lo, guardá-lo ou usá-lo noutro cálculo.
+
+    Com `def dobro(numero): return numero * 2`, podes escrever `resultado = dobro(5)` e usar `resultado` onde quiseres.
+
+    Dois enganos comuns: o `return` **não** é um `print`, e uma função **pode** ter vários `return`. Cada um costuma estar dentro de um `if`, tal como um losango do fluxograma leva a saídas diferentes. Por exemplo, na `media_segura`, `if len(numeros) == 0: return "não"`. Assim que um `return` corre, **a função termina logo ali**.
+  en: |
+    `print` **only shows** something on screen. The caller gets no value to use later. `return` **hands back** the value to the caller, who decides what to do with it: show it, store it or use it in another calculation.
+
+    With `def dobro(numero): return numero * 2`, you can write `resultado = dobro(5)` and use `resultado` wherever you like.
+
+    Two common mistakes: `return` is **not** a `print`, and a function **can** have several `return`s. Each one usually sits inside an `if`, just like a flowchart diamond leads to different exits. For example, in `media_segura`, `if len(numeros) == 0: return "não"`. As soon as a `return` runs, **the function ends right there**.
+exemplo:
+  id: media-segura
+  titulo: {pt: "Média segura", en: "Safe average"}
+  funcoes:
+    - id: f_soma
+      nome: soma_lista
+      params: "numeros"
+      texto: {pt: "soma_lista(numeros)", en: "soma_lista(numeros)"}
+      corpo:
+        - {id: sd, tipo: definir, texto: {pt: "soma = 0", en: "soma = 0"}, py: "soma = 0"}
+        - id: sf
+          tipo: para
+          texto: {pt: "para cada numero em numeros", en: "for each numero in numeros"}
+          py: "for numero in numeros"
+          corpo:
+            - {id: sc, tipo: calcular, texto: {pt: "soma = soma + numero", en: "soma = soma + numero"}, py: "soma = soma + numero"}
+        - {id: sr, tipo: devolver, texto: {pt: "devolver soma", en: "return soma"}, py: "return soma"}
+    - id: f_media
+      nome: media_segura
+      params: "numeros"
+      texto: {pt: "media_segura(numeros)", en: "media_segura(numeros)"}
+      corpo:
+        - id: mg
+          tipo: se
+          cond: {pt: "lista vazia?", en: "empty list?"}
+          py: "len(numeros) == 0"
+          sim:
+            - {id: m1, tipo: devolver, texto: {pt: 'devolver "não"', en: 'return "não"'}, py: 'return "não"'}
+        - {id: m2, tipo: devolver, texto: {pt: "devolver soma_lista(numeros) / len(numeros)", en: "return soma_lista(numeros) / len(numeros)"}, py: "return soma_lista(numeros) / len(numeros)"}
+  corpo:
+    - {id: e1, tipo: escrever, texto: {pt: "escrever media_segura([14, 9, 16, 12])", en: "write media_segura([14, 9, 16, 12])"}, py: "print(media_segura([14, 9, 16, 12]))"}
+slides:
+  - {deck: funcoes, de: 14, ate: 15}
+pistas:
+  - pt: "Pergunta-te: quem chamou a função fica com algum valor para guardar?"
+    en: "Ask yourself: does whoever called the function get a value to keep?"
+  - pt: "Depois de um return, o que estiver a seguir na função nunca corre."
+    en: "After a return, whatever comes next in the function never runs."
+atividades:
+  - tipo: ordenar_python
+    alvo: f_media
+    enunciado:
+      pt: "Põe pela ordem os dois blocos do corpo de media_segura."
+      en: "Put the two blocks of the media_segura body in order."
+    explicacao:
+      pt: "Primeiro o caso excecional (lista vazia), que devolve logo. Só se esse não acontecer é que se calcula a média."
+      en: "First the exceptional case (empty list), which returns right away. Only if it does not happen is the average calculated."
+  - tipo: completar
+    alvo: f_media
+    enunciado:
+      pt: "Completa a guarda: a lista está vazia quando não tem elementos."
+      en: "Complete the guard: the list is empty when it has no elements."
+    lacunas:
+      - {stmt: mg, lado: py, modelo: {pt: "len(numeros) ___ 0", en: "len(numeros) ___ 0"}, respostas: ["=="]}
+    explicacao:
+      pt: "`==` compara. Se o tamanho for 0, o primeiro return corre e a função acaba aí."
+      en: "`==` compares. If the length is 0, the first return runs and the function ends there."
+  - tipo: pergunta
+    enunciado:
+      pt: "Compara dobro com print e dobro com return."
+      en: "Compare dobro with print and dobro with return."
+    pergunta:
+      pt: "Se a função dobro só faz print(numero * 2), consegues guardar o resultado com resultado = dobro(5)?"
+      en: "If the function dobro only does print(numero * 2), can you store the result with resultado = dobro(5)?"
+    opcoes:
+      - {pt: "Não: o print só mostra, a função não devolve nenhum valor", en: "No: print only shows, the function returns no value"}
+      - {pt: "Sim, guarda o 10", en: "Yes, it stores 10"}
+      - {pt: "Sim, guarda o texto do print", en: "Yes, it stores the print's text"}
+    resposta: [0]
+    explicacao:
+      pt: "Sem return, quem chama não recebe nada para guardar. Com return numero * 2, resultado ficava com 10."
+      en: "Without return, the caller gets nothing to store. With return numero * 2, resultado would hold 10."
+verificacao:
+  pergunta:
+    pt: "Qual é a diferença entre print e return?"
+    en: "What is the difference between print and return?"
+  opcoes:
+    - {pt: "O print só mostra; o return devolve um valor a quem chamou", en: "print only shows; return hands a value back to the caller"}
+    - {pt: "Não há diferença", en: "There is no difference"}
+    - {pt: "O return mostra no ecrã e o print devolve", en: "return shows on screen and print returns"}
+  resposta: [0]

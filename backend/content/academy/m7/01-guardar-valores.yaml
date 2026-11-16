@@ -1,0 +1,72 @@
+id: m7-01-guardar-valores
+modulo: m7
+ordem: 1
+titulo: {pt: "Listas: guardar vários valores", en: "Lists: storing many values"}
+aprender:
+  pt: |
+    Até agora, uma variável guardava **um** valor. Mas e se precisares de guardar a **mão toda** de um jogo de póquer, e não só uma carta?
+
+    Uma **lista** guarda vários valores, **por ordem**, numa única variável: `mao = ["Rei", "Dama", 10, 10, 2]`. Escreve-se entre parênteses retos, com os valores separados por vírgulas.
+
+    Cada valor tem um **índice** e a contagem começa em **0**, não em 1: `mao[0]` é a primeira carta ("Rei"). `len(mao)` diz quantos elementos a lista tem (5). E com `for carta in mao:` percorres as cartas uma a uma.
+  en: |
+    Until now, a variable held **one** value. But what if you need to store a whole **poker hand**, not just one card?
+
+    A **list** holds several values, **in order**, in a single variable: `mao = ["Rei", "Dama", 10, 10, 2]`. It is written in square brackets, with values separated by commas.
+
+    Each value has an **index** and counting starts at **0**, not 1: `mao[0]` is the first card ("Rei"). `len(mao)` says how many elements the list has (5). And with `for carta in mao:` you go through the cards one by one.
+exemplo:
+  id: mao-poker
+  titulo: {pt: "A mão de póquer", en: "The poker hand"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: 'mao = ["Rei", "Dama", 10, 10, 2]', en: 'mao = ["Rei", "Dama", 10, 10, 2]'}, py: 'mao = ["Rei", "Dama", 10, 10, 2]'}
+    - {id: e1, tipo: escrever, texto: {pt: "escrever mao[0]", en: "write mao[0]"}, py: "print(mao[0])"}
+    - {id: e2, tipo: escrever, texto: {pt: "escrever len(mao)", en: "write len(mao)"}, py: "print(len(mao))"}
+    - id: p
+      tipo: para
+      texto: {pt: "para cada carta em mao", en: "for each carta in mao"}
+      py: "for carta in mao"
+      corpo:
+        - {id: e3, tipo: escrever, texto: {pt: "escrever carta", en: "write carta"}, py: "print(carta)"}
+  demoPath: [d, e1, e2, p, e3, p, e3, p, e3, p, e3, p, e3]
+slides:
+  - {deck: funcoes, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 9.2–9.3 — Listas"
+  en: "Python Basics, ch. 9.2–9.3 — Lists"
+pistas:
+  - pt: "Uma lista guarda vários valores por ordem. A primeira posição é a 0."
+    en: "A list holds several values in order. The first position is 0."
+atividades:
+  - tipo: ligar
+    enunciado:
+      pt: "Liga cada bloco do fluxograma à sua linha de Python."
+      en: "Match each flowchart block to its line of Python."
+    explicacao:
+      pt: "A lista é definida de uma vez, `mao[0]` e `len(mao)` são escritas, e o `for` percorre todas as cartas."
+      en: "The list is defined in one go, `mao[0]` and `len(mao)` are written, and the `for` goes through every card."
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "A lista tem de existir antes de a usares. O ciclo conta como um bloco."
+      en: "The list must exist before you use it. The loop counts as one block."
+  - tipo: completar
+    enunciado:
+      pt: "Completa para escrever a primeira carta."
+      en: "Complete it to write the first card."
+    lacunas:
+      - {stmt: e1, lado: py, modelo: {pt: "print(mao[___])", en: "print(mao[___])"}, respostas: ["0"]}
+    explicacao:
+      pt: "O primeiro elemento tem índice 0."
+      en: "The first element has index 0."
+verificacao:
+  pergunta:
+    pt: "Com `mao = [\"Rei\", \"Dama\", 10, 10, 2]`, quanto vale `len(mao)`?"
+    en: "With `mao = [\"Rei\", \"Dama\", 10, 10, 2]`, what is `len(mao)`?"
+  opcoes:
+    - {pt: "5", en: "5"}
+    - {pt: "4", en: "4"}
+    - {pt: "\"Rei\"", en: "\"Rei\""}
+  resposta: [0]

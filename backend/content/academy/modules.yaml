@@ -1,4 +1,4 @@
-# Módulos da Academia (ordem de apresentação). Só M0 e M1 têm secções na fase A1; os restantes aparecem como "Em breve".
+# Módulos da Academia (ordem de apresentação). Um módulo sem ficheiros de secções aparece como "Em breve".
 # `bloco` = id do curriculum.yaml: se esse bloco estiver aberto, o módulo abre (motivo "teacher").
 - id: m0
   ordem: 0
@@ -25,8 +25,8 @@
   ordem: 2
   titulo: {pt: "Do fluxograma ao Python: sequencial", en: "From flowchart to Python: sequential"}
   descricao:
-    pt: "Variáveis, tipos, ler, calcular e escrever: os blocos de qualquer programa sequencial."
-    en: "Variables, types, reading, calculating and writing: the building blocks of any sequential program."
+    pt: "Tipos, variáveis, ler, calcular e escrever: constrói programas sequenciais completos, do fluxograma ao Python."
+    en: "Types, variables, reading, calculating and writing: build complete sequential programs, from flowchart to Python."
   icone: m2
   peca: ler-escrever
   dificuldade: 2
@@ -35,8 +35,8 @@
   ordem: 3
   titulo: {pt: "Decomposição", en: "Decomposition"}
   descricao:
-    pt: "Partir um problema em entradas, variáveis, constantes e operações, antes de escrever uma linha de código."
-    en: "Break a problem into inputs, variables, constants and operations before writing a single line of code."
+    pt: "Missões da loja XPTO: separa o que entra, o que é fixo e o que se calcula antes de escrever uma linha de código."
+    en: "XPTO store missions: separate what goes in, what is fixed and what is calculated before writing a line of code."
   icone: m3
   peca: processo
   dificuldade: 2
@@ -45,8 +45,8 @@
   ordem: 4
   titulo: {pt: "Decisões", en: "Decisions"}
   descricao:
-    pt: "Comparações, and/or/not e if/elif/else: ensina o programa a escolher o caminho."
-    en: "Comparisons, and/or/not and if/elif/else: teach the program to choose its path."
+    pt: "Comparações, and/or/not e if/elif/else: ensina o programa a escolher o caminho, do café ao gato."
+    en: "Comparisons, and/or/not and if/elif/else: teach the program to choose its path, from the coffee to the cat."
   icone: m4
   peca: decisao
   dificuldade: 3
@@ -55,8 +55,8 @@
   ordem: 5
   titulo: {pt: "Repetição", en: "Repetition"}
   descricao:
-    pt: "Ciclos for e while, traçar a execução e fugir aos erros clássicos."
-    en: "for and while loops, tracing execution and avoiding the classic mistakes."
+    pt: "Ciclos for e while, contadores, acumuladores e traçar a execução, fugindo aos erros clássicos."
+    en: "for and while loops, counters, accumulators and tracing execution, avoiding the classic mistakes."
   icone: m5
   peca: ciclo
   dificuldade: 3
@@ -65,8 +65,8 @@
   ordem: 6
   titulo: {pt: "Funções", en: "Functions"}
   descricao:
-    pt: "Dividir o programa em partes com nome, parâmetros e valor devolvido."
-    en: "Split the program into named parts with parameters and return values."
+    pt: "Dá nome a um bloco de código: define e chama funções, passa parâmetros, devolve valores e acaba com o código repetido."
+    en: "Name a block of code: define and call functions, pass parameters, return values and put an end to repeated code."
   icone: m6
   peca: funcao
   dificuldade: 4
@@ -75,8 +75,8 @@
   ordem: 7
   titulo: {pt: "Listas", en: "Lists"}
   descricao:
-    pt: "Guardar vários valores de uma vez e percorrê-los, ordená-los e pesquisá-los."
-    en: "Store many values at once, then walk through, sort and search them."
+    pt: "Listas: índices, for, append, somas e máximos à mão, pesquisa e ordenação."
+    en: "Lists: indexes, for, append, sums and maxima by hand, searching and sorting."
   icone: m7
   peca: lista
   dificuldade: 4

@@ -1,0 +1,102 @@
+id: m7-09-desafio-turma
+modulo: m7
+ordem: 9
+titulo: {pt: "Desafio: as notas da turma", en: "Challenge: the class marks"}
+aprender:
+  pt: |
+    Hora de juntar tudo. Dada a lista das notas da turma, o programa calcula num só ciclo a **média**, o **máximo** e **quantos aprovados** há (nota ≥ `NOTA_MINIMA`, que vale 10).
+
+    São três acumuladores a trabalhar em conjunto: `soma` (para a média), `maximo` (começa em `notas[0]`) e `aprovados` (um contador). Declara-os todos **antes** do ciclo.
+
+    Repara que dentro do `for` há **dois `if` seguidos**, e não um dentro do outro: cada nota é testada duas vezes, para o máximo e para a aprovação. A média sai **fora** do ciclo, dividida por `len(notas)`.
+  en: |
+    Time to put it all together. Given the list of the class marks, the program computes in a single loop the **average**, the **maximum** and **how many passed** (mark ≥ `NOTA_MINIMA`, which is 10).
+
+    That is three accumulators working together: `soma` (for the average), `maximo` (starts at `notas[0]`) and `aprovados` (a counter). Declare them all **before** the loop.
+
+    Notice that inside the `for` there are **two `if`s one after the other**, not one inside the other: each mark is tested twice, for the maximum and for passing. The average comes **outside** the loop, divided by `len(notas)`.
+exemplo:
+  id: notas-turma
+  titulo: {pt: "As notas da turma", en: "The class marks"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "notas = [14, 9, 16, 12, 7, 18, 10, 5]", en: "notas = [14, 9, 16, 12, 7, 18, 10, 5]"}, py: "notas = [14, 9, 16, 12, 7, 18, 10, 5]"}
+    - {id: d2, tipo: definir, texto: {pt: "NOTA_MINIMA = 10", en: "NOTA_MINIMA = 10"}, py: "NOTA_MINIMA = 10"}
+    - {id: d3, tipo: definir, texto: {pt: "soma = 0", en: "soma = 0"}, py: "soma = 0"}
+    - {id: d4, tipo: definir, texto: {pt: "maximo = notas[0]", en: "maximo = notas[0]"}, py: "maximo = notas[0]"}
+    - {id: d5, tipo: definir, texto: {pt: "aprovados = 0", en: "aprovados = 0"}, py: "aprovados = 0"}
+    - id: p
+      tipo: para
+      texto: {pt: "para cada nota em notas", en: "for each nota in notas"}
+      py: "for nota in notas"
+      corpo:
+        - {id: c1, tipo: calcular, texto: {pt: "soma = soma + nota", en: "soma = soma + nota"}, py: "soma = soma + nota"}
+        - id: s1
+          tipo: se
+          cond: {pt: "nota > maximo ?", en: "nota > maximo ?"}
+          py: "nota > maximo"
+          sim:
+            - {id: c2, tipo: calcular, texto: {pt: "maximo = nota", en: "maximo = nota"}, py: "maximo = nota"}
+          nao: []
+        - id: s2
+          tipo: se
+          cond: {pt: "nota >= NOTA_MINIMA ?", en: "nota >= NOTA_MINIMA ?"}
+          py: "nota >= NOTA_MINIMA"
+          sim:
+            - {id: c3, tipo: calcular, texto: {pt: "aprovados = aprovados + 1", en: "aprovados = aprovados + 1"}, py: "aprovados = aprovados + 1"}
+          nao: []
+    - {id: c4, tipo: calcular, texto: {pt: "media = soma / len(notas)", en: "media = soma / len(notas)"}, py: "media = soma / len(notas)"}
+    - {id: e1, tipo: escrever, texto: {pt: 'escrever "Média:" e media', en: 'write "Média:" and media'}, py: 'print("Média:", media)'}
+    - {id: e2, tipo: escrever, texto: {pt: 'escrever "Máximo:" e maximo', en: 'write "Máximo:" and maximo'}, py: 'print("Máximo:", maximo)'}
+    - {id: e3, tipo: escrever, texto: {pt: 'escrever "Aprovados:" e aprovados', en: 'write "Aprovados:" and aprovados'}, py: 'print("Aprovados:", aprovados)'}
+slides:
+  - {deck: funcoes, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 9.2–9.3 — Listas"
+  en: "Python Basics, ch. 9.2–9.3 — Lists"
+pistas:
+  - pt: "Cada acumulador tem o seu valor inicial: 0 para somar e contar, `notas[0]` para o máximo."
+    en: "Each accumulator has its own initial value: 0 for summing and counting, `notas[0]` for the maximum."
+  - pt: "A média só se calcula depois de o ciclo terminar."
+    en: "The average is only computed after the loop ends."
+atividades:
+  - tipo: ordenar_fluxograma
+    enunciado:
+      pt: "Põe os blocos de 1.º nível do fluxograma pela ordem certa."
+      en: "Put the top-level flowchart blocks in the right order."
+    explicacao:
+      pt: "Declarações, depois o ciclo e, por fim, a média e as três escritas."
+      en: "Declarations, then the loop and finally the average and the three writes."
+  - tipo: completar
+    enunciado:
+      pt: "Completa o contador de aprovados."
+      en: "Complete the pass counter."
+    lacunas:
+      - {stmt: c3, lado: py, modelo: {pt: "aprovados = aprovados + ___", en: "aprovados = aprovados + ___"}, respostas: ["1"]}
+      - {stmt: s2, lado: py, modelo: {pt: "nota ___ NOTA_MINIMA", en: "nota ___ NOTA_MINIMA"}, respostas: [">="]}
+    explicacao:
+      pt: "Cada aprovado soma 1. E com nota exatamente 10 o aluno passa, por isso `>=`."
+      en: "Each pass adds 1. And with a mark of exactly 10 the student passes, so `>=`."
+  - tipo: pergunta
+    enunciado:
+      pt: "Segue o programa com as 8 notas da lista."
+      en: "Follow the program with the 8 marks in the list."
+    pergunta:
+      pt: "Quantos aprovados escreve o programa?"
+      en: "How many passes does the program write?"
+    opcoes:
+      - {pt: "5 (14, 16, 12, 18 e 10)", en: "5 (14, 16, 12, 18 and 10)"}
+      - {pt: "4", en: "4"}
+      - {pt: "8", en: "8"}
+    resposta: [0]
+    explicacao:
+      pt: "Só 9, 7 e 5 ficam abaixo de 10. A nota 10 passa, porque `>=` inclui o 10."
+      en: "Only 9, 7 and 5 are below 10. The mark 10 passes, because `>=` includes 10."
+verificacao:
+  pergunta:
+    pt: "Com estas notas, qual é o máximo e qual é a média?"
+    en: "With these marks, what are the maximum and the average?"
+  opcoes:
+    - {pt: "Máximo 18 e média 11.375", en: "Maximum 18 and average 11.375"}
+    - {pt: "Máximo 18 e média 91", en: "Maximum 18 and average 91"}
+    - {pt: "Máximo 14 e média 11.375", en: "Maximum 14 and average 11.375"}
+  resposta: [0]

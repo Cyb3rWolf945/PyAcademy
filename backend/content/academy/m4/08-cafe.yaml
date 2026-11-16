@@ -1,0 +1,83 @@
+id: m4-08-cafe
+modulo: m4
+ordem: 8
+titulo: {pt: "Ainda dá para um café?", en: "Time for a coffee?"}
+aprender:
+  pt: |
+    Dado o número de minutos que faltam para a aula começar, o programa escolhe a reação certa: **mais de 10** minutos, "ainda dá para um café"; **entre 0 e 10**, "corre, corre, CORRE!"; **menos de 0** (a aula já começou), "entra na boa e finge que estás atento desde o início".
+
+    São três faixas, a mesma estrutura `if`/`elif`/`else` do positivo/negativo/zero. Declara `minutos_para_aula` no topo, antes de a leres.
+
+    Repara que o `elif minutos_para_aula >= 0` **não precisa de limite superior**: o `if` anterior já tratou o caso de mais de 10, por isso aqui só chegam valores até 10.
+  en: |
+    Given the number of minutes left before class starts, the program picks the right reaction: **more than 10** minutes, "time for a coffee"; **between 0 and 10**, "run, run, RUN!"; **below 0** (class already started), "walk in calmly and pretend you were paying attention all along".
+
+    These are three bands, the same `if`/`elif`/`else` structure as positive/negative/zero. Declare `minutos_para_aula` at the top, before reading it.
+
+    Notice that `elif minutos_para_aula >= 0` **needs no upper limit**: the previous `if` already dealt with more than 10, so only values up to 10 get here.
+exemplo:
+  id: cafe
+  titulo: {pt: "Ainda dá para um café?", en: "Time for a coffee?"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "declarar: minutos_para_aula = 0", en: "declare: minutos_para_aula = 0"}, py: "minutos_para_aula = 0"}
+    - {id: l, tipo: ler, texto: {pt: "ler minutos para a aula", en: "read minutes until class"}, py: 'minutos_para_aula = int(input("Quantos minutos faltam para a aula? "))'}
+    - id: s1
+      tipo: se
+      cond: {pt: "minutos > 10 ?", en: "minutes > 10 ?"}
+      py: "minutos_para_aula > 10"
+      sim:
+        - {id: e1, tipo: escrever, texto: {pt: "Ainda dá para um café", en: "Time for a coffee"}, py: 'print("Ainda dá para um café")'}
+      nao:
+        - id: s2
+          tipo: se
+          cond: {pt: "minutos >= 0 ?", en: "minutes >= 0 ?"}
+          py: "minutos_para_aula >= 0"
+          sim:
+            - {id: e2, tipo: escrever, texto: {pt: "Corre, corre, CORRE!", en: "Run, run, RUN!"}, py: 'print("Corre, corre, CORRE!")'}
+          nao:
+            - {id: e3, tipo: escrever, texto: {pt: "Entra na boa e finge que estás atento desde o início", en: "Walk in calmly and pretend you were paying attention all along"}, py: 'print("Entra na boa e finge que estás atento desde o início")'}
+  demoPath: [d, l, s1, s2, e3]
+slides:
+  - {deck: aula-4, de: 16, ate: 17}
+  - {deck: aula-4, de: 21, ate: 22}
+leitura:
+  pt: "Python Basics, cap. 8.3 — Controlar o fluxo do programa"
+  en: "Python Basics, ch. 8.3 — Control the flow of your program"
+pistas:
+  - pt: "Três faixas pedem duas condições: o `else` apanha a última."
+    en: "Three bands need two conditions: the `else` catches the last one."
+  - pt: "O 0 conta como \"corre\", por isso usa `>=`."
+    en: "0 counts as \"run\", so use `>=`."
+atividades:
+  - tipo: ligar
+    enunciado:
+      pt: "Liga cada bloco do fluxograma à sua linha de Python."
+      en: "Match each flowchart block to its line of Python."
+    explicacao:
+      pt: "Os dois losangos são o `if` e o `elif`, e cada escrita é um `print`. O ramo Não final é o `else`."
+      en: "The two diamonds are the `if` and the `elif`, and each write is a `print`. The final No branch is the `else`."
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "Declarar, ler e decidir. O bloco if/elif/else vem sempre no fim, porque precisa do valor lido."
+      en: "Declare, read and decide. The if/elif/else block comes last because it needs the value that was read."
+  - tipo: completar
+    enunciado:
+      pt: "Completa o `elif`: com 0 minutos ainda se corre."
+      en: "Complete the `elif`: with 0 minutes you still run."
+    lacunas:
+      - {stmt: s2, lado: py, modelo: {pt: "minutos_para_aula ___ 0", en: "minutos_para_aula ___ 0"}, respostas: [">="]}
+    explicacao:
+      pt: "`>=` inclui o 0. Com `>` o aluno que chega à hora exata cairia no ramo de \"já começou\"."
+      en: "`>=` includes 0. With `>` the student arriving exactly on time would fall into the \"already started\" branch."
+verificacao:
+  pergunta:
+    pt: "Com `minutos_para_aula = 10`, o que escreve o programa?"
+    en: "With `minutos_para_aula = 10`, what does the program print?"
+  opcoes:
+    - {pt: "Corre, corre, CORRE!", en: "Run, run, RUN!"}
+    - {pt: "Ainda dá para um café", en: "Time for a coffee"}
+    - {pt: "Entra na boa e finge que estás atento desde o início", en: "Walk in calmly and pretend you were paying attention all along"}
+  resposta: [0]

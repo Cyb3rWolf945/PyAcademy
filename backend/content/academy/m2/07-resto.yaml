@@ -1,0 +1,92 @@
+id: m2-07-resto
+modulo: m2
+ordem: 7
+titulo:
+  pt: O resto da divisão (%)
+  en: The remainder of a division (%)
+aprender:
+  pt: |-
+    Lembras-te da divisão da escola primária? Tem **dividendo**, **divisor**, **quociente** e **resto**. Em 7 ÷ 2: dividendo 7, divisor 2, quociente 3, resto 1.
+
+    O operador `%` dá-te logo o **resto**, sem calcular primeiro o quociente: `7 % 2` é `1`.
+
+    E o quociente inteiro? É o `//`: `7 // 2` é `3`. Os dois trabalham em dupla.
+  en: |-
+    Remember division from primary school? It has a **dividend**, a **divisor**, a **quotient** and a **remainder**. In 7 ÷ 2: dividend 7, divisor 2, quotient 3, remainder 1.
+
+    The `%` operator gives you the **remainder** straight away, without calculating the quotient first: `7 % 2` is `1`.
+
+    And the whole quotient? That is `//`: `7 // 2` is `3`. The two work as a pair.
+exemplo:
+  id: resto
+  titulo:
+    pt: O resto da divisão
+    en: The remainder of a division
+  corpo:
+  - id: c
+    tipo: calcular
+    texto:
+      pt: resto = 7 % 2
+      en: resto = 7 % 2
+    py: resto = 7 % 2
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever resto
+      en: write resto
+    py: print(resto)
+slides:
+- deck: aula-2
+  de: 32
+  ate: 32
+pistas:
+- pt: Quantas vezes cabe o divisor? O que sobra é o resto.
+  en: How many times does the divisor fit? What is left is the remainder.
+atividades:
+- tipo: completar
+  enunciado:
+    pt: Completa o operador do resto.
+    en: Complete the remainder operator.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: resto = 7 ___ 2
+      en: resto = 7 ___ 2
+    respostas:
+    - '%'
+  explicacao:
+    pt: '% dá o resto da divisão de 7 por 2: 1.'
+    en: '% gives the remainder of 7 divided by 2: 1.'
+- tipo: pergunta
+  enunciado:
+    pt: Divide 17 por 5.
+    en: Divide 17 by 5.
+  pergunta:
+    pt: Quanto dá 17 % 5?
+    en: What is 17 % 5?
+  opcoes:
+  - pt: '2'
+    en: '2'
+  - pt: '3'
+    en: '3'
+  - pt: '3.4'
+    en: '3.4'
+  resposta:
+  - 0
+  explicacao:
+    pt: '17 = 5 × 3 + 2: quociente 3 e resto 2. O % devolve o resto.'
+    en: '17 = 5 × 3 + 2: quotient 3 and remainder 2. % returns the remainder.'
+verificacao:
+  pergunta:
+    pt: Quanto dá 20 % 6?
+    en: What is 20 % 6?
+  opcoes:
+  - pt: '2'
+    en: '2'
+  - pt: '3'
+    en: '3'
+  - pt: '4'
+    en: '4'
+  resposta:
+  - 0

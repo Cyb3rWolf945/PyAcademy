@@ -1,0 +1,106 @@
+id: m2-02-variaveis
+modulo: m2
+ordem: 2
+titulo:
+  pt: 'Variáveis: nome, tipo e valor'
+  en: 'Variables: name, type and value'
+aprender:
+  pt: |-
+    Uma variável é uma **caixa** com três coisas: uma **etiqueta** (o nome), o **tipo** de coisa que lá cabe e o **conteúdo** (o valor). Em `idade = 20`, o nome é `idade`, o tipo é `int` e o valor é `20`.
+
+    Regras para os nomes:
+
+    - **descritivos**: `idade`, e não `x`;
+    - só letras, dígitos e `_`, **sem espaços** e, de preferência, sem acentos;
+    - **não começam por dígito** e não podem ser palavras reservadas (como `if`);
+    - em Python, minúsculas com `_`: `nota_final`.
+  en: |-
+    A variable is a **box** with three things: a **label** (the name), the **type** of thing that fits inside and the **content** (the value). In `idade = 20`, the name is `idade`, the type is `int` and the value is `20`.
+
+    Rules for names:
+
+    - **descriptive**: `idade`, not `x`;
+    - only letters, digits and `_`, **no spaces** and, preferably, no accents;
+    - **do not start with a digit** and cannot be reserved words (like `if`);
+    - in Python, lowercase with `_`: `nota_final`.
+exemplo:
+  id: variaveis
+  titulo:
+    pt: 'Variáveis: nome, tipo e valor'
+    en: 'Variables: name, type and value'
+  corpo:
+  - id: d1
+    tipo: definir
+    texto:
+      pt: definir inteiro idade = 20
+      en: define integer idade = 20
+    py: idade = 20
+  - id: d2
+    tipo: definir
+    texto:
+      pt: definir texto nome = "António"
+      en: define text nome = "António"
+    py: nome = "António"
+slides:
+- deck: aula-2
+  de: 27
+  ate: 27
+leitura:
+  pt: Python Basics, cap. 3.3 — Criar uma variável
+  en: Python Basics, ch. 3.3 — Create a variable
+pistas:
+- pt: O nome é a etiqueta; o valor é o que está dentro da caixa.
+  en: The name is the label; the value is what is inside the box.
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: Escolhe os nomes de variável válidos em Python.
+    en: Pick the valid variable names in Python.
+  pergunta:
+    pt: Quais destes nomes são válidos?
+    en: Which of these names are valid?
+  opcoes:
+  - pt: nota_final
+    en: nota_final
+  - pt: 2nota
+    en: 2nota
+  - pt: nota final
+    en: nota final
+  - pt: if
+    en: if
+  - pt: idade
+    en: idade
+  resposta:
+  - 0
+  - 4
+  explicacao:
+    pt: '`2nota` começa por dígito, `nota final` tem espaço e `if` é palavra reservada.'
+    en: '`2nota` starts with a digit, `nota final` has a space and `if` is a reserved word.'
+- tipo: completar
+  enunciado:
+    pt: Completa a linha com o nome da variável.
+    en: Complete the line with the variable name.
+  lacunas:
+  - stmt: d1
+    lado: py
+    modelo:
+      pt: ___ = 20
+      en: ___ = 20
+    respostas:
+    - idade
+  explicacao:
+    pt: 'O nome é a etiqueta da caixa: aqui, idade.'
+    en: 'The name is the box label: here, idade.'
+verificacao:
+  pergunta:
+    pt: Em idade = 20, qual é o valor?
+    en: In idade = 20, what is the value?
+  opcoes:
+  - pt: idade
+    en: idade
+  - pt: '20'
+    en: '20'
+  - pt: int
+    en: int
+  resposta:
+  - 1

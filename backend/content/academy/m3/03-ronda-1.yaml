@@ -1,0 +1,130 @@
+id: m3-03-ronda-1
+modulo: m3
+ordem: 3
+titulo:
+  pt: 'Ronda 1: pizza, conta e troco'
+  en: 'Round 1: pizza, bill and change'
+aprender:
+  pt: |-
+    Ronda fácil, três missões: **pizza com talher extra** (cada talher extra custa 0,50 €), **dividir a conta** entre amigos e o **troco**.
+
+    Na pizza, o preço da pizza e o número de talheres extra **variam**. O custo de cada talher, 0,50 €, é **fixo**: é uma constante e, por convenção, escreve-se em MAIÚSCULAS (`CUSTO_TALHER`).
+
+    A operação é `preço da pizza + (nº de talheres × custo por talher)`. Vê-a em Python.
+  en: |-
+    Easy round, three missions: **pizza with extra cutlery** (each extra set costs 0.50 €), **splitting the bill** among friends and the **change**.
+
+    For the pizza, the pizza price and the number of extra cutlery sets **vary**. The cost of each set, 0.50 €, is **fixed**: it is a constant and, by convention, is written in UPPERCASE (`CUSTO_TALHER`).
+
+    The operation is `pizza price + (number of sets × cost per set)`. See it in Python.
+exemplo:
+  id: pizza
+  titulo:
+    pt: Pizza com talheres extra
+    en: Pizza with extra cutlery
+  corpo:
+  - id: k1
+    tipo: definir
+    texto:
+      pt: definir constante CUSTO_TALHER = 0.5
+      en: define constant CUSTO_TALHER = 0.5
+    py: CUSTO_TALHER = 0.5
+  - id: v1
+    tipo: definir
+    texto:
+      pt: definir real preco_pizza = 0.0
+      en: define real preco_pizza = 0.0
+    py: preco_pizza = 0.0
+  - id: v2
+    tipo: definir
+    texto:
+      pt: definir inteiro talheres_extra = 0
+      en: define integer talheres_extra = 0
+    py: talheres_extra = 0
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler preco_pizza
+      en: read preco_pizza
+    py: 'preco_pizza = float(input("Preço da pizza: "))'
+  - id: l2
+    tipo: ler
+    texto:
+      pt: ler talheres_extra
+      en: read talheres_extra
+    py: 'talheres_extra = int(input("Talheres extra: "))'
+  - id: c
+    tipo: calcular
+    texto:
+      pt: preco_final = preco_pizza + (talheres_extra * CUSTO_TALHER)
+      en: preco_final = preco_pizza + (talheres_extra * CUSTO_TALHER)
+    py: preco_final = preco_pizza + (talheres_extra * CUSTO_TALHER)
+  - id: e
+    tipo: escrever
+    texto:
+      pt: escrever "Preço final = " + preco_final
+      en: write "Final price = " + preco_final
+    py: print("Preço final:", preco_final)
+slides:
+- deck: aula-3-5
+  de: 8
+  ate: 8
+pistas:
+- pt: 'Pergunta-te: este valor muda de caso para caso ou é sempre o mesmo?'
+  en: 'Ask yourself: does this value change from case to case or is it always the same?'
+atividades:
+- tipo: pergunta
+  enunciado:
+    pt: 'Missão 2: dividir a conta.'
+    en: 'Mission 2: splitting the bill.'
+  pergunta:
+    pt: Quais são as variáveis ao dividir a conta?
+    en: Which are the variables when splitting the bill?
+  opcoes:
+  - pt: valor total da conta
+    en: total bill value
+  - pt: número de amigos
+    en: number of friends
+  - pt: custo de cada talher extra (0,50 €)
+    en: cost of each extra set (0.50 €)
+  resposta:
+  - 0
+  - 1
+  explicacao:
+    pt: O total e o número de amigos mudam de jantar para jantar. O talher extra é da missão da pizza.
+    en: The total and the number of friends change from dinner to dinner. The extra set belongs to the pizza mission.
+- tipo: completar
+  enunciado:
+    pt: Completa a fórmula da missão.
+    en: Complete the mission formula.
+  lacunas:
+  - stmt: c
+    lado: py
+    modelo:
+      pt: preco_final = preco_pizza + (talheres_extra * ___)
+      en: preco_final = preco_pizza + (talheres_extra * ___)
+    respostas:
+    - CUSTO_TALHER
+  explicacao:
+    pt: O custo de cada talher é a constante que multiplica o número de talheres extra.
+    en: The cost of each set is the constant that multiplies the number of extra sets.
+- tipo: ordenar_fluxograma
+  enunciado:
+    pt: Põe os blocos do fluxograma pela ordem certa.
+    en: Put the flowchart blocks in the right order.
+  explicacao:
+    pt: Primeiro definem-se as constantes e as variáveis, depois lê-se, calcula-se e só no fim se escreve.
+    en: First define the constants and variables, then read, calculate and only at the end write.
+verificacao:
+  pergunta:
+    pt: 'Dividir a conta: qual é a operação?'
+    en: 'Splitting the bill: which is the operation?'
+  opcoes:
+  - pt: valor total ÷ número de amigos
+    en: total value ÷ number of friends
+  - pt: valor total × número de amigos
+    en: total value × number of friends
+  - pt: número de amigos − valor total
+    en: number of friends − total value
+  resposta:
+  - 0

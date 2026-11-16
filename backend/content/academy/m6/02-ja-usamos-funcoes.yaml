@@ -1,0 +1,72 @@
+id: m6-02-ja-usamos-funcoes
+modulo: m6
+ordem: 2
+titulo: {pt: "Já usamos funções", en: "We already use functions"}
+aprender:
+  pt: |
+    Uma **função** é um bloco de código com nome, pronto a usar. E tu já usas várias, vêm no próprio Python:
+
+    - `int("5")` converte texto em número inteiro;
+    - `float(input(...))` lê do utilizador e converte em decimal;
+    - `len(numeros)` conta os elementos de uma lista;
+    - `print(...)` escreve no ecrã.
+
+    `"Edgar".lower()` e `"rui".upper()` escrevem-se "presas" a um texto com um ponto e chamam-se **métodos**, mas a ideia é a mesma. Uma **biblioteca** é um conjunto de funções que alguém já escreveu: `import random` e `random.randint(1, 10)` dá-te um número aleatório sem escreveres nada.
+  en: |
+    A **function** is a named block of code, ready to use. And you already use several, they come with Python itself:
+
+    - `int("5")` converts text into an integer;
+    - `float(input(...))` reads from the user and converts to a decimal;
+    - `len(numeros)` counts the elements of a list;
+    - `print(...)` writes to the screen.
+
+    `"Edgar".lower()` and `"rui".upper()` are written "attached" to a text with a dot and are called **methods**, but the idea is the same. A **library** is a set of functions someone already wrote: `import random` and `random.randint(1, 10)` gives you a random number without writing any of it.
+slides:
+  - {deck: funcoes, de: 7, ate: 8}
+leitura:
+  pt: "Python Basics, cap. 6.1 — O que é uma função"
+  en: "Python Basics, ch. 6.1 — What is a function"
+pistas:
+  - pt: "Uma função faz-se sempre acompanhar de parênteses quando a chamas."
+    en: "A function always comes with parentheses when you call it."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Procura as funções que o Python já te dá."
+      en: "Spot the functions Python already gives you."
+    pergunta:
+      pt: "Quais destas são funções que já usámos?"
+      en: "Which of these are functions we have already used?"
+    opcoes:
+      - {pt: "len(numeros)", en: "len(numeros)"}
+      - {pt: "nota1 = 10", en: "nota1 = 10"}
+      - {pt: "print(\"Olá\")", en: "print(\"Olá\")"}
+      - {pt: "int(\"5\")", en: "int(\"5\")"}
+    resposta: [0, 2, 3]
+    explicacao:
+      pt: "`len`, `print` e `int` são funções (têm nome e parênteses). `nota1 = 10` é só uma atribuição."
+      en: "`len`, `print` and `int` are functions (they have a name and parentheses). `nota1 = 10` is just an assignment."
+  - tipo: pergunta
+    enunciado:
+      pt: "Pensa de onde vem cada função."
+      en: "Think about where each function comes from."
+    pergunta:
+      pt: "De onde vem random.randint(1, 10)?"
+      en: "Where does random.randint(1, 10) come from?"
+    opcoes:
+      - {pt: "De uma biblioteca, que importamos com import random", en: "From a library, which we import with import random"}
+      - {pt: "Fomos nós que a escrevemos", en: "We wrote it ourselves"}
+      - {pt: "Está sempre disponível, sem import", en: "It is always available, no import needed"}
+    resposta: [0]
+    explicacao:
+      pt: "Uma biblioteca é um conjunto de funções já escritas. Importas e usas, sem as reescrever."
+      en: "A library is a set of ready-made functions. You import and use them without rewriting."
+verificacao:
+  pergunta:
+    pt: "O que é uma biblioteca?"
+    en: "What is a library?"
+  opcoes:
+    - {pt: "Um conjunto de funções que alguém já escreveu", en: "A set of functions someone has already written"}
+    - {pt: "Um ficheiro onde guardamos as notas", en: "A file where we store the marks"}
+    - {pt: "Um tipo de ciclo", en: "A kind of loop"}
+  resposta: [0]

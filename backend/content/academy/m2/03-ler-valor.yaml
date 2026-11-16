@@ -1,0 +1,104 @@
+id: m2-03-ler-valor
+modulo: m2
+ordem: 3
+titulo:
+  pt: 'Ler um valor: input() devolve texto'
+  en: 'Reading a value: input() returns text'
+aprender:
+  pt: |-
+    Ler é pôr no teclado um valor para dentro de uma variável. Em Python usa-se `input()`, mas atenção: **`input()` devolve sempre texto**.
+
+    Para números, converte-se: `int()` para inteiros, `float()` para reais. Por isso escreves `idade = int(input("Idade: "))`.
+
+    Agora a parte de propósito: se escreveres só `idade = input("Idade: ")` e depois `print(idade + 1)`, o Python protesta com um `TypeError`. Somar o texto `"20"` com `1` não faz sentido! Esse erro é o Python a dizer-te que te esqueceste de converter.
+  en: |-
+    Reading means typing a value into a variable. In Python you use `input()`, but beware: **`input()` always returns text**.
+
+    For numbers, you convert: `int()` for integers, `float()` for reals. That is why you write `idade = int(input("Idade: "))`.
+
+    Now the on-purpose part: if you only write `idade = input("Idade: ")` and then `print(idade + 1)`, Python complains with a `TypeError`. Adding the text `"20"` and `1` makes no sense! That error is Python telling you that you forgot to convert.
+exemplo:
+  id: ler-valores
+  titulo:
+    pt: Ler um inteiro e um texto
+    en: Reading an integer and a text
+  corpo:
+  - id: d
+    tipo: definir
+    texto:
+      pt: definir inteiro idade, texto nome
+      en: define integer idade, text nome
+    py: null
+  - id: l1
+    tipo: ler
+    texto:
+      pt: ler idade
+      en: read idade
+    py: 'idade = int(input("Idade: "))'
+  - id: l2
+    tipo: ler
+    texto:
+      pt: ler nome
+      en: read nome
+    py: 'nome = input("Nome: ")'
+slides:
+- deck: aula-2
+  de: 26
+  ate: 26
+- deck: aula-2
+  de: 28
+  ate: 28
+leitura:
+  pt: Python Basics, cap. 3 — O teu primeiro programa Python
+  en: Python Basics, ch. 3 — Your first Python program
+pistas:
+- pt: Quando precisas de um número, a seguir ao input() vem uma conversão.
+  en: When you need a number, a conversion comes after input().
+atividades:
+- tipo: completar
+  enunciado:
+    pt: 'Completa a leitura: queremos um número inteiro.'
+    en: 'Complete the read: we want an integer.'
+  lacunas:
+  - stmt: l1
+    lado: py
+    modelo:
+      pt: 'idade = ___(input("Idade: "))'
+      en: 'idade = ___(input("Idade: "))'
+    respostas:
+    - int
+  explicacao:
+    pt: int() converte o texto lido para um inteiro. Para um real usarias float().
+    en: int() converts the text read into an integer. For a real you would use float().
+- tipo: pergunta
+  enunciado:
+    pt: 'Escreveste idade = input("Idade: ") e depois print(idade + 1).'
+    en: 'You wrote idade = input("Idade: ") and then print(idade + 1).'
+  pergunta:
+    pt: O que acontece?
+    en: What happens?
+  opcoes:
+  - pt: 'TypeError: não se soma texto com um número'
+    en: 'TypeError: you cannot add text and a number'
+  - pt: Mostra a idade mais 1
+    en: It shows the age plus 1
+  - pt: Mostra 0
+    en: It shows 0
+  resposta:
+  - 0
+  explicacao:
+    pt: input() devolveu texto. Para somar 1, primeiro converte com int().
+    en: input() returned text. To add 1, convert with int() first.
+verificacao:
+  pergunta:
+    pt: Que tipo de valor devolve sempre o input()?
+    en: What type of value does input() always return?
+  opcoes:
+  - pt: Texto (str)
+    en: Text (str)
+  - pt: Inteiro (int)
+    en: Integer (int)
+  - pt: Real (float)
+    en: Real (float)
+  resposta:
+  - 0

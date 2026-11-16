@@ -1,0 +1,71 @@
+id: m5-01-problema-media
+modulo: m5
+ordem: 1
+titulo: {pt: "O problema da média de 3 notas", en: "The 3-marks average problem"}
+aprender:
+  pt: |
+    Ponto de partida de qualquer programa: um **problema em linguagem natural**. Aqui, um professor quer calcular a média de 3 notas de um aluno e dizer se foi aprovado (média ≥ 10).
+
+    Antes de escrever código, perguntamos: **que dados preciso? que operações? que resultado quero?** É a mesma pergunta de sempre, mas agora recordamos o processo todo, do problema ao *output*.
+
+    As **variáveis** (`nota1`, `nota2`, `nota3`, `media`) mudam consoante o aluno. A **constante** `NOTA_MINIMA` não muda: é a regra do negócio. A operação é uma soma e uma divisão, e no fim uma **decisão**: `if media >= NOTA_MINIMA`.
+  en: |
+    The starting point of any program: a **problem in natural language**. Here, a teacher wants to compute the average of a student's 3 marks and say whether they passed (average ≥ 10).
+
+    Before writing code, we ask: **what data do I need? what operations? what result do I want?** It is the same question as always, but now we recall the whole process, from problem to *output*.
+
+    The **variables** (`nota1`, `nota2`, `nota3`, `media`) change from student to student. The **constant** `NOTA_MINIMA` never changes: it is the business rule. The operation is a sum and a division, and at the end a **decision**: `if media >= NOTA_MINIMA`.
+exemplo:
+  id: media-aprovado
+  titulo: {pt: "Média e aprovação", en: "Average and pass/fail"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "nota1 = 14", en: "nota1 = 14"}, py: "nota1 = 14"}
+    - {id: d2, tipo: definir, texto: {pt: "nota2 = 9", en: "nota2 = 9"}, py: "nota2 = 9"}
+    - {id: d3, tipo: definir, texto: {pt: "nota3 = 16", en: "nota3 = 16"}, py: "nota3 = 16"}
+    - {id: d4, tipo: definir, texto: {pt: "NOTA_MINIMA = 10", en: "NOTA_MINIMA = 10"}, py: "NOTA_MINIMA = 10"}
+    - {id: d5, tipo: definir, texto: {pt: "media = 0", en: "media = 0"}, py: "media = 0"}
+    - {id: c, tipo: calcular, texto: {pt: "media = (nota1 + nota2 + nota3) / 3", en: "media = (nota1 + nota2 + nota3) / 3"}, py: "media = (nota1 + nota2 + nota3) / 3"}
+    - id: s
+      tipo: se
+      cond: {pt: "media >= NOTA_MINIMA ?", en: "media >= NOTA_MINIMA ?"}
+      py: "media >= NOTA_MINIMA"
+      sim:
+        - {id: e1, tipo: escrever, texto: {pt: "Escrever 'Aprovado'", en: "Write 'Aprovado'"}, py: 'print("Aprovado")'}
+      nao:
+        - {id: e2, tipo: escrever, texto: {pt: "Escrever 'Reprovado'", en: "Write 'Reprovado'"}, py: 'print("Reprovado")'}
+  demoPath: [d1, d2, d3, d4, d5, c, s, e1]
+slides:
+  - {deck: ciclos, de: 3, ate: 5}
+leitura:
+  pt: "Python Basics, cap. 8.3 — Controlar o fluxo do programa (recapitulação)"
+  en: "Python Basics, ch. 8.3 — Control the flow of your program (recap)"
+pistas:
+  - pt: "As constantes escrevem-se em MAIÚSCULAS e não mudam durante o programa."
+    en: "Constants are written in UPPERCASE and do not change during the program."
+atividades:
+  - tipo: ligar
+    ids: [d4, c, s, e1, e2]
+    enunciado:
+      pt: "Liga cada bloco do fluxograma à sua linha de Python."
+      en: "Match each flowchart block to its line of Python."
+    explicacao:
+      pt: "A constante, o cálculo, a decisão e os dois ramos de escrita. Os dois ramos terminam no mesmo sítio."
+      en: "The constant, the calculation, the decision and the two writing branches. Both branches end in the same place."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a condição de aprovação."
+      en: "Complete the pass condition."
+    lacunas:
+      - {stmt: s, lado: py, modelo: {pt: "media ___ NOTA_MINIMA", en: "media ___ NOTA_MINIMA"}, respostas: [">="]}
+    explicacao:
+      pt: "Com média exatamente 10 o aluno passa, por isso é `>=` e não `>`."
+      en: "With an average of exactly 10 the student passes, so it is `>=` and not `>`."
+verificacao:
+  pergunta:
+    pt: "Porque é que `NOTA_MINIMA` se escreve em maiúsculas?"
+    en: "Why is `NOTA_MINIMA` written in uppercase?"
+  opcoes:
+    - {pt: "É uma constante: não muda durante o programa", en: "It is a constant: it does not change during the program"}
+    - {pt: "Porque o Python obriga", en: "Because Python requires it"}
+    - {pt: "Porque é um número grande", en: "Because it is a big number"}
+  resposta: [0]

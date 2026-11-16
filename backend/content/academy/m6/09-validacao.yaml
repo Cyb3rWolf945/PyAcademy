@@ -1,0 +1,86 @@
+id: m6-09-validacao
+modulo: m6
+ordem: 9
+titulo: {pt: "Validação sem repetir", en: "Validation without repeating"}
+aprender:
+  pt: |
+    Pedir três valores ao utilizador, cada um com a sua validação, é um caso clássico de **boilerplate**: código repetitivo que não traz nada de novo, só o mesmo padrão copiado.
+
+    Com uma função, o ciclo `while` que insiste até o número ser positivo vive **num único sítio**. Em vez de 17 linhas repetidas, ficam **3 chamadas de uma linha**.
+
+    Não é só menos código: são também **menos sítios para errar**. Se quiseres mudar a mensagem de erro, mudas num lugar e ficam corrigidos os três casos.
+  en: |
+    Asking the user for three values, each with its own validation, is a classic case of **boilerplate**: repetitive code that adds nothing new, just the same pattern copied.
+
+    With a function, the `while` loop that insists until the number is positive lives **in one single place**. Instead of 17 repeated lines you get **3 one-line calls**.
+
+    It is not just less code: it is also **fewer places to go wrong**. If you want to change the error message, you change it in one place and all three cases are fixed.
+exemplo:
+  id: pedir-positivo
+  titulo: {pt: "Pedir números positivos", en: "Asking for positive numbers"}
+  funcoes:
+    - id: f_pedir
+      nome: pedir_numero_positivo
+      params: "mensagem"
+      texto: {pt: "pedir_numero_positivo(mensagem)", en: "pedir_numero_positivo(mensagem)"}
+      corpo:
+        - {id: pd, tipo: definir, texto: {pt: "valor = -1", en: "valor = -1"}, py: "valor = -1"}
+        - id: pw
+          tipo: enquanto
+          cond: {pt: "valor <= 0 ?", en: "valor <= 0 ?"}
+          py: "valor <= 0"
+          corpo:
+            - {id: pl, tipo: ler, texto: {pt: "ler valor", en: "read valor"}, py: "valor = int(input(mensagem))"}
+            - id: ps
+              tipo: se
+              cond: {pt: "valor <= 0 ?", en: "valor <= 0 ?"}
+              py: "valor <= 0"
+              sim:
+                - {id: pe, tipo: escrever, texto: {pt: 'escrever "Tem de ser um número positivo."', en: 'write "Tem de ser um número positivo."'}, py: 'print("Tem de ser um número positivo.")'}
+        - {id: pr, tipo: devolver, texto: {pt: "devolver valor", en: "return valor"}, py: "return valor"}
+  corpo:
+    - {id: c1, tipo: chamar, texto: {pt: 'idade = pedir_numero_positivo("Idade:")', en: 'idade = pedir_numero_positivo("Idade:")'}, py: 'idade = pedir_numero_positivo("Idade:")'}
+    - {id: c2, tipo: chamar, texto: {pt: 'peso = pedir_numero_positivo("Peso:")', en: 'peso = pedir_numero_positivo("Peso:")'}, py: 'peso = pedir_numero_positivo("Peso:")'}
+    - {id: c3, tipo: chamar, texto: {pt: 'altura = pedir_numero_positivo("Altura:")', en: 'altura = pedir_numero_positivo("Altura:")'}, py: 'altura = pedir_numero_positivo("Altura:")'}
+slides:
+  - {deck: funcoes, de: 19, ate: 19}
+pistas:
+  - pt: "O valor inicial tem de deixar o ciclo entrar na primeira volta."
+    en: "The starting value must let the loop enter on the first pass."
+atividades:
+  - tipo: ordenar_python
+    alvo: f_pedir
+    enunciado:
+      pt: "Põe pela ordem os blocos principais da função pedir_numero_positivo."
+      en: "Put the main blocks of the pedir_numero_positivo function in order."
+    explicacao:
+      pt: "Começa com um valor inválido para entrar no ciclo, repete o pedido enquanto o valor não servir e só depois devolve."
+      en: "It starts with an invalid value to enter the loop, repeats the request while the value is not good and only then returns."
+  - tipo: completar
+    alvo: f_pedir
+    enunciado:
+      pt: "Completa o valor inicial, que tem de deixar o ciclo entrar."
+      en: "Complete the starting value, which must let the loop enter."
+    lacunas:
+      - {stmt: pd, lado: py, modelo: {pt: "valor = ___", en: "valor = ___"}, respostas: ["-1"]}
+    explicacao:
+      pt: "Com valor = -1 a condição `valor <= 0` é verdadeira e o ciclo corre logo na primeira volta."
+      en: "With valor = -1 the condition `valor <= 0` is true and the loop runs on the first pass."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a terceira chamada."
+      en: "Complete the third call."
+    lacunas:
+      - {stmt: c3, lado: py, modelo: {pt: 'altura = pedir_numero_positivo("___")', en: 'altura = pedir_numero_positivo("___")'}, respostas: ["Altura:"]}
+    explicacao:
+      pt: "A mensagem é o argumento de cada chamada: é o que o utilizador vê ao ser questionado."
+      en: "The message is each call's argument: it is what the user sees when prompted."
+verificacao:
+  pergunta:
+    pt: "Queres mudar a mensagem de erro. Em quantos sítios mexes, com a função?"
+    en: "You want to change the error message. In how many places do you edit, with the function?"
+  opcoes:
+    - {pt: "Num só, dentro da função", en: "Just one, inside the function"}
+    - {pt: "Em três, um por cada chamada", en: "Three, one per call"}
+    - {pt: "Em todas as linhas do programa", en: "Every line of the program"}
+  resposta: [0]

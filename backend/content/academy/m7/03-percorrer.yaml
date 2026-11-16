@@ -1,0 +1,79 @@
+id: m7-03-percorrer
+modulo: m7
+ordem: 3
+titulo: {pt: "Percorrer uma lista com for", en: "Going through a list with for"}
+aprender:
+  pt: |
+    `for nome in nomes:` percorre a lista **elemento a elemento**: em cada volta, `nome` toma o valor do elemento seguinte. Não precisas de índices nem de `len`.
+
+    É o ciclo mais legível quando só queres **usar os valores**. Se precisares da **posição**, usa `for i in range(len(nomes))` e acede com `nomes[i]`.
+
+    Lembra a regra dos ciclos: a indentação decide o que repete.
+  en: |
+    `for nome in nomes:` goes through the list **element by element**: on each turn, `nome` takes the value of the next element. You need no indexes and no `len`.
+
+    It is the most readable loop when you only want to **use the values**. If you need the **position**, use `for i in range(len(nomes))` and access with `nomes[i]`.
+
+    Remember the loop rule: indentation decides what repeats.
+exemplo:
+  id: percorrer-nomes
+  titulo: {pt: "Cumprimentar a turma", en: "Greeting the class"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: 'nomes = ["Ana", "Rui", "Marta"]', en: 'nomes = ["Ana", "Rui", "Marta"]'}, py: 'nomes = ["Ana", "Rui", "Marta"]'}
+    - id: p
+      tipo: para
+      texto: {pt: "para cada nome em nomes", en: "for each nome in nomes"}
+      py: "for nome in nomes"
+      corpo:
+        - {id: e1, tipo: escrever, texto: {pt: 'escrever "Olá," e nome', en: 'write "Olá," and nome'}, py: 'print("Olá,", nome)'}
+    - {id: e2, tipo: escrever, texto: {pt: 'escrever "Fim da chamada"', en: 'write "Roll call over"'}, py: 'print("Fim da chamada")'}
+  demoPath: [d, p, e1, p, e1, p, e1, p, e2]
+slides:
+  - {deck: funcoes, de: 4, ate: 4}
+leitura:
+  pt: "Python Basics, cap. 9.2 — Listas"
+  en: "Python Basics, ch. 9.2 — Lists"
+pistas:
+  - pt: "O `print(\"Fim da chamada\")` está fora do ciclo: só corre uma vez."
+    en: "`print(\"Fim da chamada\")` is outside the loop: it only runs once."
+atividades:
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa."
+      en: "Put the pieces of the program in the right order."
+    explicacao:
+      pt: "Lista, ciclo e só no fim a despedida."
+      en: "List, loop and only at the end the sign-off."
+  - tipo: completar
+    enunciado:
+      pt: "Completa o ciclo."
+      en: "Complete the loop."
+    lacunas:
+      - {stmt: p, lado: py, modelo: {pt: "for nome ___ nomes", en: "for nome ___ nomes"}, respostas: ["in"]}
+    explicacao:
+      pt: "`for elemento in lista` percorre a lista toda."
+      en: "`for elemento in lista` goes through the whole list."
+  - tipo: pergunta
+    enunciado:
+      pt: "Conta as voltas."
+      en: "Count the turns."
+    pergunta:
+      pt: "Quantas linhas escreve o programa no total?"
+      en: "How many lines does the program write in total?"
+    opcoes:
+      - {pt: "4: três cumprimentos e \"Fim da chamada\"", en: "4: three greetings and \"Fim da chamada\""}
+      - {pt: "3", en: "3"}
+      - {pt: "6", en: "6"}
+    resposta: [0]
+    explicacao:
+      pt: "O corpo corre uma vez por nome (3) e a despedida, fora do ciclo, corre uma vez."
+      en: "The body runs once per name (3) and the sign-off, outside the loop, runs once."
+verificacao:
+  pergunta:
+    pt: "Em `for nome in nomes`, quantas vezes corre o corpo?"
+    en: "In `for nome in nomes`, how many times does the body run?"
+  opcoes:
+    - {pt: "Uma vez por elemento da lista", en: "Once per element of the list"}
+    - {pt: "Sempre 10 vezes", en: "Always 10 times"}
+    - {pt: "Só uma vez", en: "Only once"}
+  resposta: [0]

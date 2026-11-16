@@ -26,6 +26,7 @@ export function renderCode(container, program, { onSelect } = {}) {
   const lines = toPython(program);
   const byStmt = new Map();
   const rows = lines.map((ln) => {
+    if (ln.stmtId == null) return el("div", { class: "fx-line fx-blank", "aria-hidden": "true" }, el("span", { class: "fx-ln" }, String(ln.line)), el("span", { class: "fx-src" }, " "));
     const row = el("div", {
       class: `fx-line fx-k-${familyOf(ln.tipo)}`, role: "button", tabindex: 0, "data-stmt": ln.stmtId, "aria-pressed": "false",
       "aria-label": `${ln.line}: ${ln.text}`,

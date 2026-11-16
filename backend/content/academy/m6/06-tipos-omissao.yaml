@@ -1,0 +1,90 @@
+id: m6-06-tipos-omissao
+modulo: m6
+ordem: 6
+titulo: {pt: "Tipos e valores por omissão", en: "Types and default values"}
+aprender:
+  pt: |
+    Podes indicar o **tipo esperado** de cada parâmetro e do valor devolvido, com `:` e `->`. É a **tipificação** (*type hints*): serve de **documentação**, não de imposição. O Python não obriga: continuas a poder chamar `area_retangulo("a", "b")` sem erro imediato. Ajuda-te a ti e ao editor a perceber a intenção.
+
+    Um parâmetro pode ter um **valor por omissão** (com `=`), usado quando quem chama não o dá. Em `saudar_aluno("Edgar")` fica o `"Olá"`; em `saudar_aluno("Rhyanne", "Bom dia")` o valor por omissão é substituído.
+
+    Regra de sintaxe: o parâmetro com valor por omissão vai **depois** dos que não têm. `def f(a, b=1)` é válido; `def f(a=1, b)` dá erro.
+  en: |
+    You can state the **expected type** of each parameter and of the returned value, with `:` and `->`. These are **type hints**: they serve as **documentation**, not enforcement. Python does not require them: you can still call `area_retangulo("a", "b")` with no immediate error. They help you and your editor understand the intention.
+
+    A parameter can have a **default value** (with `=`), used when the caller does not give one. In `saudar_aluno("Edgar")` the `"Olá"` stays; in `saudar_aluno("Rhyanne", "Bom dia")` the default is replaced.
+
+    Syntax rule: the parameter with a default value goes **after** those without one. `def f(a, b=1)` is valid; `def f(a=1, b)` is an error.
+exemplo:
+  id: tipos-omissao
+  titulo: {pt: "Tipos e valor por omissão", en: "Types and default value"}
+  funcoes:
+    - id: f_area
+      nome: area_retangulo
+      params: "largura: float, altura: float"
+      devolve_tipo: float
+      texto: {pt: "area_retangulo(largura, altura)", en: "area_retangulo(largura, altura)"}
+      corpo:
+        - {id: ar, tipo: devolver, texto: {pt: "devolver largura * altura", en: "return largura * altura"}, py: "return largura * altura"}
+    - id: f_saudar2
+      nome: saudar_aluno
+      params: 'nome, saudacao="Olá"'
+      texto: {pt: "saudar_aluno(nome, saudacao)", en: "saudar_aluno(nome, saudacao)"}
+      corpo:
+        - {id: se1, tipo: escrever, texto: {pt: 'escrever saudacao + "," nome + "!"', en: 'write saudacao + "," nome + "!"'}, py: 'print(saudacao + ",", nome + "!")'}
+  corpo:
+    - {id: c1, tipo: chamar, texto: {pt: 'chamar saudar_aluno("Edgar")', en: 'call saudar_aluno("Edgar")'}, py: 'saudar_aluno("Edgar")'}
+    - {id: c2, tipo: chamar, texto: {pt: 'chamar saudar_aluno("Rhyanne", "Bom dia")', en: 'call saudar_aluno("Rhyanne", "Bom dia")'}, py: 'saudar_aluno("Rhyanne", "Bom dia")'}
+slides:
+  - {deck: funcoes, de: 12, ate: 13}
+leitura:
+  pt: "Python Basics, cap. 6.2 — Parâmetros e argumentos"
+  en: "Python Basics, ch. 6.2 — Parameters and arguments"
+pistas:
+  - pt: "Os type hints documentam; não impedem nada."
+    en: "Type hints document; they prevent nothing."
+  - pt: "O parâmetro com valor por omissão vai sempre para o fim."
+    en: "The parameter with a default value always goes last."
+atividades:
+  - tipo: completar
+    alvo: f_area
+    enunciado:
+      pt: "Completa a função: a área de um retângulo é largura vezes altura."
+      en: "Complete the function: a rectangle's area is width times height."
+    lacunas:
+      - {stmt: ar, lado: py, modelo: {pt: "return largura ___ altura", en: "return largura ___ altura"}, respostas: ["*"]}
+    explicacao:
+      pt: "A área é largura × altura. O `-> float` só documenta que devolve um número real."
+      en: "The area is width × height. The `-> float` only documents that it returns a real number."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a segunda chamada: a Rhyanne quer outra saudação."
+      en: "Complete the second call: Rhyanne wants a different greeting."
+    lacunas:
+      - {stmt: c2, lado: py, modelo: {pt: 'saudar_aluno("Rhyanne", "___")', en: 'saudar_aluno("Rhyanne", "___")'}, respostas: ["Bom dia"]}
+    explicacao:
+      pt: "O segundo argumento substitui o valor por omissão \"Olá\". Sem ele, usava-se \"Olá\"."
+      en: "The second argument replaces the default \"Olá\". Without it, \"Olá\" would be used."
+  - tipo: pergunta
+    enunciado:
+      pt: "Qual destas definições é válida?"
+      en: "Which of these definitions is valid?"
+    pergunta:
+      pt: "Qual definição está correta?"
+      en: "Which definition is correct?"
+    opcoes:
+      - {pt: "def saudar_aluno(nome, saudacao=\"Olá\"):", en: "def saudar_aluno(nome, saudacao=\"Olá\"):"}
+      - {pt: "def saudar_aluno(saudacao=\"Olá\", nome):", en: "def saudar_aluno(saudacao=\"Olá\", nome):"}
+    resposta: [0]
+    explicacao:
+      pt: "O parâmetro com valor por omissão tem de vir depois dos que não têm. A segunda opção dá erro."
+      en: "The parameter with a default value must come after those without one. The second option is an error."
+verificacao:
+  pergunta:
+    pt: "O que acontece com area_retangulo(\"a\", \"b\"), apesar dos type hints float?"
+    en: "What happens with area_retangulo(\"a\", \"b\"), despite the float type hints?"
+  opcoes:
+    - {pt: "O Python não o impede à partida: os type hints só documentam", en: "Python does not stop it up front: type hints only document"}
+    - {pt: "Dá logo erro de sintaxe", en: "It raises a syntax error right away"}
+    - {pt: "Converte \"a\" e \"b\" em números", en: "It converts \"a\" and \"b\" into numbers"}
+  resposta: [0]

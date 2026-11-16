@@ -1,0 +1,87 @@
+id: m5-04-media-n-notas
+modulo: m5
+ordem: 4
+titulo: {pt: "Média de N notas com for", en: "Average of N marks with for"}
+aprender:
+  pt: |
+    Voltamos ao problema das notas, agora para **qualquer N**: ler N notas e calcular a média.
+
+    O programa pergunta quantas notas há (`n`) e depois repete `n` vezes: **lê uma nota** e **acumula-a** em `soma`. A `soma` é o **acumulador**: começa em `0` e vai crescendo com `soma = soma + nota`.
+
+    Duas regras: o acumulador tem de ser **inicializado antes do ciclo**, senão `soma + nota` falha na primeira volta; e a média calcula-se **fora do ciclo**, depois de todas as notas lidas, porque a indentação decide o que repete.
+  en: |
+    Back to the marks problem, now for **any N**: read N marks and compute the average.
+
+    The program asks how many marks there are (`n`) and then repeats `n` times: **read a mark** and **accumulate it** in `soma`. `soma` is the **accumulator**: it starts at `0` and grows with `soma = soma + nota`.
+
+    Two rules: the accumulator must be **initialised before the loop**, otherwise `soma + nota` fails on the first turn; and the average is computed **outside the loop**, after all marks are read, because indentation decides what repeats.
+exemplo:
+  id: media-n-notas
+  titulo: {pt: "Média de N notas", en: "Average of N marks"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "n = 0", en: "n = 0"}, py: "n = 0"}
+    - {id: d2, tipo: definir, texto: {pt: "soma = 0", en: "soma = 0"}, py: "soma = 0"}
+    - {id: d3, tipo: definir, texto: {pt: "nota = 0", en: "nota = 0"}, py: "nota = 0"}
+    - {id: d4, tipo: definir, texto: {pt: "media = 0", en: "media = 0"}, py: "media = 0"}
+    - {id: l1, tipo: ler, texto: {pt: "ler n", en: "read n"}, py: 'n = int(input("Quantas notas? "))'}
+    - id: p
+      tipo: para
+      texto: {pt: "para i de 0 a n-1", en: "for i from 0 to n-1"}
+      py: "for i in range(n)"
+      corpo:
+        - {id: l2, tipo: ler, texto: {pt: "ler nota", en: "read nota"}, py: 'nota = float(input("Nota: "))'}
+        - {id: c1, tipo: calcular, texto: {pt: "soma = soma + nota", en: "soma = soma + nota"}, py: "soma = soma + nota"}
+    - {id: c2, tipo: calcular, texto: {pt: "media = soma / n", en: "media = soma / n"}, py: "media = soma / n"}
+    - {id: e, tipo: escrever, texto: {pt: "escrever media", en: "write media"}, py: "print(media)"}
+  demoPath: [d1, d2, d3, d4, l1, p, l2, c1, p, l2, c1, p, l2, c1, p, c2, e]
+slides:
+  - {deck: ciclos, de: 12, ate: 12}
+leitura:
+  pt: "Python Basics, cap. 6.4 — Correr em círculos (ciclos for)"
+  en: "Python Basics, ch. 6.4 — Run in circles (for loops)"
+pistas:
+  - pt: "O acumulador começa num valor neutro para a soma. Qual?"
+    en: "The accumulator starts at a neutral value for a sum. Which one?"
+  - pt: "O que fica indentado dentro do `for` repete-se; o que fica ao nível do `for` corre só uma vez."
+    en: "What is indented inside the `for` repeats; what sits at the `for` level runs just once."
+atividades:
+  - tipo: ordenar_python
+    enunciado:
+      pt: "Põe as peças do programa pela ordem certa (o ciclo conta como um bloco)."
+      en: "Put the pieces of the program in the right order (the loop counts as one block)."
+    explicacao:
+      pt: "Inicializa-se tudo, lê-se `n`, corre-se o ciclo e só depois se calcula e escreve a média, fora do ciclo."
+      en: "Initialise everything, read `n`, run the loop and only then compute and write the average, outside the loop."
+  - tipo: completar
+    enunciado:
+      pt: "Completa o acumulador."
+      en: "Complete the accumulator."
+    lacunas:
+      - {stmt: c1, lado: py, modelo: {pt: "soma = soma + ___", en: "soma = soma + ___"}, respostas: ["nota"]}
+    explicacao:
+      pt: "Em cada volta somamos a nota que acabámos de ler ao total acumulado."
+      en: "On every turn we add the mark we just read to the running total."
+  - tipo: pergunta
+    enunciado:
+      pt: "Pensa no acumulador."
+      en: "Think about the accumulator."
+    pergunta:
+      pt: "Porque é que `soma = 0` vem antes do ciclo?"
+      en: "Why does `soma = 0` come before the loop?"
+    opcoes:
+      - {pt: "Para `soma + nota` ter um valor de partida na 1.ª volta", en: "So `soma + nota` has a starting value on the 1st turn"}
+      - {pt: "Para o ciclo correr mais depressa", en: "So the loop runs faster"}
+      - {pt: "Não faz diferença onde está", en: "It makes no difference where it is"}
+    resposta: [0]
+    explicacao:
+      pt: "Sem valor inicial, `soma + nota` falha. E se estivesse dentro do ciclo, voltava a 0 em cada volta e perdia o total."
+      en: "Without an initial value, `soma + nota` fails. And inside the loop it would reset to 0 on every turn and lose the total."
+verificacao:
+  pergunta:
+    pt: "Onde se calcula e escreve a média?"
+    en: "Where is the average calculated and written?"
+  opcoes:
+    - {pt: "Fora do ciclo, depois de lidas as n notas", en: "Outside the loop, after the n marks are read"}
+    - {pt: "Dentro do ciclo, em cada volta", en: "Inside the loop, on every turn"}
+    - {pt: "Antes de ler o `n`", en: "Before reading `n`"}
+  resposta: [0]

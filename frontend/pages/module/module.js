@@ -96,6 +96,7 @@ function checkBlock(sec, state, onResult) {
 
 // ---------- página ----------
 const me = await bootPage({ access: "user", nav: true });
+const IS_TEACHER = me?.role === "teacher";
 if (me) init();
 
 async function init() {
@@ -148,9 +149,12 @@ async function init() {
 
   function renderList() {
     list.replaceChildren(...mod.secoes.map((s, i) => {
-      const head = el("button", { type: "button", class: "acad-sec__head", disabled: s.estado === "locked", "aria-expanded": String(openId === s.id), onclick: () => { openId = openId === s.id ? "" : s.id; renderList(); } },
-        el("span", { class: "acad-sec__n" }, String(i + 1)), el("span", { class: "acad-sec__t" }, pick(s.titulo)), el("span", { class: "chip" }, `+${s.pontos ?? 0}`), el("span", { class: "acad-sec__i", "aria-hidden": "true" }, ICON[s.estado] || "🔒"));
-      const body = el("div", { class: "acad-sec__body", hidden: openId !== s.id || s.estado === "locked" });
+      // O professor pode pré-visualizar secções bloqueadas (a API já o permite); para os alunos continuam fechadas.
+      const locked = s.estado === "locked" && !IS_TEACHER;
+      const preview = s.estado === "locked" && IS_TEACHER;
+      const head = el("button", { type: "button", class: "acad-sec__head", disabled: locked, title: preview ? t("ui.mod.preview") : null, "aria-expanded": String(openId === s.id), onclick: () => { openId = openId === s.id ? "" : s.id; renderList(); } },
+        el("span", { class: "acad-sec__n" }, String(i + 1)), el("span", { class: "acad-sec__t" }, pick(s.titulo)), el("span", { class: "chip" }, `+${s.pontos ?? 0}`), el("span", { class: "acad-sec__i", "aria-hidden": "true" }, preview ? "👁" : (ICON[s.estado] || "🔒")));
+      const body = el("div", { class: "acad-sec__body", hidden: openId !== s.id || locked });
       const li = el("li", { class: "acad-sec", "data-state": s.estado, id: `sec-${s.id}` }, head, body);
       if (!body.hidden) ensureBody(s, body);
       return li;

@@ -1,0 +1,74 @@
+id: m5-09-ciclo-infinito
+modulo: m5
+ordem: 9
+titulo: {pt: "O erro clássico: ciclo infinito", en: "The classic mistake: infinite loop"}
+aprender:
+  pt: |
+    Olha para este código com *bug*: `contador = 0`, `while contador < 5:` e só `print(contador)` no corpo. A condição `contador < 5` **nunca deixa de ser True**, porque nada altera o `contador`. O programa repete para sempre.
+
+    Regra de ouro: **todo o `while` precisa de algo no corpo que, eventualmente, torne a condição `False`**. A correção é acrescentar a linha `contador = contador + 1`.
+
+    Se o teu programa ficar a escrever sem parar, não entres em pânico: carrega em `Ctrl + C` para o interromper e procura a variável da condição.
+  en: |
+    Look at this buggy code: `contador = 0`, `while contador < 5:` and only `print(contador)` in the body. The condition `contador < 5` **never stops being True**, because nothing changes `contador`. The program repeats forever.
+
+    Golden rule: **every `while` needs something in the body that will eventually make the condition `False`**. The fix is to add the line `contador = contador + 1`.
+
+    If your program keeps printing non-stop, do not panic: press `Ctrl + C` to interrupt it and look for the variable in the condition.
+exemplo:
+  id: ciclo-infinito
+  titulo: {pt: "Código com bug: ciclo infinito", en: "Buggy code: infinite loop"}
+  corpo:
+    - {id: d, tipo: definir, texto: {pt: "contador = 0", en: "contador = 0"}, py: "contador = 0"}
+    - id: w
+      tipo: enquanto
+      cond: {pt: "contador < 5 ?", en: "contador < 5 ?"}
+      py: "contador < 5"
+      corpo:
+        - {id: e, tipo: escrever, texto: {pt: "escrever contador", en: "write contador"}, py: "print(contador)"}
+  demoPath: [d, w, e, w, e, w, e]
+slides:
+  - {deck: ciclos, de: 18, ate: 18}
+pistas:
+  - pt: "Segue o valor de `contador` volta a volta: alguma vez muda?"
+    en: "Follow the value of `contador` turn by turn: does it ever change?"
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Descobre porque é que o ciclo não acaba."
+      en: "Find out why the loop never ends."
+    pergunta:
+      pt: "Porque é que este ciclo é infinito?"
+      en: "Why is this loop infinite?"
+    opcoes:
+      - {pt: "Nada no corpo altera `contador`, por isso `contador < 5` é sempre True", en: "Nothing in the body changes `contador`, so `contador < 5` is always True"}
+      - {pt: "Porque o `print` bloqueia o programa", en: "Because `print` blocks the program"}
+      - {pt: "Porque 5 é um número grande demais", en: "Because 5 is too big a number"}
+    resposta: [0]
+    explicacao:
+      pt: "`contador` fica sempre a 0. A condição nunca passa a False."
+      en: "`contador` stays at 0. The condition never becomes False."
+  - tipo: pergunta
+    enunciado:
+      pt: "Escolhe a correção."
+      en: "Choose the fix."
+    pergunta:
+      pt: "Que linha, dentro do ciclo, resolve o problema?"
+      en: "Which line, inside the loop, fixes the problem?"
+    opcoes:
+      - {pt: "contador = contador + 1", en: "contador = contador + 1"}
+      - {pt: "contador = 0", en: "contador = 0"}
+      - {pt: "print(contador + 1)", en: "print(contador + 1)"}
+    resposta: [0]
+    explicacao:
+      pt: "Só `contador = contador + 1` altera a variável da condição, aproximando o ciclo do fim."
+      en: "Only `contador = contador + 1` changes the variable in the condition, bringing the loop closer to its end."
+verificacao:
+  pergunta:
+    pt: "O que precisa todo o `while` no corpo?"
+    en: "What does every `while` need in its body?"
+  opcoes:
+    - {pt: "Algo que, eventualmente, torne a condição False", en: "Something that will eventually make the condition False"}
+    - {pt: "Sempre um `print`", en: "Always a `print`"}
+    - {pt: "Um `for` lá dentro", en: "A `for` inside"}
+  resposta: [0]

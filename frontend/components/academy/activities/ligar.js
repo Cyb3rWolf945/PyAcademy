@@ -25,7 +25,10 @@ function shuffled(arr) {
 export function mountLigar(host, act, { exemplo, locale, say, onChange }) {
   const stmts = stmtMap(exemplo);
   const lines = firstLines(exemplo);
-  const ids = (act.ids || [...walk(exemplo.corpo)].filter((s) => lines.has(s.id)).map((s) => s.id)).filter((id) => lines.has(id));
+  // Com `alvo` trabalha-se só dentro dessa função (pílula de início ↔ linha def, mais o corpo); sem `alvo`, no programa principal
+  const fn = act.alvo ? (exemplo.funcoes || []).find((f) => f.id === act.alvo) : null;
+  const defaults = fn ? [fn.id, ...[...walk(fn.corpo || [])].map((s) => s.id)] : [...walk(exemplo.corpo || [])].map((s) => s.id);
+  const ids = (act.ids || defaults).filter((id) => lines.has(id));
   const rightOrder = act.linhas ? act.linhas.map((x) => (typeof x === "object" ? x.id : x)) : shuffled(ids);
   const pairs = new Map(); // idEsquerda -> idDireita
   const colorOf = new Map(); // idEsquerda -> cor
@@ -75,7 +78,7 @@ export function mountLigar(host, act, { exemplo, locale, say, onChange }) {
     const rightCol = el("div", { class: "act-col act-col--right", role: "list", "aria-label": t("fx.python") });
     if (mode === "wide") {
       const host2 = el("div");
-      flow = renderFlowchart(host2, exemplo, { locale, onSelect: (id) => { if (ids.includes(id)) chooseLeft(id); else flow.clear(); } });
+      flow = renderFlowchart(host2, exemplo, { locale, alvo: act.alvo, onSelect: (id) => { if (ids.includes(id)) chooseLeft(id); else flow.clear(); } });
       leftCol.append(host2);
       for (const id of ids) {
         const g = host2.querySelector(`[data-stmt="${CSS.escape(id)}"]`);

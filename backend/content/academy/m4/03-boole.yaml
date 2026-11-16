@@ -1,0 +1,64 @@
+id: m4-03-boole
+modulo: m4
+ordem: 3
+titulo: {pt: "Álgebra de Boole: as tabelas AND, OR e NOT", en: "Boolean algebra: the AND, OR and NOT tables"}
+aprender:
+  pt: |
+    Toda a lógica das condições assenta em **apenas dois valores**: verdadeiro (`True`) e falso (`False`). Em 1854, George Boole formalizou as regras para os combinar, e é daí que vem a *álgebra de Boole*, base de toda a computação.
+
+    Com `A` e `B` booleanos: `A and B` só dá `True` na linha em que **ambos** são `True`. `A or B` só dá `False` na linha em que **ambos** são `False`. `not A` limita-se a trocar: `not True` é `False`.
+
+    Truque para decorar: o `and` é exigente (precisa dos dois), o `or` é simpático (basta um).
+  en: |
+    All of condition logic rests on **just two values**: true (`True`) and false (`False`). In 1854, George Boole set down the rules for combining them, which gave us *Boolean algebra*, the basis of all computing.
+
+    With booleans `A` and `B`: `A and B` is `True` only in the row where **both** are `True`. `A or B` is `False` only in the row where **both** are `False`. `not A` just swaps: `not True` is `False`.
+
+    A memory trick: `and` is demanding (needs both), `or` is easygoing (one is enough).
+slides:
+  - {deck: aula-4, de: 5, ate: 5}
+leitura:
+  pt: "Python Basics, cap. 8.2 — Acrescentar lógica"
+  en: "Python Basics, ch. 8.2 — Add some logic"
+pistas:
+  - pt: "Procura a única linha em que o `and` dá True, e a única em que o `or` dá False."
+    en: "Find the only row where `and` gives True, and the only row where `or` gives False."
+atividades:
+  - tipo: pergunta
+    enunciado:
+      pt: "Completa a tabela do AND de cabeça."
+      en: "Fill in the AND table in your head."
+    pergunta:
+      pt: "Quando é que `A and B` é verdadeiro?"
+      en: "When is `A and B` true?"
+    opcoes:
+      - {pt: "Só quando A e B são ambos True", en: "Only when A and B are both True"}
+      - {pt: "Quando pelo menos um é True", en: "When at least one is True"}
+      - {pt: "Quando ambos são False", en: "When both are False"}
+    resposta: [0]
+    explicacao:
+      pt: "O `and` só dá True numa das quatro linhas da tabela: True and True."
+      en: "`and` gives True in only one of the four rows of the table: True and True."
+  - tipo: pergunta
+    enunciado:
+      pt: "Calcula o valor da expressão."
+      en: "Work out the value of the expression."
+    pergunta:
+      pt: "Qual é o valor de `False or (not False)`?"
+      en: "What is the value of `False or (not False)`?"
+    opcoes:
+      - {pt: "True", en: "True"}
+      - {pt: "False", en: "False"}
+    resposta: [0]
+    explicacao:
+      pt: "`not False` é True, e `False or True` é True: o `or` basta ter uma parte verdadeira."
+      en: "`not False` is True, and `False or True` is True: `or` only needs one true part."
+verificacao:
+  pergunta:
+    pt: "Qual é o valor de `True and False`?"
+    en: "What is the value of `True and False`?"
+  opcoes:
+    - {pt: "False", en: "False"}
+    - {pt: "True", en: "True"}
+    - {pt: "Depende do dia", en: "It depends on the day"}
+  resposta: [0]

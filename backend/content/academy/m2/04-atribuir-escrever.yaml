@@ -1,0 +1,102 @@
+id: m2-04-atribuir-escrever
+modulo: m2
+ordem: 4
+titulo:
+  pt: Atribuir e escrever
+  en: Assign and write
+aprender:
+  pt: |-
+    Guardar um valor diretamente é **atribuir**; mostrá-lo no ecrã é **escrever** com `print()`.
+
+    Cuidado: o `=` **não quer dizer "igual a"**. Quer dizer **"guarda"**. Por isso `idade = idade + 1` faz todo o sentido: usa o valor antigo, soma 1 e guarda o novo no mesmo sítio.
+
+    Assim, o programa escreve `Idade: 20` e depois `Idade: 21`. Em Python não se declara o tipo: é deduzido do valor.
+  en: |-
+    Storing a value directly is **assigning**; showing it on screen is **writing** with `print()`.
+
+    Careful: `=` does **not mean "equals"**. It means **"store"**. That is why `idade = idade + 1` makes perfect sense: it uses the old value, adds 1 and stores the new one in the same place.
+
+    So the program writes `Idade: 20` and then `Idade: 21`. In Python you do not declare the type: it is deduced from the value.
+exemplo:
+  id: idade-mais-um
+  titulo:
+    pt: Atribuir e escrever
+    en: Assign and write
+  corpo:
+  - id: d
+    tipo: definir
+    texto:
+      pt: definir inteiro idade
+      en: define integer idade
+    py: null
+  - id: a
+    tipo: calcular
+    texto:
+      pt: idade = 20
+      en: idade = 20
+    py: idade = 20
+  - id: e1
+    tipo: escrever
+    texto:
+      pt: 'escrever "Idade: " + idade'
+      en: 'write "Idade: " + idade'
+    py: print("Idade:", idade)
+  - id: c
+    tipo: calcular
+    texto:
+      pt: idade = idade + 1
+      en: idade = idade + 1
+    py: idade = idade + 1
+  - id: e2
+    tipo: escrever
+    texto:
+      pt: 'escrever "Idade: " + idade'
+      en: 'write "Idade: " + idade'
+    py: print("Idade:", idade)
+slides:
+- deck: aula-2
+  de: 29
+  ate: 29
+pistas:
+- pt: 'Lê a atribuição da direita para a esquerda: calcula e depois guarda.'
+  en: 'Read an assignment from right to left: calculate, then store.'
+atividades:
+- tipo: ordenar_python
+  enunciado:
+    pt: Põe as linhas de Python pela ordem certa.
+    en: Put the lines of Python in the right order.
+  explicacao:
+    pt: 'Primeiro guarda-se 20, mostra-se, soma-se 1 e mostra-se outra vez: a ordem muda o resultado.'
+    en: 'First store 20, show it, add 1 and show it again: the order changes the result.'
+- tipo: pergunta
+  enunciado:
+    pt: Segue o programa linha a linha.
+    en: Follow the program line by line.
+  pergunta:
+    pt: O que mostra o segundo print?
+    en: What does the second print show?
+  opcoes:
+  - pt: 'Idade: 20'
+    en: 'Idade: 20'
+  - pt: 'Idade: 21'
+    en: 'Idade: 21'
+  - pt: 'Idade: 1'
+    en: 'Idade: 1'
+  resposta:
+  - 1
+  explicacao:
+    pt: idade = idade + 1 pega em 20, soma 1 e guarda 21.
+    en: idade = idade + 1 takes 20, adds 1 and stores 21.
+verificacao:
+  pergunta:
+    pt: O que quer dizer o = em Python?
+    en: What does = mean in Python?
+  opcoes:
+  - pt: Guarda o valor do lado direito na variável
+    en: Stores the right-hand value in the variable
+  - pt: É igual a
+    en: Is equal to
+  - pt: É maior ou igual a
+    en: Is greater than or equal to
+  resposta:
+  - 0

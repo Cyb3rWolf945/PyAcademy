@@ -1,0 +1,96 @@
+id: m4-07-aninhadas
+modulo: m4
+ordem: 7
+titulo: {pt: "Condições aninhadas: a paragem policial", en: "Nested conditions: the police stop"}
+aprender:
+  pt: |
+    Um condutor é parado. Se houver **suspeita** de falta de sobriedade, faz "o quatro" (teste de equilíbrio). Se **falhar**, leva multa; se não falhar, avança para o teste do balão. Sem suspeita, segue viagem.
+
+    Aqui há uma **condição dentro de outra**: um `if` dentro de outro `if`. Chama-se **condições aninhadas** (*nested*) e é assim que se representam decisões em cadeia, como num processo real.
+
+    A indentação mostra a "casa" de cada decisão. O segundo `if` vive **dentro** do ramo Sim do primeiro, por isso só é avaliado quando há suspeita.
+
+    Ideia-chave: a mesma árvore pode escrever-se com álgebra de Boole, por exemplo `multa = suspeita_falta_sobriedade and falhou_teste`. Em problemas simples isso encurta o código; nos complexos, os `if` aninhados costumam ler-se melhor.
+  en: |
+    A driver is stopped. If there is **suspicion** of impairment, they do "the four" (a balance test). If they **fail**, they get a fine; if they do not, they go on to the breathalyser. With no suspicion, they drive on.
+
+    Here there is a **condition inside another**: an `if` inside another `if`. This is called **nested conditions** and it is how chained decisions are represented, as in a real process.
+
+    The indentation shows each decision's "home". The second `if` lives **inside** the Yes branch of the first, so it is only evaluated when there is suspicion.
+
+    Key idea: the same tree can be written with Boolean algebra, for example `multa = suspeita_falta_sobriedade and falhou_teste`. In simple problems this shortens the code; in complex ones, nested `if`s usually read better.
+exemplo:
+  id: paragem-policial
+  titulo: {pt: "A paragem policial", en: "The police stop"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "suspeita_falta_sobriedade = True", en: "suspeita_falta_sobriedade = True"}, py: "suspeita_falta_sobriedade = True"}
+    - {id: d2, tipo: definir, texto: {pt: "falhou_teste = False", en: "falhou_teste = False"}, py: "falhou_teste = False"}
+    - id: s1
+      tipo: se
+      cond: {pt: "Há suspeita de falta de sobriedade?", en: "Is there suspicion of impairment?"}
+      py: "suspeita_falta_sobriedade"
+      sim:
+        - {id: c1, tipo: chamar, texto: {pt: 'Pede para fazer "o quatro"', en: 'Asks to do "the four"'}, py: "falhou_teste = fazer_teste_equilibrio()"}
+        - id: s2
+          tipo: se
+          cond: {pt: "Falhou o teste?", en: "Did they fail the test?"}
+          py: "falhou_teste"
+          sim:
+            - {id: e1, tipo: escrever, texto: {pt: "Multa aplicada", en: "Fine issued"}, py: 'print("Multa aplicada.")'}
+          nao:
+            - {id: e2, tipo: escrever, texto: {pt: "Avança para o segundo teste", en: "Moves on to the second test"}, py: 'print("Avança para o segundo teste.")'}
+      nao:
+        - {id: e3, tipo: escrever, texto: {pt: "Segue viagem", en: "Drives on"}, py: 'print("Pode seguir viagem.")'}
+  demoPath: [d1, d2, s1, c1, s2, e2]
+slides:
+  - {deck: aula-4, de: 11, ate: 15}
+leitura:
+  pt: "Python Basics, cap. 8.3 — Controlar o fluxo do programa"
+  en: "Python Basics, ch. 8.3 — Control the flow of your program"
+pistas:
+  - pt: "O segundo losango só aparece no ramo Sim do primeiro."
+    en: "The second diamond only appears on the Yes branch of the first."
+  - pt: "Repara na indentação: o `if falhou_teste` está um nível mais para dentro."
+    en: "Look at the indentation: `if falhou_teste` sits one level further in."
+atividades:
+  - tipo: ordenar_fluxograma
+    enunciado:
+      pt: "Põe os blocos de 1.º nível do fluxograma pela ordem certa."
+      en: "Put the top-level flowchart blocks in the right order."
+    explicacao:
+      pt: "As duas variáveis são declaradas primeiro e só depois vem a decisão principal, que contém todo o resto."
+      en: "The two variables are declared first and only then comes the main decision, which contains everything else."
+  - tipo: completar
+    enunciado:
+      pt: "Completa a declaração e a condição interior."
+      en: "Complete the declaration and the inner condition."
+    lacunas:
+      - {stmt: d2, lado: py, modelo: {pt: "falhou_teste = ___", en: "falhou_teste = ___"}, respostas: ["False"]}
+      - {stmt: s2, lado: py, modelo: {pt: "___", en: "___"}, respostas: ["falhou_teste"]}
+    explicacao:
+      pt: "`falhou_teste` começa em `False` e só é atualizado se o teste chegar a ser feito. O `if` interior usa esse booleano diretamente, sem `== True`."
+      en: "`falhou_teste` starts as `False` and is only updated if the test is actually done. The inner `if` uses that boolean directly, with no `== True`."
+  - tipo: pergunta
+    enunciado:
+      pt: "Segue o programa com `suspeita_falta_sobriedade = False`."
+      en: "Follow the program with `suspeita_falta_sobriedade = False`."
+    pergunta:
+      pt: "O que mostra o programa e o teste do equilíbrio chega a ser feito?"
+      en: "What does the program show, and is the balance test ever done?"
+    opcoes:
+      - {pt: "\"Pode seguir viagem.\" e o teste não é feito", en: "\"Pode seguir viagem.\" and the test is not done"}
+      - {pt: "\"Multa aplicada.\" depois do teste", en: "\"Multa aplicada.\" after the test"}
+      - {pt: "\"Avança para o segundo teste.\" depois do teste", en: "\"Avança para o segundo teste.\" after the test"}
+    resposta: [0]
+    explicacao:
+      pt: "Sem suspeita, o programa vai direto ao `else` exterior. O `if` interior nem é avaliado."
+      en: "With no suspicion, the program goes straight to the outer `else`. The inner `if` is not even evaluated."
+verificacao:
+  pergunta:
+    pt: "O que são condições aninhadas?"
+    en: "What are nested conditions?"
+  opcoes:
+    - {pt: "Uma condição dentro de outra, um if dentro de um if", en: "One condition inside another, an if inside an if"}
+    - {pt: "Duas condições ligadas por `and`", en: "Two conditions joined by `and`"}
+    - {pt: "Uma condição que se repete para sempre", en: "A condition that repeats forever"}
+  resposta: [0]

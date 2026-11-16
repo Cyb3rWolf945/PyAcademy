@@ -1,0 +1,76 @@
+id: m7-05-soma-media
+modulo: m7
+ordem: 5
+titulo: {pt: "Somar e média de uma lista à mão", en: "Sum and average of a list by hand"}
+aprender:
+  pt: |
+    Já conheces o acumulador. Para somar uma lista, começas com `soma = 0` e, **para cada** elemento, fazes `soma = soma + numero`. É exatamente a função `soma_lista` do módulo das funções.
+
+    A **média** é a soma dividida pelo número de elementos: `soma / len(notas)`. Fica fora do ciclo, depois de somados todos.
+
+    O Python tem `sum(notas)`, mas **à mão** é que se aprende. Aqui o ciclo vive dentro de uma função e o programa principal só a chama.
+  en: |
+    You already know the accumulator. To sum a list, you start with `soma = 0` and, **for each** element, do `soma = soma + numero`. That is exactly the `soma_lista` function from the functions module.
+
+    The **average** is the sum divided by the number of elements: `soma / len(notas)`. It goes outside the loop, after everything is summed.
+
+    Python has `sum(notas)`, but doing it **by hand** is how you learn. Here the loop lives inside a function and the main program just calls it.
+exemplo:
+  id: soma-media-lista
+  titulo: {pt: "Soma e média das notas", en: "Sum and average of the marks"}
+  funcoes:
+    - id: f
+      nome: soma_lista
+      params: "numeros"
+      texto: {pt: "soma_lista(numeros)", en: "soma_lista(numeros)"}
+      corpo:
+        - {id: f1, tipo: definir, texto: {pt: "soma = 0", en: "soma = 0"}, py: "soma = 0"}
+        - id: fp
+          tipo: para
+          texto: {pt: "para cada numero em numeros", en: "for each numero in numeros"}
+          py: "for numero in numeros"
+          corpo:
+            - {id: f2, tipo: calcular, texto: {pt: "soma = soma + numero", en: "soma = soma + numero"}, py: "soma = soma + numero"}
+        - {id: f3, tipo: devolver, texto: {pt: "Devolver soma", en: "Return soma"}, py: "return soma"}
+  corpo:
+    - {id: d1, tipo: definir, texto: {pt: "notas = [14, 9, 16, 12]", en: "notas = [14, 9, 16, 12]"}, py: "notas = [14, 9, 16, 12]"}
+    - {id: d2, tipo: definir, texto: {pt: "media = 0", en: "media = 0"}, py: "media = 0"}
+    - {id: c1, tipo: chamar, texto: {pt: "soma = soma_lista(notas)", en: "soma = soma_lista(notas)"}, py: "soma = soma_lista(notas)"}
+    - {id: c2, tipo: calcular, texto: {pt: "media = soma / len(notas)", en: "media = soma / len(notas)"}, py: "media = soma / len(notas)"}
+    - {id: e, tipo: escrever, texto: {pt: 'escrever "Média =" e media', en: 'write "Média =" and media'}, py: 'print("Média =", media)'}
+  demoPath: [d1, d2, c1, f, f1, fp, f2, fp, f2, fp, f2, fp, f2, fp, f3, c2, e]
+slides:
+  - {deck: funcoes, de: 17, ate: 18}
+leitura:
+  pt: "Python Basics, cap. 9.2 — Listas; cap. 6.1 — Funções"
+  en: "Python Basics, ch. 9.2 — Lists; ch. 6.1 — Functions"
+pistas:
+  - pt: "A média divide a soma pelo número de elementos. Como se obtém esse número?"
+    en: "The average divides the sum by the number of elements. How do you get that number?"
+atividades:
+  - tipo: ligar
+    alvo: f
+    enunciado:
+      pt: "Liga cada bloco da função `soma_lista` à sua linha de Python."
+      en: "Match each block of the `soma_lista` function to its line of Python."
+    explicacao:
+      pt: "O acumulador, a soma de cada elemento e o `return`."
+      en: "The accumulator, the sum of each element and the `return`."
+  - tipo: completar
+    enunciado:
+      pt: "Completa o cálculo da média."
+      en: "Complete the average calculation."
+    lacunas:
+      - {stmt: c2, lado: py, modelo: {pt: "media = soma / ___(notas)", en: "media = soma / ___(notas)"}, respostas: ["len"]}
+    explicacao:
+      pt: "`len(notas)` dá o número de elementos (4). A soma é 51 e a média 12.75."
+      en: "`len(notas)` gives the number of elements (4). The sum is 51 and the average 12.75."
+verificacao:
+  pergunta:
+    pt: "Com `notas = [14, 9, 16, 12]`, qual é a média?"
+    en: "With `notas = [14, 9, 16, 12]`, what is the average?"
+  opcoes:
+    - {pt: "12.75", en: "12.75"}
+    - {pt: "51", en: "51"}
+    - {pt: "13.0", en: "13.0"}
+  resposta: [0]
