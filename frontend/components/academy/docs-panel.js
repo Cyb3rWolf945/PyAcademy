@@ -1,12 +1,12 @@
-// Painel do professor, secção "Leitura recomendada": carregar PDFs (com barra de progresso), pré-visualizar e apagar.
+// Perfil do professor, secção "Leitura recomendada": carregar PDFs (com barra de progresso), pré-visualizar e apagar.
 // Tocar na "Leitura recomendada" de qualquer secção da Academia abre o PDF mais recente (marcado "Em uso").
 import { api, csrf, errorText, ApiError } from "../../services/api.js";
 import { t } from "../../services/i18n.js";
-import { el } from "../../components/dom.js";
-import { toast } from "../../components/toast.js";
+import { el } from "../dom.js";
+import { toast } from "../toast.js";
 
 const MAX_MB = 100;
-const reader = (doc, page) => import("../../components/academy/doc-reader.js").then((r) => r.openReader({ ...doc, page }));
+const reader = (doc, page) => import("./doc-reader.js").then((r) => r.openReader({ ...doc, page }));
 
 // Upload com XMLHttpRequest só para ter progresso; o corpo é o próprio PDF
 function uploadPdf(file, titulo, onProgress) {

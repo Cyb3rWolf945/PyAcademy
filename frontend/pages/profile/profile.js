@@ -1,4 +1,5 @@
 // Perfil: guarda preferências, muda a palavra-passe, exporta/apaga dados (RGPD) e termina sessão.
+// O professor também carrega aqui o PDF da "Leitura recomendada" da Academia.
 import { bootPage } from "../../services/page.js";
 import { api, errorText } from "../../services/api.js";
 import { changePassword, logout, savePreferences } from "../../services/auth.js";
@@ -8,6 +9,7 @@ import { setLocale, t } from "../../services/i18n.js";
 import { el } from "../../components/dom.js";
 import { toast } from "../../components/toast.js";
 import { soundEnabled, setSoundEnabled } from "../../services/sfx.js";
+import { initDocuments } from "../../components/academy/docs-panel.js";
 
 const me = await bootPage({ access: "user", nav: true });
 if (me) init(me);
@@ -91,6 +93,13 @@ function init(user) {
   const nf = () => new Intl.NumberFormat(user.locale === "en" ? "en-GB" : "pt-PT", { maximumFractionDigits: 1 });
   loadPoints();
   document.addEventListener("localechange", loadPoints);
+
+  // Professor: PDF da "Leitura recomendada" (o que abre quando um aluno toca na leitura de uma secção da Academia)
+  if (user.role === "teacher") {
+    const docs = document.getElementById("documents");
+    docs.hidden = false;
+    initDocuments(docs);
+  }
 
   if (user.role === "teacher") lbSection.hidden = true;
   else {

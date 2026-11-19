@@ -166,7 +166,7 @@
   "toast.warning.2": "Almost burning!",
   "toast.warning.3": "Mind the smoke!",
   "admin.docs.heading": "📚 Recommended reading (PDF)",
-  "admin.docs.help": "Upload the book PDF. When a student taps \"Recommended reading\" in an Academy section, the most recent PDF (marked \"In use\") opens inside the app. Students see the pages but cannot download the file.",
+  "admin.docs.help": "Upload the book PDF here. When a student taps \"Recommended reading\" in an Academy section, the most recent PDF (marked \"In use\") opens inside the app. Students see the pages but cannot download the file.",
   "admin.docs.file": "PDF file (up to 100 MB)",
   "admin.docs.title_field": "Title",
   "admin.docs.rights": "I confirm I am allowed to share this PDF with my students.",

@@ -166,7 +166,7 @@
   "toast.warning.2": "Está quase a queimar!",
   "toast.warning.3": "Olha o fumo!",
   "admin.docs.heading": "📚 Leitura recomendada (PDF)",
-  "admin.docs.help": "Carrega o PDF do livro. Quando um aluno toca em \"Leitura recomendada\" numa secção da Academia, abre-se o PDF mais recente (o que está \"Em uso\"), dentro da app. Os alunos veem as páginas, mas não descarregam o ficheiro.",
+  "admin.docs.help": "Carrega aqui o PDF do livro. Quando um aluno toca em \"Leitura recomendada\" numa secção da Academia, abre-se o PDF mais recente (o que está \"Em uso\"), dentro da app. Os alunos veem as páginas, mas não descarregam o ficheiro.",
   "admin.docs.file": "Ficheiro PDF (até 100 MB)",
   "admin.docs.title_field": "Título",
   "admin.docs.rights": "Confirmo que tenho autorização para partilhar este PDF com os meus alunos.",
