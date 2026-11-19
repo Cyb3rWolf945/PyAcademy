@@ -157,6 +157,25 @@ class TournamentSubmission(SQLModel, table=True):
 
 
 
+class TournamentIncident(SQLModel, table=True):
+    """Anti-cheat: um "colar" ou uma saída da janela durante a ronda. Em aberto (released_at nulo) = aluno bloqueado até o professor autorizar."""
+    __tablename__ = "tournament_incidents"
+    __table_args__ = (
+        UniqueConstraint("tournament_id", "user_id", "client_id", name="uq_incident_client"),
+        Index("uq_incident_open", "tournament_id", "user_id", unique=True, postgresql_where=text("released_at IS NULL")),
+    )
+
+    id: int | None = Field(default=None, primary_key=True)
+    tournament_id: int = Field(sa_column=_fk("tournaments.id", index=True))
+    user_id: int = Field(sa_column=_fk("users.id"))
+    kind: str = Field(max_length=8)  # paste | drop | blur | hidden
+    round_idx: int | None = None
+    client_id: str = Field(max_length=64)
+    created_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
+    released_at: datetime | None = Field(default=None, sa_column=Column(ts_column().type, nullable=True))
+    released_by: int | None = Field(default=None, sa_column=Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True))
+
+
 class TournamentGroup(SQLModel, table=True):
     """Grupo de uma ronda da Eliminatória. members/winners/ranking são listas de user_id."""
     __tablename__ = "tournament_groups"

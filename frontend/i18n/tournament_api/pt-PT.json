@@ -34,5 +34,7 @@
   "tournament.not_enough_players": "São precisos pelo menos 2 alunos em jogo para começar a ronda.",
   "tournament.group_not_found": "Grupo não encontrado.",
   "tournament.player_not_in_group": "Esse aluno não está neste grupo.",
-  "leaderboard.rate_limited": "Demasiados pedidos. Tenta daqui a pouco."
+  "leaderboard.rate_limited": "Demasiados pedidos. Tenta daqui a pouco.",
+  "tournament.locked": "Estás bloqueado neste torneio até o professor te deixar voltar.",
+  "tournament.no_incident": "Este aluno não está bloqueado."
 }

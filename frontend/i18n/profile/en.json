@@ -6,5 +6,8 @@
  "profile.lb_points_all": "Total points",
  "profile.lb_points_week": "Points this week",
  "profile.lb_rank": "Rank: #{rank} of {total}",
- "profile.lb_saved": "Preference saved."
+ "profile.lb_saved": "Preference saved.",
+ "profile.font_help": "If the pixel font is hard to read, choose another one. You will see the difference right away.",
+ "profile.toast_sound": "Notice sounds (the toaster)",
+ "profile.toast_sound_on": "Sound on. Hear the toaster!"
 }

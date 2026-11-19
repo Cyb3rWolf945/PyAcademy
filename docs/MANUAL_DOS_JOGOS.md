@@ -17,6 +17,8 @@
 9. [Problemas de rede e perguntas frequentes](#9-problemas-de-rede-e-perguntas-frequentes)
 10. [Modos em breve](#10-modos-em-breve)
 11. [Atividades extra: Poker e Bit a Bit](#11-atividades-extra-poker-e-bit-a-bit)
+12. [Anti-cheat dos torneios](#12-anti-cheat-dos-torneios)
+13. [Tipo de letra](#13-tipo-de-letra)
 
 ---
 
@@ -292,6 +294,33 @@ Na página **Extra**, o professor pode:
 - decidir se os alunos podem criar mesas.
 
 O histórico completo de cada mão, com todas as cartas, fica guardado para auditoria (`GET /api/extra/poker/hands`).
+
+---
+
+## 12. Anti-cheat dos torneios
+
+Durante uma ronda, o torneio vigia a janela de quem está a competir.
+
+**O que faz disparar o alarme:**
+- colar texto (ou largar texto vindo de outra janela);
+- sair da janela do torneio ou mudar de separador.
+
+**O que acontece:** toca uma sirene, aparece o ecrã **"Foste apanhado, cheater!"** e deixas de poder submeter e pedir pistas. Recarregar a página não resolve. O tempo da ronda continua a contar.
+
+**Como voltar:** só o professor te pode deixar voltar.
+
+### Para o professor
+- Os alunos apanhados aparecem no topo do torneio, no painel do professor, com o motivo e o número de vezes. O botão **Deixar voltar** desbloqueia o aluno.
+- No projetor aparece só o número de alunos à espera, nunca o nome. Os colegas não sabem quem foi apanhado.
+- O alarme só conta com a ronda a decorrer: não conta no lobby, entre rondas, com a ronda em pausa, nem para quem já foi eliminado ou já ganhou o grupo.
+- **Limites:** não deteta um segundo dispositivo (por exemplo, o telemóvel), e um aluno com conhecimentos técnicos pode desligar o aviso no próprio browser. Bloquear o ecrã ou uma chamada no telemóvel também dispara o alarme: nesses casos, basta deixar voltar.
+- O volume da sirene depende do volume do computador do aluno.
+
+---
+
+## 13. Tipo de letra
+
+Se a letra pixel for difícil de ler, vai a **Perfil → Tipo de letra** e escolhe **Clara** ou **Leitura fácil** (maior e mais espaçada). A mudança vê-se logo e fica guardada na tua conta.
 
 ---
 

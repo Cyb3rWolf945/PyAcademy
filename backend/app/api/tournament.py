@@ -1,5 +1,7 @@
 # Rotas REST do torneio. O professor (dono, verificado no servidor) cria e controla; os alunos da turma
 # entram, formam agências e pedem pistas; todos leem o snapshot do estado. Erros: {"error": "tournament.<chave>"}.
+from typing import Literal
+
 from fastapi import APIRouter, Depends, Query, Request
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +11,7 @@ from app.db import get_db
 from app.errors import ApiError
 from app.models.user import Role
 from app.services import elimination, points as points_svc, tournament as svc
+from app.services import tournament_anticheat as anticheat
 from app.services import tournament_events as events
 
 router = APIRouter(prefix="/api/tournaments", dependencies=[Depends(origin_guard)])
@@ -59,6 +62,11 @@ class JoinIn(Strict):
 
 class TeamIn(Strict):
     name: str = Field(max_length=80)
+
+
+class IncidentIn(Strict):
+    client_id: str = Field(min_length=8, max_length=64)
+    kind: Literal["paste", "drop", "blur", "hidden"]
 
 
 def student_only(auth: Auth) -> None:
@@ -189,7 +197,23 @@ async def move(tid: int, team_id: int, body: MoveIn, auth: Auth = Depends(teache
     return await _admin(db, auth, await svc.owned(db, tid, auth.user))
 
 
+@router.post("/{tid}/anticheat/{user_id}/release")
+async def anticheat_release(tid: int, user_id: int, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    """O professor deixa o aluno voltar ao torneio."""
+    t = await svc.owned(db, tid, auth.user)
+    await anticheat.release(db, t, auth.user, user_id)
+    await audit(db, auth.user.id, "tournament.anticheat_released", {"tournament_id": tid, "user_id": user_id})
+    await db.commit()
+    return await _admin(db, auth, t)
+
+
 # ---------------- alunos ----------------
+@router.post("/{tid}/anticheat/report")
+async def anticheat_report(tid: int, body: IncidentIn, auth: Auth = Depends(active_auth), db: AsyncSession = Depends(get_db)):
+    student_only(auth)
+    return await anticheat.report(db, await svc.viewable(db, tid, auth.user), auth.user, body.client_id, body.kind)
+
+
 @router.post("/{tid}/teams", status_code=201)
 async def create_team(tid: int, body: TeamIn, auth: Auth = Depends(active_auth), db: AsyncSession = Depends(get_db)):
     student_only(auth)

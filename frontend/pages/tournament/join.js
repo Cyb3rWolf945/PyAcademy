@@ -2,6 +2,7 @@
 import { el } from "../../components/dom.js";
 import { icon } from "../../components/icon.js";
 import { api, errorText } from "../../services/api.js";
+import { guestJoin } from "../../services/auth.js";
 import { t } from "../../services/i18n.js";
 
 export function mountJoin(host, { code = "", error = "", guest = false, onJoined }) {
@@ -21,9 +22,9 @@ export function mountJoin(host, { code = "", error = "", guest = false, onJoined
     if (!c) return;
     btn.disabled = true; msg.textContent = "";
     try {
-      const path = guest ? "/api/auth/tournament-guest" : "/api/tournaments/join";
-      const body = guest ? { join_code: c, display_name: name.value } : { join_code: c };
-      const res = await api("POST", path, body, { idempotent: true });
+      const res = guest
+        ? await guestJoin({ join_code: c, display_name: name.value })
+        : await api("POST", "/api/tournaments/join", { join_code: c }, { idempotent: true });
       onJoined(res.tournament_id);
     } catch (err) { msg.textContent = errorText(err); btn.disabled = false; }
   }

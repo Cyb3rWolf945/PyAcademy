@@ -6,6 +6,7 @@ import { toast } from "../../components/toast.js";
 import { mountConnectionStatus } from "../../components/connection-status.js";
 import { flushQueue, startQueueLoop } from "../../services/storage.js";
 import { createLive } from "./live.js";
+import { mountAnticheat } from "./anticheat.js";
 import { mountJoin } from "./join.js";
 import { mountLobby } from "./lobby.js";
 import { mountRound } from "./round.js";
@@ -16,10 +17,14 @@ import { fmtPoints } from "../challenge/lib.js";
 import { celebrateSafe } from "./fx.js";
 import { el } from "../../components/dom.js";
 
-const me = await bootPage({ access: "guest" });
+const me = await bootPage({ access: "guest", nav: true });
+
+// O menu só aparece a quem tem sessão; durante a ronda o anti-cheat esconde-o (sair da página contaria como fuga).
+const navHost = document.querySelector("[data-bottom-nav]");
 
 function main() {
   const view = document.getElementById("view");
+  navHost.hidden = !me;
   if (me?.role === "teacher") {
     mountTeacherHub(view);
     return;
@@ -30,9 +35,11 @@ function main() {
   startQueueLoop();
   flushQueue();
 
-  let live = null, current = null, kind = null;
+  let live = null, current = null, kind = null, guard = null;
 
   function showJoin(error) {
+    guard?.destroy(); guard = null;
+    navHost.hidden = !me;
     live?.destroy(); live = null; current?.destroy(); current = null; kind = null;
     document.getElementById("conn").hidden = true;
     document.getElementById("page-title").textContent = "PyArena";
@@ -58,6 +65,7 @@ function main() {
     }
     history.replaceState(null, "", `${location.pathname}?id=${id}`);
     document.getElementById("conn").hidden = false;
+    guard = mountAnticheat(live);
     render();
   }
 
@@ -85,12 +93,14 @@ function main() {
       if (next === "final") celebrateSafe("podium");
     }
     current.update();
+    guard?.update();
   }
 
   function onEvent(ev) {
     const p = ev.payload || {};
     const snap = live.snap();
     const mine = (key) => key === snap?.me?.participant_key;
+    if (ev.type === "anticheat_locked" || ev.type === "anticheat_released") { live.refresh().catch(() => {}); return; }
     if (ev.type === "points_awarded") { toast(t("tournament.toast_points", { points: fmtPoints(p.points) }), "success"); return; }
     if (ev.type === "champion" && p.user_id === snap?.me?.user_id) celebrateSafe("podium");
     if (ev.type === "group_decided" && snap?.format === "eliminatoria") return;

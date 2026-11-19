@@ -17,6 +17,8 @@ from app.models.tournament import Tournament
 from app.models.user import Role, SchoolClass, User
 from app.services import security, tournament as tournament_service
 
+FONTS = ("clara", "leitura")  # alternativas à letra pixel (None = pixel)
+
 router = APIRouter(prefix="/api", dependencies=[Depends(origin_guard)])
 JOIN_KEY = "__join__"
 
@@ -29,6 +31,7 @@ def user_payload(user: User) -> dict:
         "role": user.role.value,
         "locale": user.locale,
         "preferred_theme": user.preferred_theme,
+        "preferred_font": user.preferred_font,
         "show_in_leaderboard": user.show_in_leaderboard,
         "class_id": user.class_id,
         "must_change_password": user.must_change_password,
@@ -182,6 +185,10 @@ async def preferences(body: PreferencesIn, auth: Auth = Depends(current_auth), d
         if body.preferred_theme is not None and body.preferred_theme not in THEMES:
             raise ApiError(422, "prefs.invalid_theme")
         auth.user.preferred_theme = body.preferred_theme
+    if "preferred_font" in sent:
+        if body.preferred_font is not None and body.preferred_font not in FONTS:
+            raise ApiError(422, "prefs.invalid_font")
+        auth.user.preferred_font = body.preferred_font
     if "show_in_leaderboard" in sent:
         if body.show_in_leaderboard is None:
             raise ApiError(422, "common.invalid_request")

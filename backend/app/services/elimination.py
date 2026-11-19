@@ -23,6 +23,7 @@ from app.models.points import UserPoints
 from app.models.user import Role, User
 from app.services import points as pts
 from app.services.leaderboard import avatar_seed
+from app.services import tournament_anticheat as anticheat
 from app.services import tournament_events as events
 from app.services.problems import ProblemSpec
 
@@ -223,6 +224,7 @@ async def build_snapshot(db: AsyncSession, t: Tournament, user: User, teacher: b
             "config": t.config, "players_count": len(players)}
     if teacher:
         tour["join_code"], tour["class_id"] = t.join_code, t.class_id
+        tour["incidents_pending"] = await anticheat.pending_count(db, t.id)
     return {
         "format": "eliminatoria", "tournament": tour, "server_now": now.isoformat(), "last_seq": seq, "config": t.config,
         "players_count": len(players), "alive_count": sum(1 for p in players if p.status != "eliminated"),
@@ -231,6 +233,7 @@ async def build_snapshot(db: AsyncSession, t: Tournament, user: User, teacher: b
             "user_id": user.id, "status": None if teacher or me_p is None else me_p.status, "group_id": my_group.id if my_group else None,
             "eliminated_in_round": me_p.eliminated_in_round if me_p else None, "team_id": None,
             "participant_key": None if teacher else f"u:{user.id}",
+            "anticheat": None if teacher else await anticheat.me_view(db, t, user.id),
         },
         "teams": [], "leaderboard": leaderboard,
         "champion": {"user_id": champion_id, "display_name": names.get(champion_id), "avatar_seed": avatar_seed(champion_id)} if champion_id else None,
@@ -541,7 +544,8 @@ async def handle_finished(db: AsyncSession, link: TournamentSubmission, sub: Sub
 # ---------------- fecho automático ----------------
 async def autoclose_once() -> int:
     """Fecha as rondas cujo ends_at + grace_s já passou. Seguro com vários workers: o torneio é bloqueado com
-    FOR UPDATE SKIP LOCKED (só um consegue) e a ronda é relida já com o lock (se já fechou, não faz nada)."""
+    FOR NO KEY UPDATE SKIP LOCKED (só um consegue) e a ronda é relida já com o lock (se já fechou, não faz nada).
+    Não se usa FOR UPDATE porque gravar um evento (FK para o torneio) faria este fecho saltar a ronda nessa volta."""
     now = utcnow()
     async with SessionLocal() as db:
         cands = [r[0] for r in (await db.execute(
@@ -550,7 +554,7 @@ async def autoclose_once() -> int:
     done = 0
     for tid in cands:
         async with SessionLocal() as db:
-            t = (await db.execute(select(Tournament).where(Tournament.id == tid).with_for_update(skip_locked=True))).scalar_one_or_none()
+            t = (await db.execute(select(Tournament).where(Tournament.id == tid).with_for_update(skip_locked=True, key_share=True))).scalar_one_or_none()
             if t is None or t.current_round is None:
                 continue
             rnd = (await db.execute(select(TournamentRound).where(TournamentRound.tournament_id == tid, TournamentRound.idx == t.current_round))).scalar_one()

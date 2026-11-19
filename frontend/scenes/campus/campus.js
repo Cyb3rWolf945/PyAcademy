@@ -340,7 +340,7 @@ export async function mountCampus(host, { theme, onHotspot, lift = 0, isTeacher 
   const onMove = (e) => {
     if (e.pointerType === "touch" || e.target !== stage.canvas) { if (hoverId && e.target !== stage.canvas) { hoverId = null; hs.setActive(null); stage.canvas.style.cursor = ""; } return; }
     const id = pick(e);
-    if (id !== hoverId) { hoverId = id; hs.setActive(id); stage.canvas.style.cursor = id ? "pointer" : ""; }
+    if (id !== hoverId) { hoverId = id; hs.setActive(id); stage.canvas.style.cursor = id ? "var(--cur-pointer)" : ""; }
   };
   const onUp = (e) => { if (e.target !== stage.canvas) return; const id = pick(e); if (id) hs.items.get(id).btn.click(); };
   host.addEventListener("pointermove", onMove); host.addEventListener("pointerup", onUp);

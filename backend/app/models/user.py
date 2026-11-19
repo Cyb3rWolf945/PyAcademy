@@ -24,6 +24,7 @@ class User(SQLModel, table=True):
     role: Role = Field(default=Role.student)
     locale: str = Field(default="pt-PT", max_length=8)
     preferred_theme: str | None = Field(default=None, max_length=32)
+    preferred_font: str | None = Field(default=None, max_length=16)  # None = letra pixel; ver FONTS em api/auth.py
     # FK circular com school_classes -> use_alter (criada num ALTER TABLE)
     class_id: int | None = Field(
         default=None,

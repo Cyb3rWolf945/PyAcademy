@@ -6,5 +6,8 @@
  "profile.lb_points_all": "Pontos totais",
  "profile.lb_points_week": "Pontos desta semana",
  "profile.lb_rank": "Posição: #{rank} de {total}",
- "profile.lb_saved": "Preferência guardada."
+ "profile.lb_saved": "Preferência guardada.",
+ "profile.font_help": "Se a letra pixel for difícil de ler, escolhe outra. Vês logo a diferença.",
+ "profile.toast_sound": "Sons dos avisos (a torradeira)",
+ "profile.toast_sound_on": "Som ligado. Ouve-se a torradeira!"
 }

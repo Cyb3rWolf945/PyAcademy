@@ -1,5 +1,6 @@
 # Testes do poker no servidor: saldo/buy-in/limites/opt-in, mãos com soma poker_net = 0, privacidade das cartas, ações fora
 # de vez e idempotentes, temporizadores (check/fold, away -> sitting_out), perda diária, privacidade entre turmas e auditoria.
+import asyncio
 import itertools
 from datetime import timedelta
 
@@ -75,7 +76,12 @@ async def act(w, i, tid, type_, amount=None, action_id=None, expect=200):
 
 
 async def start(tid):
-    assert await poker.tick() >= 1
+    """Começa a mão. O temporizador salta a mesa se alguém a tiver bloqueada nesse instante (ex.: um WebSocket a ligar) e tenta na volta seguinte."""
+    for _ in range(100):
+        if await poker.tick() >= 1:
+            return
+        await asyncio.sleep(.02)
+    pytest.fail("a mão não começou")
 
 
 async def to_act_index(w, tid):

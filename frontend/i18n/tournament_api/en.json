@@ -34,5 +34,7 @@
   "tournament.not_enough_players": "At least 2 players still in the game are needed to start the round.",
   "tournament.group_not_found": "Group not found.",
   "tournament.player_not_in_group": "That student is not in this group.",
-  "leaderboard.rate_limited": "Too many requests. Try again shortly."
+  "leaderboard.rate_limited": "Too many requests. Try again shortly.",
+  "tournament.locked": "You are locked out of this tournament until the teacher lets you back in.",
+  "tournament.no_incident": "This student is not locked."
 }

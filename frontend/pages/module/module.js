@@ -147,18 +147,32 @@ async function init() {
     }
   }
 
+  // Abre uma secção e leva o aluno ao início dela, já com o conteúdo carregado (antes disso a página ainda não tem a altura final)
+  async function goToSection(id) {
+    openId = id;
+    await renderList();
+    const li = document.getElementById(`sec-${id}`);
+    if (!li) return;
+    // Salto direto: um deslize suave seria interrompido pelo conteúdo que ainda está a chegar (fluxogramas, slides)
+    li.scrollIntoView({ block: "start", behavior: "instant" });
+    li.querySelector(".acad-sec__head")?.focus({ preventScroll: true });
+    setTimeout(() => { if (openId === id && Math.abs(li.getBoundingClientRect().top) > 40) li.scrollIntoView({ block: "start", behavior: "instant" }); }, 350);
+  }
+
   function renderList() {
+    const opening = [];
     list.replaceChildren(...mod.secoes.map((s, i) => {
       // O professor pode pré-visualizar secções bloqueadas (a API já o permite); para os alunos continuam fechadas.
       const locked = s.estado === "locked" && !IS_TEACHER;
       const preview = s.estado === "locked" && IS_TEACHER;
-      const head = el("button", { type: "button", class: "acad-sec__head", disabled: locked, title: preview ? t("ui.mod.preview") : null, "aria-expanded": String(openId === s.id), onclick: () => { openId = openId === s.id ? "" : s.id; renderList(); } },
+      const head = el("button", { type: "button", class: "acad-sec__head", disabled: locked, title: preview ? t("ui.mod.preview") : null, "aria-expanded": String(openId === s.id), onclick: () => { if (openId === s.id) { openId = ""; renderList(); } else goToSection(s.id); } },
         el("span", { class: "acad-sec__n" }, String(i + 1)), el("span", { class: "acad-sec__t" }, pick(s.titulo)), el("span", { class: "chip" }, `+${s.pontos ?? 0}`), el("span", { class: "acad-sec__i", "aria-hidden": "true" }, preview ? "👁" : (ICON[s.estado] || "🔒")));
       const body = el("div", { class: "acad-sec__body", hidden: openId !== s.id || locked });
       const li = el("li", { class: "acad-sec", "data-state": s.estado, id: `sec-${s.id}` }, head, body);
-      if (!body.hidden) ensureBody(s, body);
+      if (!body.hidden) opening.push(ensureBody(s, body));
       return li;
     }));
+    return Promise.all(opening);
   }
 
   async function refresh() {
@@ -184,8 +198,10 @@ async function init() {
       badgeBox.scrollIntoView({ block: "nearest" });
     }
     loaded.delete(sec.id); // o corpo é refeito em modo "revisão" quando se reabrir
+    if (r.proxima) openId = r.proxima; // evita reabrir por instantes a secção que acabou de ser concluída
     await refresh().catch(() => {});
-    if (r.proxima) { openId = r.proxima; renderList(); document.getElementById(`sec-${r.proxima}`)?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+    if (r.proxima) await goToSection(r.proxima);
+    else if (r.badge) badgeBox.scrollIntoView({ block: "start", behavior: "instant" }); // última secção: mostra o selo ganho
     pulse(bar);
   }
 

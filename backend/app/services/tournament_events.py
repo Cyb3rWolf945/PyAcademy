@@ -44,8 +44,13 @@ async def emit(db: AsyncSession, tournament_id: int, type_: str, payload: dict |
 
 
 def visible_to(ev: dict, user_id: int) -> bool:
-    """points_awarded é privado: só o próprio aluno o recebe."""
-    return ev["type"] != "points_awarded" or ev["payload"].get("user_id") == user_id
+    """points_awarded só vai para o próprio aluno; o anti-cheat vai para o próprio e para o professor (nunca para a turma)."""
+    p = ev["payload"]
+    if ev["type"] == "points_awarded":
+        return p.get("user_id") == user_id
+    if ev["type"] in ("anticheat_locked", "anticheat_released"):
+        return user_id in (p.get("user_id"), p.get("teacher_id"))
+    return True
 
 
 def event_view(ev: TournamentEvent) -> dict:

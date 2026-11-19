@@ -13,7 +13,7 @@ function buildBiome(theme) {
   const land = new Set(); // colunas com terra
   const surf = (x, z) => (surfH.get(x + "," + z) ?? 0);
   const surfH = new Map();
-  const ocean = cfg.biome === "ocean", radius = ocean ? 5.2 : R;
+  const ocean = cfg.biome === "ocean" || cfg.biome === "tropic", radius = cfg.biome === "ocean" ? 5.2 : cfg.biome === "tropic" ? 6.4 : R;
 
   // terreno: topo, camada lateral e fundo em cone invertido (ilha flutuante)
   for (let x = -R; x <= R; x++) for (let z = -R; z <= R; z++) {
@@ -77,6 +77,25 @@ function buildBiome(theme) {
       for (let i = 0; i < 4; i++) { const [x, z] = free(); put(x, surf(x, z) + 1, z, i % 2 ? 0xff7a8a : 0xffffff); }
       anim.push({ kind: "boat", r: 7.5, sp: 0.35, ph: 0 }, { kind: "boat", r: 9.8, sp: -0.22, ph: 2.4 });
       anim.push({ kind: "water" });
+      break;
+    }
+    case "tropic": {
+      const palm = (x, z, tall, lean) => { // tronco inclinado e folhas em cruz, a cair nas pontas
+        const h = surf(x, z);
+        for (let i = 1; i <= tall; i++) put(x + Math.round((lean * i) / tall), h + i, z, 0x6a3a50);
+        const tx = x + lean, ty = h + tall + 1;
+        put(tx, ty, z, 0x1f8f7a);
+        for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) for (let k = 1; k <= 3; k++) put(tx + dx * k, ty - (k === 3 ? 1 : 0), z + dz * k, k === 2 ? 0x2bb39a : 0x1f8f7a);
+      };
+      palm(-4, 2, 6, -1); palm(-2, 4, 4, 1); palm(4, -3, 5, 1);
+      for (let x = 0; x <= 4; x++) for (let z = 0; z <= 2; z++) for (let y = 1; y <= 5; y++) { // hotel de praia
+        const wall = x === 0 || x === 4 || z === 0 || z === 2;
+        if (wall) put(x - 2, y, z - 3, y === 3 ? 0xff5c93 : (y % 2 === 0 && x % 2 === 1 && z === 2) ? 0xffcf5a : 0xffd9c7);
+      }
+      for (let x = -1; x <= 5; x++) for (let z = -1; z <= 3; z++) put(x - 2, 6, z - 3, 0x3fe6d4);
+      for (let y = 1; y <= 2; y++) put(3, y, 3, 0xfff3e8); // chapéu de praia
+      for (const [dx, dz] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) put(3 + dx, 3, 3 + dz, (dx + dz) % 2 ? 0xff5c93 : 0xfff3e8);
+      anim.push({ kind: "boat", r: 8.6, sp: 0.3, ph: 1 }, { kind: "water" }, { kind: "sunset" });
       break;
     }
     case "desert": {
@@ -176,6 +195,15 @@ export async function mountLobby(el, { theme, lift = 0 } = {}) { // lift: sobe a
         tickers.push((dt, t) => { m.rotation.y += dt * 1.1; m.position.y = a.y + Math.round(Math.sin(t * 1.5 + a.x) * 3) / 4; });
       } else if (a.kind === "moon") {
         const m = mk(new THREE.SphereGeometry(3.2, 8, 6), 0xfff6c8); m.position.set(-16, 14, -14); island.add(m);
+      } else if (a.kind === "sunset") { // sol às riscas, parado ao fundo: bandas de voxels, sem luz nem brilho
+        const R0 = 7, g = new THREE.Group();
+        for (let y = -R0; y <= R0; y++) {
+          if (y < -1 && (-y) % 3 === 0) continue;
+          const w = 2 * Math.sqrt(R0 * R0 - y * y), f = (y + R0) / (2 * R0);
+          const c = new THREE.Color(0xff4f8b).lerp(new THREE.Color(0xffe36b), f);
+          const m = mk(box, c.getHex()); m.scale.set(Math.max(1, w), 1, 1); m.position.y = y; g.add(m);
+        }
+        g.position.set(-15, 6, -24); g.rotation.y = 0.55; island.add(g);
       } else if (a.kind === "stars") {
         const sp = new Float32Array(90), sr = rng(5);
         for (let i = 0; i < 30; i++) { const th = sr() * 6.28, ph = Math.acos(sr() * 1.2 - 0.2), r = 40; sp[i * 3] = r * Math.sin(ph) * Math.cos(th); sp[i * 3 + 1] = r * Math.cos(ph) * 0.9 + 4; sp[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th); }
@@ -187,7 +215,7 @@ export async function mountLobby(el, { theme, lift = 0 } = {}) { // lift: sobe a
         let n = 0;
         for (let x = -8; x <= 8; x++) for (let z = -8; z <= 8; z++) {
           const d = Math.hypot(x, z); if (d < 3.6 || d > 8.2) continue;
-          pos.push([x * 1.35, z * 1.35]); col.setHex((x + z) & 1 ? 0x1f7fc0 : 0x2a90d6); wm.setColorAt(n++, col);
+          pos.push([x * 1.35, z * 1.35]); col.setHex((x + z) & 1 ? (b.cfg.water?.[0] ?? 0x1f7fc0) : (b.cfg.water?.[1] ?? 0x2a90d6)); wm.setColorAt(n++, col);
         }
         wm.count = n; wm.frustumCulled = false; island.add(wm);
         tickers.push((dt, t) => {

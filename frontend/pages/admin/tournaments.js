@@ -135,7 +135,11 @@ export function initTournaments(root) {
       const next = await api("GET", `/api/tournaments/${selected}/admin`);
       const sig = JSON.stringify(next, (k, v) => (k === "server_now" || k === "last_seen" || k === "last_seq" ? undefined : v));
       if (sig === lastSig && !force) return;
-      lastSig = sig; data = next; render();
+      lastSig = sig; data = next;
+      const ids = new Set((next.incidents || []).map((i) => i.user_id));
+      if (knownIncidents && [...ids].some((id) => !knownIncidents.has(id))) toast(t("tournament.ac_admin_toast"), "error");
+      knownIncidents = ids;
+      render();
     } catch (err) { if (force) toast(errorText(err), "error"); }
   }
 
@@ -343,6 +347,20 @@ export function initTournaments(root) {
     return el("section", { class: "panel-pixel grid gap-2" }, el("h3", {}, t("tournament.admin_rounds")), el("ul", { class: "grid gap-2" }, rows));
   }
 
+  // ---------- Anti-cheat: alunos à espera de autorização para voltar ----------
+  let knownIncidents = null;
+  function incidentsView() {
+    const list = data.incidents || [];
+    if (!list.length) return null;
+    return el("section", { class: "panel-pixel ac-admin grid gap-2", role: "alert" },
+      el("h3", {}, t("tournament.ac_admin_title", { n: list.length })),
+      el("p", { class: "text-sm text-muted" }, t("tournament.ac_admin_help")),
+      el("ul", { class: "grid gap-2" }, list.map((i) => el("li", { class: "flex flex-wrap items-center gap-2" },
+        el("span", { class: "min-w-0 flex-1" }, el("strong", {}, i.display_name), el("br"),
+          el("span", { class: "text-sm text-muted" }, `${t(`tournament.ac_admin_kind_${i.kind}`)} · ${t("tournament.ac_admin_times", { n: i.offences })}`)),
+        el("button", { type: "button", class: "btn-pixel btn-pixel--accent", onclick: () => call("POST", `/anticheat/${i.user_id}/release`) }, t("tournament.ac_admin_release"))))));
+  }
+
   // ---------- Presença ----------
   function presenceView() {
     const pres = data.players || [];
@@ -368,15 +386,20 @@ export function initTournaments(root) {
     const tour = data.tournament;
     const projectorUrl = `/pages/projector/projector.html?id=${tour.id}`;
     // Não recriar o editor a meio da escrita: só repinta tudo quando não se está a editar (o poll é pausado)
-    detail.replaceChildren(
+    detail.replaceChildren(...[
       el("section", { class: "panel-pixel grid gap-2" },
         el("h3", { class: "text-lg" }, tour.name),
         el("p", { class: "text-sm" }, `${t("tournament.admin_join_code")}: `, el("strong", { class: "text-2xl text-accent" }, tour.join_code || "")),
         el("p", { class: "text-sm text-muted" }, t(`tournament.mode_${tour.mode}`)),
         el("a", { class: "btn-pixel btn-pixel--accent", href: projectorUrl, target: "_blank", rel: "noopener" }, `📽 ${t("tournament.admin_open_projector")}`)),
-      ...(isElim() ? [controls(), data.tournament.state === "lobby" ? previewView() : null, groupsView(), roundsView(), presenceView()] : [controls(), roundsView(), presenceView()]).filter(Boolean));
+      incidentsView(),
+      ...(isElim() ? [controls(), data.tournament.state === "lobby" ? previewView() : null, groupsView(), roundsView(), presenceView()] : [controls(), roundsView(), presenceView()]),
+    ].filter(Boolean));
   }
 
   document.addEventListener("localechange", () => { paintShell(); loadList(); render(); });
+  // Vindo do aviso do projetor (?tournament=<id>): abre logo esse torneio
+  const wanted = Number(new URLSearchParams(location.search).get("tournament"));
+  if (wanted) select(wanted);
   return { setClasses, setActiveClass };
 }

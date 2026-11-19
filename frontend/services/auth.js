@@ -26,6 +26,13 @@ export async function loadMe({ optional = false } = {}) {
 
 export const login = async (username, password) => remember(await api("POST", "/api/auth/login", { username, password }));
 export const join = async (payload) => remember(await api("POST", "/api/auth/join", payload));
+// Entrar num torneio sem conta: o servidor cria uma sessão nova, por isso é preciso guardar o token CSRF dela
+// (sem isto, o pedido seguinte era recusado com "Pedido recusado por segurança" até se recarregar a página)
+export async function guestJoin(payload) {
+  const data = await api("POST", "/api/auth/tournament-guest", payload, { idempotent: true });
+  remember(data);
+  return data;
+}
 export const changePassword = async (current_password, new_password) =>
   remember(await api("POST", "/api/auth/change-password", { current_password, new_password }));
 

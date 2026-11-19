@@ -247,6 +247,18 @@ async def test_autoclose_waits_for_submissions_in_flight(make_user, make_class, 
     assert await elimination.autoclose_once() == 1
 
 
+async def test_autoclose_is_not_skipped_by_a_concurrent_event_insert(make_user, make_class, new_client):
+    """Gravar um evento (FK para tournaments) põe um FOR KEY SHARE no torneio: isso não pode fazer o fecho automático saltar a ronda."""
+    from sqlalchemy import text
+    env, tid, users = await _env(make_user, make_class, new_client, 8)
+    await _start(env, tid)
+    await _expire(tid, 1)
+    async with SessionLocal() as other:
+        await other.execute(text("SELECT 1 FROM tournaments WHERE id = :t FOR KEY SHARE"), {"t": tid})
+        assert await elimination.autoclose_once() == 1
+        await other.rollback()
+
+
 # ---------------- professor, eliminados, idempotência ----------------
 async def test_teacher_override_and_permissions(make_user, make_class, new_client):
     env, tid, users = await _env(make_user, make_class, new_client, 8)
@@ -401,7 +413,7 @@ async def test_snapshot_shape_for_students_in_group_and_lobby(make_user, make_cl
     await login(sc, users[0].username)
     lobby = await state(sc, tid)
     assert lobby["format"] == "eliminatoria" and lobby["players_count"] == 8 and lobby["alive_count"] == 8
-    assert lobby["me"] == {"user_id": users[0].id, "status": "alive", "group_id": None, "eliminated_in_round": None, "team_id": None, "participant_key": f"u:{users[0].id}"}
+    assert lobby["me"] == {"user_id": users[0].id, "status": "alive", "group_id": None, "eliminated_in_round": None, "team_id": None, "participant_key": f"u:{users[0].id}", "anticheat": {"armed": False, "locked": False, "kind": None}}
     assert lobby["current"] is None and lobby["champion"] is None and lobby["podium"] is None and lobby["my_points_this_tournament"] == 0
     assert "problem_slugs" not in lobby["rounds"][0] and "ex-facil" not in str(lobby)
     await _start(env, tid)

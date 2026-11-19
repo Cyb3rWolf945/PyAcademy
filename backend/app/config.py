@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 ROOT = Path(__file__).resolve().parents[2]  # /app (ou a raiz do projeto)
 
 LOCALES = ("pt-PT", "en")
-THEMES = ("campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite")
+THEMES = ("campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite", "tropico")
 
 
 class Settings(BaseSettings):

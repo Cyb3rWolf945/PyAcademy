@@ -227,5 +227,5 @@ async def test_session_endpoint_and_all_themes(client, make_user):
     h = await login(client, "ana")
     r = (await client.get("/api/session")).json()
     assert r["user"]["username"] == "ana" and r["csrf_token"] == h["X-CSRF-Token"]
-    for th in ("floresta", "masmorra", "oceano", "deserto", "neve", "noite"):
+    for th in ("floresta", "masmorra", "oceano", "deserto", "neve", "noite", "tropico"):
         assert (await client.patch("/api/me/preferences", json={"preferred_theme": th}, headers=h)).status_code == 200

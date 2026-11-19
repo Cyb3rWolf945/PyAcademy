@@ -39,6 +39,7 @@ function main() {
     const snap = live.snap();
     if (!snap) return;
     document.getElementById("title").textContent = snap.tournament.name;
+    paintIncidents(snap);
     const next = kindOf(snap);
     if (next !== kind) {
       view?.destroy();
@@ -50,6 +51,16 @@ function main() {
     view.update();
   }
 
+  // Anti-cheat: no ecrã público só aparece o número (nunca o nome do aluno), com ligação para o painel do professor
+  const acLink = el("a", { class: "ac-projector", target: "_blank", rel: "noopener", hidden: true });
+  document.body.append(acLink);
+  function paintIncidents(snap) {
+    const n = snap.tournament.incidents_pending || 0;
+    acLink.hidden = !n;
+    acLink.href = `/pages/admin/admin.html?tournament=${snap.tournament.id}`;
+    acLink.textContent = n ? t("tournament.ac_projector", { n }) : "";
+  }
+
   // Toasts de eventos (mission_solved / first_bonus) + celebração do boss
   function pushToast(text, cls = "") {
     const node = el("div", { class: `toast-pixel anim-pop bg-surface p-[1vw] text-[1.8vw] ${cls}` }, text);
@@ -59,6 +70,7 @@ function main() {
   }
   function onEvent(ev) {
     const p = ev.payload || {};
+    if (ev.type === "anticheat_locked" || ev.type === "anticheat_released") { live.refresh().catch(() => {}); return; }
     if (ev.type === "mission_solved") pushToast(`🎯 ${t("tournament.toast_solved", { name: p.name, points: fmtPoints(p.points) })}`);
     else if (ev.type === "first_bonus") pushToast(`⚡ ${t("tournament.toast_first_bonus", { name: p.name })}`, "text-gold");
     else if (ev.type === "group_decided") {

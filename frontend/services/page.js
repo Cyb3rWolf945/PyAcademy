@@ -1,5 +1,6 @@
 // Arranque comum das páginas: tema, idioma, utilizador (com guarda de acesso) e componentes de navegação.
 import { applyTheme } from "./theme.js";
+import { applyFont } from "./font.js";
 import { getLocale, initialLocale, setLocale } from "./i18n.js";
 import { loadMe, homeFor } from "./auth.js";
 import { mountLangSwitch } from "../components/lang-switch.js";
@@ -11,6 +12,7 @@ export async function bootPage({ access = "user", nav = false } = {}) {
   applyTheme();
   await setLocale(initialLocale(), { save: false });
   const me = await loadMe({ optional: access === "public" || access === "guest" });
+  if (me) applyFont(me.preferred_font);
   if (access === "public") {
     if (me) { location.replace(homeFor(me)); return null; }
   } else if (access !== "guest") {

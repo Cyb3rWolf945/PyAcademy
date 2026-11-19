@@ -2,7 +2,7 @@
 // O theme-boot.js (no <head>) já aplicou o tema antes de desenhar; aqui está a lógica que as páginas e componentes usam.
 import { currentUser, savePreferences } from "./auth.js";
 
-export const THEMES = ["campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite"];
+export const THEMES = ["campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite", "tropico"];
 export const DEFAULT_THEME = "campus";
 const K_PIN = "pyarena.pinned", K_LAST = "pyarena.theme.last", K_VISIT = "pyarena.theme", K_UNSYNC = "pyarena.pin.unsynced";
 

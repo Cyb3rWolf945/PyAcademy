@@ -22,6 +22,7 @@ from app.models.user import Role, SchoolClass, User
 from app.realtime import presence
 from app.services import elimination, security, tournament_events as events, tournament_scoring as scoring
 from app.services import points as points_svc
+from app.services import tournament_anticheat as anticheat
 from app.services.problems import ProblemSpec, curriculum
 
 JOIN_KEY = "__tjoin__"
@@ -273,11 +274,13 @@ async def snapshot(db: AsyncSession, t: Tournament, user: User) -> dict:
     if teacher:
         tour["join_code"] = t.join_code  # só o professor
         tour["class_id"] = t.class_id
+        tour["incidents_pending"] = await anticheat.pending_count(db, t.id)
     return {
         "tournament": tour, "server_now": now.isoformat(), "last_seq": seq,
         "rounds": [round_view(r, now) for r in rounds], "current": current,
         "players_count": players_count,
-        "me": {"user_id": user.id, "team_id": player.team_id if player else None, "participant_key": who[0] if who else None},
+        "me": {"user_id": user.id, "team_id": player.team_id if player else None, "participant_key": who[0] if who else None,
+               "anticheat": None if teacher else await anticheat.me_view(db, t, user.id)},
         "teams": await teams_view(db, t), "leaderboard": board,
         "podium": scoring.podium_of(board) if t.state == "finished" else None,
     }
@@ -304,6 +307,7 @@ async def admin_view(db: AsyncSession, t: Tournament, teacher: User) -> dict:
         "user_id": p.user_id, "display_name": name, "team_id": p.team_id,
         "online": pres.get(p.user_id, {}).get("online", False), "last_seen": pres.get(p.user_id, {}).get("last_seen"),
     } for p, name in players]
+    view["incidents"] = await anticheat.admin_view(db, t.id)
     attempts = {(rid, slug): n for rid, slug, n in (await db.execute(
         select(TournamentSubmission.round_id, Submission.problem_slug, func.count())
         .join(Submission, Submission.id == TournamentSubmission.submission_id).where(TournamentSubmission.tournament_id == t.id)
@@ -583,6 +587,8 @@ async def validate_submission(db: AsyncSession, user: User, tid: int, round_idx:
         raise ApiError(403, "tournament.not_participant")
     if t.mode == "agencias" and (await scoring.participant_for(db, t, user.id)) is None:
         raise ApiError(403, "tournament.team_required")
+    if await anticheat.is_locked(db, tid, user.id):
+        raise ApiError(403, "tournament.locked")
     if t.state == "finished":
         raise ApiError(409, "tournament.finished")
     rnd = await get_round(db, tid, round_idx)
@@ -612,6 +618,8 @@ async def open_hint(db: AsyncSession, user: User, tid: int, slug: str, n: int) -
         raise ApiError(404, "tournament.not_found")
     if await db.get(TournamentPlayer, (tid, user.id)) is None:
         raise ApiError(403, "tournament.not_participant")
+    if await anticheat.is_locked(db, tid, user.id):
+        raise ApiError(403, "tournament.locked")
     if t.current_round is None:
         raise ApiError(409, "tournament.round_not_active")
     rnd = await get_round(db, tid, t.current_round)

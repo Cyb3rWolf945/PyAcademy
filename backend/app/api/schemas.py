@@ -96,6 +96,7 @@ class DeleteAccountIn(Strict):
 class PreferencesIn(Strict):
     locale: str | None = None
     preferred_theme: str | None = None
+    preferred_font: str | None = None
     show_in_leaderboard: bool | None = None
     display_name: str | None = None
 

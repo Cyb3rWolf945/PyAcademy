@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
-THEMES = ["campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite"]
+THEMES = ["campus", "floresta", "masmorra", "oceano", "deserto", "neve", "noite", "tropico"]
 
 PAL = {
     ".": None, "K": "#1b1424", "W": "#ffffff", "w": "#d5dde8", "g": "#8a97ab", "G": "#566079",
@@ -275,6 +275,7 @@ ISLAND = {  # topo, lado, fundo da ilha flutuante por tema
     "deserto": ("#f0c070", "#d49a50", "#a8703a"),
     "neve": ("#ffffff", "#bcd4ec", "#7f9cc0"),
     "noite": ("#3a3a7a", "#26265a", "#16163a"),
+    "tropico": ("#f4b58c", "#b4587c", "#5a2a72"),
 }
 
 
@@ -298,6 +299,12 @@ def scene(name, p):
             d.point((rnd.randrange(W), rnd.randrange(55)), fill=rgba("#ffffff" if rnd.random() < .6 else "#9aa0ff"))
         d.ellipse((118, 10, 134, 26), fill=rgba("#fff6c8"))
         d.ellipse((124, 8, 138, 22), fill=rgba(mix(p["sky-1"], p["sky-2"], .12)))
+    elif name == "tropico":  # sol enorme, baixo e às riscas, a pôr-se no mar
+        for y in range(14, 63):
+            half = int((25 ** 2 - (y - 38) ** 2) ** .5) if abs(y - 38) <= 25 else 0
+            if y > 40 and (y - 40) % 5 < 1 + (y - 40) // 8:
+                continue
+            d.rectangle((80 - half, y, 80 + half, y), fill=rgba(mix("#ffe36b", "#ff4f8b", (y - 14) / 48)))
     else:
         c = {"masmorra": "#c9b6ff", "neve": "#fff7d6", "oceano": "#fff2b0"}.get(name, "#fff2a8")
         d.ellipse((120, 10, 136, 26), fill=rgba(c))
@@ -305,9 +312,17 @@ def scene(name, p):
     for cx, cy in ((22, 18), (70, 10), (140, 40), (30, 50)):
         if name == "noite":
             continue
-        cc = "#ffffff" if name not in ("masmorra",) else "#8a7aa8"
+        cc = {"masmorra": "#8a7aa8", "tropico": "#ff9fb0"}.get(name, "#ffffff")
         for dx, dy, w in ((0, 0, 14), (4, -3, 9), (-3, 2, 8)):
             d.rectangle((cx + dx, cy + dy, cx + dx + w, cy + dy + 3), fill=rgba(cc))
+    if name == "tropico":
+        d.rectangle((0, 62, W, H), fill=rgba("#1b2f73"))
+        for y in range(63, H, 3):  # reflexo do sol na água
+            half = 30 - (y - 63) // 2
+            for x in range(80 - half + (y % 2) * 3, 80 + half, 7):
+                d.rectangle((x, y, x + 3, y), fill=rgba("#ff9a6b"))
+            for x in range((y * 5) % 11, W, 19):
+                d.rectangle((x, y, x + 2, y), fill=rgba("#3fe6d4"))
     if name == "oceano":
         d.rectangle((0, 62, W, H), fill=rgba("#1f7fc0"))
         for y in range(62, H, 4):
@@ -358,6 +373,22 @@ def scene(name, p):
             tri(x, ty - 1, h, w, "#c8dcf2"); tri(x, ty - 1 - h + h // 3, h // 3 + 2, w // 3 + 2, "#ffffff")
         for x in (64, 100, 70):
             tri(x, ty - 1, 12, 8, "#3c7f6a"); tri(x, ty - 7, 5, 6, "#ffffff")
+    elif name == "tropico":
+        def palm(x, h, lean):
+            for i in range(h):
+                d.rectangle((x + lean * i // h, ty - 3 - i, x + lean * i // h + 1, ty - 3 - i), fill=rgba("#3a1740"))
+            tx, ty2 = x + lean, ty - 3 - h
+            for dx, dy, w in ((-9, 1, 9), (1, 1, 9), (-7, -2, 7), (1, -2, 7), (-3, -3, 7)):
+                d.rectangle((tx + dx, ty2 + dy, tx + dx + w, ty2 + dy + 1), fill=rgba("#17584f"))
+            for dx in (-10, 9):
+                d.rectangle((tx + dx, ty2 + 2, tx + dx + 1, ty2 + 4), fill=rgba("#17584f"))
+        palm(46, 24, -3); palm(58, 16, 2); palm(116, 21, 3)
+        d.rectangle((72, ty - 19, 104, ty - 1), fill=rgba("#ffd9c7"))  # hotel de praia com janelas acesas
+        d.rectangle((70, ty - 21, 106, ty - 19), fill=rgba("#3fe6d4"))
+        d.rectangle((70, ty - 11, 106, ty - 10), fill=rgba("#ff5c93"))
+        for wy in (ty - 17, ty - 8):
+            for wx in range(75, 101, 6):
+                d.rectangle((wx, wy, wx + 3, wy + 3), fill=rgba("#ffcf5a" if (wx + wy) % 4 else "#57257c"))
     elif name == "noite":
         for x, h, c in ((48, 18, "#7af0ff"), (70, 12, "#ff7ad9"), (100, 22, "#ffe34d"), (118, 13, "#7af0ff")):
             cy = ty - 8 - h // 2
@@ -368,6 +399,385 @@ def scene(name, p):
     return im
 
 
+# ---------- cartaz do tema Trópico: dupla original do PyArena em grande plano (320x180) ----------
+def _finish(layer, rim, ink="#1d0b2c"):
+    """Luz do pôr do sol no lado esquerdo e contorno escuro de 1 px à volta da figura."""
+    w, h = layer.size
+    src = layer.copy().load()
+    px = layer.load()
+    solid = lambda x, y: 0 <= x < w and 0 <= y < h and src[x, y][3] > 0
+    for y in range(h):
+        for x in range(w):
+            if solid(x, y) and not solid(x - 1, y):
+                px[x, y] = rgba(rim)
+            elif not solid(x, y) and any(solid(x + a, y + b) for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                px[x, y] = rgba(ink)
+    return layer
+
+
+def _sky(im):
+    W, H = im.size
+    stops = ["#4b3a8f", "#7a4fa8", "#b75fa8", "#ec7fa0", "#ffa98a", "#ffd08f"]
+    px = im.load()
+    for y in range(H):
+        t = min(1, y / 118) * (len(stops) - 1)
+        i, f = min(int(t), len(stops) - 2), t - int(t)
+        for x in range(W):
+            step = 1 if f * 16 > BAYER[y % 4][x % 4] else 0
+            px[x, y] = rgba(stops[i + step])
+
+
+def _palm(d, x, base, h, lean, c):
+    for i in range(h):
+        k = x + lean * i * i // (h * h)
+        d.rectangle((k, base - i, k + 2, base - i), fill=rgba(c))
+    tx, ty = x + lean + 1, base - h
+    for sx in (-1, 1):
+        for reach, rise in ((24, -3), (21, 6), (15, 13), (19, -9)):
+            for j in range(reach):
+                fx = tx + sx * j
+                fy = ty + rise * j // reach + (j * j) // (reach * 2)
+                th = max(1, 3 - j // 7)
+                d.rectangle((fx, fy, fx, fy + th), fill=rgba(c))
+                if j % 3 == 0:
+                    d.rectangle((fx, fy + th, fx, fy + th + 2), fill=rgba(c))
+
+
+def _city(d):
+    towers = [(2, 62, 26, "#8f5aa6"), (30, 80, 20, "#a4639f"), (222, 44, 34, "#a968a6"), (258, 22, 40, "#c77f9f"), (300, 58, 24, "#9a5da3")]
+    for x, top, w, c in towers:
+        d.rectangle((x, top, x + w, 130), fill=rgba(c))
+        d.rectangle((x, top, x + 2, 130), fill=rgba(mix(c, "#ffd08f", .55)))
+        for wy in range(top + 5, 128, 6):
+            for wx in range(x + 5, x + w - 3, 5):
+                lit = (wx * 7 + wy * 3) % 5 == 0
+                d.rectangle((wx, wy, wx + 2, wy + 2), fill=rgba("#ffe08a" if lit else mix(c, "#3c2470", .35)))
+
+
+def _rita():
+    """Rita: caracóis volumosos, auscultadores ao pescoço, blusão turquesa e um pato de borracha na mão."""
+    im = Image.new("RGBA", (320, 180), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    skin, shade, deep = "#a9673f", "#864a30", "#5f3224"
+    hair, hair2, hair3 = "#2a1430", "#4a2148", "#7a3560"
+    jacket, jacket2, jacket3 = "#27b8ad", "#178179", "#7ff0dc"
+    # corpo
+    d.polygon([(62, 180), (66, 128), (84, 112), (138, 112), (160, 126), (168, 180)], fill=rgba(jacket))
+    d.polygon([(138, 112), (160, 126), (168, 180), (142, 180)], fill=rgba(jacket2))
+    d.polygon([(98, 112), (124, 112), (120, 180), (102, 180)], fill=rgba("#20142e"))
+    d.polygon([(84, 112), (100, 110), (104, 138), (92, 130)], fill=rgba(jacket3))
+    d.polygon([(138, 112), (122, 110), (118, 138), (130, 130)], fill=rgba(jacket2))
+    d.rectangle((105, 148, 107, 148), fill=rgba("#3fe6d4")); d.rectangle((107, 150, 109, 150), fill=rgba("#3fe6d4")); d.rectangle((105, 152, 107, 152), fill=rgba("#3fe6d4"))
+    d.rectangle((112, 152, 117, 153), fill=rgba("#fff3e8"))
+    # pescoço
+    d.polygon([(100, 92), (122, 92), (124, 114), (110, 124), (98, 114)], fill=rgba(shade))
+    d.polygon([(100, 92), (112, 96), (112, 122), (98, 114)], fill=rgba(skin))
+    d.polygon([(98, 96), (124, 96), (122, 108), (111, 112), (100, 108)], fill=rgba(deep))
+    # caracóis atrás
+    for cx, cy, r in ((111, 44, 31), (82, 54, 17), (140, 54, 17), (78, 78, 15), (144, 78, 15), (88, 96, 11), (135, 96, 11), (92, 26, 13), (130, 26, 13)):
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=rgba(hair))
+    # cara
+    d.polygon([(92, 46), (130, 46), (132, 74), (124, 94), (112, 101), (100, 94), (91, 74)], fill=rgba(skin))
+    d.polygon([(121, 46), (130, 46), (132, 74), (124, 94), (113, 101), (120, 88)], fill=rgba(shade))
+    d.rectangle((88, 62, 91, 73), fill=rgba(shade)); d.rectangle((132, 62, 134, 73), fill=rgba(deep))
+    d.rectangle((86, 73, 89, 77), fill=rgba("#ffd23f"))  # brinco
+    # olhos e sobrancelhas (olhar de lado, confiante)
+    d.rectangle((95, 58, 106, 60), fill=rgba(hair)); d.rectangle((115, 56, 126, 58), fill=rgba(hair))
+    d.rectangle((96, 64, 105, 68), fill=rgba("#fff3e8")); d.rectangle((116, 64, 125, 68), fill=rgba("#fff3e8"))
+    d.rectangle((100, 64, 104, 68), fill=rgba("#3a1c12")); d.rectangle((120, 64, 124, 68), fill=rgba("#3a1c12"))
+    d.rectangle((101, 65, 101, 65), fill=rgba("#ffffff")); d.rectangle((121, 65, 121, 65), fill=rgba("#ffffff"))
+    d.rectangle((95, 63, 106, 63), fill=rgba(hair)); d.rectangle((115, 63, 126, 63), fill=rgba(hair))
+    # nariz e boca (meio sorriso)
+    d.rectangle((110, 70, 111, 78), fill=rgba(shade)); d.rectangle((108, 79, 113, 80), fill=rgba(deep))
+    d.polygon([(102, 87), (120, 85), (122, 83), (119, 89), (104, 90)], fill=rgba("#7a2438"))
+    d.rectangle((105, 87, 118, 87), fill=rgba("#fff3e8"))
+    d.rectangle((94, 72, 98, 74), fill=rgba("#b9583f")); d.rectangle((122, 72, 126, 74), fill=rgba("#8f4532"))
+    # franja de caracóis
+    for cx, cy, r, c in ((93, 42, 9, hair), (106, 37, 10, hair), (120, 37, 10, hair), (131, 43, 9, hair), (99, 34, 5, hair2), (116, 31, 5, hair2), (129, 36, 4, hair2), (88, 50, 6, hair), (136, 50, 6, hair)):
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=rgba(c))
+    for x, y in ((84, 30), (97, 22), (110, 16), (126, 20), (139, 34), (74, 58), (72, 80), (148, 62), (150, 84), (88, 44)):
+        d.rectangle((x, y, x + 4, y + 1), fill=rgba(hair3))
+    # auscultadores ao pescoço
+    d.arc((86, 88, 136, 132), 15, 165, fill=rgba("#ffd23f"), width=3)
+    d.rectangle((83, 104, 92, 120), fill=rgba("#ff5c93")); d.rectangle((85, 106, 90, 118), fill=rgba("#ffd23f"))
+    d.rectangle((130, 104, 139, 120), fill=rgba("#c93d72")); d.rectangle((132, 106, 137, 118), fill=rgba("#ffd23f"))
+    # braço e pato de borracha
+    d.polygon([(62, 180), (58, 146), (68, 128), (84, 140), (82, 180)], fill=rgba(jacket2))
+    d.polygon([(46, 138), (66, 130), (72, 148), (54, 158)], fill=rgba(skin))
+    d.ellipse((34, 110, 62, 134), fill=rgba("#ffd23f")); d.ellipse((44, 96, 64, 116), fill=rgba("#ffd23f"))
+    d.ellipse((34, 122, 60, 134), fill=rgba("#e0a418"))
+    d.rectangle((60, 104, 70, 108), fill=rgba("#ff8a3c")); d.rectangle((60, 108, 67, 110), fill=rgba("#d9602a"))
+    d.rectangle((53, 102, 56, 105), fill=rgba("#1d0b2c")); d.rectangle((54, 102, 54, 102), fill=rgba("#ffffff"))
+    d.polygon([(44, 130), (62, 126), (66, 142), (50, 146)], fill=rgba(skin))
+    for x in (47, 53, 59):
+        d.rectangle((x, 130, x, 142), fill=rgba(shade))
+    return _finish(im, "#ffd9a0")
+
+
+def _tomas():
+    """Tomás: óculos redondos, camisa mostarda, café na mão e o gato laranja ao ombro."""
+    im = Image.new("RGBA", (320, 180), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    skin, shade, deep = "#efb98f", "#cf8f6c", "#a06850"
+    hair, hair2 = "#1f1430", "#40305c"
+    shirt, shirt2, shirt3 = "#f2b632", "#c4861c", "#ffdc78"
+    # corpo
+    d.polygon([(158, 180), (164, 126), (186, 110), (240, 110), (262, 124), (272, 180)], fill=rgba(shirt))
+    d.polygon([(240, 110), (262, 124), (272, 180), (244, 180)], fill=rgba(shirt2))
+    d.polygon([(198, 110), (228, 110), (226, 180), (200, 180)], fill=rgba("#fff3e8"))
+    d.polygon([(214, 110), (228, 110), (226, 180), (214, 180)], fill=rgba("#e3cfd6"))
+    d.polygon([(186, 110), (200, 106), (206, 134), (194, 128)], fill=rgba(shirt3)); d.polygon([(240, 110), (226, 106), (220, 134), (232, 128)], fill=rgba(shirt2))
+    for y in range(120, 180, 12):
+        d.rectangle((168, y, 196, y), fill=rgba(shirt2)); d.rectangle((232, y, 266, y), fill=rgba(mix(shirt2, "#8a5a14", .4)))
+    # "print" no peito
+    d.rectangle((205, 148, 207, 148), fill=rgba("#57257c")); d.rectangle((207, 150, 209, 150), fill=rgba("#57257c")); d.rectangle((205, 152, 207, 152), fill=rgba("#57257c"))
+    d.rectangle((212, 152, 220, 153), fill=rgba("#ff5c93"))
+    # pescoço
+    d.polygon([(200, 90), (226, 90), (228, 112), (213, 122), (198, 112)], fill=rgba(shade))
+    d.polygon([(200, 90), (213, 96), (213, 120), (198, 112)], fill=rgba(skin))
+    d.polygon([(198, 94), (228, 94), (226, 106), (213, 110), (200, 106)], fill=rgba(deep))
+    # cabelo atrás e orelhas
+    d.polygon([(188, 44), (192, 22), (214, 12), (236, 18), (244, 40), (242, 62), (186, 62)], fill=rgba(hair))
+    d.rectangle((186, 62, 191, 76), fill=rgba(shade)); d.rectangle((238, 62, 243, 76), fill=rgba(deep))
+    # cara
+    d.polygon([(191, 44), (239, 44), (240, 74), (232, 92), (215, 101), (198, 92), (190, 74)], fill=rgba(skin))
+    d.polygon([(228, 44), (239, 44), (240, 74), (232, 92), (216, 101), (226, 86)], fill=rgba(shade))
+    # madeixa de cabelo
+    d.polygon([(190, 48), (194, 28), (216, 18), (240, 26), (241, 50), (232, 40), (214, 44), (202, 38), (196, 52)], fill=rgba(hair))
+    for x, y, w in ((200, 26, 12), (214, 22, 14), (226, 30, 8)):
+        d.rectangle((x, y, x + w, y + 1), fill=rgba(hair2))
+    # sobrancelhas, olhos
+    d.rectangle((197, 54, 209, 56), fill=rgba(hair)); d.rectangle((220, 52, 233, 54), fill=rgba(hair))
+    d.rectangle((199, 63, 207, 67), fill=rgba("#fff3e8")); d.rectangle((222, 63, 230, 67), fill=rgba("#fff3e8"))
+    d.rectangle((200, 63, 204, 67), fill=rgba("#27507a")); d.rectangle((223, 63, 227, 67), fill=rgba("#27507a"))
+    d.rectangle((201, 64, 201, 64), fill=rgba("#ffffff")); d.rectangle((224, 64, 224, 64), fill=rgba("#ffffff"))
+    d.rectangle((199, 62, 207, 62), fill=rgba(hair)); d.rectangle((222, 62, 230, 62), fill=rgba(hair))
+    # óculos redondos
+    d.ellipse((193, 57, 212, 73), outline=rgba("#57257c"), width=2); d.ellipse((217, 57, 236, 73), outline=rgba("#57257c"), width=2)
+    d.rectangle((212, 63, 217, 64), fill=rgba("#57257c"))
+    d.rectangle((197, 60, 200, 60), fill=rgba("#ffffff")); d.rectangle((221, 60, 224, 60), fill=rgba("#ffffff"))
+    # nariz, boca, barba por fazer
+    d.rectangle((214, 70, 215, 79), fill=rgba(shade)); d.rectangle((212, 80, 218, 81), fill=rgba(deep))
+    d.rectangle((206, 88, 224, 89), fill=rgba("#8a3a42")); d.rectangle((222, 86, 225, 87), fill=rgba("#8a3a42"))
+    for x in range(198, 234, 3):
+        for y in range(90 + abs(x - 215) // 5, 98 - abs(x - 215) // 4, 3):
+            d.point((x, y), fill=rgba(deep))
+    # gato laranja ao ombro
+    d.polygon([(238, 114), (246, 84), (272, 84), (282, 116), (270, 124), (246, 124)], fill=rgba("#f08a32"))
+    d.polygon([(244, 90), (246, 66), (256, 78)], fill=rgba("#f08a32")); d.polygon([(274, 90), (272, 66), (262, 78)], fill=rgba("#cf6c1e"))
+    d.polygon([(248, 84), (248, 72), (254, 79)], fill=rgba("#ffb0a8")); d.polygon([(270, 84), (270, 72), (264, 79)], fill=rgba("#ffb0a8"))
+    d.ellipse((242, 74, 277, 106), fill=rgba("#f08a32")); d.ellipse((248, 92, 271, 107), fill=rgba("#ffe0b8"))
+    for x, y, w in ((254, 76, 2), (259, 74, 2), (264, 76, 2), (244, 84, 5), (270, 84, 5), (243, 92, 4), (272, 92, 4)):
+        d.rectangle((x, y, x + w - 1, y + 5 if w == 2 else y + 1), fill=rgba("#b9561a"))
+    d.rectangle((250, 86, 255, 91), fill=rgba("#b9f24d")); d.rectangle((264, 86, 269, 91), fill=rgba("#b9f24d"))
+    d.rectangle((252, 86, 253, 91), fill=rgba("#1d0b2c")); d.rectangle((266, 86, 267, 91), fill=rgba("#1d0b2c"))
+    d.rectangle((258, 94, 261, 96), fill=rgba("#ff7a8a")); d.rectangle((259, 97, 260, 98), fill=rgba("#7a3a2a"))
+    for sx, ex in ((245, 234), (274, 288)):
+        d.rectangle((min(sx, ex), 95, max(sx, ex), 95), fill=rgba("#fff3e8"))
+    # caneca de café erguida
+    d.polygon([(268, 180), (272, 150), (288, 146), (300, 180)], fill=rgba(shirt2))
+    d.polygon([(276, 152), (294, 148), (298, 162), (280, 168)], fill=rgba(skin))
+    d.rectangle((276, 120, 300, 150), fill=rgba("#fff3e8")); d.rectangle((294, 120, 300, 150), fill=rgba("#d9c3d0"))
+    d.rectangle((276, 120, 300, 123), fill=rgba("#4a2a1c"))
+    d.arc((296, 126, 312, 144), 270, 90, fill=rgba("#fff3e8"), width=3)
+    d.rectangle((281, 132, 283, 132), fill=rgba("#ff5c93")); d.rectangle((283, 134, 285, 134), fill=rgba("#ff5c93")); d.rectangle((281, 136, 283, 136), fill=rgba("#ff5c93"))
+    d.rectangle((288, 136, 293, 137), fill=rgba("#57257c"))
+    for x, y in ((282, 112), (290, 106), (284, 100)):
+        d.rectangle((x, y, x + 1, y + 5), fill=rgba("#fff3e8"))
+    return _finish(im, "#ffe6bd")
+
+
+def tropico_poster():
+    im = Image.new("RGBA", (320, 180), rgba("#4b3a8f"))
+    _sky(im)
+    d = ImageDraw.Draw(im)
+    d.ellipse((24, 22, 72, 70), fill=rgba("#fff0b8"))
+    d.ellipse((30, 28, 66, 64), fill=rgba("#fffbe0"))
+    for x, y in ((92, 18), (106, 12), (176, 22)):  # gaivotas
+        d.rectangle((x, y, x + 3, y), fill=rgba("#3c2470")); d.rectangle((x + 3, y + 1, x + 4, y + 1), fill=rgba("#3c2470")); d.rectangle((x + 5, y, x + 8, y), fill=rgba("#3c2470"))
+    _city(d)
+    d.rectangle((0, 128, 320, 180), fill=rgba("#6a3a8c"))
+    _palm(d, 22, 150, 92, 8, "#5a2f86")
+    _palm(d, 296, 150, 104, -10, "#54297e")
+    im.alpha_composite(_rita())
+    im.alpha_composite(_tomas())
+    return im
+
+
+# ---------- cursores do rato: pato de borracha e pata do gato (16x16 ampliados a 32x32, com halo para se verem em qualquer tema) ----------
+CURSOR_INK = {"k": "#1d0b2c", "y": "#ffd23f", "o": "#e0a418", "w": "#fff7c8", "b": "#ff8a3c", "d": "#d9602a", "e": "#1d0b2c",
+              "c": "#f08a32", "s": "#c9651c", "l": "#ffc27a", "p": "#ffb0a8", "r": "#e23b3b", "h": "#ffffff"}
+CURSORS = {
+    "duck": [
+        "kkk.............",
+        "kbbkk...........",
+        "kbbbbkkkkk......",
+        ".kbddkyyyyyk....",
+        ".kddkywwyyyyk...",
+        "..kkyweeyyyyk...",
+        "...kyweeyyyyk...",
+        "...kyyyyyyyk....",
+        "....kyyyyyyk.kk.",
+        "...kkyyyyyyykyk.",
+        "..kyyyywwyyyyyk.",
+        "..kyyywwwyyyyok.",
+        "..kyyyyyyyyyook.",
+        "...kooyyyyoook..",
+        "....kkooooookk..",
+        "......kkkkkk....",
+    ],
+    "paw": [
+        ".......kk.......",
+        "......khhk......",
+        "...kk.kclk.kk...",
+        "..kclkkcpkkclk..",
+        "..kcpkkcckkcpk..",
+        "..kcckkcckkcck..",
+        ".kkcckcccckcckk.",
+        "kclcccccccccsclk",
+        "kcpcccccccccscpk",
+        "kcckcclpplccskck",
+        ".kkccpppppplcskk",
+        "..kcppppppppcsk.",
+        "..kccppppppccsk.",
+        "...kcccccccssk..",
+        "....kcccsssk....",
+        ".....kkkkkk.....",
+    ],
+    "grab": [
+        "................",
+        "...kk..kk..kk...",
+        "..kclkkclkkclk..",
+        "..kcpkkcpkkcpk..",
+        "..kcckkcckkcck..",
+        ".kkcckkcckkcckk.",
+        "kclckccccccckclk",
+        "kcpkccccccccscpk",
+        "kcckcclpplccskck",
+        ".kkccpppppplcskk",
+        "..kcppppppppcsk.",
+        "..kccppppppccsk.",
+        "...kcccccccssk..",
+        "....kcccsssk....",
+        ".....kkkkkk.....",
+        "................",
+    ],
+    "grabbing": [
+        "................",
+        "................",
+        "................",
+        "....kk.kk.kk....",
+        "...kclkclkclk...",
+        "..kkcckcckcckk..",
+        ".kclccccccccclk.",
+        ".kccccccccccsck.",
+        ".kcclcpplcccsck.",
+        ".kccppppppccsk..",
+        "..kcppppppccsk..",
+        "..kccppppcccsk..",
+        "...kcccccsssk...",
+        "....kkkkkkkk....",
+        "................",
+        "................",
+    ],
+}
+CURSOR_HALO = "#ffffff"
+
+
+def cursor(rows):
+    size = 32
+    im = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    for y, row in enumerate(rows):
+        for x, c in enumerate(row):
+            if c != ".":
+                ImageDraw.Draw(im).rectangle((x * 2, y * 2, x * 2 + 1, y * 2 + 1), fill=rgba(CURSOR_INK[c]))
+    src = im.copy().load()
+    px = im.load()
+    for y in range(size):
+        for x in range(size):
+            if src[x, y][3] == 0 and any(0 <= x + a < size and 0 <= y + b < size and src[x + a, y + b][3] for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                px[x, y] = rgba(CURSOR_HALO)
+    return im
+
+
+def build_cursors():
+    out = ASSETS / "sprites/cursors"
+    out.mkdir(parents=True, exist_ok=True)
+    for name, rows in CURSORS.items():
+        cursor(rows).save(out / f"{name}.png")
+    nope = cursor(CURSORS["duck"])  # pato zangado: sinal de proibido por cima, para o que não se pode carregar
+    d = ImageDraw.Draw(nope)
+    d.ellipse((13, 13, 31, 31), fill=rgba(CURSOR_HALO))
+    d.ellipse((15, 15, 29, 29), fill=rgba(CURSOR_INK["r"]))
+    d.ellipse((18, 18, 26, 26), fill=rgba(CURSOR_HALO))
+    d.line((18, 18, 26, 26), fill=rgba(CURSOR_INK["r"]), width=3)
+    nope.save(out / "nope.png")
+
+
+# ---------- avisos (toasts): torradas com cara e a torradeira de onde saltam ----------
+TOASTS = {  # tipo: (côdea, miolo, sombra do miolo)
+    "success": ("#9a5a24", "#f2b860", "#d9953f"),
+    "info": ("#b9783a", "#ffe2a8", "#f4c97f"),
+    "warning": ("#6e3c1c", "#c47f3e", "#9a5c2a"),
+    "error": ("#17100f", "#3a2a26", "#241917"),
+}
+
+
+def toast_slice(kind):
+    crust, crumb, shade = TOASTS[kind]
+    im = Image.new("RGBA", (24, 24), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    ink = "#1d0b2c"
+    d.rectangle((3, 1, 20, 22), fill=rgba(ink)); d.rectangle((1, 3, 22, 9), fill=rgba(ink)); d.rectangle((2, 2, 21, 10), fill=rgba(ink))
+    d.rectangle((4, 2, 19, 21), fill=rgba(crust)); d.rectangle((2, 4, 21, 8), fill=rgba(crust)); d.rectangle((3, 3, 20, 9), fill=rgba(crust))
+    d.rectangle((5, 4, 18, 20), fill=rgba(crumb)); d.rectangle((4, 5, 19, 8), fill=rgba(crumb))
+    for x, y in ((6, 6), (16, 5), (7, 17), (17, 18), (12, 19)):
+        d.point((x, y), fill=rgba(shade))
+    face = "#fff3e8" if kind == "error" else ink
+    if kind == "success":  # óculos de sol e sorriso
+        d.rectangle((6, 9, 17, 9), fill=rgba(ink)); d.rectangle((6, 10, 10, 12), fill=rgba(ink)); d.rectangle((13, 10, 17, 12), fill=rgba(ink))
+        d.point((7, 10), fill=rgba("#ffffff")); d.point((14, 10), fill=rgba("#ffffff"))
+        d.rectangle((9, 16, 14, 16), fill=rgba(ink)); d.point((8, 15), fill=rgba(ink)); d.point((15, 15), fill=rgba(ink))
+    elif kind == "info":  # manteiga na cabeça e ar simpático
+        d.rectangle((8, 3, 15, 6), fill=rgba("#fff6a8")); d.rectangle((8, 6, 15, 6), fill=rgba("#e8c94d"))
+        d.rectangle((8, 11, 9, 13), fill=rgba(ink)); d.rectangle((14, 11, 15, 13), fill=rgba(ink))
+        d.rectangle((10, 16, 13, 16), fill=rgba(ink)); d.point((9, 15), fill=rgba(ink)); d.point((14, 15), fill=rgba(ink))
+    elif kind == "warning":  # sobrancelhas preocupadas e boca torta
+        d.point((7, 10), fill=rgba(ink)); d.point((8, 9), fill=rgba(ink)); d.point((16, 10), fill=rgba(ink)); d.point((15, 9), fill=rgba(ink))
+        d.rectangle((8, 12, 9, 13), fill=rgba(ink)); d.rectangle((14, 12, 15, 13), fill=rgba(ink))
+        for x, y in ((9, 17), (10, 16), (11, 17), (12, 16), (13, 17), (14, 16)):
+            d.point((x, y), fill=rgba(ink))
+    else:  # queimada: olhos em X e boca aberta
+        for ox in (7, 13):
+            for i in range(4):
+                d.point((ox + i, 10 + i), fill=rgba(face)); d.point((ox + 3 - i, 10 + i), fill=rgba(face))
+        d.rectangle((10, 16, 13, 18), fill=rgba("#ff5c5c"))
+        d.point((5, 7), fill=rgba("#ff8a3c")); d.point((18, 15), fill=rgba("#ff8a3c"))
+    return im
+
+
+def toaster():
+    im = Image.new("RGBA", (28, 14), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    ink = "#1d0b2c"
+    d.rectangle((1, 0, 26, 13), fill=rgba(ink))
+    d.rectangle((2, 1, 25, 12), fill=rgba("#c9d3e6"))
+    d.rectangle((2, 1, 25, 2), fill=rgba("#f4f7ff")); d.rectangle((2, 10, 25, 12), fill=rgba("#8d99b8"))
+    d.rectangle((4, 4, 7, 4), fill=rgba("#ffffff"))
+    d.rectangle((10, 6, 17, 8), fill=rgba("#ff5c93")); d.rectangle((10, 6, 12, 6), fill=rgba("#ffb0cc"))  # botão
+    d.rectangle((21, 4, 24, 9), fill=rgba(ink)); d.rectangle((22, 5, 23, 6), fill=rgba("#ffd23f"))  # alavanca
+    d.rectangle((0, 13, 3, 13), fill=rgba(ink)); d.rectangle((24, 13, 27, 13), fill=rgba(ink))
+    return im
+
+
+def build_toasts():
+    out = ASSETS / "sprites/toast"
+    out.mkdir(parents=True, exist_ok=True)
+    for kind in TOASTS:
+        toast_slice(kind).save(out / f"{kind}.png")
+    toaster().save(out / "toaster.png")
+
+
 def build_themes():
     for i, name in enumerate(THEMES):
         p = read_theme(name)
@@ -375,7 +785,7 @@ def build_themes():
         out.mkdir(parents=True, exist_ok=True)
         tile(p, i).save(out / "bg.png")
         if name in ISLAND:  # o campus usa o cartaz sprites/campus/poster.png (build_campus)
-            scene(name, p).save(out / "scene.png")
+            (tropico_poster() if name == "tropico" else scene(name, p)).save(out / "scene.png")
 
 
 # ---------- medalhas (ouro, bronze, cobre) 32x32 e 64x64 ----------
@@ -980,6 +1390,8 @@ if __name__ == "__main__":
     build_icons()
     build_ui()
     build_themes()
+    build_cursors()
+    build_toasts()
     build_medals()
     build_more()
     build_academy()

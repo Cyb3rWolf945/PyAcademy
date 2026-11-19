@@ -1,0 +1,33 @@
+/* Tema "tropico" (Trópico): só variáveis CSS, nenhuma regra de componente.
+   Paleta original de fim de tarde numa costa tropical: roxo do anoitecer, coral do pôr do sol e turquesa do mar. */
+[data-theme="tropico"] {
+  color-scheme: dark;
+  --c-bg: #190b2e;
+  --c-surface: #2a1248;
+  --c-surface-2: #3c1a60;
+  --c-surface-3: #57257c;
+  --c-border: #08030f;
+  --c-text: #fff3e8;
+  --c-muted: #e3c3dc;
+  --c-accent: #ff5c93;
+  --c-accent-text: #1c0512;
+  --c-accent-2: #3fe6d4;
+  --c-success: #66f2a6;
+  --c-warning: #ffc04d;
+  --c-danger: #ff8a70;
+  /* céu das cenas 3D e do cartaz 2D de reserva */
+  --c-sky-1: #2c1160;
+  --c-sky-2: #ff7d57;
+  /* equipas 0..7 (mesma ordem de matiz em todos os temas) */
+  --c-team-0: #ff5d5d;
+  --c-team-1: #ff9f43;
+  --c-team-2: #ffe14d;
+  --c-team-3: #5be37d;
+  --c-team-4: #3fd8e8;
+  --c-team-5: #6f9bff;
+  --c-team-6: #c08bff;
+  --c-team-7: #ff7ac8;
+  /* texturas pixel do tema (geradas por assets/gen_assets.py) */
+  --bg-tile: url("/assets/sprites/themes/tropico/bg.png");
+  --scene-img: url("/assets/sprites/themes/tropico/scene.png");
+}

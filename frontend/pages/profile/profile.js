@@ -3,9 +3,11 @@ import { bootPage } from "../../services/page.js";
 import { api, errorText } from "../../services/api.js";
 import { changePassword, logout, savePreferences } from "../../services/auth.js";
 import { applyTheme, THEMES } from "../../services/theme.js";
+import { applyFont, FONTS } from "../../services/font.js";
 import { setLocale, t } from "../../services/i18n.js";
 import { el } from "../../components/dom.js";
 import { toast } from "../../components/toast.js";
+import { soundEnabled, setSoundEnabled } from "../../services/sfx.js";
 
 const me = await bootPage({ access: "user", nav: true });
 if (me) init(me);
@@ -44,9 +46,23 @@ function init(user) {
       ...THEMES.map((n) => el("option", { value: n }, t(`theme.${n}`))),
     );
     prefs.preferred_theme.value = user.preferred_theme || "";
+    prefs.preferred_font.replaceChildren(
+      el("option", { value: "" }, t("font.pixel")),
+      ...FONTS.map((n) => el("option", { value: n }, t(`font.${n}`))),
+    );
+    prefs.preferred_font.value = user.preferred_font || "";
   };
   fillSelects();
   document.addEventListener("localechange", fillSelects);
+  // Sons dos avisos: preferência deste dispositivo (numa sala com muitos computadores cada aluno decide)
+  const soundToggle = document.getElementById("sound-toggle");
+  soundToggle.checked = soundEnabled();
+  soundToggle.addEventListener("change", () => {
+    setSoundEnabled(soundToggle.checked);
+    if (soundToggle.checked) toast(t("profile.toast_sound_on"), "success");
+  });
+  // Pré-visualização imediata: quem não consegue ler a letra atual vê logo a diferença, antes de guardar
+  prefs.preferred_font.addEventListener("change", () => applyFont(prefs.preferred_font.value || null));
 
   prefs.addEventListener("submit", async (ev) => {
     ev.preventDefault();
@@ -55,8 +71,10 @@ function init(user) {
         display_name: prefs.display_name.value,
         locale: prefs.locale.value,
         preferred_theme: prefs.preferred_theme.value || null,
+        preferred_font: prefs.preferred_font.value || null,
       }));
       applyTheme(user.preferred_theme);
+      applyFont(user.preferred_font);
       await setLocale(user.locale);
       toast(t("common.saved"), "success");
     } catch (err) { toast(errorText(err), "error"); }
