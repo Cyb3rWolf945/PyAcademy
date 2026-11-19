@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 from starlette.types import ASGIApp, Receive, Scope, Send
 
-from app.api import academy, extra as extra_api, extra_ws, admin, auth, health, leaderboard, problems, submissions, tournament, ws
+from app.api import academy, documents, extra as extra_api, extra_ws, admin, auth, health, leaderboard, problems, submissions, tournament, ws
 from app.config import settings
 from app.errors import install_error_handlers
 from app.realtime.pg_bus import hub
@@ -17,15 +17,16 @@ from app.services import dispatcher, elimination, extra_poker, tournament_scorin
 class BodyLimitMiddleware:
     """Recusa corpos acima de max_body_bytes (por Content-Length e também em streaming)."""
 
-    def __init__(self, app: ASGIApp, max_bytes: int):
-        self.app, self.max_bytes = app, max_bytes
+    def __init__(self, app: ASGIApp, max_bytes: int, big: dict[str, int] | None = None):
+        self.app, self.default, self.big = app, max_bytes, big or {}
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send):
         if scope["type"] != "http":
             return await self.app(scope, receive, send)
+        limit = self.big.get(scope["path"], self.default) if scope.get("method") == "POST" else self.default
         too_big = JSONResponse({"error": "common.too_large"}, status_code=413)
         length = dict(scope["headers"]).get(b"content-length")
-        if length and length.isdigit() and int(length) > self.max_bytes:
+        if length and length.isdigit() and int(length) > limit:
             return await too_big(scope, receive, send)
         seen = 0
 
@@ -34,7 +35,7 @@ class BodyLimitMiddleware:
             msg = await receive()
             if msg["type"] == "http.request":
                 seen += len(msg.get("body", b""))
-                if seen > self.max_bytes:
+                if seen > limit:
                     raise _TooLarge
             return msg
 
@@ -84,9 +85,9 @@ async def lifespan(_: FastAPI):
 
 def create_app() -> FastAPI:
     app = FastAPI(title="PyArena", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
-    app.add_middleware(BodyLimitMiddleware, max_bytes=settings.max_body_bytes)
+    app.add_middleware(BodyLimitMiddleware, max_bytes=settings.max_body_bytes, big={"/api/academy/documents": settings.docs_max_bytes})
     install_error_handlers(app)
-    for r in (health.router, auth.router, admin.router, problems.router, submissions.router, tournament.router, ws.router, leaderboard.router, academy.router, extra_api.router, extra_ws.router):
+    for r in (health.router, auth.router, admin.router, problems.router, submissions.router, tournament.router, ws.router, leaderboard.router, academy.router, documents.router, extra_api.router, extra_ws.router):
         app.include_router(r)
 
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)

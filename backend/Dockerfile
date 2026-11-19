@@ -36,6 +36,8 @@ ENV PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH" \
     PYTHONPATH=/app/backend
 COPY --from=uv /uv /usr/local/bin/uv
+# poppler-utils: pdfinfo/pdftoppm para mostrar as páginas dos PDFs da "Leitura recomendada" como imagens
+RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils && rm -rf /var/lib/apt/lists/*
 RUN useradd --system --create-home --uid 10001 pyarena
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
@@ -48,7 +50,7 @@ COPY --from=css /src/frontend/dist ./frontend/dist
 # para nenhum browser ficar com estilos antigos depois de uma atualização.
 RUN H=$(sha256sum frontend/dist/app.css | cut -c1-10) \
     && find frontend -name '*.html' -not -path 'frontend/dist/*' -exec sed -i "s#/dist/app.css\"#/dist/app.css?v=${H}\"#g" {} + \
-    && mkdir -p /data/slides && chown -R pyarena:pyarena /app /data/slides
+    && mkdir -p /data/slides /data/docs && chown -R pyarena:pyarena /app /data/slides /data/docs
 USER pyarena
 WORKDIR /app/backend
 EXPOSE 8000

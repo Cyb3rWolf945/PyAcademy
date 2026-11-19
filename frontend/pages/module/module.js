@@ -17,6 +17,15 @@ const ICON = { done: "✅", current: "▶", locked: "🔒" };
 const modId = new URLSearchParams(location.search).get("id") || "m1";
 const celebrateSafe = (kind) => import("../../scenes/celebrate.js").then((m) => m.celebrate(document.body, { kind })).catch(() => {});
 
+// "Leitura recomendada": o mesmo texto de sempre; se o professor carregou um PDF, tocar no bloco abre-o no leitor
+function readingNode(sec) {
+  const kids = [el("span", { "aria-hidden": "true" }, "📖 "), pick(sec.leitura)];
+  const doc = sec.leitura_doc;
+  if (!doc) return el("p", { class: "clean acad-reading" }, kids);
+  return el("button", { type: "button", class: "clean acad-reading acad-reading--open", title: doc.titulo,
+    onclick: () => import("../../components/academy/doc-reader.js").then((r) => r.openReader(doc)) }, kids);
+}
+
 // ---------- blocos de uma secção ----------
 function learnBlock(sec) {
   const kids = [el("h4", { class: "acad-block__h" }, el("span", { "aria-hidden": "true" }, "📘 "), t("ui.mod.learn")),
@@ -30,7 +39,7 @@ function learnBlock(sec) {
   }
   const slidesHost = el("div", { class: "slides" });
   if (sec.slides?.length) { mountSlides(slidesHost, sec.slides); kids.push(slidesHost); }
-  if (sec.leitura) kids.push(el("p", { class: "clean acad-reading" }, el("span", { "aria-hidden": "true" }, "📖 "), pick(sec.leitura)));
+  if (sec.leitura) kids.push(readingNode(sec));
   return el("section", { class: "acad-block" }, kids);
 }
 
@@ -117,7 +126,7 @@ async function init() {
   const buildSide = () => el("aside", { class: "acad-side" },
     el("section", { class: "panel-pixel" }, el("h2", {}, t("ui.side.progress")), el("div", { class: "acad-progress" }, bar, pctText), el("p", { class: "acad-side__line" }, secText), el("p", { class: "acad-side__line" }, ptsText)),
     el("section", { class: "panel-pixel" }, el("h2", {}, t("ui.side.slides")), el("p", { class: "acad-side__line" }, t("ui.side.slides_hint"))),
-    el("section", { class: "panel-pixel" }, el("h2", {}, t("ui.side.reading")), el("p", { class: "clean", id: "side-reading" }, t("ui.side.reading_none"))));
+    el("section", { class: "panel-pixel" }, el("h2", {}, t("ui.side.reading")), el("div", { class: "clean", id: "side-reading" }, t("ui.side.reading_none"))));
   let side = buildSide();
   const badgeBox = el("div", { class: "acad-badge-box" });
   root.replaceChildren(el("div", { class: "acad-layout" }, el("div", { class: "acad-col" }, crumb, h2, badgeBox, list), side));
@@ -140,7 +149,7 @@ async function init() {
       const kids = [learnBlock(full), practiceBlock(full), checkBlock(full, sec.estado, (r, btn) => onVerified(sec, r, btn))].filter(Boolean);
       loaded.set(sec.id, kids);
       body.replaceChildren(...kids);
-      if (full.leitura) { const r = document.getElementById("side-reading"); if (r) r.textContent = pick(full.leitura); }
+      if (full.leitura) { const r = document.getElementById("side-reading"); if (r) r.replaceChildren(full.leitura_doc ? readingNode(full) : pick(full.leitura)); }
     } catch (err) {
       if (err instanceof ApiError && err.key === "academy.locked") { toast(errorText(err), "error"); await refresh(); return; }
       body.replaceChildren(el("p", { role: "alert" }, errorText(err)), el("button", { type: "button", class: "btn-pixel", onclick: () => ensureBody(sec, body) }, t("ui.err.retry")));

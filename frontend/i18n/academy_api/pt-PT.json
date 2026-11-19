@@ -7,5 +7,11 @@
   "academy.hint_not_found": "Essa pista não existe.",
   "academy.rate_limited": "Estás a responder depressa de mais. Espera um momento.",
   "academy.slide_not_found": "Slide não encontrado.",
-  "academy.slides_forbidden": "Os slides só estão disponíveis para alunos de uma turma e professores."
+  "academy.slides_forbidden": "Os slides só estão disponíveis para alunos de uma turma e professores.",
+  "academy.doc_not_found": "Documento não encontrado.",
+  "academy.doc_not_pdf": "O ficheiro tem de ser um PDF.",
+  "academy.doc_invalid": "Não foi possível ler este PDF (pode estar danificado ou protegido).",
+  "academy.doc_page_not_found": "Essa página não existe neste PDF.",
+  "academy.doc_render_failed": "Não foi possível mostrar esta página do PDF.",
+  "academy.doc_timeout": "O PDF demorou demasiado a responder. Tenta outra vez."
 }

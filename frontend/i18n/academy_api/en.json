@@ -7,5 +7,11 @@
   "academy.hint_not_found": "That hint does not exist.",
   "academy.rate_limited": "You are answering too fast. Wait a moment.",
   "academy.slide_not_found": "Slide not found.",
-  "academy.slides_forbidden": "Slides are only available to students in a class and teachers."
+  "academy.slides_forbidden": "Slides are only available to students in a class and teachers.",
+  "academy.doc_not_found": "Document not found.",
+  "academy.doc_not_pdf": "The file must be a PDF.",
+  "academy.doc_invalid": "This PDF could not be read (it may be damaged or protected).",
+  "academy.doc_page_not_found": "That page does not exist in this PDF.",
+  "academy.doc_render_failed": "This PDF page could not be shown.",
+  "academy.doc_timeout": "The PDF took too long to respond. Try again."
 }

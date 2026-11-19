@@ -164,5 +164,20 @@
   "toast.info.3": "Buttered up!",
   "toast.warning.1": "Watch the toaster!",
   "toast.warning.2": "Almost burning!",
-  "toast.warning.3": "Mind the smoke!"
+  "toast.warning.3": "Mind the smoke!",
+  "admin.docs.heading": "📚 Recommended reading (PDF)",
+  "admin.docs.help": "Upload the book PDF. When a student taps \"Recommended reading\" in an Academy section, the most recent PDF (marked \"In use\") opens inside the app. Students see the pages but cannot download the file.",
+  "admin.docs.file": "PDF file (up to 100 MB)",
+  "admin.docs.title_field": "Title",
+  "admin.docs.rights": "I confirm I am allowed to share this PDF with my students.",
+  "admin.docs.upload": "Upload PDF",
+  "admin.docs.uploaded": "\"{title}\" uploaded ({pages} pages).",
+  "admin.docs.list": "Uploaded PDFs",
+  "admin.docs.none": "You have not uploaded any PDF yet.",
+  "admin.docs.meta": "{pages} pages · {mb} MB",
+  "admin.docs.preview": "Preview",
+  "admin.docs.delete": "Delete",
+  "admin.docs.delete_confirm": "Delete \"{title}\"? Sections using it will stop opening the PDF.",
+  "admin.docs.deleted": "PDF deleted.",
+  "admin.docs.in_use": "In use"
 }

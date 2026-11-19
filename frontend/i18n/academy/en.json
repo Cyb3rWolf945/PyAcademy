@@ -140,5 +140,14 @@
  "fx.k_chamar": "Call function",
  "fx.k_devolver": "Return",
  "fx.k_funcao": "Function",
- "ui.mod.preview": "Preview (teacher)"
+ "ui.mod.preview": "Preview (teacher)",
+ "ui.reader.prev": "Previous page",
+ "ui.reader.next": "Next page",
+ "ui.reader.close": "Close the reader",
+ "ui.reader.page_label": "Page number",
+ "ui.reader.loading": "Opening the page…",
+ "ui.reader.error": "Could not open this page. Try again.",
+ "ui.reader.page_alt": "Page {n} of {total}",
+ "ui.reader.zoom_in": "Zoom in",
+ "ui.reader.zoom_out": "Fit to width"
 }

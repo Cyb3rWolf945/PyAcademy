@@ -3,7 +3,13 @@
 {$DOMAIN::80} {
 	encode zstd gzip
 
-	request_body {
+	# Upload de PDFs do professor (Leitura recomendada): limite próprio; tudo o resto fica em 1 MB
+	@pdf_upload path /api/academy/documents
+	request_body @pdf_upload {
+		max_size 100MB
+	}
+	@other_body not path /api/academy/documents
+	request_body @other_body {
 		max_size 1MB
 	}
 

@@ -5,6 +5,7 @@ import { t } from "../../services/i18n.js";
 import { el } from "../../components/dom.js";
 import { toast } from "../../components/toast.js";
 import { initTournaments } from "./tournaments.js";
+import { initDocuments } from "./documents.js";
 
 const me = await bootPage({ access: "teacher", nav: true });
 if (me) init();
@@ -15,6 +16,7 @@ function init() {
   let classes = [];
   const selectedClassIds = new Set();
   const tournaments = initTournaments(document.getElementById("tournaments"));
+  initDocuments(document.getElementById("documents"));
 
   function renderClasses() {
     const query = $("class-search").value.trim().toLocaleLowerCase();

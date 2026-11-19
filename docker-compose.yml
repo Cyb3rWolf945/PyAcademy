@@ -45,6 +45,7 @@ services:
       RUNNER_TOKEN: ${RUNNER_TOKEN}
     volumes:
       - slides:/data/slides:ro
+      - docs:/data/docs
     networks: [public, internal, sandbox]
     depends_on:
       db:
@@ -133,3 +134,4 @@ volumes:
   caddy_data:
   caddy_config:
   slides:
+  docs:  # PDFs carregados pelo professor (Leitura recomendada) e a cache das páginas

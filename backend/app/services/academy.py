@@ -363,7 +363,10 @@ async def section_view(db: AsyncSession, user: User, section_id: str) -> dict:
     await db.commit()
     siblings = content.by_module[module.id]
     pos = next(i for i, s in enumerate(siblings) if s.id == sec.id)
-    return section_public(sec, module, states[sec.id], user.id, prog, solved, siblings[pos + 1].id if pos + 1 < len(siblings) else None)
+    view = section_public(sec, module, states[sec.id], user.id, prog, solved, siblings[pos + 1].id if pos + 1 < len(siblings) else None)
+    from app.services import documents  # importação tardia: documents usa o conteúdo da Academia
+    view["leitura_doc"] = await documents.reading_for(db, user) if sec.leitura else None
+    return view
 
 
 _recent: dict[int, list[float]] = {}

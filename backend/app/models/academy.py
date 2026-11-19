@@ -1,4 +1,5 @@
-# Modelos da Academia: progresso por secção, registo das tentativas das atividades e os decks de slides importados.
+# Modelos da Academia: progresso por secção, registo das tentativas das atividades, decks de slides importados
+# e os PDFs carregados pelo professor (abertos ao tocar na "Leitura recomendada").
 from datetime import datetime
 
 from sqlalchemy import Boolean, Column, ForeignKey, Integer
@@ -36,3 +37,16 @@ class SlideDeck(SQLModel, table=True):
     titulo: str = Field(max_length=120)
     n_slides: int
     imported_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
+
+
+class Document(SQLModel, table=True):
+    """PDF carregado pelo professor (fica no volume "docs"; as páginas são servidas como imagens, nunca o ficheiro)."""
+    __tablename__ = "documents"
+
+    id: int | None = Field(default=None, primary_key=True)
+    teacher_id: int = Field(sa_column=Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True))
+    titulo: str = Field(max_length=120)
+    pages: int
+    size_bytes: int
+    created_at: datetime = Field(default_factory=utcnow, sa_column=ts_column())
+

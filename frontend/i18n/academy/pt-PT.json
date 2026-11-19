@@ -140,5 +140,14 @@
  "fx.k_chamar": "Chamar função",
  "fx.k_devolver": "Devolver",
  "fx.k_funcao": "Função",
- "ui.mod.preview": "Pré-visualização (professor)"
+ "ui.mod.preview": "Pré-visualização (professor)",
+ "ui.reader.prev": "Página anterior",
+ "ui.reader.next": "Página seguinte",
+ "ui.reader.close": "Fechar o leitor",
+ "ui.reader.page_label": "Número da página",
+ "ui.reader.loading": "A abrir a página…",
+ "ui.reader.error": "Não foi possível abrir esta página. Tenta outra vez.",
+ "ui.reader.page_alt": "Página {n} de {total}",
+ "ui.reader.zoom_in": "Aumentar",
+ "ui.reader.zoom_out": "Ajustar à largura"
 }

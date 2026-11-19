@@ -38,6 +38,8 @@ class Settings(BaseSettings):
     frontend_dir: Path = ROOT / "frontend"
     academy_dir: Path = ROOT / "backend" / "content" / "academy"
     slides_dir: Path = Path("/data/slides")  # volume "slides" (só leitura na app)
+    docs_dir: Path = Path("/data/docs")  # volume "docs": PDFs carregados pelo professor e a cache das páginas
+    docs_max_bytes: int = 100 * 1024 * 1024
     academy_answers_per_minute: int = 30
     problems_dir: Path = ROOT / "backend" / "problems"
 

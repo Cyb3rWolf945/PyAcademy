@@ -3,6 +3,7 @@ import { t } from "./i18n.js";
 
 let csrfToken = null;
 export const setCsrf = (token) => { csrfToken = token; };
+export const csrf = () => csrfToken; // para pedidos que não são JSON (ex.: upload de um PDF)
 
 export class ApiError extends Error {
   constructor(status, key) {
