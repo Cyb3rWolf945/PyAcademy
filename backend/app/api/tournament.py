@@ -126,6 +126,12 @@ async def update_round(tid: int, idx: int, body: RoundIn, auth: Auth = Depends(t
     return await _admin(db, auth, await svc.owned(db, tid, auth.user))
 
 
+@router.post("/{tid}/rounds/{idx}/random")
+async def random_round(tid: int, idx: int, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
+    """Sugere problemas aleatórios para a ronda (o professor revê e grava com PUT)."""
+    return {"problem_slugs": await svc.random_problems(db, auth.user, tid, idx)}
+
+
 @router.post("/{tid}/rounds/next/start")
 async def start_next(tid: int, auth: Auth = Depends(teacher_auth), db: AsyncSession = Depends(get_db)):
     """Eliminatória: sorteia os grupos com os jogadores em jogo e começa a ronda pendente."""

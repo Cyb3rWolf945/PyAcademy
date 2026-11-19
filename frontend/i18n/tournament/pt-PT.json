@@ -224,5 +224,10 @@
  "tournament.ac_admin_kind_blur": "Saiu da janela",
  "tournament.ac_admin_kind_hidden": "Mudou de separador",
  "tournament.ac_admin_toast": "🚨 Novo aluno apanhado pelo anti-cheat",
- "tournament.ac_projector": "🚨 {n} à espera de autorização: abrir o painel"
+ "tournament.ac_projector": "🚨 {n} à espera de autorização: abrir o painel",
+ "tournament.admin_random": "Sortear",
+ "tournament.admin_random_none": "Não há problemas disponíveis para sortear nesta ronda.",
+ "tournament.admin_random_all": "Sortear todas",
+ "tournament.admin_random_all_confirm": "Toca outra vez: troca os problemas das rondas por começar",
+ "tournament.admin_random_all_done": "Problemas sorteados em {n} rondas."
 }

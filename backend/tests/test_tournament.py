@@ -616,3 +616,49 @@ async def test_static_cache_headers(client):
     finally:
         for rel in ("dist/x.css", "i18n/x.json", "vendor/x.js"):
             (d / rel).unlink(missing_ok=True)
+
+
+# ---------------- sorteio de problemas (🎲) ----------------
+async def test_random_problems_respects_round_and_open_blocks(make_user, make_class, new_client):
+    for d in (1, 2, 3, 4, 5):
+        for i in range(5):
+            await add_problem(f"r7-d{d}-{i}", tipo=("programa", "funcao", "bug")[i % 3], bloco="7", dif=d)
+    await add_problem("r6b-fechado", tipo="programa", bloco="6b", dif=1)  # bloco ainda não dado: nunca sai
+    env = await make_env(make_user, make_class, new_client)
+    t = await create_tournament(env, "individual")
+    tid = t["tournament"]["id"]
+    other = {s for r in t["rounds"] if r["idx"] != 1 for s in r["problem_slugs"]}
+    meta = {f"r7-d{d}-{i}": d for d in (1, 2, 3, 4, 5) for i in range(5)}
+    for _ in range(5):
+        slugs = (await control(env, tid, "rounds/1/random"))["problem_slugs"]
+        assert len(slugs) == 3 and len(set(slugs)) == 3
+        assert not set(slugs) & other and "r6b-fechado" not in slugs
+        assert all(meta[s] in (1, 2) for s in slugs)  # ronda 1: fácil
+    boss = (await control(env, tid, "rounds/6/random"))["problem_slugs"]
+    assert len(boss) == 1
+    # é só uma sugestão: nada muda até o professor gravar
+    assert (await control(env, tid, "rounds/1/random")) and [r for r in (await state(env.t_client, tid))["rounds"] if r["idx"] == 1][0]
+
+
+async def test_random_problems_permissions_and_started_round(make_user, make_class, new_client):
+    await add_problem("rp-1", tipo="programa", bloco="7", dif=1)
+    env = await make_env(make_user, make_class, new_client)
+    t = await create_tournament(env, "individual")
+    tid = t["tournament"]["id"]
+    _, c, h = await env.student(make_user, new_client, "estudante")
+    assert (await c.post(f"/api/tournaments/{tid}/rounds/1/random", json={}, headers=h)).status_code == 403
+    await set_round(env, tid, 1, ["rp-1"])
+    await control(env, tid, "rounds/1/start")
+    await control(env, tid, "rounds/1/random", expect=409)
+
+
+async def test_random_problems_skip_algorithm_arena_when_possible(make_user, make_class, new_client):
+    for i in range(4):
+        await add_problem(f"aula-{i}", tipo="programa", bloco="7", dif=1)
+        await add_problem(f"algo-{i}", tipo="programa", bloco="mais_alem", dif=1)
+    env = await make_env(make_user, make_class, new_client)
+    t = await create_tournament(env, "individual")
+    tid = t["tournament"]["id"]
+    for _ in range(5):
+        slugs = (await control(env, tid, "rounds/1/random"))["problem_slugs"]
+        assert slugs and all(s.startswith("aula-") for s in slugs)

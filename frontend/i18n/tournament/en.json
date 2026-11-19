@@ -224,5 +224,10 @@
  "tournament.ac_admin_kind_blur": "Left the window",
  "tournament.ac_admin_kind_hidden": "Switched tabs",
  "tournament.ac_admin_toast": "🚨 New student caught by the anti-cheat",
- "tournament.ac_projector": "🚨 {n} waiting for approval: open the panel"
+ "tournament.ac_projector": "🚨 {n} waiting for approval: open the panel",
+ "tournament.admin_random": "Shuffle",
+ "tournament.admin_random_none": "No problems available to draw for this round.",
+ "tournament.admin_random_all": "Shuffle all",
+ "tournament.admin_random_all_confirm": "Tap again: replaces the problems of rounds not started",
+ "tournament.admin_random_all_done": "Problems drawn for {n} rounds."
 }

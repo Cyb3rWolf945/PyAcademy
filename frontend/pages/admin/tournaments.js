@@ -309,6 +309,32 @@ export function initTournaments(root) {
       el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => { picking = false; render(); } }, t("tournament.admin_picker_done")));
   }
 
+  // 🎲 Sorteio no servidor (só blocos já dados e sem repetir outras rondas); no editor fica por gravar
+  async function shuffleDraft(r) {
+    try {
+      const { problem_slugs: slugs } = await api("POST", `/api/tournaments/${selected}/rounds/${r.idx}/random`);
+      if (!slugs.length) { toast(t("tournament.admin_random_none"), "warning"); return; }
+      draft.slugs = slugs;
+      await ensureProblems();
+      render();
+    } catch (err) { toast(errorText(err), "error"); }
+  }
+
+  async function shuffleAllPending() {
+    const pending = (data.rounds || []).filter((r) => r.state === "pending");
+    let done = 0;
+    for (const r of pending) {
+      try {
+        const { problem_slugs: slugs } = await api("POST", `/api/tournaments/${selected}/rounds/${r.idx}/random`);
+        if (!slugs.length) continue;
+        await api("PUT", `/api/tournaments/${selected}/rounds/${r.idx}`, { problem_slugs: slugs });
+        done++;
+      } catch (err) { toast(errorText(err), "error"); break; }
+    }
+    if (done) toast(t("tournament.admin_random_all_done", { n: done }), "success");
+    await reload(true);
+  }
+
   function editorView(r) {
     const slugRows = draft.slugs.map((s, i) => el("li", { class: "flex items-center gap-1 bg-surface-2 p-1" },
       el("span", { class: "min-w-0 flex-1 truncate text-sm" }, `${i + 1}. ${titleOf(s)}`),
@@ -327,7 +353,9 @@ export function initTournaments(root) {
         isElim() ? null : el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_multiplier")), numInput(draft.multiplier, (v) => { draft.multiplier = v; }, { min: 1, max: 10, step: 0.5 })),
         el("label", { class: "grid gap-1 text-sm" }, el("span", {}, t("tournament.admin_minutes")), numInput(draft.duration_min, (v) => { draft.duration_min = v; }, { min: 1, max: 180 }))),
       el("ul", { class: "grid gap-1" }, slugRows),
-      picking ? pickerView() : el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => { picking = true; render(); } }, `＋ ${t("tournament.admin_add_problem")}`),
+      picking ? pickerView() : el("div", { class: "grid gap-2 sm:grid-cols-2" },
+        el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => { picking = true; render(); } }, `＋ ${t("tournament.admin_add_problem")}`),
+        el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => shuffleDraft(r) }, `🎲 ${t("tournament.admin_random")}`)),
       el("div", { class: "flex gap-2" },
         el("button", { type: "button", class: "btn-pixel btn-pixel--accent flex-1", onclick: saveEditor }, t("common.save")),
         el("button", { type: "button", class: "btn-pixel btn-pixel--ghost flex-1", onclick: () => { editing = null; picking = false; render(); } }, t("tournament.cancel"))));
@@ -344,7 +372,12 @@ export function initTournaments(root) {
           pending && editing !== r.idx ? el("button", { type: "button", class: "btn-pixel btn-pixel--ghost", onclick: () => openEditor(r) }, t("tournament.admin_edit")) : null),
         editing === r.idx ? editorView(r) : null);
     });
-    return el("section", { class: "panel-pixel grid gap-2" }, el("h3", {}, t("tournament.admin_rounds")), el("ul", { class: "grid gap-2" }, rows));
+    const anyPending = (data.rounds || []).some((r) => r.state === "pending");
+    const shuffleAll = anyPending && editing == null && data.tournament.state !== "finished"
+      ? confirmButton(`🎲 ${t("tournament.admin_random_all")}`, t("tournament.admin_random_all_confirm"), shuffleAllPending, "btn-pixel btn-pixel--ghost") : null;
+    return el("section", { class: "panel-pixel grid gap-2" },
+      el("div", { class: "flex flex-wrap items-center justify-between gap-2" }, el("h3", {}, t("tournament.admin_rounds")), shuffleAll),
+      el("ul", { class: "grid gap-2" }, rows));
   }
 
   // ---------- Anti-cheat: alunos à espera de autorização para voltar ----------

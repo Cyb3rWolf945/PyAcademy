@@ -197,6 +197,35 @@ async def update_round(db: AsyncSession, teacher: User, tid: int, idx: int, data
     await db.commit()
 
 
+async def random_problems(db: AsyncSession, teacher: User, tid: int, idx: int, rng: random.Random | None = None) -> list[str]:
+    """Sugestão aleatória para uma ronda por começar (não grava). Só blocos já dados, sem repetir problemas de outras
+    rondas; segue a dificuldade e os tipos próprios da ronda (aprovados e rascunhos, como no sorteio da criação)."""
+    rng = rng or random.Random()
+    t = await owned(db, tid, teacher)
+    rnd = await get_round(db, tid, idx)
+    if rnd.state != "pending" or t.state == "finished":
+        raise ApiError(409, "tournament.round_not_pending")
+    used = {s for r in await rounds_of(db, tid) if r.idx != idx for s in r.problem_slugs}
+    prio = _block_priority()
+    rows = [r for r in (await db.execute(select(Problem.slug, Problem.data, Problem.estado, Problem.bloco, Problem.tipo))).all()
+            if r.bloco in prio and r.slug not in used]
+    if t.format == "eliminatoria":
+        diffs, tipos, want = elimination.DIFFS.get(rnd.difficulty or "easy", (1, 2)), elimination.CODE_TIPOS, 1
+    else:
+        preset = next((p for p in PRESET if p[0] == idx), PRESET[-1])
+        diffs, tipos, want = preset[6], preset[7], 1 if rnd.is_boss else MISSIONS_PER_ROUND
+    def pool(allowed):
+        cands = [r for r in allowed if r.tipo in tipos and r.data.get("dificuldade") in diffs]
+        if len(cands) < want:  # poucos com esta dificuldade: alarga a todas, mantendo os tipos
+            cands += [r for r in allowed if r.tipo in tipos and r not in cands]
+        return cands
+    # Primeiro só a matéria das aulas; a Arena de Algoritmia ("mais_alem") só entra se não houver mais nada
+    cands = pool([r for r in rows if prio[r.bloco] > 0])
+    if len(cands) < want:
+        cands = pool(rows)
+    return [r.slug for r in rng.sample(cands, min(want, len(cands)))]
+
+
 # ---------------- vistas ----------------
 def _remaining(r: TournamentRound, now) -> int | None:
     if r.state == "active" and r.ends_at:
